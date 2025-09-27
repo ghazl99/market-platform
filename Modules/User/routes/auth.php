@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Modules\User\Http\Controllers\Auth\AuthenticatedSessionController;
+use Modules\User\Http\Controllers\Auth\Customer\LoginController;
+use Modules\User\Http\Controllers\Auth\Customer\RegisterController;
+use Modules\User\Http\Controllers\Auth\RegisteredUserController;
+
+Route::middleware('guest')->group(function () {
+
+    // ...existing code for guest (register/login)  to owner...
+    Route::get('register', [RegisteredUserController::class, 'create'])
+        ->name('register');
+
+    Route::post('register', [RegisteredUserController::class, 'store']);
+
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
+
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+    // ...existing code for guest (register/login)  to customer...
+    Route::get('register-customer', [RegisterController::class, 'create'])
+        ->name('customer.register');
+
+    Route::get('login-customer', [LoginController::class, 'create'])
+        ->name('customer.login');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
+});

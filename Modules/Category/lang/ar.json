@@ -1,0 +1,23 @@
+{
+    "Add New Category": "إضافة صنف جديد",
+    "Categories": "الأصناف",
+    "Category Name": "اسم الصنف",
+    "Enter category name": "ادخل اسم الصنف",
+    "Category Image": "صورة الصنف",
+    "Optional Subcategories": "أقسام فرعية (اختياري)",
+    "You can type new subcategories and they will be added automatically.": "يمكنك كتابة أقسام جديدة مباشرة وسيتم إضافتها تلقائيًا.",
+    "Save": "حفظ",
+    "Back": "العودة",
+    "Manage Categories": "إدارة الأصناف",
+    "Categories List": "قائمة الأصناف",
+    "Image": "الصورة",
+    "Subcategories": "الأقسام الفرعية",
+    "No Subcategories": "لا توجد أصناف فرعية",
+    "Created At": "تاريخ الإنشاء",
+    "Actions": "الإجراءات",
+    "Show :count Subcategories": "عرض :count صنف فرعي",
+    "Edit Category": "تعديل الصنف",
+    "Search products...": "ابحث عن المنتجات...",
+    "No products found for this category.": "لم يتم العثور على منتجات لهذا الصنف.",
+    "Subcategories for":"الفئات الفرعية ل"
+}

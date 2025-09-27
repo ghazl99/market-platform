@@ -1,0 +1,8 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Modules\Order\Http\Controllers\App\OrderController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('orders', OrderController::class)->names('order');
+});
