@@ -31,6 +31,7 @@ class Product extends Model implements HasMedia
         'min_quantity',
         'max_quantity',
     ];
+
     protected $casts = [
         'status' => 'boolean',
     ];

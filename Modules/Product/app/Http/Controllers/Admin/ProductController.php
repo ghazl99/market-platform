@@ -100,7 +100,7 @@ class ProductController extends Controller implements HasMiddleware
         try {
             $product = $this->productService->updateProduct($id, $data);
 
-            if (!$product) {
+            if (! $product) {
                 return redirect()->back()->with('error', __('Failed to update the product.'));
             }
 
@@ -109,7 +109,6 @@ class ProductController extends Controller implements HasMiddleware
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

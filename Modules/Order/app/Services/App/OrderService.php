@@ -2,10 +2,10 @@
 
 namespace Modules\Order\Services\App;
 
-use Modules\Order\Models\Order;
-use Modules\Product\Models\Product;
 use Illuminate\Validation\ValidationException;
+use Modules\Order\Models\Order;
 use Modules\Order\Repositories\App\OrderRepository;
+use Modules\Product\Models\Product;
 
 class OrderService
 {
@@ -13,6 +13,11 @@ class OrderService
         protected OrderRepository $orderRepository,
         protected \Modules\Cart\Services\App\CartService $cartService,
     ) {}
+
+    public function getOrders(int $userId, int $storeId)
+    {
+        return $this->orderRepository->index($userId, $storeId);
+    }
 
     /* with cart
     public function create(int $userId, int $storeId, $cartItems)
@@ -28,10 +33,7 @@ class OrderService
         return $order;
     }
 
-    public function getOrders(int $userId, int $storeId)
-    {
-        return $this->orderRepository->index($userId, $storeId);
-    }
+
 
     public function cancel(Order $order)
     {
@@ -51,7 +53,7 @@ class OrderService
             ]);
         }
 
-        if (!is_null($product->max_quantity) && $quantity > $product->max_quantity) {
+        if (! is_null($product->max_quantity) && $quantity > $product->max_quantity) {
             throw ValidationException::withMessages([
                 'quantity' => __('The quantity may not be greater than :max', ['max' => $product->max_quantity]),
             ]);

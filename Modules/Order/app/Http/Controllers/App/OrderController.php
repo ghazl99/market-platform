@@ -2,20 +2,19 @@
 
 namespace Modules\Order\Http\Controllers\App;
 
-use Illuminate\Http\Request;
-use Modules\Order\Models\Order;
-use Modules\Store\Models\Store;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Modules\Order\Services\App\OrderService;
 use Modules\Order\Http\Requests\App\StoreOrderRequest;
+use Modules\Order\Models\Order;
+use Modules\Order\Services\App\OrderService;
+use Modules\Store\Models\Store;
 
 class OrderController extends Controller
 {
     public function __construct(
         protected OrderService $orderService,
     ) {}
-
 
     public function store(StoreOrderRequest $request)
     {
@@ -29,19 +28,20 @@ class OrderController extends Controller
             return back()->withErrors(['error' => $e->getMessage()])->withInput();
         }
     }
-    //with cart
+
+    // with cart
     /**
      * Display a listing of the resource.
      */
-    // public function index()
-    // {
-    //     $userId = Auth::id();
-    //     $storeId = Store::currentFromUrl()->firstOrFail()->id;
+    public function index()
+    {
+        $userId = Auth::id();
+        $storeId = Store::currentFromUrl()->firstOrFail()->id;
 
-    //     $orders = $this->orderService->getOrders($userId, $storeId);
+        $orders = $this->orderService->getOrders($userId, $storeId);
 
-    //     return view('order::app.index', compact('orders'));
-    // }
+        return view('order::app.index', compact('orders'));
+    }
 
     /**
      * Show the form for creating a new resource.

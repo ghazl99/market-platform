@@ -68,9 +68,11 @@ class CategoryService
     }
 
     /** Get all subcategories */
-    public function getAllSubcategories():mixed{
+    public function getAllSubcategories(): mixed
+    {
         return $this->categoryRepository->getAllSubcategories();
     }
+
     public function getAllSubcategoriesById($id): mixed
     {
         return $this->categoryRepository->getAllSubcategoriesById($id);

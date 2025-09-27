@@ -6,15 +6,16 @@ use Modules\Order\Models\Order;
 
 interface OrderRepository
 {
+    public function index(int $userId, int $storeId);
+
     /*
     with cart
-    public function index(int $userId, int $storeId);
 
     public function store(array $orderData, $items);
 
     public function updateStatus(Order $order, string $status);
    */
 
-    //without cart
+    // without cart
     public function createOrder(array $data): Order;
 }

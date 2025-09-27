@@ -13,8 +13,8 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             'product_id' => 'required|exists:products,id',
-            'quantity'   => 'required|integer|min:1',
-            'player_id'  => 'nullable|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'player_id' => 'nullable|string|max:255',
             // 'delivery_email' => 'nullable|email',
         ];
     }

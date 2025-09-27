@@ -30,7 +30,8 @@ class CategoryModelRepository implements CategoryRepository
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAllSubcategories():mixed{
+    public function getAllSubcategories(): mixed
+    {
         $store = \Modules\Store\Models\Store::currentFromUrl()->first();
 
         if (! $store) {
@@ -38,10 +39,11 @@ class CategoryModelRepository implements CategoryRepository
         }
 
         return Category::with('children')
-        ->whereNotNull('parent_id')
+            ->whereNotNull('parent_id')
             ->where('store_id', $store->id)
             ->get();
     }
+
     public function getAllSubcategoriesById($id): mixed
     {
         $store = \Modules\Store\Models\Store::currentFromUrl()->first();

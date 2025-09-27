@@ -55,7 +55,9 @@ class ProductModelRepository implements ProductRepository
     public function update(int $id, array $data)
     {
         $product = Product::find($id);
-        if (! $product) abort(404);
+        if (! $product) {
+            abort(404);
+        }
 
         $product->update($data);
 
@@ -65,7 +67,6 @@ class ProductModelRepository implements ProductRepository
 
         return $product;
     }
-
 
     public function delete(Product $product): bool
     {

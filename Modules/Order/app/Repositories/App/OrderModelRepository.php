@@ -2,23 +2,25 @@
 
 namespace Modules\Order\Repositories\App;
 
-use Modules\Order\Models\Order;
-use Illuminate\Support\Facades\DB;
-use Modules\Order\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Modules\Order\Models\Order;
+use Modules\Order\Models\OrderItem;
 
 class OrderModelRepository implements OrderRepository
 {
-    /*
-    with cart
-    *public function index(int $userId, int $storeId)
-    *{
+    public function index(int $userId, int $storeId)
+    {
         return Order::where('user_id', $userId)
             ->where('store_id', $storeId)
             ->with('items.product') // تجيب المنتجات
             ->latest()
             ->paginate(10);
-    *}
+    }
+
+    /*
+    with cart
+
 
     *public function store(array $orderData, $items)
    * {
@@ -60,10 +62,10 @@ class OrderModelRepository implements OrderRepository
 
             // إضافة المنتج للطلب
             OrderItem::create([
-                'order_id'   => $order->id,
+                'order_id' => $order->id,
                 'product_id' => $data['product_id'],
-                'quantity'   => $data['quantity'],
-                'player_id'  => $data['player_id'] ?? null,
+                'quantity' => $data['quantity'],
+                'player_id' => $data['player_id'] ?? null,
                 'delivery_email' => $data['delivery_email'] ?? null,
             ]);
 
