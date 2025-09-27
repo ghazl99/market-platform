@@ -53,9 +53,9 @@ class CategoryController extends Controller
         return view('category::app.show', compact('category', 'products'));
     }
 
-    public function getSubCategory($id)
+    public function getSubCategoryById($id)
     {
-        $category = $this->categoryService->getAllSubcategories($id);
+        $category = $this->categoryService->getAllSubcategoriesById($id);
 
         return view('category::app.subCategoryById', compact('category'));
     }

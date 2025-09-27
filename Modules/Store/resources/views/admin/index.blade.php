@@ -1,172 +1,197 @@
-```blade
 @extends('core::layouts.app')
 
 @section('title', 'Stores Management - Dashboard')
 
 @push('styles')
-<style>
-    /* Layout */
-    .container {
-        max-width: 1400px;
-        margin: 60px auto;
-        padding: 0 20px;
-    }
+    <style>
+        /* Layout */
+        .container {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
 
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-    }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
 
-    .page-header h1 {
-        font-size: 24px;
-        font-weight: 700;
-        color: #2d3748;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+        .page-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-    .btn {
-        padding: 8px 14px;
-        border-radius: 6px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        border: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        transition: background 0.2s;
-        text-decoration: none;
-    }
+        .btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
 
-    .btn-primary {
-        background: #2563eb;
-        color: white;
-    }
-    .btn-primary:hover { background: #1e40af; }
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
 
-    .btn-secondary {
-        background: #f1f5f9;
-        color: #334155;
-    }
-    .btn-secondary:hover { background: #e2e8f0; }
+        .btn-primary:hover {
+            background: #1e40af;
+        }
 
-    /* Stats Grid */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
-    }
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #334155;
+        }
 
-    .stat-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
 
-    .stat-card h4 {
-        font-size: 13px;
-        text-transform: uppercase;
-        margin-bottom: 6px;
-        color: #6b7280;
-    }
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
 
-    .stat-card p {
-        font-size: 20px;
-        font-weight: 700;
-        color: #111827;
-    }
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .stat-icon {
-        font-size: 28px;
-        color: #cbd5e1;
-    }
+        .stat-card h4 {
+            font-size: 13px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            color: #6b7280;
+        }
 
-    /* Table */
-    .card {
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        overflow: hidden;
-    }
+        .stat-card p {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
 
-    .card-header {
-        padding: 15px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #f8fafc;
-        border-bottom: 1px solid #e5e7eb;
-    }
+        .stat-icon {
+            font-size: 28px;
+            color: #cbd5e1;
+        }
 
-    .card-header h6 {
-        font-size: 16px;
-        font-weight: 700;
-        color: #2563eb;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+        /* Table */
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+        .card-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            border-bottom: 1px solid #e5e7eb;
+        }
 
-    table thead {
-        background: #f1f5f9;
-    }
+        .card-header h6 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    table th, table td {
-        padding: 12px 15px;
-        font-size: 14px;
-        text-align: left;
-        border-bottom: 1px solid #e5e7eb;
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-    table th {
-        font-weight: 600;
-        color: #475569;
-    }
+        table thead {
+            background: #f1f5f9;
+        }
 
-    table td {
-        color: #1e293b;
-    }
+        table th,
+        table td {
+            padding: 12px 15px;
+            font-size: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
 
-    /* Badges */
-    .badge {
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: capitalize;
-    }
+        table th {
+            font-weight: 600;
+            color: #475569;
+        }
 
-    .badge-success { background: #dcfce7; color: #166534; }
-    .badge-warning { background: #fef9c3; color: #92400e; }
-    .badge-danger { background: #fee2e2; color: #b91c1c; }
-    .badge-secondary { background: #e2e8f0; color: #475569; }
-    .badge-info { background: #dbeafe; color: #1e40af; }
+        table td {
+            color: #1e293b;
+        }
 
-    /* Table actions */
-    .table-actions {
-        display: flex;
-        gap: 6px;
-    }
+        /* Badges */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
 
-    .btn-sm {
-        padding: 6px 8px;
-        font-size: 12px;
-    }
-</style>
+        .badge-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-warning {
+            background: #fef9c3;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .badge-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* Table actions */
+        .table-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-sm {
+            padding: 6px 8px;
+            font-size: 12px;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -248,7 +273,8 @@
                                         <td>{{ $store->store_url }}</td>
                                         <td><span class="badge badge-secondary">{{ $store->type }}</span></td>
                                         <td>
-                                            <span class="badge
+                                            <span
+                                                class="badge
                                                 {{ $store->status == 'active' ? 'badge-success' : ($store->status == 'pending' ? 'badge-warning' : 'badge-danger') }}">
                                                 {{ $store->status }}
                                             </span>
@@ -257,8 +283,10 @@
                                         <td>{{ $store->created_at->format('Y-m-d H:i') }}</td>
                                         <td>
                                             <div class="table-actions">
-                                                <a href="#" class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i></a>
-                                                <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
+                                                <a href="#" class="btn btn-sm btn-secondary"><i
+                                                        class="fas fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-primary"><i
+                                                        class="fas fa-edit"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -280,4 +308,3 @@
         </div>
     </div>
 @endsection
-```

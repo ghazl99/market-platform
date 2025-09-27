@@ -97,11 +97,19 @@ class ProductController extends Controller implements HasMiddleware
     {
         $data = $request->validated();
 
-        $product = $this->productService->updateProduct($id, $data);
+        try {
+            $product = $this->productService->updateProduct($id, $data);
 
-        return redirect()->route('dashboard.product.index')
-            ->with('success', __('Updated successfully'));
+            if (!$product) {
+                return redirect()->back()->with('error', __('Failed to update the product.'));
+            }
+
+            return redirect()->route('dashboard.product.index')->with('success', __('Updated successfully'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -4,10 +4,10 @@
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
-    
+
     sidebar.classList.toggle('collapsed');
     mainContent.classList.toggle('expanded');
-    
+
     // Save state to localStorage
     const isCollapsed = sidebar.classList.contains('collapsed');
     localStorage.setItem('sidebarCollapsed', isCollapsed);
@@ -24,7 +24,7 @@ function initializeSidebar() {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
     const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-    
+
     if (isCollapsed) {
         sidebar.classList.add('collapsed');
         mainContent.classList.add('expanded');
@@ -37,7 +37,7 @@ function initializeChartButtons() {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            
+
             // Here you would typically update the chart data
             updateChartData(this.textContent.trim());
         });
@@ -74,16 +74,16 @@ function addRippleEffect() {
             const size = Math.max(rect.width, rect.height);
             const x = e.clientX - rect.left - size / 2;
             const y = e.clientY - rect.top - size / 2;
-            
+
             ripple.style.width = ripple.style.height = size + 'px';
             ripple.style.left = x + 'px';
             ripple.style.top = y + 'px';
             ripple.classList.add('ripple');
-            
+
             this.style.position = 'relative';
             this.style.overflow = 'hidden';
             this.appendChild(ripple);
-            
+
             setTimeout(() => {
                 ripple.remove();
             }, 600);
@@ -128,30 +128,30 @@ function initializeUserMenu() {
 }
 
 // Navigation management
-function initializeNavigation() {
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Remove active class from all items
-            navItems.forEach(nav => nav.classList.remove('active'));
-            
-            // Add active class to clicked item
-            this.classList.add('active');
-            
-            // Get the page name from the item
-            const pageName = this.querySelector('.nav-item-text').textContent.trim();
-            console.log(`Navigating to: ${pageName}`);
-            
-            // Update breadcrumb
-            updateBreadcrumb(pageName);
-            
-            // Load page content
-            loadPageContent(pageName);
-        });
-    });
-}
+// function initializeNavigation() {
+//     const navItems = document.querySelectorAll('.nav-item');
+//     navItems.forEach(item => {
+//         item.addEventListener('click', function(e) {
+//             e.preventDefault();
+
+//             // Remove active class from all items
+//             navItems.forEach(nav => nav.classList.remove('active'));
+
+//             // Add active class to clicked item
+//             this.classList.add('active');
+
+//             // Get the page name from the item
+//             const pageName = this.querySelector('.nav-item-text').textContent.trim();
+//             console.log(`Navigating to: ${pageName}`);
+
+//             // Update breadcrumb
+//             updateBreadcrumb(pageName);
+
+//             // Load page content
+//             loadPageContent(pageName);
+//         });
+//     });
+// }
 
 // Update breadcrumb
 function updateBreadcrumb(pageName) {
@@ -172,7 +172,7 @@ function loadPageContent(pageName) {
     if (content) {
         // This would typically load different content based on the page
         console.log(`Loading content for: ${pageName}`);
-        
+
         // For demo purposes, update the page title
         const pageTitle = document.querySelector('.page-title');
         if (pageTitle) {
@@ -234,11 +234,11 @@ function initializeTheme() {
 function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
+
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('dashboard-theme', newTheme);
     updateThemeIcon(newTheme);
-    
+
     // Add transition effect
     document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
     setTimeout(() => {
@@ -279,7 +279,7 @@ function initializeKeyboardShortcuts() {
             e.preventDefault();
             toggleSidebar();
         }
-        
+
         // Ctrl/Cmd + K to focus search
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
             e.preventDefault();
@@ -288,13 +288,13 @@ function initializeKeyboardShortcuts() {
                 searchInput.focus();
             }
         }
-        
+
         // Ctrl/Cmd + Shift + T to toggle theme
         if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'T') {
             e.preventDefault();
             toggleTheme();
         }
-        
+
         // Escape to close mobile sidebar
         if (e.key === 'Escape') {
             const sidebar = document.getElementById('sidebar');
@@ -312,7 +312,7 @@ function initializePerformanceMonitoring() {
         const loadTime = performance.now();
         console.log(`Page loaded in ${loadTime.toFixed(2)}ms`);
     });
-    
+
     // Monitor scroll performance
     let scrollTimeout;
     window.addEventListener('scroll', function() {
@@ -326,26 +326,26 @@ function initializePerformanceMonitoring() {
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Dashboard initializing...');
-    
+
     // Initialize all components
     initializeSidebar();
     initializeChartButtons();
     initializeSearch();
     initializeNotifications();
     initializeUserMenu();
-    initializeNavigation();
+    // initializeNavigation();
     initializeTheme();
     initializeSystemThemeListener();
     initializeKeyboardShortcuts();
     initializePerformanceMonitoring();
-    
+
     // Add visual effects
     animateStats();
     addRippleEffect();
-    
+
     // Start real-time updates
     simulateRealTimeUpdates();
-    
+
     console.log('Dashboard initialized successfully!');
 });
 

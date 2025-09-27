@@ -41,6 +41,7 @@
                                 @enderror
                             </div>
 
+                            <!-- الصورة -->
                             <div class="mb-3">
                                 <label for="image" class="form-label">{{ __('Product Image') }}</label>
                                 <input type="file" class="form-control @error('image') is-invalid @enderror"
@@ -49,6 +50,7 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
                             <!-- السعر الأصلي -->
                             <div class="mb-3">
                                 <label for="original_price" class="form-label">{{ __('Original Price') }}</label>
@@ -72,8 +74,27 @@
                                 @enderror
                             </div>
 
-                            <!-- المخزون -->
+                            <!-- الحد الأدنى للكمية -->
+                            <div class="mb-3">
+                                <label for="min_quantity" class="form-label">{{ __('Min Quantity') }}</label>
+                                <input type="number" class="form-control @error('min_quantity') is-invalid @enderror"
+                                    id="min_quantity" name="min_quantity" value="{{ old('min_quantity', 1) }}"
+                                    min="1" required>
+                                @error('min_quantity')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
+                            <!-- الحد الأقصى للكمية -->
+                            <div class="mb-3">
+                                <label for="max_quantity" class="form-label">{{ __('Max Quantity') }}</label>
+                                <input type="number" class="form-control @error('max_quantity') is-invalid @enderror"
+                                    id="max_quantity" name="max_quantity" value="{{ old('max_quantity', 1) }}"
+                                    min="1" required>
+                                @error('max_quantity')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
                             <!-- الأقسام -->
                             <div class="mb-3">
@@ -90,12 +111,17 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+                            <!-- حالة التفعيل -->
+                            <div class="mb-3 form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="status" name="status"
+                                    value="1" {{ old('status', 1) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="status">{{ __('Active') }}</label>
+                            </div>
 
                             <!-- الخصائص -->
                             <div class="mb-3">
                                 <label class="form-label">{{ __('Attributes') }}</label>
-                                <div id="attributes-container">
-                                    <!-- الخصائص الموجودة -->
+                                <div id="attributes-container" style="display:none;">
                                     <div class="mb-2 attribute-item">
                                         <select name="names[]" class="form-control attribute-select"
                                             data-placeholder="{{ __('Select or type new attribute') }}">
@@ -150,61 +176,59 @@
                 allowClear: false
             });
 
-            // خصائص موجودة + فارغة
-            $('.attribute-select').select2({
-                theme: 'bootstrap-5',
-                tags: true,
-                placeholder: "{{ __('Select attributes') }}",
-
-                tokenSeparators: [',', '،'],
-
-                allowClear: false
-            });
-
-            // إضافة حقل جديد ديناميكي
-            $('#add-attribute-btn').click(function() {
-                // نسخ جميع الخيارات الحالية من أول select
-                let options = '';
-                $('#attributes-container .attribute-item:first .attribute-select option').each(function() {
-                    options += `<option value="${$(this).val()}">${$(this).text()}</option>`;
-                });
-
-                let html = `
-                <div class="mb-2 attribute-item row g-2 align-items-center">
-                    <div class="col">
-                        <select name="names[]" class="form-control attribute-select" data-placeholder="{{ __('Type attribute name') }}">
-                            ${options}
-                        </select>
-                    </div>
-                    <div class="col">
-                        <input type="text" name="value[]" class="form-control" placeholder="{{ __('Attribute Value') }}">
-                    </div>
-                    <div class="col">
-                        <input type="text" name="unit[]" class="form-control" placeholder="{{ __('Unit (optional)') }}">
-                    </div>
-                    <div class="col-auto">
-                        <button type="button" class="btn btn-danger btn-sm remove-attribute">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>`;
-
-                $('#attributes-container').append(html);
-
-                // تفعيل Select2 للحقل الجديد
-                $('#attributes-container .attribute-item:last .attribute-select').select2({
+            function initAttributeSelect($container) {
+                $container.find('.attribute-select').select2({
                     theme: 'bootstrap-5',
                     tags: true,
                     tokenSeparators: [',', '،'],
                     placeholder: "{{ __('Select attributes') }}",
                     allowClear: false
                 });
+            }
+
+            // عند الضغط على زر إضافة خاصية، إظهار الحاوية إذا مخفية
+            $('#add-attribute-btn').click(function() {
+                let $container = $('#attributes-container');
+
+                if ($container.is(':hidden')) {
+                    $container.show();
+                } else {
+                    // نسخ الخيارات من أول select
+                    let options = '';
+                    $container.find('.attribute-item:first .attribute-select option').each(function() {
+                        options += `<option value="${$(this).val()}">${$(this).text()}</option>`;
+                    });
+
+                    let html = `
+            <div class="mb-2 attribute-item row g-2 align-items-center">
+                <div class="col">
+                    <select name="names[]" class="form-control attribute-select" data-placeholder="{{ __('Type attribute name') }}">
+                        ${options}
+                    </select>
+                </div>
+                <div class="col">
+                    <input type="text" name="value[]" class="form-control" placeholder="{{ __('Attribute Value') }}">
+                </div>
+                <div class="col">
+                    <input type="text" name="unit[]" class="form-control" placeholder="{{ __('Unit (optional)') }}">
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-danger btn-sm remove-attribute">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>`;
+                    $container.append(html);
+                    initAttributeSelect($container.find('.attribute-item:last'));
+                }
+                initAttributeSelect($container.find('.attribute-item:first'));
             });
-
-
 
             $(document).on('click', '.remove-attribute', function() {
                 $(this).closest('.attribute-item').remove();
+                if ($('#attributes-container .attribute-item').length === 0) {
+                    $('#attributes-container').hide();
+                }
             });
         });
     </script>

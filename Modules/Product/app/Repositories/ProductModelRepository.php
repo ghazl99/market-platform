@@ -55,19 +55,17 @@ class ProductModelRepository implements ProductRepository
     public function update(int $id, array $data)
     {
         $product = Product::find($id);
-        if (! $product) {
-            abort(404);
-        }
+        if (! $product) abort(404);
 
         $product->update($data);
 
-        // تحديث الأقسام إذا موجودة
         if (isset($data['categories'])) {
             $product->categories()->sync($data['categories']);
         }
 
         return $product;
     }
+
 
     public function delete(Product $product): bool
     {

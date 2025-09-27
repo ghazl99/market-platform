@@ -27,15 +27,15 @@
                 <i class="fas fa-chart-line"></i>
                 <span class="nav-item-text">الإحصائيات</span>
             </a>
-            <a href="orders.html" class="nav-item">
+            <a href="{{ route('dashboard.order.index') }}" class="nav-item {{ request()->routeIs('dashboard.order.*') ? 'active' : '' }}">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="nav-item-text">الطلبات</span>
+                <span class="nav-item-text">{{ __('Orders') }}</span>
             </a>
         </div>
 
         <div class="nav-section">
             <div class="nav-section-title">إدارة المنتجات</div>
-            <a href="{{ route('dashboard.order.index') }}" class="nav-item {{ request()->routeIs('dashboard.order.*') ? 'active' : '' }}">
+            <a href="{{ route('dashboard.product.index') }}" class="nav-item {{ request()->routeIs('dashboard.product.*') ? 'active' : '' }}">
                 <i class="fas fa-box"></i>
                 <span class="nav-item-text">{{ __('Products') }}</span>
             </a>

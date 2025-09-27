@@ -76,6 +76,16 @@
                                 @enderror
                             </div>
 
+                            <div class="mb-3">
+                                <label for="min_quantity" class="form-label">{{ __('Min Quantity') }}</label>
+                                <input type="number" name="min_quantity"
+                                    value="{{ old('min_quantity', $product->min_quantity) }}" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="max_quantity" class="form-label">{{ __('Max Quantity') }}</label>
+                                <input type="number" name="max_quantity"
+                                    value="{{ old('max_quantity', $product->max_quantity) }}" class="form-control">
+                            </div>
 
                             <!-- الأقسام -->
                             <div class="mb-3">
@@ -89,6 +99,16 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <!-- حالة المنتج -->
+                            <div class="form-check mb-3">
+                                <input type="hidden" name="status" value="0">
+                                <input type="checkbox" name="status" value="1"
+                                    {{ $product->status === true ? 'checked' : '' }}>
+
+                                <label class="form-check-label" for="status">{{ __('Active') }}</label>
+                            </div>
+                            {{-- {{ dd($product->status) }} --}}
+
 
                             <!-- الخصائص -->
                             <div class="mb-3">
@@ -144,21 +164,12 @@
                                     @endforeach
                                 </div>
 
-                                <button type="button" id="add-attribute-btn" class="btn btn-outline-primary btn-sm mt-2">
+                                <button type="button" id="add-attribute-btn"
+                                    class="btn btn-outline-primary btn-sm mt-2">
                                     <i class="fas fa-plus me-1"></i>{{ __('Add Attribute') }}
                                 </button>
                             </div>
-                            <!-- حالة المنتج -->
-                            <div class="form-check mb-3">
-                                <!-- إذا لم يتم تحديد الـ checkbox، سيرسل 0 -->
-                                <input type="hidden" name="status" value="0">
 
-                                <input class="form-check-input" type="checkbox" name="status" id="status"
-                                    value="1" {{ old('status', $product->status) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="status">
-                                    {{ __('Active') }}
-                                </label>
-                            </div>
 
 
 

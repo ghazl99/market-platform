@@ -18,7 +18,8 @@ interface CategoryRepository
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAllSubcategories($id): mixed;
+    public function getAllSubcategories():mixed;
+    public function getAllSubcategoriesById($id): mixed;
 
     /**
      * Store a new category with optional subcategories.

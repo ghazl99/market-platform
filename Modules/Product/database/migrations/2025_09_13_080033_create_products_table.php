@@ -18,7 +18,7 @@ return new class extends Migration
             $table->json('description')->nullable();
             $table->decimal('price', 10, 2);
             $table->decimal('original_price', 10, 2);
-            $table->boolean('status')->default(true)->change();
+            $table->boolean('status')->default(true);
             $table->unsignedBigInteger('views_count')->default(0);
             $table->unsignedBigInteger('orders_count')->default(0);
 

@@ -21,10 +21,12 @@ class StoreProductRequest extends FormRequest
             'names' => 'nullable|array',
             'names.*' => 'string|max:255',
             'value' => 'nullable|array',
-            'value.*' => 'string|max:255',
+            'value.*' => 'nullable|string|max:255',
             'unit' => 'nullable|array',
             'unit.*' => 'nullable|string|max:50',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp',
+            'min_quantity' => 'required|integer|min:0',
+            'max_quantity' => 'required|integer|min:1|gte:min_quantity',
         ];
     }
 
