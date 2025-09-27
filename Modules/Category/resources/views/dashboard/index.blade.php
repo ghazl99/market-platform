@@ -3,9 +3,51 @@
 @section('title', __('Dashboard') . ' - ' . __('Manage Categories'))
 
 @push('styles')
-    <!-- DataTables CSS -->
-    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<style>
+    /* Dark mode for table */
+    body[data-theme="dark"] table.dataTable {
+        color: #e5e5e5 !important;
+        background-color: #2c2c2e !important;
+    }
+
+    body[data-theme="dark"] table.dataTable thead th {
+        background-color: #3a3a3c !important;
+        color: #e5e5e5 !important;
+    }
+
+    body[data-theme="dark"] table.dataTable tbody tr {
+        background-color: #2c2c2e !important;
+    }
+
+    body[data-theme="dark"] table.dataTable tbody tr:nth-child(even) {
+        background-color: #323234 !important;
+    }
+
+    body[data-theme="dark"] table.dataTable tbody tr:hover {
+        background-color: #444446 !important;
+    }
+
+    body[data-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button {
+        background-color: #3a3a3c !important;
+        color: #e5e5e5 !important;
+        border: none !important;
+    }
+
+    body[data-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background-color: #0d6efd !important;
+        color: #fff !important;
+    }
+
+    body[data-theme="dark"] .dataTables_wrapper .dataTables_filter input {
+        background-color: #3a3a3c !important;
+        color: #e5e5e5 !important;
+        border: 1px solid #555 !important;
+    }
+</style>
 @endpush
+
+
+
 
 @section('content')
 <div class="container mt-4 mb-4">
@@ -90,7 +132,7 @@
                             </tr>
                         </tfoot>
                     </table>
-                    
+
                 </div>
             </div>
         </div>
@@ -101,6 +143,10 @@
 @push('scripts')
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap JS Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
@@ -112,8 +158,30 @@
                     url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json'
                 },
                 order: [[0, 'asc']],
-                pageLength: 10
+                pageLength: 10,
+                stripeClasses: ['table-striped', 'table-dark'], // لتوافق Dark Mode
             });
+
+            // عند تغيير الوضع الليلي/نهاري
+            function updateTableTheme() {
+                const isDark = document.body.getAttribute('data-theme') === 'dark';
+                const table = $('#categoriesTable').DataTable();
+                if (isDark) {
+                    table.columns().every(function() {
+                        $(this.header()).css('color', '#e5e5e5');
+                    });
+                } else {
+                    table.columns().every(function() {
+                        $(this.header()).css('color', '');
+                    });
+                }
+            }
+
+            // استمع لتغيير theme
+            const observer = new MutationObserver(updateTableTheme);
+            observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
         });
     </script>
 @endpush
+
+

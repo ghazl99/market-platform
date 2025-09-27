@@ -3,244 +3,275 @@
 @section('title', __('View Store') . ': ' . $store->name . ' - ' . __('Dashboard'))
 
 @section('content')
+
+<style>
+    /* Layout */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .page-header h1 {
+        font-size: 1.5rem;
+        color: #333;
+        margin: 0;
+    }
+
+    /* Buttons */
+    .button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        justify-content: center;
+    }
+    .button-secondary { background: #f5f5f5; color: #333; }
+    .button-secondary:hover { background: #e0e0e0; }
+    .button-success { background: #28a745; color: #fff; }
+    .button-danger { background: #dc3545; color: #fff; }
+    .button-warning { background: #ffc107; color: #000; }
+    .button-outline { border: 1px solid #007bff; color: #007bff; background: #fff; }
+    .button-outline:hover { background: #007bff; color: #fff; }
+
+    /* Cards */
+    .custom-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+    .custom-card-header {
+        padding: 12px 16px;
+        background: #f8f9fa;
+        font-weight: bold;
+        font-size: 15px;
+        color: #007bff;
+        border-bottom: 1px solid #eaeaea;
+    }
+    .custom-card-body {
+        padding: 16px;
+    }
+
+    /* Alerts */
+    .custom-alert {
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    .alert-warning { background: #fff3cd; color: #856404; }
+    .alert-danger { background: #f8d7da; color: #721c24; }
+
+    /* Grid */
+    .grid {
+        display: grid;
+        gap: 20px;
+    }
+    .grid-2 {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    /* Labels */
+    .label {
+        font-weight: bold;
+        color: #444;
+        font-size: 14px;
+    }
+    .value {
+        margin: 0;
+        color: #333;
+        font-size: 14px;
+    }
+
+    /* Badges */
+    .badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .badge-success { background: #28a745; color: #fff; }
+    .badge-warning { background: #ffc107; color: #000; }
+    .badge-danger { background: #dc3545; color: #fff; }
+    .badge-info { background: #17a2b8; color: #fff; }
+
+    /* Text Center */
+    .text-center { text-align: center; }
+    .text-muted { color: #6c757d; font-size: 13px; }
+
+    /* Statistics */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        text-align: center;
+    }
+    .stats-item h4 {
+        margin: 0;
+        font-size: 20px;
+    }
+    .stats-item small {
+        color: #6c757d;
+    }
+</style>
+
 <div class="container-fluid">
     <!-- Page Header -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">
-            <i class="fas fa-store me-2"></i>
-            {{ __('View Store') }}: {{ $store->name }}
-        </h1>
-        <div class="d-flex gap-2">
-            <a href="{{ route('admin.stores.index') }}" class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-right me-2"></i>
-                {{ __('Back to Stores List') }}
-            </a>
-        </div>
+    <div class="page-header">
+        <h1><i class="fas fa-store"></i> {{ __('View Store') }}: {{ $store->name }}</h1>
+        <a href="{{ route('admin.stores.index') }}" class="button button-secondary">
+            <i class="fas fa-arrow-right"></i> {{ __('Back to Stores List') }}
+        </a>
     </div>
 
-    <!-- Store Status Alert -->
-    @if($store->status == 'pending')
-        <div class="alert alert-warning" role="alert">
-            <i class="fas fa-clock me-2"></i>
-            <strong>{{ __('This store is under review') }}:</strong> {{ __('You can activate or reject it after reviewing the information.') }}
-        </div>
-    @elseif($store->status == 'inactive')
-        <div class="alert alert-danger" role="alert">
-            <i class="fas fa-exclamation-triangle me-2"></i>
-            <strong>{{ __('This store is inactive') }}:</strong> {{ __('You can reactivate it or delete it.') }}
-        </div>
-    @endif
+```
+<!-- Store Status Alert -->
+@if($store->status == 'pending')
+    <div class="custom-alert alert-warning">
+        <i class="fas fa-clock"></i> <strong>{{ __('This store is under review') }}</strong>
+    </div>
+@elseif($store->status == 'inactive')
+    <div class="custom-alert alert-danger">
+        <i class="fas fa-exclamation-triangle"></i> <strong>{{ __('This store is inactive') }}</strong>
+    </div>
+@endif
 
-    <div class="row">
-        <!-- Store Information -->
-        <div class="col-lg-8">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-info-circle me-2"></i>
-                        {{ __('Store Info') }}
-                    </h6>
+<div class="grid grid-2">
+    <!-- Store Information -->
+    <div>
+        <div class="custom-card">
+            <div class="custom-card-header">
+                <i class="fas fa-info-circle"></i> {{ __('Store Info') }}
+            </div>
+            <div class="custom-card-body grid grid-2">
+                <div>
+                    <label class="label">{{ __('Store Name') }}</label>
+                    <p class="value">{{ $store->name }}</p>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">{{ __('Store Name') }}</label>
-                                <p class="mb-0">{{ $store->name }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">{{ __('Domain') }}</label>
-                                <p class="mb-0"><code>{{ $store->store_url }}</code></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">{{ __('Status') }}</label>
-                                <p class="mb-0">
-                                    <span class="badge bg-{{ $store->status == 'active' ? 'success' : ($store->status == 'pending' ? 'warning' : 'danger') }}">
-                                        {{ $store->status == 'active' ? __('Active') : ($store->status == 'pending' ? __('Pending') : __('Inactive')) }}
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">{{ __('Theme') }}</label>
-                                <p class="mb-0">{{ ucfirst($store->theme) }}</p>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">{{ __('Description') }}</label>
-                                <p class="mb-0">{{ $store->description ?: __('No description') }}</p>
-                            </div>
-                        </div>
-                    </div>
+                <div>
+                    <label class="label">{{ __('Domain') }}</label>
+                    <p class="value"><code>{{ $store->store_url }}</code></p>
+                </div>
+                <div>
+                    <label class="label">{{ __('Status') }}</label>
+                    <p class="value">
+                        <span class="badge {{ $store->status == 'active' ? 'badge-success' : ($store->status == 'pending' ? 'badge-warning' : 'badge-danger') }}">
+                            {{ ucfirst($store->status) }}
+                        </span>
+                    </p>
+                </div>
+                <div>
+                    <label class="label">{{ __('Theme') }}</label>
+                    <p class="value">{{ ucfirst($store->theme) }}</p>
+                </div>
+                <div style="grid-column: 1 / -1;">
+                    <label class="label">{{ __('Description') }}</label>
+                    <p class="value">{{ $store->description ?: __('No description') }}</p>
                 </div>
             </div>
-
-            <!-- Store Banner -->
-            @if($store->banner)
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-image me-2"></i>
-                        {{ __('Store Banner') }}
-                    </h6>
-                </div>
-                <div class="card-body p-0">
-                    <img src="{{ $store->banner }}" class="img-fluid w-100" alt="{{ $store->name }} Banner">
-                </div>
-            </div>
-            @endif
         </div>
 
-        <!-- Sidebar -->
-        <div class="col-lg-4">
-            <!-- Owner Information -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-user me-2"></i>
-                        {{ __('Owner Info') }}
-                    </h6>
+        <!-- Store Banner -->
+        @if($store->banner)
+        <div class="custom-card">
+            <div class="custom-card-header">
+                <i class="fas fa-image"></i> {{ __('Store Banner') }}
+            </div>
+            <div class="custom-card-body">
+                <img src="{{ $store->banner }}" style="width: 100%; border-radius: 6px;" alt="{{ $store->name }} Banner">
+            </div>
+        </div>
+        @endif
+    </div>
+
+    <!-- Sidebar -->
+    <div>
+        <!-- Owner Info -->
+        <div class="custom-card">
+            <div class="custom-card-header">
+                <i class="fas fa-user"></i> {{ __('Owner Info') }}
+            </div>
+            <div class="custom-card-body text-center">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: #007bff; display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+                    <i class="fas fa-user fa-2x text-white"></i>
                 </div>
-                <div class="card-body">
-                    <div class="text-center mb-3">
-                        <div class="bg-primary rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                            <i class="fas fa-user fa-2x text-white"></i>
-                        </div>
-                        <h5 class="mb-1">{{ $store->owners->first()->name }}</h5>
-                        <p class="text-muted mb-2">{{ $store->owners->first()->email }}</p>
-                        <span class="badge bg-info">{{ __('Regular User') }}</span>
-                    </div>
-                    <div class="row text-center">
-                        <div class="col-6">
-                            <div class="mb-2">
-                                <h6 class="text-primary mb-1">{{ $store->owners->first()->stores()->count() }}</h6>
-                                <small class="text-muted">{{ __('Stores') }}</small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="mb-2">
-                                <h6 class="text-success mb-1">{{ auth()->user()->created_at->diffForHumans() }}</h6>
-                                <small class="text-muted">{{ __('Registered At') }}</small>
-                            </div>
-                        </div>
-                    </div>
+                <h5>{{ $store->owners->first()->name }}</h5>
+                <p class="text-muted">{{ $store->owners->first()->email }}</p>
+                <span class="badge badge-info">{{ __('Regular User') }}</span>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="custom-card">
+            <div class="custom-card-header">
+                <i class="fas fa-cogs"></i> {{ __('Quick Actions') }}
+            </div>
+            <div class="custom-card-body">
+                <div class="grid" style="gap:10px;">
+                    @if($store->status == 'pending')
+                        <button class="button button-success" onclick="updateStoreStatus('active')">
+                            <i class="fas fa-check"></i> {{ __('Activate Store') }}
+                        </button>
+                        <button class="button button-danger" onclick="updateStoreStatus('inactive')">
+                            <i class="fas fa-times"></i> {{ __('Reject Store') }}
+                        </button>
+                    @elseif($store->status == 'active')
+                        <button class="button button-warning" onclick="updateStoreStatus('inactive')">
+                            <i class="fas fa-pause"></i> {{ __('Deactivate Store') }}
+                        </button>
+                    @else
+                        <button class="button button-success" onclick="updateStoreStatus('active')">
+                            <i class="fas fa-play"></i> {{ __('Reactivate Store') }}
+                        </button>
+                    @endif
+
+                    <a href="{{ $store->store_url }}" class="button button-outline" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> {{ __('Visit Store') }}
+                    </a>
                 </div>
             </div>
+        </div>
 
-            <!-- Quick Actions -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-cogs me-2"></i>
-                        {{ __('Quick Actions') }}
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        @if($store->status == 'pending')
-                            <button class="btn btn-success btn-lg" onclick="updateStoreStatus('active')">
-                                <i class="fas fa-check me-2"></i>
-                                {{ __('Activate Store') }}
-                            </button>
-                            <button class="btn btn-danger btn-lg" onclick="updateStoreStatus('inactive')">
-                                <i class="fas fa-times me-2"></i>
-                                {{ __('Reject Store') }}
-                            </button>
-                        @elseif($store->status == 'active')
-                            <button class="btn btn-warning btn-lg" onclick="updateStoreStatus('inactive')">
-                                <i class="fas fa-pause me-2"></i>
-                                {{ __('Deactivate Store') }}
-                            </button>
-                        @else
-                            <button class="btn btn-success btn-lg" onclick="updateStoreStatus('active')">
-                                <i class="fas fa-play me-2"></i>
-                                {{ __('Reactivate Store') }}
-                            </button>
-                        @endif
-
-                        <a href="{{ $store->store_url }}" class="btn btn-outline-primary btn-lg" target="_blank">
-                            <i class="fas fa-external-link-alt me-2"></i>
-                            {{ __('Visit Store') }}
-                        </a>
-
-                        <!-- Alternative Links -->
-                        <div class="mt-3">
-                            <h6 class="text-muted mb-2">{{ __('Alternative Links') }}:</h6>
-                            <div class="d-flex flex-column gap-2">
-                                @if(app()->environment('production'))
-                                    <a href="{{ $store->store_url }}" class="btn btn-outline-success btn-sm" target="_blank">
-                                        <i class="fas fa-globe me-2"></i>
-                                        {{ __('Main Domain') }}: {{ $store->domain }}
-                                    </a>
-                                    <a href="{{ $store->dashboard_url }}" class="btn btn-outline-info btn-sm" target="_blank">
-                                        <i class="fas fa-tachometer-alt me-2"></i>
-                                        {{ __('Dashboard') }}: {{ $store->domain }}/dashboard
-                                    </a>
-                                @else
-                                    <a href="{{ $store->alternative_store_url }}" class="btn btn-outline-success btn-sm" target="_blank">
-                                        <i class="fas fa-link me-2"></i>
-                                        {{ __('Main Link') }}: /store/{{ $store->domain }}
-                                    </a>
-                                    <a href="{{ $store->alternative_dashboard_url }}" class="btn btn-outline-info btn-sm" target="_blank">
-                                        <i class="fas fa-tachometer-alt me-2"></i>
-                                        {{ __('Dashboard') }}: /dashboard/{{ $store->domain }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Store Stats -->
+        <div class="custom-card">
+            <div class="custom-card-header">
+                <i class="fas fa-chart-bar"></i> {{ __('Store Statistics') }}
             </div>
-
-            <!-- Store Statistics -->
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-chart-bar me-2"></i>
-                        {{ __('Store Statistics') }}
-                    </h6>
+            <div class="custom-card-body stats-grid">
+                <div class="stats-item">
+                    <h4 class="text-primary">0</h4>
+                    <small>{{ __('Products') }}</small>
                 </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <h4 class="text-primary mb-1">0</h4>
-                                <small class="text-muted">{{ __('Products') }}</small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <h4 class="text-success mb-1">0</h4>
-                                <small class="text-muted">{{ __('Orders') }}</small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <h4 class="text-info mb-1">0</h4>
-                                <small class="text-muted">{{ __('Customers') }}</small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <h4 class="text-warning mb-1">0</h4>
-                                <small class="text-muted">{{ __('Sales') }}</small>
-                            </div>
-                        </div>
-                    </div>
+                <div class="stats-item">
+                    <h4 class="text-success">0</h4>
+                    <small>{{ __('Orders') }}</small>
+                </div>
+                <div class="stats-item">
+                    <h4 class="text-info">0</h4>
+                    <small>{{ __('Customers') }}</small>
+                </div>
+                <div class="stats-item">
+                    <h4 class="text-warning">0</h4>
+                    <small>{{ __('Sales') }}</small>
                 </div>
             </div>
         </div>
     </div>
 </div>
+```
+
+</div>
 
 <!-- Status Update Form -->
-<form id="statusForm" method="POST" action="{{ route('admin.stores.status', $store->id) }}" style="display: none;">
+
+<form id="statusForm" method="POST" action="{{ route('admin.stores.status', $store->id) }}" style="display:none;">
     @csrf
     @method('PATCH')
     <input type="hidden" name="status" id="statusInput">
@@ -261,4 +292,5 @@ function updateStoreStatus(status) {
     }
 }
 </script>
+
 @endsection

@@ -1,250 +1,264 @@
+```blade
 @extends('core::layouts.app')
 
-@section('title', __('Stores Management - Dashboard'))
+@section('title', 'Stores Management - Dashboard')
+
+@push('styles')
+<style>
+    /* Layout */
+    .container {
+        max-width: 1400px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2d3748;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 8px 14px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.2s;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: #2563eb;
+        color: white;
+    }
+    .btn-primary:hover { background: #1e40af; }
+
+    .btn-secondary {
+        background: #f1f5f9;
+        color: #334155;
+    }
+    .btn-secondary:hover { background: #e2e8f0; }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stat-card h4 {
+        font-size: 13px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        color: #6b7280;
+    }
+
+    .stat-card p {
+        font-size: 20px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .stat-icon {
+        font-size: 28px;
+        color: #cbd5e1;
+    }
+
+    /* Table */
+    .card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .card-header {
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f8fafc;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .card-header h6 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table thead {
+        background: #f1f5f9;
+    }
+
+    table th, table td {
+        padding: 12px 15px;
+        font-size: 14px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    table th {
+        font-weight: 600;
+        color: #475569;
+    }
+
+    table td {
+        color: #1e293b;
+    }
+
+    /* Badges */
+    .badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .badge-success { background: #dcfce7; color: #166534; }
+    .badge-warning { background: #fef9c3; color: #92400e; }
+    .badge-danger { background: #fee2e2; color: #b91c1c; }
+    .badge-secondary { background: #e2e8f0; color: #475569; }
+    .badge-info { background: #dbeafe; color: #1e40af; }
+
+    /* Table actions */
+    .table-actions {
+        display: flex;
+        gap: 6px;
+    }
+
+    .btn-sm {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+</style>
+@endpush
 
 @section('content')
-    <div class="container-fluid " style="margin-top: 50px;">
+    <div class="container">
         <!-- Page Header -->
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">
-                <i class="fas fa-store me-2"></i>
-                {{ __('Stores Management') }}
-            </h1>
+        <div class="page-header">
+            <h1><i class="fas fa-store"></i> Stores Management</h1>
             <div class="d-flex gap-2">
                 <a href="{{ route('admin.stores.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>
-                    {{ __('Create New Store') }}
+                    <i class="fas fa-plus"></i> Create New Store
                 </a>
-                <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-right me-2"></i>
-                    {{ __('Back to dashboard') }}
+                <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
                 </a>
             </div>
         </div>
 
-        <!-- Statistics Cards -->
-        <div class="row mb-4">
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    {{ __('Total Stores') }}
-                                </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stores->count() }}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-store fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div>
+                    <h4>Total Stores</h4>
+                    <p>{{ $stores->count() }}</p>
                 </div>
+                <i class="fas fa-store stat-icon"></i>
             </div>
-
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    {{ __('Active Stores') }}
-                                </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    {{ $stores->where('status', 'active')->count() }}
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-check-circle fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
+            <div class="stat-card">
+                <div>
+                    <h4>Active Stores</h4>
+                    <p>{{ $stores->where('status', 'active')->count() }}</p>
                 </div>
+                <i class="fas fa-check-circle stat-icon"></i>
             </div>
-
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    {{ __('Pending Review') }}
-                                </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    {{ $stores->where('status', 'pending')->count() }}
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-clock fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
+            <div class="stat-card">
+                <div>
+                    <h4>Pending Review</h4>
+                    <p>{{ $stores->where('status', 'pending')->count() }}</p>
                 </div>
+                <i class="fas fa-clock stat-icon"></i>
             </div>
-
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-danger shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                    {{ __('Inactive Stores') }}
-                                </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    {{ $stores->where('status', 'inactive')->count() }}
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-times-circle fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
+            <div class="stat-card">
+                <div>
+                    <h4>Inactive Stores</h4>
+                    <p>{{ $stores->where('status', 'inactive')->count() }}</p>
                 </div>
+                <i class="fas fa-times-circle stat-icon"></i>
             </div>
         </div>
 
         <!-- Stores Table -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">
-                    <i class="fas fa-list me-2"></i>
-                    {{ __('Stores List') }}
-                </h6>
-                <a href="{{ route('admin.stores.create') }}" class="btn btn-sm btn-primary">
-                    <i class="fas fa-plus me-2"></i>
-                    {{ __('Add New Store') }}
+        <div class="card">
+            <div class="card-header">
+                <h6><i class="fas fa-list"></i> Stores List</h6>
+                <a href="{{ route('admin.stores.create') }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> Add New Store
                 </a>
             </div>
             <div class="card-body">
                 @if ($stores->count() > 0)
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="storesTable" width="100%" cellspacing="0">
+                        <table>
                             <thead>
                                 <tr>
-                                    <th>{{ __('Store') }}</th>
-                                    <th>{{ __('Owner') }}</th>
-                                    <th>{{ __('Domain') }}</th>
-                                    <th>{{ __('Type') }}</th>
-                                    <th>{{ __('Status') }}</th>
-                                    <th>{{ __('Theme') }}</th>
-                                    <th>{{ __('Created At') }}</th>
-                                    <th>{{ __('Actions') }}</th>
+                                    <th>Store</th>
+                                    <th>Owner</th>
+                                    <th>Domain</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Theme</th>
+                                    <th>Created At</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($stores as $store)
                                     <tr>
+                                        <td>{{ $store->name }}</td>
+                                        <td>{{ $store->owners->first()->name }}</td>
+                                        <td>{{ $store->store_url }}</td>
+                                        <td><span class="badge badge-secondary">{{ $store->type }}</span></td>
                                         <td>
-                                            <div class="d-flex align-items-center">
-                                                @if ($store->logo)
-                                                    <img src="{{ $store->logo }}" class="rounded-circle me-2"
-                                                        width="40" height="40" alt="{{ $store->name }}">
-                                                @else
-                                                    <div class="bg-secondary rounded-circle me-2 d-flex align-items-center justify-content-center"
-                                                        style="width: 40px; height: 40px;">
-                                                        <i class="fas fa-store text-white"></i>
-                                                    </div>
-                                                @endif
-                                                <div>
-                                                    <div class="font-weight-bold">{{ $store->name }}</div>
-                                                    @if ($store->description)
-                                                        <small
-                                                            class="text-muted">{{ Str::limit($store->description, 50) }}</small>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center"
-                                                    style="width: 32px; height: 32px;">
-                                                    <i class="fas fa-user text-white"></i>
-                                                </div>
-                                                <div>
-                                                    <div class="font-weight-bold">{{ $store->owners->first()->name }}</div>
-                                                    <small class="text-muted">{{ $store->owners->first()->email }}</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            @if (app()->environment('production'))
-                                                <code>{{ $store->store_url }}</code>
-                                            @else
-                                                <code>{{ $store->store_url }}.localhost</code>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-secondary">
-                                                {{ $store->type ? ($store->type == 'digital' ? __('Digital') : __('Traditional')) : __('Unknown') }}
+                                            <span class="badge
+                                                {{ $store->status == 'active' ? 'badge-success' : ($store->status == 'pending' ? 'badge-warning' : 'badge-danger') }}">
+                                                {{ $store->status }}
                                             </span>
                                         </td>
+                                        <td><span class="badge badge-info">{{ ucfirst($store->theme) }}</span></td>
+                                        <td>{{ $store->created_at->format('Y-m-d H:i') }}</td>
                                         <td>
-                                            <span
-                                                class="badge bg-{{ $store->status == 'active' ? 'success' : ($store->status == 'pending' ? 'warning' : 'danger') }}">
-                                                {{ $store->status == 'active' ? __('Active') : ($store->status == 'pending' ? __('Pending Review') : __('Inactive')) }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info">{{ ucfirst($store->theme) }}</span>
-                                        </td>
-                                        <td>
-                                            <div>{{ $store->created_at_in_store_timezone->format('Y-m-d') }}</div>
-                                            <small
-                                                class="text-muted">{{ $store->created_at_in_store_timezone->format('H:i') }}</small>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                <a href="{{ route('admin.stores.show', $store->id) }}"
-                                                    class="btn btn-sm btn-outline-primary" title="{{ __('View') }}">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                @if ($store->status == 'pending')
-                                                    <button class="btn btn-sm btn-success"
-                                                        onclick="activateStore({{ $store->id }})"
-                                                        title="{{ __('Activate') }}">
-                                                        <i class="fas fa-check"></i>
-                                                    </button>
-                                                @elseif($store->status == 'active')
-                                                    <button class="btn btn-sm btn-warning"
-                                                        onclick="deactivateStore({{ $store->id }})"
-                                                        title="{{ __('Deactivate') }}">
-                                                        <i class="fas fa-pause"></i>
-                                                    </button>
-                                                @else
-                                                    <button class="btn btn-sm btn-success"
-                                                        onclick="activateStore({{ $store->id }})"
-                                                        title="{{ __('Reactivate') }}">
-                                                        <i class="fas fa-play"></i>
-                                                    </button>
-                                                @endif
-
-                                                <!-- Store Visit -->
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm btn-outline-info dropdown-toggle"
-                                                        type="button" data-bs-toggle="dropdown"
-                                                        title="{{ __('Visit Store') }}">
-                                                        <i class="fas fa-external-link-alt"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        @if (app()->environment('production'))
-                                                            <li>
-                                                                <a class="dropdown-item" href="{{ $store->store_url }}"
-                                                                    target="_blank">
-                                                                    <i class="fas fa-globe me-2"></i>
-                                                                    {{ __('Main Domain') }}
-                                                                </a>
-                                                            </li>
-                                                        @else
-                                                            <li>
-                                                                <a class="dropdown-item" href="{{ $store->store_url }}"
-                                                                    target="_blank">
-                                                                    <i class="fas fa-link me-2"></i>
-                                                                    {{ __('Main Link') }}
-                                                                </a>
-                                                            </li>
-                                                        @endif
-                                                    </ul>
-                                                </div>
+                                            <div class="table-actions">
+                                                <a href="#" class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -254,41 +268,16 @@
                     </div>
                 @else
                     <div class="text-center py-5">
-                        <i class="fas fa-store fa-3x text-muted mb-3"></i>
-                        <h5 class="text-muted">{{ __('No stores yet') }}</h5>
-                        <p class="text-muted">{{ __('Start by creating your first store') }}</p>
+                        <i class="fas fa-store fa-3x text-gray-300 mb-3"></i>
+                        <h5>No stores yet</h5>
+                        <p>Start by creating your first store</p>
                         <a href="{{ route('admin.stores.create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>
-                            {{ __('Create New Store') }}
+                            <i class="fas fa-plus"></i> Create New Store
                         </a>
                     </div>
                 @endif
             </div>
         </div>
     </div>
-
-    <!-- Status Update Form -->
-    <form id="statusForm" method="POST" style="display: none;">
-        @csrf
-        @method('PATCH')
-        <input type="hidden" name="status" id="statusInput">
-    </form>
-
-    <script>
-        function activateStore(storeId) {
-            if (confirm('{{ __('Are you sure you want to activate this store?') }}')) {
-                document.getElementById('statusInput').value = 'active';
-                document.getElementById('statusForm').action = `/admin/stores/${storeId}/status`;
-                document.getElementById('statusForm').submit();
-            }
-        }
-
-        function deactivateStore(storeId) {
-            if (confirm('{{ __('Are you sure you want to deactivate this store?') }}')) {
-                document.getElementById('statusInput').value = 'inactive';
-                document.getElementById('statusForm').action = `/admin/stores/${storeId}/status`;
-                document.getElementById('statusForm').submit();
-            }
-        }
-    </script>
 @endsection
+```

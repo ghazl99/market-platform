@@ -1,116 +1,101 @@
- <nav class="sidebar" id="sidebar">
-     <!-- Sidebar Header -->
-     <div class="sidebar-header">
-         <div class="sidebar-brand">
-             <img src="https://qu-card.com/images/q-b.png" alt="كوانتم" class="sidebar-logo">
-             <div class="brand-text">
-                 <h2>كوانتم ماركت</h2>
-                 <p>منصة الخدمات الرقمية</p>
-             </div>
-         </div>
-         <button class="sidebar-close" id="sidebarClose">
-             <i class="fas fa-times"></i>
-         </button>
-     </div>
+<!-- Sidebar -->
+<aside class="dashboard-sidebar" id="sidebar">
+    @php
+        $media = $store->getFirstMedia('logo');
+    @endphp
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <img src="{{ route('store.image', $media->id) }}" alt="{{ $store->name }}">
+            <div class="sidebar-logo-text">
+                <h2>{{ __('Dashboard') }}</h2>
+                <p>{{ $store->name }}</p>
+            </div>
+        </div>
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
 
-     <!-- Combined Profile & Balance Section -->
-     <div class="profile-balance-section">
-         <div class="profile-balance-card">
-             <div class="profile-section">
-                 <div class="user-avatar-container">
-                     <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-                         alt="المستخدم" class="user-avatar">
-                     <div class="online-indicator"></div>
-                 </div>
-                 <div class="user-info">
-                     <h3 class="user-name">وليد الحسن</h3>
-                     <p class="user-email">alhasn690168@gmail.com</p>
-                     <span class="verified-badge">
-                         <i class="fas fa-check-circle"></i>
-                         موثق
-                     </span>
-                 </div>
-             </div>
+    <nav class="sidebar-nav">
+        <div class="nav-section">
+            <div class="nav-section-title">{{ __('Dashboard') }}</div>
+            <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <i class="fas fa-home"></i>
+                <span class="nav-item-text">{{ __('Dashboard') }}</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span class="nav-item-text">الإحصائيات</span>
+            </a>
+            <a href="orders.html" class="nav-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="nav-item-text">الطلبات</span>
+            </a>
+        </div>
 
-             <div class="balance-section">
-                 <div class="balance-info">
-                     <span class="balance-label">صافي الرصيد</span>
-                     <span class="balance-value">$1,000.00</span>
-                 </div>
-                 <button class="balance-refresh" title="تحديث">
-                     <i class="fas fa-sync-alt"></i>
-                 </button>
-             </div>
-         </div>
-     </div>
+        <div class="nav-section">
+            <div class="nav-section-title">إدارة المنتجات</div>
+            <a href="{{ route('dashboard.order.index') }}" class="nav-item {{ request()->routeIs('dashboard.order.*') ? 'active' : '' }}">
+                <i class="fas fa-box"></i>
+                <span class="nav-item-text">{{ __('Products') }}</span>
+            </a>
+            <a href="{{ route('dashboard.category.index') }}"
+                class="nav-item {{ request()->routeIs('dashboard.category.*') ? 'active' : '' }}">
+                <i class="fas fa-chart-line"></i>
+                <span class="nav-item-text">{{ __('Categories') }}</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-warehouse"></i>
+                <span class="nav-item-text">المخزون</span>
+            </a>
+        </div>
 
-     <!-- Navigation Menu -->
-     <div class="sidebar-menu">
-         <div class="menu-items">
-             <a href="/home" class="menu-item active">
-                 <div class="menu-item-icon">
-                     <i class="fas fa-home"></i>
-                 </div>
-                 <span class="menu-item-title">الرئيسية</span>
-             </a>
+        <div class="nav-section">
+            <div class="nav-section-title">المبيعات</div>
+            <a href="#" class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                <span class="nav-item-text">التقارير</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-credit-card"></i>
+                <span class="nav-item-text">المدفوعات</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-percentage"></i>
+                <span class="nav-item-text">الخصومات</span>
+            </a>
+        </div>
 
-             <a href="/orders" class="menu-item">
-                 <div class="menu-item-icon">
-                     <i class="fas fa-list-ul"></i>
-                 </div>
-                 <span class="menu-item-title">الطلبات</span>
-                 <span class="menu-item-badge">5</span>
-             </a>
+        <div class="nav-section">
+            <div class="nav-section-title">العملاء</div>
+            <a href="users.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span class="nav-item-text">العملاء</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span class="nav-item-text">التقييمات</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-headset"></i>
+                <span class="nav-item-text">الدعم</span>
+            </a>
+        </div>
 
-             <a href="/wallet" class="menu-item">
-                 <div class="menu-item-icon">
-                     <i class="fas fa-wallet"></i>
-                 </div>
-                 <span class="menu-item-title">المحفظة</span>
-             </a>
-
-             <a href="/addBalance" class="menu-item">
-                 <div class="menu-item-icon">
-                     <i class="fas fa-plus-circle"></i>
-                 </div>
-                 <span class="menu-item-title">إضافة رصيد</span>
-             </a>
-
-             <a href="/notify" class="menu-item">
-                 <div class="menu-item-icon">
-                     <i class="fas fa-bell"></i>
-                 </div>
-                 <span class="menu-item-title">الإشعارات</span>
-                 <span class="menu-item-badge notification">3</span>
-             </a>
-
-             <a href="/passwordchange" class="menu-item">
-                 <div class="menu-item-icon">
-                     <i class="fas fa-user-shield"></i>
-                 </div>
-                 <span class="menu-item-title">الأمان</span>
-             </a>
-
-             <a href="https://api.whatsapp.com/send?phone=963992609703" class="menu-item">
-                 <div class="menu-item-icon">
-                     <i class="fas fa-headset"></i>
-                 </div>
-                 <span class="menu-item-title">الدعم</span>
-             </a>
-
-             <!-- Logout Item -->
-             <a href="/logout" class="menu-item logout-item">
-                 <div class="menu-item-icon">
-                     <i class="fas fa-sign-out-alt"></i>
-                 </div>
-                 <span class="menu-item-title">تسجيل الخروج</span>
-             </a>
-
-             <!-- Footer Info -->
-             <div class="menu-footer-info">
-                 <p>بواسطة <a href="https://kaymn.com" target="_blank">كايمن للخدمات</a></p>
-                 <p class="version">الإصدار 2.0.1</p>
-             </div>
-         </div>
-     </div>
- </nav>
+        <div class="nav-section">
+            <div class="nav-section-title">الإعدادات</div>
+            <a href="#" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span class="nav-item-text">عام</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-shield-alt"></i>
+                <span class="nav-item-text">الأمان</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="nav-item-text">تسجيل الخروج</span>
+            </a>
+        </div>
+    </nav>
+</aside>

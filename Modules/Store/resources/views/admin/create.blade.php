@@ -4,98 +4,127 @@
 @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
-        /* Store Type Selection */
-        .field-label {
-            display: block;
-            color: #333;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
+       /* ==========================
+   Store Type Selection
+========================== */
+.field-label {
+    display: block;
+    color: #333;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
 
-        .store-type-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-        }
+/* Grid Layout for Store Type Cards */
+.store-type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
 
-        .store-type-option {
-            cursor: pointer;
-        }
+/* Card Wrapper */
+.store-type-option {
+    cursor: pointer;
+}
 
-        .store-type-input {
-            display: none;
-        }
+/* Hidden Radio Input */
+.store-type-input {
+    display: none;
+}
 
-        .store-type-card {
-            padding: 1.5rem 1rem;
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+/* Card Style */
+.store-type-card {
+    padding: 1.5rem 1rem;
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
 
-        .store-type-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-        }
+/* Gradient Overlay (for hover/selected) */
+.store-type-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
 
-        .store-icon {
-            position: relative;
-            z-index: 2;
-            width: 50px;
-            height: 50px;
-            background: #e0e0e0;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 1.25rem;
-            color: #667eea;
-            transition: all 0.3s ease;
-        }
+/* Icon Styling */
+.store-icon {
+    position: relative;
+    z-index: 2;
+    width: 50px;
+    height: 50px;
+    background: #e0e0e0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.25rem;
+    color: #667eea;
+    transition: all 0.3s ease;
+}
 
-        .store-label {
-            position: relative;
-            z-index: 2;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #333;
-            transition: color 0.3s ease;
-        }
+/* Label Styling */
+.store-label {
+    position: relative;
+    z-index: 2;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    transition: all 0.3s ease;
+}
 
-        .store-type-input:checked+.store-type-card {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #e0eaff 0%, #f3f0ff 100%);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
-        }
+/* Hover Effect */
+.store-type-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+}
 
-        .store-type-input:checked+.store-type-card::before {
-            opacity: 0.2;
-        }
+/* Checked State */
+.store-type-input:checked + .store-type-card {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #e0eaff 0%, #f3f0ff 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.25);
+}
 
-        .store-type-input:checked+.store-type-card .store-icon {
-            background: #667eea;
-            color: #fff;
-        }
+.store-type-input:checked + .store-type-card::before {
+    opacity: 0.2;
+}
 
-        .store-type-input:checked+.store-type-card .store-label {
-            color: #667eea;
-            font-weight: 600;
-        }
+.store-type-input:checked + .store-type-card .store-icon {
+    background: #667eea;
+    color: #fff;
+}
+
+.store-type-input:checked + .store-type-card .store-label {
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .store-type-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+    .store-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    .store-type-card {
+        padding: 1.2rem 0.8rem;
+    }
+}
+
     </style>
 @endpush
 @section('content')
