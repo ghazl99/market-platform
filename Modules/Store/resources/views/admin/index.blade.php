@@ -1,4 +1,4 @@
-@extends('core::layouts.app')
+@extends('core::dashboard.layouts.app')
 
 @section('title', 'Stores Management - Dashboard')
 
@@ -283,10 +283,9 @@
                                         <td>{{ $store->created_at->format('Y-m-d H:i') }}</td>
                                         <td>
                                             <div class="table-actions">
-                                                <a href="#" class="btn btn-sm btn-secondary"><i
+                                                <a href="{{ route('admin.stores.show',$store) }}" class="btn btn-sm btn-secondary"><i
                                                         class="fas fa-eye"></i></a>
-                                                <a href="#" class="btn btn-sm btn-primary"><i
-                                                        class="fas fa-edit"></i></a>
+
                                             </div>
                                         </td>
                                     </tr>

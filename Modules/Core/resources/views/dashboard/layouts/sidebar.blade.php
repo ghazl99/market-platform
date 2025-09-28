@@ -1,20 +1,30 @@
 <!-- Sidebar -->
 <aside class="dashboard-sidebar" id="sidebar">
-    @php
-        $media = $store->getFirstMedia('logo');
-    @endphp
+
     <div class="sidebar-header">
         <div class="sidebar-logo">
-            <img src="{{ route('store.image', $media->id) }}" alt="{{ $store->name }}">
-            <div class="sidebar-logo-text">
-                <h2>{{ __('Dashboard') }}</h2>
-                <p>{{ $store->name }}</p>
-            </div>
+            @if (!empty($store) && !empty($media))
+                @php
+                    $media = $store->getFirstMedia('logo');
+                @endphp
+                <img src="{{ route('store.image', $media->id) }}" alt="{{ $store->name }}">
+                <div class="sidebar-logo-text">
+                    <h2>{{ __('Dashboard') }}</h2>
+                    <p>{{ $store->name }}</p>
+                </div>
+            @else
+                <i class="fas fa-store fa-2x text-primary"></i>
+                <div class="sidebar-logo-text">
+                    <h2>{{ __('Dashboard') }}</h2>
+                    <p>{{ __('Market Platform') }}</p>
+                </div>
+            @endif
         </div>
         <button class="sidebar-toggle" onclick="toggleSidebar()">
             <i class="fas fa-bars"></i>
         </button>
     </div>
+
 
     <nav class="sidebar-nav">
         <div class="nav-section">
@@ -27,7 +37,8 @@
                 <i class="fas fa-chart-line"></i>
                 <span class="nav-item-text">الإحصائيات</span>
             </a>
-            <a href="{{ route('dashboard.order.index') }}" class="nav-item {{ request()->routeIs('dashboard.order.*') ? 'active' : '' }}">
+            <a href="{{ route('dashboard.order.index') }}"
+                class="nav-item {{ request()->routeIs('dashboard.order.*') ? 'active' : '' }}">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="nav-item-text">{{ __('Orders') }}</span>
             </a>
@@ -35,7 +46,8 @@
 
         <div class="nav-section">
             <div class="nav-section-title">إدارة المنتجات</div>
-            <a href="{{ route('dashboard.product.index') }}" class="nav-item {{ request()->routeIs('dashboard.product.*') ? 'active' : '' }}">
+            <a href="{{ route('dashboard.product.index') }}"
+                class="nav-item {{ request()->routeIs('dashboard.product.*') ? 'active' : '' }}">
                 <i class="fas fa-box"></i>
                 <span class="nav-item-text">{{ __('Products') }}</span>
             </a>

@@ -54,7 +54,8 @@
                  <span class="menu-item-title">{{ __('Home') }}</span>
              </a>
 
-             <a href="{{ Route('order.index') }}" class="menu-item {{ request()->routeIs('order.index') ? 'active' : '' }}">
+             <a href="{{ Route('order.index') }}"
+                 class="menu-item {{ request()->routeIs('order.index') ? 'active' : '' }}">
                  <div class="menu-item-icon">
                      <i class="fas fa-list-ul"></i>
                  </div>
@@ -99,13 +100,16 @@
              </a>
 
              <!-- Logout Item -->
-             <a href="/logout" class="menu-item logout-item">
-                 <div class="menu-item-icon">
-                     <i class="fas fa-sign-out-alt"></i>
-                 </div>
-                 <span class="menu-item-title">تسجيل الخروج</span>
-             </a>
 
+             <form method="POST" action="{{ route('auth.logout') }}">
+                 @csrf
+                 <button type="submit" class="menu-item logout-item ">
+                     <div class="menu-item-icon">
+                         <i class="fas fa-sign-out-alt"></i>
+                     </div>
+                     <span class="menu-item-title">{{ __('Logout') }}</span>
+                 </button>
+             </form>
              <!-- Footer Info -->
              <div class="menu-footer-info">
                  <p>بواسطة <a href="https://kaymn.com" target="_blank">كايمن للخدمات</a></p>

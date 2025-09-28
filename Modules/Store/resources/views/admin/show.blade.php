@@ -1,4 +1,4 @@
-@extends('core::layouts.app')
+@extends('core::dashboard.layouts.app')
 
 @section('title', __('View Store') . ': ' . $store->name . ' - ' . __('Dashboard'))
 

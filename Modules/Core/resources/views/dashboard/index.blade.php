@@ -1,4 +1,4 @@
-@extends('core::layouts.app')
+@extends('core::dashboard.layouts.app')
 
 @section('title', __('Dashboard') . ' - ' . __('Store Platform'))
 
@@ -336,3 +336,4 @@
             }
         }
     </script>
+@endsection
