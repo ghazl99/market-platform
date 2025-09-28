@@ -83,7 +83,7 @@
             @if ($category->children->count() > 0)
                 @foreach ($category->children as $subCategory)
                     <a href="{{ route('category.show', $subCategory->id) }}" class="service-card">
-                        @php $media = $subCategory->getFirstMedia('category_images'); @endphp
+                        @php $media = $subCategory->getFirstMedia('subcategory_images'); @endphp
                         <div class="service-image">
                             @if ($media)
                                 <img src="{{ route('category.image', $media->id) }}" alt="{{ $subCategory->name }}"

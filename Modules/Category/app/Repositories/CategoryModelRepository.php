@@ -73,22 +73,8 @@ class CategoryModelRepository implements CategoryRepository
         $category = Category::create([
             'name' => $data['name'],
             'store_id' => $store->id,
-
+            'parent_id' => $data['parent_id'] ?? null,
         ]);
-
-        // Create subcategories if provided
-        if (! empty($data['subcategories'])) {
-            foreach ($data['subcategories'] as $subcategoryName) {
-                if (! empty($subcategoryName)) {
-                    Category::create([
-                        'name' => $subcategoryName,
-                        'parent_id' => $category->id, // Link child to parent
-                        'store_id' => $store->id,
-
-                    ]);
-                }
-            }
-        }
 
         return $category;
     }

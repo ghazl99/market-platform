@@ -32,7 +32,7 @@ class CategoryService
                     try {
                         $translated[$lang] = $this->autoGoogleTranslator($lang, $data[$field]);
                     } catch (\Exception $e) {
-                        Log::error("Failed to translate [$field] to [$lang]: ".$e->getMessage());
+                        Log::error("Failed to translate [$field] to [$lang]: " . $e->getMessage());
                         $translated[$lang] = $data[$field]; // fallback
                     }
                 }
@@ -41,21 +41,21 @@ class CategoryService
         }
 
         // ترجمة الأصناف الفرعية إذا وجدت
-        if (isset($data['subcategories']) && is_array($data['subcategories'])) {
-            $translatedSubcategories = [];
-            foreach ($data['subcategories'] as $subcategory) {
+        if (isset($data['subcategory_name']) && is_array($data['subcategory_name'])) {
+            $translatedsubcategory_name = [];
+            foreach ($data['subcategory_name'] as $subcategory) {
                 $subTranslated = [$locale => $subcategory];
                 foreach ($this->otherLangs() as $lang) {
                     try {
                         $subTranslated[$lang] = $this->autoGoogleTranslator($lang, $subcategory);
                     } catch (\Exception $e) {
-                        Log::error("Failed to translate [subcategory] to [$lang]: ".$e->getMessage());
+                        Log::error("Failed to translate [subcategory] to [$lang]: " . $e->getMessage());
                         $subTranslated[$lang] = $subcategory;
                     }
                 }
-                $translatedSubcategories[] = $subTranslated;
+                $translatedsubcategory_name[] = $subTranslated;
             }
-            $data['subcategories'] = $translatedSubcategories;
+            $data['subcategory_name'] = $translatedsubcategory_name;
         }
 
         return $data;
@@ -88,7 +88,8 @@ class CategoryService
 
             $category = $this->categoryRepository->store($data);
 
-            if (isset($data['image'])) {
+            // صورة الصنف الرئيسي
+            if (! empty($data['image'])) {
                 $this->uploadOrUpdateImageWithResize(
                     $category,
                     $data['image'],
@@ -96,6 +97,30 @@ class CategoryService
                     'private_media',
                     false
                 );
+            }
+
+            // الأصناف الفرعية
+            if (! empty($data['subcategory_name'])) {
+                foreach ($data['subcategory_name'] as $k => $name) {
+                    if (! empty($name)) {
+                        $subcategory = $this->categoryRepository->store([
+                            'name' => $name,
+                            'parent_id' => $category->id,
+                            'store_id' => $data['store_id'] ?? null,
+                        ]);
+
+                        // صورة الصنف الفرعي
+                        if (! empty($data['subcategory_image'][$k])) {
+                            $this->uploadOrUpdateImageWithResize(
+                                $subcategory,
+                                $data['subcategory_image'][$k],
+                                'subcategory_images',
+                                'private_media',
+                                false
+                            );
+                        }
+                    }
+                }
             }
 
             DB::commit();
@@ -106,6 +131,8 @@ class CategoryService
             throw $e;
         }
     }
+
+
 
     /** Update existing category and optionally replace image */
     public function updateCategory(Category $category, array $data): bool

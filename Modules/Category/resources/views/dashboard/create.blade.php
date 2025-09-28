@@ -48,13 +48,21 @@
 
                             <!-- الأقسام الفرعية -->
                             <div class="mb-3">
-                                <label for="subcategories" class="form-label">{{ __('Optional Subcategories') }}</label>
-                                <select name="subcategories[]" id="subcategories" class="form-control" multiple="multiple">
-                                    {{-- الخيارات يمكن تحميلها من قاعدة البيانات --}}
-                                </select>
-                                <small class="text-muted">
-                                    {{ __('You can type new subcategories and they will be added automatically.') }}
-                                </small>
+                                <label class="form-label">{{ __('Subcategories') }}</label>
+                                <div id="subcategories-wrapper">
+                                    <div class="subcategory-item d-flex gap-2 mb-2">
+                                        <input type="text" name="subcategory_name[]" class="form-control"
+                                            placeholder="{{ __('Enter subcategory name') }}">
+                                        <input type="file" name="subcategory_image[]" class="form-control"
+                                            accept="image/*">
+                                        <button type="button" class="btn btn-danger remove-subcategory">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" id="add-subcategory" class="btn btn-outline-primary mt-2">
+                                    <i class="fas fa-plus"></i> {{ __('Add Subcategory') }}
+                                </button>
                             </div>
 
                             <div class="d-flex gap-2">
@@ -88,6 +96,29 @@
                 theme: 'bootstrap-5',
                 tags: true,
                 tokenSeparators: [',', '،']
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            let index = 1;
+
+            $('#add-subcategory').on('click', function() {
+                $('#subcategories-wrapper').append(`
+                <div class="subcategory-item d-flex gap-2 mb-2">
+                    <input type="text" name="subcategory_name[]" class="form-control"
+                        placeholder="{{ __('Enter subcategory name') }}">
+                    <input type="file" name="subcategory_image[]" class="form-control" accept="image/*">
+                    <button type="button" class="btn btn-danger remove-subcategory">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `);
+                index++;
+            });
+
+            $(document).on('click', '.remove-subcategory', function() {
+                $(this).closest('.subcategory-item').remove();
             });
         });
     </script>

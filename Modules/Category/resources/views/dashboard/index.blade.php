@@ -110,9 +110,26 @@
                                                     {{ __('Show :count Subcategories', ['count' => $category->children->count()]) }}
                                                 </button>
                                                 <div class="collapse mt-2" id="subcats-{{ $category->id }}">
-                                                    <ul style="padding-right: 15px; margin: 0; list-style-type: disc;">
+                                                    <ul class="list-unstyled mb-0">
                                                         @foreach ($category->children as $child)
-                                                            <li>{{ $child->name }}</li>
+                                                            <li class="d-flex align-items-center mb-2">
+                                                                @php
+                                                                    $subMedia = $child->getFirstMedia(
+                                                                        'subcategory_images',
+                                                                    );
+                                                                @endphp
+                                                                @if ($subMedia)
+                                                                    <img src="{{ route('category.image', $subMedia->id) }}"
+                                                                        alt="{{ $child->name }}" width="35"
+                                                                        height="35" class="rounded me-2 border">
+                                                                @else
+                                                                    <div class="bg-light text-muted rounded me-2 d-flex justify-content-center align-items-center"
+                                                                        style="width:35px;height:35px;font-size:12px;">
+                                                                        -
+                                                                    </div>
+                                                                @endif
+                                                                <span>{{ $child->name }}</span>
+                                                            </li>
                                                         @endforeach
                                                     </ul>
                                                 </div>
@@ -120,6 +137,7 @@
                                                 <span class="text-muted">{{ __('No Subcategories') }}</span>
                                             @endif
                                         </td>
+
                                         <td>
                                             <a href="{{ route('dashboard.category.edit', $category->id) }}"
                                                 class="btn btn-sm btn-primary">
@@ -148,33 +166,37 @@
 @endsection
 
 @push('scripts')
-  <script>
-    $(document).ready(function() {
-        let table = $('#categoriesTable').DataTable({
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json'
-            },
-            order: [[0, 'asc']],
-            pageLength: 10
-        });
+    <script>
+        $(document).ready(function() {
+            let table = $('#categoriesTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json'
+                },
+                order: [
+                    [0, 'asc']
+                ],
+                pageLength: 10
+            });
 
-        // تحديث عند تغيير الثيم
-        function updateTableTheme() {
-            const isDark = document.body.getAttribute('data-theme') === 'dark';
-            if (isDark) {
-                $('#categoriesTable').addClass('table-dark-mode');
-            } else {
-                $('#categoriesTable').removeClass('table-dark-mode');
+            // تحديث عند تغيير الثيم
+            function updateTableTheme() {
+                const isDark = document.body.getAttribute('data-theme') === 'dark';
+                if (isDark) {
+                    $('#categoriesTable').addClass('table-dark-mode');
+                } else {
+                    $('#categoriesTable').removeClass('table-dark-mode');
+                }
             }
-        }
 
-        // راقب التغيير على data-theme
-        const observer = new MutationObserver(updateTableTheme);
-        observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+            // راقب التغيير على data-theme
+            const observer = new MutationObserver(updateTableTheme);
+            observer.observe(document.body, {
+                attributes: true,
+                attributeFilter: ['data-theme']
+            });
 
-        // شغّل أول مرة
-        updateTableTheme();
-    });
-</script>
-
+            // شغّل أول مرة
+            updateTableTheme();
+        });
+    </script>
 @endpush

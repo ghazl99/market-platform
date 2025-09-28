@@ -33,7 +33,6 @@ class StoreService
 
         $user_id = $data['user_id'] ?? null;
         unset($data['user_id']);
-
         // Prepare translated fields
         $data = $this->prepareUserData($data);
         // Extract timezone into settings
@@ -62,12 +61,7 @@ class StoreService
             );
         }
         // Attach user if provided
-        if ($user_id) {
-            $store->storeUsers()->create([
-                'user_id' => $user_id,
-                'is_active' => true,
-            ]);
-        }
+            $store->users()->attach($user_id, ['is_active' => true]);
 
         DB::commit();
 

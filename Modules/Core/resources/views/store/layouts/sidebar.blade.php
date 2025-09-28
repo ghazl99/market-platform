@@ -47,18 +47,18 @@
      <!-- Navigation Menu -->
      <div class="sidebar-menu">
          <div class="menu-items">
-             <a href="/home" class="menu-item active">
+             <a href="{{ Route('home') }}" class="menu-item {{ request()->routeIs('home') ? 'active' : '' }}">
                  <div class="menu-item-icon">
                      <i class="fas fa-home"></i>
                  </div>
-                 <span class="menu-item-title">الرئيسية</span>
+                 <span class="menu-item-title">{{ __('Home') }}</span>
              </a>
 
-             <a href="/orders" class="menu-item">
+             <a href="{{ Route('order.index') }}" class="menu-item {{ request()->routeIs('order.index') ? 'active' : '' }}">
                  <div class="menu-item-icon">
                      <i class="fas fa-list-ul"></i>
                  </div>
-                 <span class="menu-item-title">الطلبات</span>
+                 <span class="menu-item-title">{{ __('Orders') }}</span>
                  <span class="menu-item-badge">5</span>
              </a>
 
