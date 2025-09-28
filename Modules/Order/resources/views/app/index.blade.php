@@ -533,23 +533,25 @@
 
             <!-- Filters Section -->
             <div class="filters-section">
-                <div class="filters-row">
+                <form method="GET" action="{{ route('order.index') }}" class="filters-row">
                     <div class="date-filter-group">
                         <div class="date-input-wrapper">
-                            <input type="date" class="date-input" id="dateFrom">
-                            <label class="date-label">من</label>
+                            <input type="date" class="date-input" name="date_from" value="{{ request('date_from') }}">
+                            <label class="date-label">{{ __('From') }}</label>
                         </div>
                         <div class="date-input-wrapper">
-                            <input type="date" class="date-input" id="dateTo">
-                            <label class="date-label">إلى</label>
+                            <input type="date" class="date-input" name="date_to" value="{{ request('date_to') }}">
+                            <label class="date-label">{{ __('To') }}</label>
                         </div>
                     </div>
                     <div class="search-group">
-                        <input type="text" class="search-input" placeholder="{{ __('Search orders...') }}"
-                            id="searchInput">
-                        <button class="search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
+                        <input type="text" class="search-input" name="search"
+                            placeholder="{{ __('Search product or status...') }}" value="{{ request('search') }}">
+                        <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
                     </div>
-                </div>
+                </form>
+
+
 
                 <!-- Status Chips -->
                 <div class="status-chips">
@@ -561,6 +563,10 @@
                             'canceled' => __('Canceled'),
                         ];
                     @endphp
+                    <div class="status-chip active" data-status="all">
+                        <span>{{ __('All Orders') }}</span>
+                        <span class="count">{{ $orders->total() }}</span>
+                    </div>
                     @foreach ($statusLabels as $key => $label)
                         <div class="status-chip" data-status="{{ $key }}">
                             <span>{{ $label }}</span>
@@ -569,7 +575,20 @@
                     @endforeach
                 </div>
             </div>
+            <div class="summary-section">
+                <div class="total-amount">
+                    <span class="total-label">{{ __('Total') }}</span>
+                    <span class="total-value">
+                        {{ $orders->sum(fn($order) => $order->items->sum(fn($item) => $item->quantity * $item->product->price)) }}
+                        $
+                    </span>
+                </div>
+                <a href="{{ route('order.export') }}" class="export-btn"style="text-decoration: none;">
+                    <i class="fas fa-file-excel"></i>
+                    {{ __('Export Excel') }}
+                </a>
 
+            </div>
             <!-- Orders List -->
             <div class="orders-list">
                 @forelse($orders as $order)
@@ -599,7 +618,10 @@
                                 <span>{{ $statusLabels[$order->status] ?? $order->status }}</span>
                             </div>
                             <div class="order-time">{{ $order->created_at->format('Y-m-d H:i:s') }}</div>
-                            <div class="order-player-id"># {{ $order->user->player_id ?? '-' }}</div>
+
+                            <div class="order-player-id">
+                                {{ $order->user?->player_id ? '#' . $order->user->player_id : '' }}
+                            </div>
                         </div>
                         <div class="order-price">
                             <h3 class="price-value">
@@ -627,38 +649,5 @@
     </div>
 
     @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const statusChips = document.querySelectorAll('.status-chip[data-status]');
-                const orderItems = document.querySelectorAll('.order-item');
-
-                statusChips.forEach(chip => {
-                    chip.addEventListener('click', function() {
-                        statusChips.forEach(c => c.classList.remove('active'));
-                        this.classList.add('active');
-
-                        const status = this.dataset.status;
-                        orderItems.forEach(item => {
-                            if (status === 'all') {
-                                item.style.display = 'flex';
-                            } else {
-                                item.style.display = item.querySelector('.order-status span')
-                                    .textContent.toLowerCase() === status ? 'flex' : 'none';
-                            }
-                        });
-                    });
-                });
-
-                // Search
-                const searchInput = document.getElementById('searchInput');
-                searchInput.addEventListener('keyup', function() {
-                    const term = this.value.toLowerCase();
-                    orderItems.forEach(item => {
-                        const text = item.textContent.toLowerCase();
-                        item.style.display = text.includes(term) ? 'flex' : 'none';
-                    });
-                });
-            });
-        </script>
     @endpush
 @endsection

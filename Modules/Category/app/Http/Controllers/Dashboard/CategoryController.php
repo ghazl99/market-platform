@@ -2,15 +2,15 @@
 
 namespace Modules\Category\Http\Controllers\Dashboard;
 
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Modules\Category\Models\Category;
-use Illuminate\Routing\Controllers\Middleware;
-use Modules\Category\Services\CategoryService;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Log;
 use Modules\Category\Http\Requests\CategoryRequest;
-use Modules\Category\Repositories\CategoryRepository;
 use Modules\Category\Http\Requests\UpdateCategoryRequest;
+use Modules\Category\Models\Category;
+use Modules\Category\Repositories\CategoryRepository;
+use Modules\Category\Services\CategoryService;
 
 class CategoryController extends Controller implements HasMiddleware
 {
@@ -64,7 +64,7 @@ class CategoryController extends Controller implements HasMiddleware
                 ->route('dashboard.category.index')
                 ->with('success', __('Created successfully'));
         } catch (\Throwable $e) {
-            Log::error('Category Store Error: ' . $e->getMessage(), [
+            Log::error('Category Store Error: '.$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
             ]);
 
@@ -74,8 +74,6 @@ class CategoryController extends Controller implements HasMiddleware
                 ->withErrors($e->getMessage());
         }
     }
-
-
 
     /**
      * Show the form for editing the specified resource.

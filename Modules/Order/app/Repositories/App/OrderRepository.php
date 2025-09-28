@@ -6,7 +6,7 @@ use Modules\Order\Models\Order;
 
 interface OrderRepository
 {
-    public function index(int $userId, int $storeId);
+    public function index(int $userId, int $storeId, array $filters = []);
 
     /*
     with cart

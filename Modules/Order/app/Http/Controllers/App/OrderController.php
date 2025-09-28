@@ -2,9 +2,11 @@
 
 namespace Modules\Order\Http\Controllers\App;
 
+use App\Exports\OrderExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Modules\Order\Http\Requests\App\StoreOrderRequest;
 use Modules\Order\Models\Order;
 use Modules\Order\Services\App\OrderService;
@@ -29,16 +31,29 @@ class OrderController extends Controller
         }
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function export()
+    {
+        return Excel::download(new OrderExport, 'orders.xlsx');
+    }
+
     // with cart
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $userId = Auth::id();
         $storeId = Store::currentFromUrl()->firstOrFail()->id;
 
-        $orders = $this->orderService->getOrders($userId, $storeId);
+        $filters = $filters = [
+            'date_from' => $request->date_from,
+            'date_to' => $request->date_to,
+            'search' => $request->search,
+        ];
+        $orders = $this->orderService->getOrders($userId, $storeId, $filters);
 
         return view('order::app.index', compact('orders'));
     }
@@ -76,12 +91,12 @@ class OrderController extends Controller
     /**
      * Show the specified resource.
      */
-    // public function show(Order $order)
-    // {
-    //     $order->load('items.product');
+    public function show(Order $order)
+    {
+        $order->load('items.product');
 
-    //     return view('order::app.show', compact('order'));
-    // }
+        return view('order::app.show', compact('order'));
+    }
 
     /**
      * Show the form for editing the specified resource.

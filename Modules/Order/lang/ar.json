@@ -1,5 +1,11 @@
 {
     "My Orders": "طلباتي",
+    "All Orders":"كل الطلبات",
+    "Export Excel":"تصدير إكسل",
+    "From": "من",
+    "To": "إلى",
+    "Search orders...": "ابحث عن الطلبات...",
+    "You have not made any orders yet.": "لم تقم بأي طلبات بعد.",
     "Order Details": "تفاصيل الطلب",
     "View Details": "عرض التفاصيل",
     "Order ID": "معرف الطلب",
@@ -32,5 +38,5 @@
     "Yes, cancel it!": "نعم، قم بالإلغاء!",
     "Success": "نجاح",
     "Payment alert": "تنبيه الدفع",
-    "No orders":"لا يوجد طلبات"
+    "No orders": "لا يوجد طلبات"
 }

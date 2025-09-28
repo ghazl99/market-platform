@@ -32,7 +32,7 @@ class CategoryService
                     try {
                         $translated[$lang] = $this->autoGoogleTranslator($lang, $data[$field]);
                     } catch (\Exception $e) {
-                        Log::error("Failed to translate [$field] to [$lang]: " . $e->getMessage());
+                        Log::error("Failed to translate [$field] to [$lang]: ".$e->getMessage());
                         $translated[$lang] = $data[$field]; // fallback
                     }
                 }
@@ -49,7 +49,7 @@ class CategoryService
                     try {
                         $subTranslated[$lang] = $this->autoGoogleTranslator($lang, $subcategory);
                     } catch (\Exception $e) {
-                        Log::error("Failed to translate [subcategory] to [$lang]: " . $e->getMessage());
+                        Log::error("Failed to translate [subcategory] to [$lang]: ".$e->getMessage());
                         $subTranslated[$lang] = $subcategory;
                     }
                 }
@@ -131,8 +131,6 @@ class CategoryService
             throw $e;
         }
     }
-
-
 
     /** Update existing category and optionally replace image */
     public function updateCategory(Category $category, array $data): bool

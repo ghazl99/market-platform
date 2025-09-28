@@ -9,13 +9,30 @@ use Modules\Order\Models\OrderItem;
 
 class OrderModelRepository implements OrderRepository
 {
-    public function index(int $userId, int $storeId)
+    public function index(int $userId, int $storeId, array $filters = [])
     {
-        return Order::where('user_id', $userId)
+        $query = Order::where('user_id', $userId)
             ->where('store_id', $storeId)
-            ->with('items.product') // تجيب المنتجات
-            ->latest()
-            ->paginate(10);
+            ->with('items.product');
+
+        // فلترة حسب التاريخ
+        if (! empty($filters['date_from'])) {
+            $query->whereDate('created_at', '>=', $filters['date_from']);
+        }
+        if (! empty($filters['date_to'])) {
+            $query->whereDate('created_at', '<=', $filters['date_to']);
+        }
+
+        if (! empty($filters['search'])) {
+            $query->where(function ($q) use ($filters) {
+                $q->whereHas('items.product', function ($q2) use ($filters) {
+                    $q2->where('name', 'like', '%'.$filters['search'].'%');
+                })
+                    ->orWhere('status', 'like', '%'.$filters['search'].'%');
+            });
+        }
+
+        return $query->latest()->paginate(10);
     }
 
     /*

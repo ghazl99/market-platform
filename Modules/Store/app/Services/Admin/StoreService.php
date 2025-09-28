@@ -61,7 +61,7 @@ class StoreService
             );
         }
         // Attach user if provided
-            $store->users()->attach($user_id, ['is_active' => true]);
+        $store->users()->attach($user_id, ['is_active' => true]);
 
         DB::commit();
 

@@ -14,9 +14,9 @@ class OrderService
         protected \Modules\Cart\Services\App\CartService $cartService,
     ) {}
 
-    public function getOrders(int $userId, int $storeId)
+    public function getOrders($userId, $storeId, $filters)
     {
-        return $this->orderRepository->index($userId, $storeId);
+        return $this->orderRepository->index($userId, $storeId, $filters);
     }
 
     /* with cart
