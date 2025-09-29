@@ -23,8 +23,8 @@
                      <div class="online-indicator"></div>
                  </div>
                  <div class="user-info">
-                     <h3 class="user-name">وليد الحسن</h3>
-                     <p class="user-email">alhasn690168@gmail.com</p>
+                     <h3 class="user-name">{{ Auth::user()->name }}</h3>
+                     <p class="user-email">{{ Auth::user()->email }}</p>
                      <span class="verified-badge">
                          <i class="fas fa-check-circle"></i>
                          موثق
@@ -55,26 +55,28 @@
              </a>
 
              <a href="{{ Route('order.index') }}"
-                 class="menu-item {{ request()->routeIs('order.index') ? 'active' : '' }}">
+                 class="menu-item {{ request()->routeIs('order.index') || request()->routeIs('order.show') ? 'active' : '' }}">
                  <div class="menu-item-icon">
                      <i class="fas fa-list-ul"></i>
                  </div>
                  <span class="menu-item-title">{{ __('Orders') }}</span>
-                 <span class="menu-item-badge">5</span>
+                 {{-- <span class="menu-item-badge">5</span> --}}
              </a>
 
-             <a href="/wallet" class="menu-item">
+             <a href="{{ Route('wallet.index') }}"
+                 class="menu-item {{ request()->routeIs('wallet.index') ? 'active' : '' }}">
                  <div class="menu-item-icon">
                      <i class="fas fa-wallet"></i>
                  </div>
-                 <span class="menu-item-title">المحفظة</span>
+                 <span class="menu-item-title">{{ __('Wallet') }}</span>
              </a>
 
-             <a href="/addBalance" class="menu-item">
+             <a href="{{ Route('balance.index') }}"
+                 class="menu-item {{ request()->routeIs('balance.index') ? 'active' : '' }}">
                  <div class="menu-item-icon">
                      <i class="fas fa-plus-circle"></i>
                  </div>
-                 <span class="menu-item-title">إضافة رصيد</span>
+                 <span class="menu-item-title">{{ __('Balance') }}</span>
              </a>
 
              <a href="/notify" class="menu-item">
@@ -85,13 +87,20 @@
                  <span class="menu-item-badge notification">3</span>
              </a>
 
-             <a href="/passwordchange" class="menu-item">
+             <a href="{{ Route('auth.profile.edit', Auth::user()->id) }}"
+                 class="menu-item {{ request()->routeIs('auth.profile.edit') ? 'active' : '' }}">
+                 <div class="menu-item-icon">
+                     <i class="fas fa-user"></i>
+                 </div>
+                 <span class="menu-item-title">{{ __('Edit Profile') }}</span>
+             </a>
+             <a href="{{ Route('auth.profile.edit', Auth::user()->id) }}"
+                 class="menu-item {{ request()->routeIs('auth.profile.edit') ? 'active' : '' }}">
                  <div class="menu-item-icon">
                      <i class="fas fa-user-shield"></i>
                  </div>
-                 <span class="menu-item-title">الأمان</span>
+                 <span class="menu-item-title">{{ __('Security') }}</span>
              </a>
-
              <a href="https://api.whatsapp.com/send?phone=963992609703" class="menu-item">
                  <div class="menu-item-icon">
                      <i class="fas fa-headset"></i>

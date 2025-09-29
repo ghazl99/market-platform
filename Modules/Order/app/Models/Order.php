@@ -21,7 +21,24 @@ class Order extends Model
         'status',
         'payment_status',
     ];
+    /**
+     * Get created_at in store timezone
+     */
+    public function getCreatedAtInStoreTimezoneAttribute()
+    {
+        $timezone = $this->store?->timezone ?? 'UTC';
+        return $this->created_at->timezone($timezone);
+    }
 
+    /**
+     * Get updated_at in store timezone
+     */
+    public function getUpdatedAtInStoreTimezoneAttribute()
+    {
+        $timezone = $this->store?->timezone ?? 'UTC';
+        return $this->updated_at->timezone($timezone);
+    }
+    
     public function items()
     {
         return $this->hasMany(OrderItem::class);
@@ -34,5 +51,9 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function store()
+    {
+        return $this->belongsTo(\Modules\Store\Models\Store::class);
     }
 }

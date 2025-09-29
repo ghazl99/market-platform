@@ -2,8 +2,9 @@
 
 namespace Modules\Wallet\Providers;
 
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
         $this->mapWebRoutes();
+        $this->mapDashboardRoutes();
     }
 
     /**
@@ -35,7 +37,13 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware('web')->group(module_path($this->name, '/routes/web.php'));
+        $name = $this->name;
+        Route::group([
+            'prefix' => LaravelLocalization::setLocale(),
+            'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath'],
+        ], static function () use ($name) {
+            Route::middleware('web')->group(module_path($name, '/routes/web.php'));
+        });
     }
 
     /**
@@ -46,5 +54,20 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes(): void
     {
         Route::middleware('api')->prefix('api')->name('api.')->group(module_path($this->name, '/routes/api.php'));
+    }
+
+    /** Define the "dashboard" routes for the application. */
+    protected function mapDashboardRoutes(): void
+    {
+        $name = $this->name;
+        Route::group([
+            'prefix' => LaravelLocalization::setLocale(),
+            'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath'],
+        ], static function () use ($name) {
+            Route::prefix('dashboard')
+                ->name('dashboard.')
+                ->middleware(['web'])
+                ->group(module_path($name, '/routes/dashboard.php'));
+        });
     }
 }

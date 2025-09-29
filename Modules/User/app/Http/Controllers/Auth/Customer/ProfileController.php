@@ -1,18 +1,18 @@
 <?php
 
-namespace Modules\Wallet\Http\Controllers\App;
+namespace Modules\User\Http\Controllers\Auth\Customer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class WalletController extends Controller
+class ProfileController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('wallet::app.wallet.index');
+        return view('user::index');
     }
 
     /**
@@ -20,7 +20,7 @@ class WalletController extends Controller
      */
     public function create()
     {
-        return view('wallet::create');
+        return view('user::create');
     }
 
     /**
@@ -33,7 +33,7 @@ class WalletController extends Controller
      */
     public function show($id)
     {
-        return view('wallet::show');
+        return view('user::show');
     }
 
     /**
@@ -41,7 +41,7 @@ class WalletController extends Controller
      */
     public function edit($id)
     {
-        return view('wallet::edit');
+        return view('user::Auth.customer.profile');
     }
 
     /**

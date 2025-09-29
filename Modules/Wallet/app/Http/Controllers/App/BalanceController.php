@@ -5,14 +5,14 @@ namespace Modules\Wallet\Http\Controllers\App;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class WalletController extends Controller
+class BalanceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('wallet::app.wallet.index');
+        return view('wallet::app.balance.index');
     }
 
     /**
@@ -20,7 +20,7 @@ class WalletController extends Controller
      */
     public function create()
     {
-        return view('wallet::create');
+        return view('wallet::app.balance.create');
     }
 
     /**

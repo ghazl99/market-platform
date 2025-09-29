@@ -33,13 +33,17 @@
 
                 </div>
 
-                <div class="user-profile-mini">
-                    <i class="fas fa-wallet"></i>
-                    <div class="user-info-mini">
-                        <span class="wallet-amount">$1000</span>
+                <a href="{{ Route('auth.profile.edit',Auth::user()->id) }}" class="user-profile-link " style="text-decoration: none;">
+                    <div class="user-profile-mini">
+                        <img src="{{ Auth::user()->profilePhotoUrl }}"
+                            alt="{{ Auth::user()->name }}" class="user-avatar-mini">
+                        <div class="user-info-mini">
+                            <span class="user-name">{{ Auth::user()->name }}</span>
 
+                        </div>
                     </div>
-                </div>
+                </a>
+
 
                 <div class="language-switcher">
                     <select class="form-select lang-select" onchange="if(this.value) window.location.href=this.value;">
