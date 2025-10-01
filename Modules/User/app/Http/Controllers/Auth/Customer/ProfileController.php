@@ -2,17 +2,25 @@
 
 namespace Modules\User\Http\Controllers\Auth\Customer;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Modules\User\Services\Auth\ProfileService;
+use Modules\User\Http\Requests\Auth\ProfileUpdateRequest;
 
 class ProfileController extends Controller
 {
+
+    public function __construct(
+        protected ProfileService $profileService
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('user::index');
+        return view('user::Auth.customer.security');
     }
 
     /**
@@ -47,8 +55,15 @@ class ProfileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {}
+    public function update(ProfileUpdateRequest $request, $id)
+    {
+        $user = Auth::user();
 
+        $this->profileService->updateProfile($user, $request->validated());
+
+        return  redirect()->route('auth.profile.edit', $user->id)
+            ->with('success', __('Updated successfully'));
+    }
     /**
      * Remove the specified resource from storage.
      */

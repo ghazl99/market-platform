@@ -12,38 +12,34 @@
              <i class="fas fa-times"></i>
          </button>
      </div>
+     @auth
+         <!-- Combined Profile & Balance Section -->
+         <div class="profile-balance-section">
+             <div class="profile-balance-card">
+                 <div class="profile-section">
+                     <div class="user-avatar-container">
+                         <img src="{{ Auth::user()->profilePhotoUrl }}"
+                             alt="{{ Auth::user()->name }}" class="user-avatar">
+                         <div class="online-indicator"></div>
+                     </div>
+                     <div class="user-info">
+                         <h3 class="user-name">{{ Auth::user()->name }}</h3>
+                         <p class="user-email">{{ Auth::user()->email }}</p>
+                     </div>
+                 </div>
 
-     <!-- Combined Profile & Balance Section -->
-     <div class="profile-balance-section">
-         <div class="profile-balance-card">
-             <div class="profile-section">
-                 <div class="user-avatar-container">
-                     <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-                         alt="المستخدم" class="user-avatar">
-                     <div class="online-indicator"></div>
+                 <div class="balance-section">
+                     <div class="balance-info">
+                         <span class="balance-label">صافي الرصيد</span>
+                         <span class="balance-value">$1,000.00</span>
+                     </div>
+                     <button class="balance-refresh" title="تحديث">
+                         <i class="fas fa-sync-alt"></i>
+                     </button>
                  </div>
-                 <div class="user-info">
-                     <h3 class="user-name">{{ Auth::user()->name }}</h3>
-                     <p class="user-email">{{ Auth::user()->email }}</p>
-                     <span class="verified-badge">
-                         <i class="fas fa-check-circle"></i>
-                         موثق
-                     </span>
-                 </div>
-             </div>
-
-             <div class="balance-section">
-                 <div class="balance-info">
-                     <span class="balance-label">صافي الرصيد</span>
-                     <span class="balance-value">$1,000.00</span>
-                 </div>
-                 <button class="balance-refresh" title="تحديث">
-                     <i class="fas fa-sync-alt"></i>
-                 </button>
              </div>
          </div>
-     </div>
-
+     @endauth
      <!-- Navigation Menu -->
      <div class="sidebar-menu">
          <div class="menu-items">
@@ -86,16 +82,16 @@
                  <span class="menu-item-title">الإشعارات</span>
                  <span class="menu-item-badge notification">3</span>
              </a>
-
+             @auth
              <a href="{{ Route('auth.profile.edit', Auth::user()->id) }}"
-                 class="menu-item {{ request()->routeIs('auth.profile.edit') ? 'active' : '' }}">
+                 class="menu-item {{ request()->routeIs('auth.profile.edit', Auth::user()->id) ? 'active' : '' }}">
                  <div class="menu-item-icon">
                      <i class="fas fa-user"></i>
                  </div>
                  <span class="menu-item-title">{{ __('Edit Profile') }}</span>
              </a>
-             <a href="{{ Route('auth.profile.edit', Auth::user()->id) }}"
-                 class="menu-item {{ request()->routeIs('auth.profile.edit') ? 'active' : '' }}">
+             <a href="{{ Route('auth.security') }}"
+                 class="menu-item {{ request()->routeIs('auth.security') ? 'active' : '' }}">
                  <div class="menu-item-icon">
                      <i class="fas fa-user-shield"></i>
                  </div>
@@ -119,6 +115,7 @@
                      <span class="menu-item-title">{{ __('Logout') }}</span>
                  </button>
              </form>
+             @endauth
              <!-- Footer Info -->
              <div class="menu-footer-info">
                  <p>بواسطة <a href="https://kaymn.com" target="_blank">كايمن للخدمات</a></p>

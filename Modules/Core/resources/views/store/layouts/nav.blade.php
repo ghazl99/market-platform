@@ -30,20 +30,23 @@
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge">3</span>
                     </button>
-
                 </div>
-
-                <a href="{{ Route('auth.profile.edit',Auth::user()->id) }}" class="user-profile-link " style="text-decoration: none;">
-                    <div class="user-profile-mini">
-                        <img src="{{ Auth::user()->profilePhotoUrl }}"
-                            alt="{{ Auth::user()->name }}" class="user-avatar-mini">
-                        <div class="user-info-mini">
-                            <span class="user-name">{{ Auth::user()->name }}</span>
-
+                @auth
+                    <a href="{{ route('auth.profile.edit', Auth::user()->id) }}" class="user-profile-link"
+                        style="text-decoration: none;">
+                        <div class="user-profile-mini">
+                            <img src="{{ Auth::user()->profilePhotoUrl }}" alt="{{ Auth::user()->name }}"
+                                class="user-avatar-mini">
+                            <div class="user-info-mini">
+                                <span class="user-name">{{ Auth::user()->name }}</span>
+                            </div>
                         </div>
-                    </div>
-                </a>
-
+                    </a>
+                @else
+                    <a href="{{ route('auth.customer.login') }}" class="btn btn-success" title="{{ __('Login') }}">
+                        تسجيل الدخول
+                    </a>
+                @endauth
 
                 <div class="language-switcher">
                     <select class="form-select lang-select" onchange="if(this.value) window.location.href=this.value;">

@@ -5,6 +5,7 @@ use Modules\User\Http\Controllers\Auth\AuthenticatedSessionController;
 use Modules\User\Http\Controllers\Auth\Customer\LoginController;
 use Modules\User\Http\Controllers\Auth\Customer\ProfileController;
 use Modules\User\Http\Controllers\Auth\Customer\RegisterController;
+use Modules\User\Http\Controllers\Auth\PassWordController;
 use Modules\User\Http\Controllers\Auth\RegisteredUserController;
 
 Route::middleware('guest')->group(function () {
@@ -31,7 +32,15 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
-    Route::middleware(['customer.auth', 'ensure-store-access', 'check.store.status'])->group(function () {
-        Route::resource('profile', ProfileController::class)->names('profile');
-    });
+});
+Route::middleware(['customer.auth', 'ensure-store-access', 'check.store.status'])->group(function () {
+    Route::resource('profile', ProfileController::class)->names('profile');
+    Route::get('security', [ProfileController::class, 'index'])
+        ->name('security');
+
+    Route::get('/change-password', [PassWordController::class, 'changePasswordForm'])
+        ->name('change-password');
+
+    Route::post('/change-password', [PassWordController::class, 'changePassword'])
+        ->name('password.update');
 });

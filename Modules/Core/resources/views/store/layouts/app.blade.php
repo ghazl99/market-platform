@@ -38,26 +38,6 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        @if (session('success'))
-            <div class="container mt-5 pt-5">
-                <div class="alert alert-success alert-dismissible fade show modern-alert" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="container mt-5 pt-5">
-                <div class="alert alert-danger alert-dismissible fade show modern-alert" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            </div>
-        @endif
-
         @yield('content')
     </main>
 
@@ -130,10 +110,38 @@
         });
     </script>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Store Scripts -->
     <script src="{{ asset('assets/js/script-store.js') }}"></script>
 
     <!-- Blade pushed scripts -->
     @stack('scripts')
+    <!-- Session Alerts -->
+    <script>
+        $(function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: "{{ __('نجاح') }}",
+                    text: "{{ session('success') }}",
+                    timer: 2500,
+                    showConfirmButton: false
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: "{{ __('خطأ') }}",
+                    text: "{{ session('error') }}",
+                    timer: 3000,
+                    showConfirmButton: true
+                });
+            @endif
+        });
+    </script>
 </body>
 </html>

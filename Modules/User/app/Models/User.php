@@ -2,17 +2,18 @@
 
 namespace Modules\User\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Scout\Searchable;
 use Modules\Store\Models\Store;
-use Spatie\MediaLibrary\HasMedia; // use Modules\User\Database\Factories\UserFactory;
-use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Translatable\HasTranslations;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\MediaLibrary\HasMedia; // use Modules\User\Database\Factories\UserFactory;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail
 {
@@ -28,6 +29,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'email',
         'password',
         'last_login_at',
+        'last_updated_at_password'
     ];
 
     /**
@@ -49,9 +51,29 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_updated_at_password' => 'datetime',
             'last_login_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getLastUpdatedAtPasswordInStoreTimezoneAttribute()
+    {
+        if (!$this->last_updated_at_password) {
+            return null;
+        }
+
+        // استرجاع المتجر الحالي من الدومين
+        $store = Cache::remember('current_store', 60, function () {
+            return Store::currentFromUrl()->first();
+        });
+
+        if ($store) {
+            return $this->last_updated_at_password->timezone($store->timezone);
+        }
+
+        // إذا ما في متجر، رجّعها UTC
+        return $this->last_updated_at_password->timezone('UTC');
     }
 
     public function getProfilePhotoUrlAttribute()
@@ -75,7 +97,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         return $this->belongsToMany(Store::class, 'store_users')
             ->withPivot('is_active')
             ->withTimestamps()
-            ->whereHas('users.roles', fn ($q) => $q->where('name', 'owner'));
+            ->whereHas('users.roles', fn($q) => $q->where('name', 'owner'));
     }
 
     /**
@@ -86,7 +108,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         return $this->belongsToMany(Store::class, 'store_users')
             ->withPivot('is_active')
             ->withTimestamps()
-            ->whereHas('users.roles', fn ($q) => $q->where('name', 'staff'));
+            ->whereHas('users.roles', fn($q) => $q->where('name', 'staff'));
     }
 
     /**

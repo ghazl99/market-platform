@@ -45,6 +45,7 @@ class UserServiceProvider extends ServiceProvider
         $this->app->bind(UserRepository::class, UserModelRepository::class);
         $this->app->bind(\Modules\User\Repositories\Dashboard\StaffRepository::class, \Modules\User\Repositories\Dashboard\StaffModelRepository::class);
         $this->app->bind(CustomerRepository::class, CustomerModelRepository::class);
+        $this->app->bind(\Modules\User\Repositories\Auth\ProfileRepository::class, \Modules\User\Repositories\Auth\ProfileModelRepository::class);
     }
 
     /**
