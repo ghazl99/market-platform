@@ -5,45 +5,45 @@
 @endpush
 @section('content')
     <div class="profile-container">
-        <!-- Security Section -->
         <div class="profile-main">
 
             <h2 class="section-title">
                 <i class="fas fa-shield-alt"></i>
-                الأمان
+                {{ __('Security') }}
             </h2>
 
             <div class="security-item">
                 <div class="security-info">
                     <h4>{{ __('Password') }}</h4>
-                    <p>آخر تحديث:{{Auth::user()->last_updated_at_password_in_store_timezone?->diffForHumans() ?? 'غير محدد' }}
+                    <p>{{ __('Last update') }}:
+                        {{ Auth::user()->last_updated_at_password_in_store_timezone?->diffForHumans() ?? 'غير محدد' }}
                     </p>
                 </div>
                 <div class="security-status">
-                    <span class="status-badge status-active">آمن</span>
-                    <a href="{{ Route('auth.change-password') }}" class="btn btn-secondary">تغيير</a>
+                    <span class="status-badge status-active">{{ __('Safe') }}</span>
+                    <a href="{{ route('auth.change-password') }}" class="btn btn-secondary">{{ __('Change') }}</a>
                 </div>
             </div>
 
             <div class="security-item">
                 <div class="security-info">
-                    <h4>المصادقة الثنائية</h4>
-                    <p>إضافة طبقة حماية إضافية لحسابك</p>
+                    <h4>{{ __('Two Factor Authentication') }}</h4>
+                    <p>{{ __('Two Factor Description') }}</p>
                 </div>
                 <div class="security-status">
-                    <span class="status-badge status-inactive">غير مفعل</span>
-                    <button class="btn btn-primary">تفعيل</button>
+                    <span class="status-badge status-inactive">{{ __('Inactive') }}</span>
+                    <button class="btn btn-primary">{{ __('Activate') }}</button>
                 </div>
             </div>
 
             <div class="security-item">
                 <div class="security-info">
-                    <h4>جلسات نشطة</h4>
-                    <p>إدارة الأجهزة المتصلة بحسابك</p>
+                    <h4>{{ __('Active Sessions') }}</h4>
+                    <p>{{ __('Active Sessions Description') }}</p>
                 </div>
                 <div class="security-status">
-                    <span class="status-badge status-active">3 أجهزة</span>
-                    <button class="btn btn-secondary">إدارة</button>
+                    <span class="status-badge status-active">3 {{ __('Devices') }}</span>
+                    <button class="btn btn-secondary">{{ __('Manage') }}</button>
                 </div>
             </div>
         </div>

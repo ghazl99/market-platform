@@ -91,7 +91,7 @@
                  <span class="menu-item-title">{{ __('Edit Profile') }}</span>
              </a>
              <a href="{{ Route('auth.security') }}"
-                 class="menu-item {{ request()->routeIs('auth.security') ? 'active' : '' }}">
+                 class="menu-item {{ (request()->routeIs('auth.security') ||  request()->routeIs('auth.change-password')) ? 'active' : '' }}">
                  <div class="menu-item-icon">
                      <i class="fas fa-user-shield"></i>
                  </div>
