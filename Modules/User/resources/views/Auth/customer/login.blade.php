@@ -66,6 +66,8 @@
 
                     <form method="POST" action="{{ route('auth.login') }}" class="auth-form" id="loginForm">
                         @csrf
+
+                        <!-- Email Field -->
                         <div class="form-group">
                             <label for="email" class="form-label">{{ __('Email') }}</label>
                             <div class="input-wrapper">
@@ -81,6 +83,7 @@
                             @enderror
                         </div>
 
+                        <!-- Password Field -->
                         <div class="form-group">
                             <label for="password" class="form-label">{{ __('Password') }}</label>
                             <div class="input-wrapper">
@@ -99,6 +102,7 @@
                             @enderror
                         </div>
 
+                        <!-- Remember Me -->
                         <div class="form-options">
                             <input type="hidden" name="remember" value="0">
 
@@ -111,11 +115,24 @@
                             <a href="#" class="forgot-link">{{ __('Forgot password?') }}</a>
                         </div>
 
+                        <!-- Submit Button -->
                         <button type="submit" class="submit-btn">
                             <i class="fas fa-sign-in-alt"></i>
                             <span>{{ __('Login') }}</span>
                         </button>
+
+                        <!-- Display General Errors -->
+                        @if ($errors->any())
+                            <div class="alert alert-danger mt-2">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </form>
+
 
                     <!-- Divider -->
                     <div class="divider">

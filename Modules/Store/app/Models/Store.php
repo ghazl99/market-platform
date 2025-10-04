@@ -2,18 +2,21 @@
 
 namespace Modules\Store\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Modules\Product\Models\Product;
 use Modules\User\Models\User;
 use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
+use Modules\Product\Models\Product;
+use Illuminate\Database\Eloquent\Model;
+use Modules\Wallet\Models\PaymentMethod;
 use Spatie\Translatable\HasTranslations;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Modules\Store\Database\Factories\StoreFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Store extends Model implements HasMedia
 {
-    use HasTranslations, InteractsWithMedia;
+    use HasFactory,HasTranslations, InteractsWithMedia;
 
     protected $fillable = [
         'name',
@@ -32,7 +35,10 @@ class Store extends Model implements HasMedia
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
-
+    protected static function newFactory()
+    {
+        return StoreFactory::new();
+    }
     /**
      * Scope to get store from current request URL (subdomain)
      */
@@ -82,7 +88,7 @@ class Store extends Model implements HasMedia
     public function getStoreUrlAttribute(): string
     {
         if (app()->environment('production')) {
-            return 'https://'.$this->domain; // custom domain
+            return 'https://' . $this->domain; // custom domain
         }
 
         // Local domain-based
@@ -93,7 +99,7 @@ class Store extends Model implements HasMedia
     public function getDashboardUrlAttribute(): string
     {
         if (app()->environment('production')) {
-            return 'https://'.$this->domain.'/dashboard';
+            return 'https://' . $this->domain . '/dashboard';
         }
 
         return "http://{$this->domain}.market-platform.localhost/dashboard";
@@ -125,7 +131,7 @@ class Store extends Model implements HasMedia
         return $this->belongsToMany(User::class, 'store_users')
             ->withPivot('is_active')
             ->withTimestamps()
-            ->whereHas('roles', fn ($q) => $q->where('name', 'owner'));
+            ->whereHas('roles', fn($q) => $q->where('name', 'owner'));
     }
 
     /** * Get all staff members of the store. */
@@ -133,7 +139,7 @@ class Store extends Model implements HasMedia
     {
         return $this->belongsToMany(User::class, 'store_users')
             ->withPivot('is_active')
-            ->withTimestamps()->whereHas('roles', fn ($q) => $q->where('name', 'staff'));
+            ->withTimestamps()->whereHas('roles', fn($q) => $q->where('name', 'staff'));
     }
 
     /**
@@ -151,7 +157,7 @@ class Store extends Model implements HasMedia
     {
         $appUrl = config('app.url', 'http://127.0.0.1:8000');
 
-        return $appUrl.'/view/'.$this->id;
+        return $appUrl . '/view/' . $this->id;
     }
 
     public function products()
@@ -176,5 +182,10 @@ class Store extends Model implements HasMedia
                 'by_id' => $this->store_by_id_url,
             ],
         ];
+    }
+
+    public function paymentMethods()
+    {
+        return $this->hasMany(PaymentMethod::class);
     }
 }

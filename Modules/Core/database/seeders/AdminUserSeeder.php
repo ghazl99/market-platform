@@ -13,12 +13,14 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // إنشاء مستخدم admin
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@kaymn.store',
-            'password' => Hash::make('admin123'),
-            'email_verified_at' => now(),
-        ])->assignRole('admin');
+        User::withoutEvents(function () {
+            // إنشاء مستخدم admin
+            User::create([
+                'name' => 'Admin',
+                'email' => 'admin@kaymn.store',
+                'password' => Hash::make('admin123'),
+                'email_verified_at' => now(),
+            ])->assignRole('admin');
+        });
     }
 }

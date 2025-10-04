@@ -592,7 +592,7 @@
             <!-- Orders List -->
             <div class="orders-list">
                 @forelse($orders as $order)
-                    <div class="order-item" data-order-id="{{ $order->id }}">
+                    <a href="{{ route('order.show',$order->id) }}" style="text-decoration: none" class="order-item" data-order-id="{{ $order->id }}">
                         <div class="order-info">
                             <h6 class="order-id">#{{ $order->id }}</h6>
                             <div class="order-title">{{ $order->items->first()->product->name ?? '' }}</div>
@@ -629,7 +629,7 @@
                             </h3>
                             <small class="price-quantity">/ {{ $order->items->sum('quantity') }}</small>
                         </div>
-                    </div>
+                    </a>
                 @empty
                     <div class="empty-state">
                         <i class="fas fa-shopping-cart"></i>

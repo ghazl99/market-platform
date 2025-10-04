@@ -2,7 +2,12 @@
 
 namespace Modules\Wallet\Repositories\App;
 
-class WalletModelRepository
+use Modules\Wallet\Models\Wallet;
+
+class WalletModelRepository implements WalletRepository
 {
-    public function handle() {}
+    public function create(array $data): Wallet
+    {
+        return Wallet::create($data);
+    }
 }

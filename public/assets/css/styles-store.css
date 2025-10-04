@@ -126,6 +126,7 @@ body {
     line-height: 1.6;
     transition: var(--transition);
 }
+
 .language-switcher select {
     padding: 0.25rem 0.5rem;
     border-radius: 5px;
@@ -646,9 +647,11 @@ body {
     0% {
         box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
     }
+
     70% {
         box-shadow: 0 0 0 6px rgba(74, 222, 128, 0);
     }
+
     100% {
         box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
     }
@@ -880,10 +883,13 @@ body {
 }
 
 @keyframes pulse-badge {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: scale(1);
         box-shadow: 0 3px 8px rgba(239, 68, 68, 0.4);
     }
+
     50% {
         transform: scale(1.1);
         box-shadow: 0 6px 15px rgba(239, 68, 68, 0.6);
@@ -2196,6 +2202,7 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -2292,10 +2299,13 @@ body:not(.loaded)::after {
 }
 
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1);
     }
+
     50% {
         opacity: 0.7;
         transform: translate(-50%, -50%) scale(1.05);
@@ -2472,9 +2482,12 @@ body:not(.loaded)::after {
 }
 
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0px) rotate(0deg);
     }
+
     50% {
         transform: translateY(-20px) rotate(180deg);
     }
@@ -2549,6 +2562,7 @@ body:not(.loaded)::after {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -2660,9 +2674,12 @@ body:not(.loaded)::after {
 }
 
 @keyframes floatCard {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0px);
     }
+
     50% {
         transform: translateY(-10px);
     }
@@ -2699,12 +2716,19 @@ body:not(.loaded)::after {
 }
 
 @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
         transform: translateY(0);
     }
+
     40% {
         transform: translateY(-10px);
     }
+
     60% {
         transform: translateY(-5px);
     }
@@ -2866,6 +2890,7 @@ body:not(.loaded)::after {
     0% {
         transform: translateX(0);
     }
+
     100% {
         transform: translateX(-100%);
     }
@@ -3235,9 +3260,12 @@ body:not(.loaded)::after {
 }
 
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.05);
     }
@@ -3794,7 +3822,6 @@ body:not(.loaded)::after {
     position: relative;
     color: transparent;
 }
-
 .btn-loading::after {
     content: '';
     position: absolute;
@@ -3809,17 +3836,19 @@ body:not(.loaded)::after {
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
-
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+    0% {
+        transform: rotate(0deg);
+    }
 
+    100% {
+        transform: rotate(360deg);
+    }
+}
 /* Button with Badge */
 .btn-badge {
     position: relative;
 }
-
 .btn-badge::after {
     content: attr(data-badge);
     position: absolute;
@@ -3835,7 +3864,6 @@ body:not(.loaded)::after {
     text-align: center;
     line-height: 1;
 }
-
 /* Floating Action Button */
 .btn-fab {
     position: fixed;
@@ -3850,12 +3878,10 @@ body:not(.loaded)::after {
     z-index: 1000;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .btn-fab:hover {
     transform: scale(1.1);
     box-shadow: 0 12px 40px rgba(5, 150, 105, 0.5);
 }
-
 /* Dark Mode Button Adjustments */
 [data-theme="dark"] .btn-outline {
     border-color: var(--primary-color);
@@ -3884,17 +3910,14 @@ body:not(.loaded)::after {
         padding: 0.625rem 1.25rem;
         font-size: 0.8125rem;
     }
-
     .btn-lg {
         padding: 0.875rem 1.75rem;
         font-size: 0.9375rem;
     }
-
     .btn-xl {
         padding: 1rem 2rem;
         font-size: 1rem;
     }
-
     .btn-fab {
         width: 48px;
         height: 48px;
@@ -3902,7 +3925,6 @@ body:not(.loaded)::after {
         right: 1.5rem;
     }
 }
-
 /* Print Styles */
 @media print {
     .header,
@@ -3911,14 +3933,11 @@ body:not(.loaded)::after {
     .install-prompt {
         display: none !important;
     }
-
     .main-content {
         margin: 0 !important;
     }
-
     body {
         background: white !important;
         color: black !important;
     }
 }
-

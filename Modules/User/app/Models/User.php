@@ -13,6 +13,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Modules\User\Database\Factories\OwnerFactory;
 use Spatie\MediaLibrary\HasMedia; // use Modules\User\Database\Factories\UserFactory;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail
@@ -56,7 +57,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
             'password' => 'hashed',
         ];
     }
-
+    protected static function newFactory()
+    {
+        return OwnerFactory::new();
+    }
     public function getLastUpdatedAtPasswordInStoreTimezoneAttribute()
     {
         if (!$this->last_updated_at_password) {
@@ -120,7 +124,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
             ->withPivot('is_active')
             ->withTimestamps();
     }
-
+    public function wallet()
+    {
+        return $this->hasOne(\Modules\Wallet\Models\Wallet::class);
+    }
     public function toSearchableArray()
     {
         $array = [

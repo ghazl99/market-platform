@@ -7,7 +7,13 @@
         <div class="header-content">
             <div class="logo-section">
                 <div class="logo">
-                    <img src="{{ route('store.image', $media->id) }}" alt="{{ $store->name }}" class="logo-img">
+
+                    @if ($store->getFirstMedia('store_logo'))
+                        <img src="{{ route('store.image', $store->getFirstMedia('store_logo')->id) }}"
+                            alt="{{ $store->name }}" class="logo-img">
+                    @else
+                        <i class="fas fa-store fa-2x"></i>
+                    @endif
                     <div class="logo-text">
                         <h1>{{ $store->name }}</h1>
                     </div>

@@ -31,7 +31,7 @@
                  <div class="balance-section">
                      <div class="balance-info">
                          <span class="balance-label">صافي الرصيد</span>
-                         <span class="balance-value">$1,000.00</span>
+                         <span class="balance-value">{{ number_format(Auth::user()->wallet->balance ?? 0, 2) }} $</span>
                      </div>
                      <button class="balance-refresh" title="تحديث">
                          <i class="fas fa-sync-alt"></i>
@@ -67,8 +67,8 @@
                  <span class="menu-item-title">{{ __('Wallet') }}</span>
              </a>
 
-             <a href="{{ Route('balance.index') }}"
-                 class="menu-item {{ request()->routeIs('balance.index') ? 'active' : '' }}">
+             <a href="{{ Route('payment-method.index') }}"
+                 class="menu-item {{ request()->routeIs('payment-method.index') ? 'active' : '' }}">
                  <div class="menu-item-icon">
                      <i class="fas fa-plus-circle"></i>
                  </div>

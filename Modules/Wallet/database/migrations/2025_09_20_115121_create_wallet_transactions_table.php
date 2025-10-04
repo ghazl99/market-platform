@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('wallet_id')->constrained('wallets')->cascadeOnDelete();
             $table->foreignId('order_id')->nullable()->constrained('orders')->cascadeOnDelete();
-            $table->enum('type', ['deposit', 'withdraw', 'payment'])->default('deposit');
+            $table->enum('type', ['deposit', 'withdraw'])->default('deposit');
             $table->decimal('amount', 12, 2);
-            $table->text('description')->nullable();
+            $table->string('reference_type')->nullable();  // model type (PaymentRequest, Order, ...)
+            $table->unsignedBigInteger('reference_id')->nullable(); // id المرجع
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

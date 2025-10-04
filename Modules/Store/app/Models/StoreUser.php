@@ -2,14 +2,18 @@
 
 namespace Modules\Store\Models;
 
+use Modules\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Modules\User\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Store\Database\Factories\StoreUserFactory;
 
 // use Modules\Store\Database\Factories\StoreUserFactory;
 
 class StoreUser extends Model
 {
+        use HasFactory;
+
     protected $fillable = [
         'store_id',
         'user_id',
@@ -20,7 +24,10 @@ class StoreUser extends Model
         'permissions' => 'array',
         'is_active' => 'boolean',
     ];
-
+    protected static function newFactory()
+    {
+        return StoreUserFactory::new();
+    }
     /**
      * علاقة مع المتجر
      */

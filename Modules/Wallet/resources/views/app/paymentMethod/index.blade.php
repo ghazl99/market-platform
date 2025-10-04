@@ -296,7 +296,9 @@
         <!-- Current Balance -->
         <div class="current-balance">
             <div class="balance-label">الرصيد الحالي</div>
-            <div class="balance-amount">1,250.50</div>
+            <div class="balance-amount">
+                {{ number_format(Auth::user()->wallet->balance ?? 0, 2) }}
+            </div>
             <div class="balance-currency">دولار أمريكي</div>
         </div>
 
@@ -321,6 +323,37 @@
                 </h3>
                 <p class="tab-description">
                     اختر طريقة الدفع اليدوية المناسبة لك. سيتم إرسال طلب إضافة الرصيد للمدير للمراجعة والموافقة.
+                </p>
+                <div class="payment-methods-grid">
+                    @foreach ($paymentMethods as $method)
+                        <a href="{{ Route('payment-method.show',$method) }}" class="payment-method-card"
+                            data-gateway="{{ $method->gateway }}">
+                            @php $media = $method->getFirstMedia('payment_method_images'); @endphp
+
+                            @if ($method->getFirstMediaUrl('image'))
+                                <img class="payment-method-image" src="{{ route('payment.methode.image', $media->id) }}"
+                                    alt="{{ $method->getTranslation('name', app()->getLocale()) }}">
+                            @else
+                                <img class="payment-method-image" src="{{ asset('assets/img/payment.png') }}"
+                                    alt="{{ $method->name }}">
+                            @endif
+
+                            <div class="payment-method-name">
+                                {{ $method->getTranslation('name', app()->getLocale()) }}
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Electronic Payment Tab -->
+            <div class="tab-content" id="electronicTab">
+                <h3 class="tab-title">
+                    <i class="fas fa-shield-alt"></i>
+                    بوابات الدفع الإلكترونية
+                </h3>
+                <p class="tab-description">
+                    اختر بوابة الدفع الإلكترونية المناسبة لك. سيتم توجيهك للدفع الفوري عبر البوابة المختارة.
                 </p>
                 <div class="payment-methods-grid">
                     <a href="payment-5" class="payment-method-card" data-gateway="binance">
@@ -361,82 +394,6 @@
                     </a>
                     <a href="payment-13" class="payment-method-card" data-gateway="morocco">
                         <img class="payment-method-image" src="https://qu-card.com/images/1736513721.png" alt="بنوك المغرب">
-                        <div class="payment-method-name">بنوك المغرب</div>
-                    </a>
-                    <a href="payment-14" class="payment-method-card" data-gateway="brady">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736514212.png" alt="بريدي موب">
-                        <div class="payment-method-name">بريدي موب</div>
-                    </a>
-                    <a href="payment-15" class="payment-method-card" data-gateway="syria">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736514947.png"
-                            alt="سوريا حوالات">
-                        <div class="payment-method-name">سوريا حوالات</div>
-                    </a>
-                    <a href="payment-16" class="payment-method-card" data-gateway="europe">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736516312.png"
-                            alt="بنوك اوربا">
-                        <div class="payment-method-name">بنوك اوربا</div>
-                    </a>
-                    <a href="payment-17" class="payment-method-card" data-gateway="jordan">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1737319096.png"
-                            alt="حوالات الاردن">
-                        <div class="payment-method-name">حوالات الاردن</div>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Electronic Payment Tab -->
-            <div class="tab-content" id="electronicTab">
-                <h3 class="tab-title">
-                    <i class="fas fa-shield-alt"></i>
-                    بوابات الدفع الإلكترونية
-                </h3>
-                <p class="tab-description">
-                    اختر بوابة الدفع الإلكترونية المناسبة لك. سيتم توجيهك للدفع الفوري عبر البوابة المختارة.
-                </p>
-                <div class="payment-methods-grid">
-                    <a href="payment-5" class="payment-method-card" data-gateway="binance">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736503888.png" alt="بينانس">
-                        <div class="payment-method-name">بينانس</div>
-                    </a>
-                    <a href="payment-6" class="payment-method-card" data-gateway="usdt">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736506495.png"
-                            alt="USDT TRC20">
-                        <div class="payment-method-name">USDT TRC20</div>
-                    </a>
-                    <a href="payment-7" class="payment-method-card" data-gateway="zain">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736507124.png"
-                            alt="زين كاش العراق">
-                        <div class="payment-method-name">زين كاش العراق</div>
-                    </a>
-                    <a href="payment-8" class="payment-method-card" data-gateway="turkey">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736509159.png"
-                            alt="بنوك تركيا">
-                        <div class="payment-method-name">بنوك تركيا</div>
-                    </a>
-                    <a href="payment-9" class="payment-method-card" data-gateway="uae">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736509628.png"
-                            alt="بنوك الامارت">
-                        <div class="payment-method-name">بنوك الامارت</div>
-                    </a>
-                    <a href="payment-10" class="payment-method-card" data-gateway="wish">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736510139.png"
-                            alt="ويش مني لبنان">
-                        <div class="payment-method-name">ويش مني لبنان</div>
-                    </a>
-                    <a href="payment-11" class="payment-method-card" data-gateway="paypal">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736511909.png"
-                            alt="باي بال يورو">
-                        <div class="payment-method-name">باي بال يورو</div>
-                    </a>
-                    <a href="payment-12" class="payment-method-card" data-gateway="vodafone">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736512284.png"
-                            alt="فودافون مصر">
-                        <div class="payment-method-name">فودافون مصر</div>
-                    </a>
-                    <a href="payment-13" class="payment-method-card" data-gateway="morocco">
-                        <img class="payment-method-image" src="https://qu-card.com/images/1736513721.png"
-                            alt="بنوك المغرب">
                         <div class="payment-method-name">بنوك المغرب</div>
                     </a>
                     <a href="payment-14" class="payment-method-card" data-gateway="brady">

@@ -36,6 +36,9 @@ class WalletServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+        $this->app->bind(\Modules\Wallet\Repositories\App\PaymentMethodRepository::class, \Modules\Wallet\Repositories\App\PaymentMethodModelRepository::class);
+        $this->app->bind(\Modules\Wallet\Repositories\App\WalletRepository::class, \Modules\Wallet\Repositories\App\WalletModelRepository::class);
+        $this->app->bind(\Modules\Wallet\Repositories\App\PaymentRequestRepository::class, \Modules\Wallet\Repositories\App\PaymentRequestModelRepository::class);
     }
 
     /**

@@ -66,21 +66,29 @@
 
                     <form method="POST" action="{{ route('auth.register') }}" class="auth-form" id="registerForm">
                         @csrf
+
                         <div class="form-group">
                             <label for="name" class="form-label">{{ __('Name') }}</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-user input-icon"></i>
-                                <input type="text" id="name" name="name" class="form-input" required>
+                                <input type="text" id="name" name="name" class="form-input"
+                                    value="{{ old('name') }}" required>
                             </div>
+                            @error('name')
+                                <span class="form-error">{{ $message }}</span>
+                            @enderror
                         </div>
-
 
                         <div class="form-group">
                             <label for="email" class="form-label">{{ __('Email') }}</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-envelope input-icon"></i>
-                                <input type="email" id="email" name="email" class="form-input" required>
+                                <input type="email" id="email" name="email" class="form-input"
+                                    value="{{ old('email') }}" required>
                             </div>
+                            @error('email')
+                                <span class="form-error">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="form-group">
@@ -92,7 +100,9 @@
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
-
+                            @error('password')
+                                <span class="form-error">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="form-group">
@@ -105,6 +115,9 @@
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
+                            @error('password_confirmation')
+                                <span class="form-error">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <input type="hidden" name="role" id="role" value="customer" />
@@ -113,11 +126,15 @@
                             <label class="checkbox-wrapper">
                                 <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
                                 <span class="checkmark"></span>
-                                <span class="checkbox-label">{{ __('I agree to') }} <a href="#"
-                                        class="terms-link">{{ __('terms of use') }}</a>
-                                    {{ __('and') }} <a href="#"
-                                        class="terms-link">{{ __('privacy policy') }}</a></span>
+                                <span class="checkbox-label">
+                                    {{ __('I agree to') }} <a href="#"
+                                        class="terms-link">{{ __('terms of use') }}</a> {{ __('and') }} <a
+                                        href="#" class="terms-link">{{ __('privacy policy') }}</a>
+                                </span>
                             </label>
+                            @error('agreeTerms')
+                                <span class="form-error">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <button type="submit" class="submit-btn">
@@ -125,6 +142,7 @@
                             <span>{{ __('Save') }}</span>
                         </button>
                     </form>
+
 
                     <!-- Divider -->
                     <div class="divider">

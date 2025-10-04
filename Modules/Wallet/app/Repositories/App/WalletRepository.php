@@ -2,7 +2,9 @@
 
 namespace Modules\Wallet\Repositories\App;
 
-class WalletRepository
+use Modules\Wallet\Models\Wallet;
+
+interface WalletRepository
 {
-    public function handle() {}
+    public function create(array $data): Wallet;
 }

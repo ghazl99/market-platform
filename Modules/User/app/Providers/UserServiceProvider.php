@@ -4,6 +4,7 @@ namespace Modules\User\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\User\Models\User;
 use Modules\User\Repositories\Admin\UserModelRepository;
 use Modules\User\Repositories\Admin\UserRepository;
 use Modules\User\Repositories\Dashboard\CustomerModelRepository;
@@ -31,6 +32,7 @@ class UserServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+        User::observe(\Modules\User\Observers\UserObserver::class);
     }
 
     /**

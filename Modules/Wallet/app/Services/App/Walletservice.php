@@ -2,7 +2,22 @@
 
 namespace Modules\Wallet\Services\App;
 
-class Walletservice
+use Modules\User\Models\User;
+use Modules\Store\Models\Store;
+use Modules\Wallet\Repositories\App\WalletRepository;
+
+class WalletService
 {
-    public function handle() {}
+    public function __construct(
+        protected WalletRepository $walletRepository
+    ) {}
+
+    public function createWalletForUser(User $user,Store $store ,float $initialBalance = 0)
+    {
+        return $this->walletRepository->create([
+            'user_id' => $user->id,
+            'store_id' => $store->id,
+            'balance' => $initialBalance,
+        ]);
+    }
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use Modules\Attribute\Models\Attribute;
 use Modules\Category\Models\Category;
+use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Store\Models\Store;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -37,7 +38,10 @@ class Product extends Model implements HasMedia
     ];
 
     public $translatable = ['name', 'description'];
-
+    protected static function newFactory()
+    {
+        return ProductFactory::new();
+    }
     public function getCreatedAtInStoreTimezoneAttribute()
     {
         if ($this->store) {
