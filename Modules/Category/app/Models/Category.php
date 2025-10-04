@@ -20,9 +20,20 @@ class Category extends Model implements HasMedia
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = ['name', 'parent_id', 'store_id'];
+    protected $fillable = [
+        'name',
+        'description',
+        'parent_id',
+        'store_id',
+        'icon',
+        'is_active',
+        'sort_order',
+        'seo_title',
+        'keywords',
+        'seo_description'
+    ];
 
-    public $translatable = ['name'];
+    public $translatable = ['name', 'description'];
 
     public function products()
     {

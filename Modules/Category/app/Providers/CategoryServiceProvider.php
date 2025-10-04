@@ -39,6 +39,7 @@ class CategoryServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
         $this->app->bind(CategoryRepository::class, CategoryModelRepository::class);
+        $this->app->singleton(\Modules\Category\Services\CategoryService::class);
     }
 
     /**

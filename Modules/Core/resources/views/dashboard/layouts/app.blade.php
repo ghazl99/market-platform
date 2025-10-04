@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $store->name }}</title>
 
     <!-- Mobile optimizations -->
@@ -26,6 +27,7 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ asset('assets/css/styles-store.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/notifications.css') }}?v={{ time() }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
@@ -57,50 +59,36 @@
 
     <script src="{{ asset('assets/js/script-store.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('assets/js/dashboard.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/js/notifications.js') }}?v={{ time() }}"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
-            // مثال: عرض رسالة نجاح من session
+            // Handle session messages with new notification system
             @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: "{{ __('Success') }}",
-                    text: "{{ session('success') }}",
-                    timer: 2500,
-                    showConfirmButton: false
-                });
+                showSuccess('تم بنجاح!', '{{ session('success') }}');
             @endif
 
-            // مثال: عرض رسالة خطأ من session
             @if (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: "{{ __('Error') }}",
-                    text: "{{ session('error') }}",
-                    timer: 3000,
-                    showConfirmButton: true
-                });
+                showError('حدث خطأ!', '{{ session('error') }}');
             @endif
 
-            // مثال: تأكيد الحذف
-            $(document).on('click', '.delete-btn', function(e) {
-                e.preventDefault();
-                let form = $(this).closest('form'); // افترض أن الزر داخل form
-                Swal.fire({
-                    title: "{{ __('Are you sure?') }}",
-                    text: "{{ __('You won\'t be able to revert this!') }}",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: "{{ __('Yes, delete it!') }}"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
-            });
+            @if (session('warning'))
+                showWarning('تحذير!', '{{ session('warning') }}');
+            @endif
+
+            @if (session('info'))
+                showInfo('معلومة', '{{ session('info') }}');
+            @endif
+
+            // Handle validation errors
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    showError('خطأ في التحقق', '{{ $error }}');
+                @endforeach
+            @endif
+
+            // Delete confirmation is handled by individual pages
         });
     </script>
 

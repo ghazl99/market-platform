@@ -13,6 +13,7 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
             'image' => 'nullable|image|mimes:png,jpg,jpeg',
             'subcategories' => 'nullable|array',
             'subcategories.*' => 'nullable|string|max:255',

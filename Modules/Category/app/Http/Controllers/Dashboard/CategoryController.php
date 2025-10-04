@@ -5,11 +5,13 @@ namespace Modules\Category\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Log;
 use Modules\Category\Http\Requests\CategoryRequest;
 use Modules\Category\Http\Requests\UpdateCategoryRequest;
 use Modules\Category\Models\Category;
 use Modules\Category\Repositories\CategoryRepository;
 use Modules\Category\Services\CategoryService;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class CategoryController extends Controller implements HasMiddleware
 {
@@ -29,11 +31,19 @@ class CategoryController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Category $parent = null)
     {
-        $categories = $this->categoryService->getAllcategories();
+        if ($parent) {
+            // عرض الأقسام الفرعية
+            $categories = $parent->children()->with('children')->get();
+            $parentCategory = $parent;
+        } else {
+            // عرض الأقسام الرئيسية مع العلاقات
+            $categories = $this->categoryService->getAllcategories();
+            $parentCategory = null;
+        }
 
-        return view('category::dashboard.index', compact('categories'));
+        return view('category::dashboard.index', compact('categories', 'parentCategory'));
     }
 
     /**
@@ -41,7 +51,8 @@ class CategoryController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        return view('category::dashboard.create');
+        $categories = $this->categoryService->getAllcategories();
+        return view('category::dashboard.create', compact('categories'));
     }
 
     /**
@@ -49,11 +60,22 @@ class CategoryController extends Controller implements HasMiddleware
      */
     public function store(CategoryRequest $request)
     {
-        $validatedData = $request->validated();
+        try {
+            $validatedData = $request->validated();
 
-        $this->categoryService->store($validatedData + ['image' => $request->file('image')]);
+            $this->categoryService->store($validatedData + ['image' => $request->file('image')]);
 
-        return redirect()->route('dashboard.category.index')->with('success', __('Created successfully'));
+            return redirect()->route('dashboard.category.index')->with('success', __('تم إضافة القسم بنجاح'));
+        } catch (\Exception $e) {
+            Log::error('Category creation failed: ' . $e->getMessage(), [
+                'data' => $request->all(),
+                'exception' => $e
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'حدث خطأ أثناء إضافة القسم: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -61,7 +83,8 @@ class CategoryController extends Controller implements HasMiddleware
      */
     public function edit(Category $category)
     {
-        return view('category::dashboard.edit', compact('category'));
+        $categories = $this->categoryService->getAllcategories();
+        return view('category::dashboard.edit', compact('category', 'categories'));
     }
 
     /**
@@ -81,7 +104,45 @@ class CategoryController extends Controller implements HasMiddleware
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Category $category)
+    {
+        // توجيه إلى index مع عرض الأقسام الفرعية
+        return redirect()->route('dashboard.category.index.parent', ['parent' => $category->id]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {}
+    public function destroy(Category $category)
+    {
+        try {
+            $this->categoryService->deleteCategory($category);
+
+            return response()->json([
+                'success' => true,
+                'message' => __('Category deleted successfully'),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Error deleting category: ') . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Show category image
+     */
+    public function showImage(Media $media)
+    {
+        $path = $media->getPath();
+
+        if (! file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path);
+    }
 }

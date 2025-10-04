@@ -25,7 +25,16 @@ class Product extends Model implements HasMedia
         'description',
         'original_price',
         'price',
+        'sale_price',
         'status',
+        'is_active',
+        'is_featured',
+        'sku',
+        'stock_quantity',
+        'weight',
+        'dimensions',
+        'seo_title',
+        'seo_description',
         'views_count',
         'orders_count',
         'min_quantity',
@@ -33,10 +42,41 @@ class Product extends Model implements HasMedia
     ];
 
     protected $casts = [
-        'status' => 'boolean',
+        'status' => 'string',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'price' => 'decimal:2',
+        'original_price' => 'decimal:2',
+        'sale_price' => 'decimal:2',
+        'stock_quantity' => 'integer',
+        'weight' => 'decimal:2',
+        'views_count' => 'integer',
+        'orders_count' => 'integer',
+        'min_quantity' => 'integer',
+        'max_quantity' => 'integer',
     ];
 
     public $translatable = ['name', 'description'];
+
+    public function getImagePathAttribute()
+    {
+        $media = $this->getFirstMedia('product_images');
+        return $media ? $media->getPath() : null;
+    }
+
+    public function getImageUrlAttribute()
+    {
+        $media = $this->getFirstMedia('product_images');
+        if ($media) {
+            try {
+                return $media->getUrl();
+            } catch (\Exception $e) {
+                \Log::error('Error getting media URL: ' . $e->getMessage());
+                return null;
+            }
+        }
+        return null;
+    }
 
     public function getCreatedAtInStoreTimezoneAttribute()
     {

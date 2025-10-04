@@ -27,7 +27,8 @@
                 <i class="fas fa-chart-line"></i>
                 <span class="nav-item-text">الإحصائيات</span>
             </a>
-            <a href="{{ route('dashboard.order.index') }}" class="nav-item {{ request()->routeIs('dashboard.order.*') ? 'active' : '' }}">
+            <a href="{{ route('dashboard.order.index') }}"
+                class="nav-item {{ request()->routeIs('dashboard.order.*') ? 'active' : '' }}">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="nav-item-text">{{ __('Orders') }}</span>
             </a>
@@ -35,14 +36,15 @@
 
         <div class="nav-section">
             <div class="nav-section-title">إدارة المنتجات</div>
-            <a href="{{ route('dashboard.product.index') }}" class="nav-item {{ request()->routeIs('dashboard.product.*') ? 'active' : '' }}">
+            <a href="{{ route('dashboard.product.index') }}"
+                class="nav-item {{ request()->routeIs('dashboard.product.*') ? 'active' : '' }}">
                 <i class="fas fa-box"></i>
                 <span class="nav-item-text">{{ __('Products') }}</span>
             </a>
             <a href="{{ route('dashboard.category.index') }}"
                 class="nav-item {{ request()->routeIs('dashboard.category.*') ? 'active' : '' }}">
-                <i class="fas fa-chart-line"></i>
-                <span class="nav-item-text">{{ __('Categories') }}</span>
+                <i class="fas fa-tags"></i>
+                <span class="nav-item-text">{{ __('Sections') }}</span>
             </a>
             <a href="#" class="nav-item">
                 <i class="fas fa-warehouse"></i>

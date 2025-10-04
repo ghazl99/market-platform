@@ -6,24 +6,32 @@
         </button>
         <div class="breadcrumb">
             <i class="fas fa-home"></i>
-            <span>الرئيسية</span>
-            <i class="fas fa-chevron-left"></i>
-            <span>لوحة التحكم</span>
+            <span>{{ __('Dashboard') }}</span>
+            @if (request()->routeIs('dashboard.category.*'))
+                <i class="fas fa-chevron-left"></i>
+                <span>{{ __('Sections') }}</span>
+            @elseif(request()->routeIs('dashboard.product.*'))
+                <i class="fas fa-chevron-left"></i>
+                <span>{{ __('Products') }}</span>
+            @elseif(request()->routeIs('dashboard.order.*'))
+                <i class="fas fa-chevron-left"></i>
+                <span>{{ __('Orders') }}</span>
+            @endif
         </div>
     </div>
 
     <div class="topbar-right">
         <div class="search-box">
-            <input type="text" placeholder="ابحث في لوحة التحكم...">
+            <input type="text" placeholder="{{ __('Search in dashboard...') }}">
             <i class="fas fa-search"></i>
         </div>
         <!-- Language Switcher -->
         <div class="language-switcher d-flex gap-2">
-                <a href="{{ LaravelLocalization::getLocalizedURL('ar') }}"
-                    class="btn btn-sm {{ app()->getLocale() === 'ar' ? 'btn-primary' : 'btn-outline-secondary' }}">عربي</a>
-                <a href="{{ LaravelLocalization::getLocalizedURL('en') }}"
-                    class="btn btn-sm {{ app()->getLocale() === 'en' ? 'btn-primary' : 'btn-outline-secondary' }}">EN</a>
-            </div>
+            <a href="{{ LaravelLocalization::getLocalizedURL('ar') }}"
+                class="btn btn-sm {{ app()->getLocale() === 'ar' ? 'btn-primary' : 'btn-outline-secondary' }}">عربي</a>
+            <a href="{{ LaravelLocalization::getLocalizedURL('en') }}"
+                class="btn btn-sm {{ app()->getLocale() === 'en' ? 'btn-primary' : 'btn-outline-secondary' }}">EN</a>
+        </div>
         <button class="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع الليلي">
             <i class="fas fa-moon" id="theme-icon"></i>
         </button>

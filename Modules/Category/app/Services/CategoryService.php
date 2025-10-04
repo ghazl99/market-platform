@@ -28,14 +28,21 @@ class CategoryService
         foreach ($fields as $field) {
             if (isset($data[$field])) {
                 $translated = [$locale => $data[$field]];
-                foreach ($this->otherLangs() as $lang) {
-                    try {
-                        $translated[$lang] = $this->autoGoogleTranslator($lang, $data[$field]);
-                    } catch (\Exception $e) {
-                        Log::error("Failed to translate [$field] to [$lang]: ".$e->getMessage());
-                        $translated[$lang] = $data[$field]; // fallback
-                    }
+
+                // ترجمة إلى اللغة الأخرى المدعومة فقط
+                $otherLang = $locale === 'ar' ? 'en' : 'ar';
+                try {
+                    $translated[$otherLang] = $this->autoGoogleTranslator($otherLang, $data[$field]);
+                } catch (\Exception $e) {
+                    Log::warning("Translation failed for [$field] to [$otherLang]: ".$e->getMessage());
+                    // استخدام النص الأصلي كبديل
+                    $translated[$otherLang] = $data[$field];
+                } catch (\Throwable $e) {
+                    Log::warning("Translation failed for [$field] to [$otherLang]: ".$e->getMessage());
+                    // استخدام النص الأصلي كبديل
+                    $translated[$otherLang] = $data[$field];
                 }
+
                 $data[$field] = $translated;
             }
         }
@@ -45,14 +52,21 @@ class CategoryService
             $translatedSubcategories = [];
             foreach ($data['subcategories'] as $subcategory) {
                 $subTranslated = [$locale => $subcategory];
-                foreach ($this->otherLangs() as $lang) {
-                    try {
-                        $subTranslated[$lang] = $this->autoGoogleTranslator($lang, $subcategory);
-                    } catch (\Exception $e) {
-                        Log::error("Failed to translate [subcategory] to [$lang]: ".$e->getMessage());
-                        $subTranslated[$lang] = $subcategory;
-                    }
+
+                // ترجمة إلى اللغة الأخرى المدعومة فقط
+                $otherLang = $locale === 'ar' ? 'en' : 'ar';
+                try {
+                    $subTranslated[$otherLang] = $this->autoGoogleTranslator($otherLang, $subcategory);
+                } catch (\Exception $e) {
+                    Log::warning("Translation failed for [subcategory] to [$otherLang]: ".$e->getMessage());
+                    // استخدام النص الأصلي كبديل
+                    $subTranslated[$otherLang] = $subcategory;
+                } catch (\Throwable $e) {
+                    Log::warning("Translation failed for [subcategory] to [$otherLang]: ".$e->getMessage());
+                    // استخدام النص الأصلي كبديل
+                    $subTranslated[$otherLang] = $subcategory;
                 }
+
                 $translatedSubcategories[] = $subTranslated;
             }
             $data['subcategories'] = $translatedSubcategories;
@@ -73,9 +87,21 @@ class CategoryService
         return $this->categoryRepository->getAllSubcategories();
     }
 
+    /** Get all categories (main and subcategories) for product forms */
+    public function getAllCategoriesForProducts(): mixed
+    {
+        return $this->categoryRepository->getAllCategoriesForProducts();
+    }
+
     public function getAllSubcategoriesById($id): mixed
     {
         return $this->categoryRepository->getAllSubcategoriesById($id);
+    }
+
+    /** Get category by ID */
+    public function getCategoryById($id): ?Category
+    {
+        return $this->categoryRepository->getCategoryById($id);
     }
 
     /** Store new category with optional image */
@@ -103,6 +129,10 @@ class CategoryService
             return $category;
         } catch (\Throwable $e) {
             DB::rollBack();
+            Log::error("Failed to store category: " . $e->getMessage(), [
+                'data' => $data,
+                'exception' => $e
+            ]);
             throw $e;
         }
     }
@@ -137,5 +167,35 @@ class CategoryService
     public function getProducts(Category $category, ?string $query = null)
     {
         return $this->categoryRepository->getProducts($category, $query);
+    }
+
+    /**
+     * Delete a category and its associated data
+     */
+    public function deleteCategory(Category $category): bool
+    {
+        DB::beginTransaction();
+
+        try {
+            // Delete associated media
+            $category->clearMediaCollection('category_images');
+
+            // Delete subcategories first
+            $category->children()->delete();
+
+            // Delete the category
+            $category->delete();
+
+            DB::commit();
+
+            return true;
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error("Failed to delete category: " . $e->getMessage(), [
+                'category_id' => $category->id,
+                'exception' => $e
+            ]);
+            throw $e;
+        }
     }
 }

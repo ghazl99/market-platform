@@ -6,7 +6,7 @@ use Modules\Product\Models\Product;
 
 interface ProductRepository
 {
-    public function index(?string $keyword = null);
+    public function index(?string $keyword = null, ?int $categoryFilter = null, ?string $statusFilter = null);
 
     public function create(array $data);
 

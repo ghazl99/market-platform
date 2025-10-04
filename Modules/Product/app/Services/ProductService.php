@@ -18,9 +18,9 @@ class ProductService
 
     ) {}
 
-    public function getAllProducts(?string $keyword = null)
+    public function getAllProducts(?string $keyword = null, ?int $categoryFilter = null, ?string $statusFilter = null)
     {
-        return $this->productRepository->index($keyword);
+        return $this->productRepository->index($keyword, $categoryFilter, $statusFilter);
     }
 
     /**
@@ -44,9 +44,12 @@ class ProductService
 
                 $translated = [$locale => $original];
 
+                // استخدم النص الأصلي لجميع اللغات مؤقتاً لتجنب مشاكل الترجمة
                 foreach ($this->otherLangs() as $lang) {
                     try {
-                        $translated[$lang] = $this->autoGoogleTranslator($lang, $original);
+                        // تجنب استخدام Google Translate مؤقتاً
+                        $translated[$lang] = $original; // استخدام النص الأصلي
+                        // $translated[$lang] = $this->autoGoogleTranslator($lang, $original);
                     } catch (\Exception $e) {
                         Log::error("Failed to translate [$field] to [$lang]: ".$e->getMessage());
                         $translated[$lang] = $original; // fallback
@@ -68,26 +71,58 @@ class ProductService
             // الحصول على المتجر الحالي
             $store = \Modules\Store\Models\Store::currentFromUrl()->first();
             if (! $store) {
-                abort(404, 'Store not found');
+                $store = \Modules\Store\Models\Store::where('status', 'active')->first();
+                if (! $store) {
+                    throw new \Exception('No active store found');
+                }
             }
             $data['store_id'] = $store->id;
+
+            // إضافة القيم الافتراضية المطلوبة
+            $data['status'] = $data['status'] ?? 'active';
+            $data['is_active'] = $data['is_active'] ?? true;
+            $data['is_featured'] = $data['is_featured'] ?? false;
+            $data['stock_quantity'] = $data['stock_quantity'] ?? 0;
+            $data['min_quantity'] = $data['min_quantity'] ?? 1;
+            $data['max_quantity'] = $data['max_quantity'] ?? 10;
+            $data['views_count'] = 0;
+            $data['orders_count'] = 0;
 
             $textFields = ['name', 'description'];
             $translated = $this->prepareData(array_intersect_key($data, array_flip($textFields)));
 
             $data = array_merge($data, $translated);
+
+            // Log data for debugging
+            Log::info('Product creation data: ' . json_encode($data));
+
             $product = $this->productRepository->create($data);
+
             if (isset($data['image'])) {
+                Log::info('Uploading image for product: ' . $product->id);
+                Log::info('Image file: ' . ($data['image'] ? $data['image']->getClientOriginalName() : 'null'));
+
                 $this->uploadOrUpdateImageWithResize(
                     $product,
                     $data['image'],
                     'product_images',
-                    'private_media',
+                    'public',
                     false
                 );
+
+                // Check if image was uploaded successfully
+                $media = $product->getFirstMedia('product_images');
+                if ($media) {
+                    Log::info('Image uploaded successfully: ' . $media->getUrl());
+                } else {
+                    Log::error('Failed to upload image for product: ' . $product->id);
+                }
             }
-            if (! empty($data['names']) && is_array($data['names'])) {
+
+            // Handle attributes if provided
+            if (isset($data['names']) && ! empty($data['names']) && is_array($data['names'])) {
                 foreach ($data['names'] as $k => $name) {
+                    if (empty($name)) continue;
 
                     $valueData = ['value' => $data['value'][$k] ?? ''];
                     if (! empty($valueData)) {
@@ -113,6 +148,9 @@ class ProductService
             return $product;
         } catch (\Throwable $e) {
             DB::rollBack();
+            Log::error('Product creation failed: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('Data: ' . json_encode($data));
             throw $e;
         }
     }
@@ -132,12 +170,18 @@ class ProductService
             $data = array_merge($data, $translated);
 
             $this->productRepository->update($id, $data);
+
+            // تحديث الفئات
+            if (isset($data['category'])) {
+                $product->categories()->sync([$data['category']]);
+            }
+
             if (isset($data['image'])) {
                 $this->uploadOrUpdateImageWithResize(
                     $product,
                     $data['image'],
                     'product_images',
-                    'private_media',
+                    'public',
                     true
                 );
             }
