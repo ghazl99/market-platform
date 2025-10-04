@@ -15,7 +15,11 @@ class CategoryModelRepository implements CategoryRepository
     {
         $store = \Modules\Store\Models\Store::currentFromUrl()->first();
         if (! $store) {
-            abort(404, 'Store not found');
+            // إذا لم يتم العثور على متجر من الدومين، استخدم المتجر الأول كبديل
+            $store = \Modules\Store\Models\Store::where('status', 'active')->first();
+            if (! $store) {
+                abort(404, 'No active store found');
+            }
         }
 
         // Paginate the results (20 per page)
@@ -33,9 +37,12 @@ class CategoryModelRepository implements CategoryRepository
     public function getAllSubcategories(): mixed
     {
         $store = \Modules\Store\Models\Store::currentFromUrl()->first();
-
         if (! $store) {
-            abort(404, 'Store not found');
+            // إذا لم يتم العثور على متجر من الدومين، استخدم المتجر الأول كبديل
+            $store = \Modules\Store\Models\Store::where('status', 'active')->first();
+            if (! $store) {
+                abort(404, 'No active store found');
+            }
         }
 
         return Category::with('children')
@@ -44,12 +51,38 @@ class CategoryModelRepository implements CategoryRepository
             ->get();
     }
 
+    /**
+     * Get all categories (main and subcategories) for product forms.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllCategoriesForProducts(): mixed
+    {
+        $store = \Modules\Store\Models\Store::currentFromUrl()->first();
+        if (! $store) {
+            // إذا لم يتم العثور على متجر من الدومين، استخدم المتجر الأول كبديل
+            $store = \Modules\Store\Models\Store::where('status', 'active')->first();
+            if (! $store) {
+                abort(404, 'No active store found');
+            }
+        }
+
+        return Category::with('children')
+            ->where('store_id', $store->id)
+            ->orderBy('parent_id', 'asc')
+            ->orderBy('name', 'asc')
+            ->get();
+    }
+
     public function getAllSubcategoriesById($id): mixed
     {
         $store = \Modules\Store\Models\Store::currentFromUrl()->first();
-
         if (! $store) {
-            abort(404, 'Store not found');
+            // إذا لم يتم العثور على متجر من الدومين، استخدم المتجر الأول كبديل
+            $store = \Modules\Store\Models\Store::where('status', 'active')->first();
+            if (! $store) {
+                abort(404, 'No active store found');
+            }
         }
 
         return Category::with('children')
@@ -65,16 +98,35 @@ class CategoryModelRepository implements CategoryRepository
     public function store(array $data)
     {
         $store = \Modules\Store\Models\Store::currentFromUrl()->first();
-
         if (! $store) {
-            abort(404, 'Store not found');
+            // إذا لم يتم العثور على متجر من الدومين، استخدم المتجر الأول كبديل
+            $store = \Modules\Store\Models\Store::where('status', 'active')->first();
+            if (! $store) {
+                abort(404, 'No active store found');
+            }
         }
+
         // Create main category
         $category = Category::create([
             'name' => $data['name'],
+            'description' => $data['description'] ?? null,
             'store_id' => $store->id,
-            'parent_id' => $data['parent_id'] ?? null,
+
         ]);
+
+        // Create subcategories if provided
+        if (! empty($data['subcategories'])) {
+            foreach ($data['subcategories'] as $subcategoryName) {
+                if (! empty($subcategoryName)) {
+                    Category::create([
+                        'name' => $subcategoryName,
+                        'parent_id' => $category->id, // Link child to parent
+                        'store_id' => $store->id,
+
+                    ]);
+                }
+            }
+        }
 
         return $category;
     }
@@ -90,6 +142,25 @@ class CategoryModelRepository implements CategoryRepository
     }
 
     /**
+     * Get category by ID with store validation.
+     *
+     * @return Category|null
+     */
+    public function getCategoryById($id): ?Category
+    {
+        $store = \Modules\Store\Models\Store::currentFromUrl()->first();
+        if (!$store) {
+            // إذا لم يتم العثور على متجر من الدومين، استخدم المتجر الأول كبديل
+            $store = \Modules\Store\Models\Store::where('status', 'active')->first();
+            if (!$store) {
+                abort(404, 'No active store found');
+            }
+        }
+
+        return Category::where('store_id', $store->id)->find($id);
+    }
+
+    /**
      * Update a category and replace its subcategories.
      *
      * @return Category|false
@@ -100,15 +171,26 @@ class CategoryModelRepository implements CategoryRepository
             return false;
         }
         $store = \Modules\Store\Models\Store::currentFromUrl()->first();
-
         if (! $store) {
-            abort(404, 'Store not found');
+            // إذا لم يتم العثور على متجر من الدومين، استخدم المتجر الأول كبديل
+            $store = \Modules\Store\Models\Store::where('status', 'active')->first();
+            if (! $store) {
+                abort(404, 'No active store found');
+            }
         }
+
         // Update main category
         $category->update([
             'name' => $data['name'],
+            'description' => $data['description'] ?? null,
+            'parent_id' => $data['parent_id'] ?? null,
+            'icon' => $data['icon'] ?? 'fas fa-tag',
+            'is_active' => $data['is_active'] ?? true,
+            'sort_order' => $data['sort_order'] ?? 0,
+            'seo_title' => $data['seo_title'] ?? null,
+            'keywords' => $data['keywords'] ?? null,
+            'seo_description' => $data['seo_description'] ?? null,
             'store_id' => $store->id,
-
         ]);
 
         // Remove old subcategories

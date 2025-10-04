@@ -23,7 +23,7 @@ class Attribute extends Model
     {
         return $this->belongsToMany(
             Product::class,
-            'product_attributes'
+            'attribute_products'
         )->withPivot('value')
             ->withTimestamps();
     }

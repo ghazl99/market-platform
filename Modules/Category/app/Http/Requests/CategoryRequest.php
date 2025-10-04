@@ -13,13 +13,9 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-
-            'subcategory_name' => 'nullable|array',
-            'subcategory_name.*' => 'nullable|string|max:255',
-
-            'subcategory_image' => 'nullable|array',
-            'subcategory_image.*' => 'nullable|image|mimes:png,jpg,jpeg',
+            'image' => 'nullable|image|mimes:png,jpg,jpeg',
+            'subcategories' => 'nullable|array',
+            'subcategories.*' => 'nullable|string|max:255',
         ];
     }
 

@@ -13,10 +13,12 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
             'original_price' => 'nullable|numeric|min:0',
             'price' => 'required|numeric|min:0',
-            'categories' => 'required|array',
+            'sale_price' => 'nullable|numeric|min:0',
+            'category' => 'required|exists:categories,id',
+            'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
             'names' => 'nullable|array',
             'names.*' => 'string|max:255',
@@ -25,8 +27,17 @@ class StoreProductRequest extends FormRequest
             'unit' => 'nullable|array',
             'unit.*' => 'nullable|string|max:50',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp',
-            'min_quantity' => 'required|integer|min:0',
-            'max_quantity' => 'required|integer|min:1|gte:min_quantity',
+            'min_quantity' => 'nullable|integer|min:0',
+            'max_quantity' => 'nullable|integer|min:1',
+            'status' => 'nullable|string|in:active,inactive,draft',
+            'is_active' => 'nullable|boolean',
+            'is_featured' => 'nullable|boolean',
+            'sku' => 'nullable|string|max:255|unique:products,sku',
+            'stock_quantity' => 'required|integer|min:0',
+            'weight' => 'nullable|string|max:100',
+            'dimensions' => 'nullable|string|max:100',
+            'seo_title' => 'nullable|string|max:255',
+            'seo_description' => 'nullable|string|max:500',
         ];
     }
 

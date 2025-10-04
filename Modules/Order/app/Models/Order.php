@@ -20,6 +20,8 @@ class Order extends Model
         'store_id',
         'status',
         'payment_status',
+        'total_amount',
+        'cancel_reason',
     ];
     /**
      * Get created_at in store timezone
@@ -42,6 +44,16 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(\Modules\User\Models\User::class);
+    }
+
+    public function store()
+    {
+        return $this->belongsTo(\Modules\Store\Models\Store::class);
     }
 
     public function walletTransactions()

@@ -56,6 +56,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Main Domain
+    |--------------------------------------------------------------------------
+    |
+    | This value is used to determine the main domain for multi-store platform
+    | to identify subdomains vs main domain access.
+    |
+    */
+
+    'main_domain' => env('APP_MAIN_DOMAIN', 'market-platform.localhost'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

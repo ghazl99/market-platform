@@ -19,12 +19,16 @@ class ThemeManager {
 
     applyTheme(theme) {
         body.setAttribute('data-theme', theme);
-        const icon = themeToggle.querySelector('i');
-        
-        if (theme === 'dark') {
-            icon.className = 'fas fa-sun';
-        } else {
-            icon.className = 'fas fa-moon';
+
+        if (themeToggle) {
+            const icon = themeToggle.querySelector('i');
+            if (icon) {
+                if (theme === 'dark') {
+                    icon.className = 'fas fa-sun';
+                } else {
+                    icon.className = 'fas fa-moon';
+                }
+            }
         }
     }
 
@@ -35,7 +39,9 @@ class ThemeManager {
     }
 
     setupEventListeners() {
-        themeToggle.addEventListener('click', () => this.toggleTheme());
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => this.toggleTheme());
+        }
     }
 }
 
@@ -56,7 +62,7 @@ class SidebarManager {
         this.autoOpenSidebar();
         console.log('SidebarManager initialized');
     }
-    
+
     autoOpenSidebar() {
         // Open sidebar automatically on desktop
         if (window.innerWidth > 768) {
@@ -69,15 +75,15 @@ class SidebarManager {
             this.menuToggle.addEventListener('click', () => this.toggleSidebar());
             console.log('Menu toggle event listener added');
         }
-        
+
         if (this.sidebarClose) {
             this.sidebarClose.addEventListener('click', () => this.closeSidebar());
         }
-        
+
         if (this.overlay) {
             this.overlay.addEventListener('click', () => this.closeSidebar());
         }
-        
+
         // Close sidebar when clicking on menu items
         if (this.sidebar) {
             const menuItems = this.sidebar.querySelectorAll('.menu-item');
@@ -95,8 +101,8 @@ class SidebarManager {
 
         // Add search functionality
         this.setupSearch();
-        
-        
+
+
         // Add wallet functionality
         this.setupWallet();
     }
@@ -104,7 +110,7 @@ class SidebarManager {
     setupSearch() {
         const searchInput = document.querySelector('.search-input');
         const searchBtn = document.querySelector('.search-btn');
-        
+
         if (searchInput && searchBtn) {
             searchBtn.addEventListener('click', () => this.performSearch());
             searchInput.addEventListener('keypress', (e) => {
@@ -118,7 +124,7 @@ class SidebarManager {
     performSearch() {
         const searchInput = document.querySelector('.search-input');
         const query = searchInput.value.trim();
-        
+
         if (query) {
             console.log('Searching for:', query);
             // Add search functionality here
@@ -134,7 +140,7 @@ class SidebarManager {
 
     setupWallet() {
         const walletBtn = document.getElementById('walletBtn');
-        
+
         if (walletBtn) {
             walletBtn.addEventListener('click', () => this.showWallet());
         }
@@ -159,17 +165,17 @@ class SidebarManager {
             this.sidebar.classList.add('active');
             console.log('Sidebar opened');
         }
-        
+
         if (this.overlay) {
             this.overlay.classList.add('active');
         }
-        
+
         this.body.classList.add('sidebar-open');
         this.isOpen = true;
-        
+
         // Animate menu toggle
         this.animateMenuToggle(true);
-        
+
         // Add progress bar animation
         this.animateProgressBar();
     }
@@ -179,14 +185,14 @@ class SidebarManager {
             this.sidebar.classList.remove('active');
             console.log('Sidebar closed');
         }
-        
+
         if (this.overlay) {
             this.overlay.classList.remove('active');
         }
-        
+
         this.body.classList.remove('sidebar-open');
         this.isOpen = false;
-        
+
         // Animate menu toggle
         this.animateMenuToggle(false);
     }
@@ -194,7 +200,7 @@ class SidebarManager {
     animateMenuToggle(isOpen) {
         if (this.menuToggle) {
             const spans = this.menuToggle.querySelectorAll('span');
-            
+
             if (isOpen) {
                 spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
                 spans[1].style.opacity = '0';
@@ -309,7 +315,7 @@ class SmoothScrolling {
                 e.preventDefault();
                 const targetId = link.getAttribute('href').substring(1);
                 const targetElement = document.getElementById(targetId);
-                
+
                 if (targetElement) {
                     targetElement.scrollIntoView({
                         behavior: 'smooth',
@@ -334,7 +340,7 @@ class PerformanceOptimizer {
 
     lazyLoadImages() {
         const images = document.querySelectorAll('img[data-src]');
-        
+
         if ('IntersectionObserver' in window) {
             const imageObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -448,8 +454,10 @@ class PWAInstallManager {
     }
 
     init() {
-        this.setupEventListeners();
-        this.checkInstallability();
+        if (this.installPrompt || this.installBtn || this.dismissBtn) {
+            this.setupEventListeners();
+            this.checkInstallability();
+        }
     }
 
     setupEventListeners() {
@@ -459,8 +467,12 @@ class PWAInstallManager {
             this.showInstallPrompt();
         });
 
-        this.installBtn.addEventListener('click', () => this.installApp());
-        this.dismissBtn.addEventListener('click', () => this.hideInstallPrompt());
+        if (this.installBtn) {
+            this.installBtn.addEventListener('click', () => this.installApp());
+        }
+        if (this.dismissBtn) {
+            this.dismissBtn.addEventListener('click', () => this.hideInstallPrompt());
+        }
 
         window.addEventListener('appinstalled', () => {
             this.hideInstallPrompt();
@@ -471,7 +483,9 @@ class PWAInstallManager {
     showInstallPrompt() {
         if (this.installPrompt && !localStorage.getItem('installPromptDismissed')) {
             setTimeout(() => {
-                this.installPrompt.classList.add('show');
+                if (this.installPrompt) {
+                    this.installPrompt.classList.add('show');
+                }
             }, 3000);
         }
     }
@@ -485,16 +499,20 @@ class PWAInstallManager {
 
     async installApp() {
         if (this.deferredPrompt) {
-            this.deferredPrompt.prompt();
-            const { outcome } = await this.deferredPrompt.userChoice;
-            console.log(`User response to the install prompt: ${outcome}`);
-            this.deferredPrompt = null;
-            this.hideInstallPrompt();
+            try {
+                this.deferredPrompt.prompt();
+                const { outcome } = await this.deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                this.deferredPrompt = null;
+                this.hideInstallPrompt();
+            } catch (error) {
+                console.error('Error during app installation:', error);
+            }
         }
     }
 
     checkInstallability() {
-        if (window.matchMedia('(display-mode: standalone)').matches) {
+        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
             // App is already installed
             this.hideInstallPrompt();
         }
@@ -524,7 +542,7 @@ class InnovativeOffersSystem {
             card.addEventListener('mouseenter', () => {
                 card.style.transform = 'perspective(1000px) rotateX(5deg) rotateY(5deg) scale(1.05)';
             });
-            
+
             card.addEventListener('mouseleave', () => {
                 card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
             });
@@ -542,10 +560,10 @@ class InnovativeOffersSystem {
                 const centerY = rect.height / 2;
                 const rotateX = (y - centerY) / 10;
                 const rotateY = (centerX - x) / 10;
-                
+
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
             });
-            
+
             card.addEventListener('mouseleave', () => {
                 card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
             });
@@ -563,11 +581,11 @@ class InnovativeOffersSystem {
                 const centerY = rect.height / 2;
                 const rotateX = (y - centerY) / 20;
                 const rotateY = (centerX - x) / 20;
-                
+
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                 card.style.boxShadow = `0 ${8 + Math.abs(rotateX)}px ${32 + Math.abs(rotateY)}px rgba(0, 0, 0, 0.1)`;
             });
-            
+
             card.addEventListener('mouseleave', () => {
                 card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
                 card.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
@@ -582,7 +600,7 @@ class InnovativeOffersSystem {
                 card.style.boxShadow = '0 0 30px rgba(0, 212, 255, 0.6), 0 0 60px rgba(0, 212, 255, 0.4)';
                 card.style.transform = 'scale(1.02)';
             });
-            
+
             card.addEventListener('mouseleave', () => {
                 card.style.boxShadow = '0 0 20px rgba(0, 212, 255, 0.3)';
                 card.style.transform = 'scale(1)';
@@ -597,7 +615,7 @@ class InnovativeOffersSystem {
                 card.style.transform = 'scale(1.05) rotate(2deg)';
                 card.style.filter = 'brightness(1.1)';
             });
-            
+
             card.addEventListener('mouseleave', () => {
                 card.style.transform = 'scale(1) rotate(0deg)';
                 card.style.filter = 'brightness(1)';
@@ -612,7 +630,7 @@ class InnovativeOffersSystem {
                 card.style.animationPlayState = 'paused';
                 card.style.transform = 'translateY(-15px) scale(1.02)';
             });
-            
+
             card.addEventListener('mouseleave', () => {
                 card.style.animationPlayState = 'running';
                 card.style.transform = 'translateY(0px) scale(1)';
@@ -624,17 +642,17 @@ class InnovativeOffersSystem {
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
         const carousel = document.querySelector('.offers-carousel');
-        
+
         if (prevBtn && nextBtn && carousel) {
             let currentIndex = 0;
             const cards = carousel.children;
             const totalCards = cards.length;
-            
+
             prevBtn.addEventListener('click', () => {
                 currentIndex = (currentIndex - 1 + totalCards) % totalCards;
                 this.updateCarousel(carousel, currentIndex);
             });
-            
+
             nextBtn.addEventListener('click', () => {
                 currentIndex = (currentIndex + 1) % totalCards;
                 this.updateCarousel(carousel, currentIndex);
@@ -678,9 +696,9 @@ class InnovativeOffersSystem {
                 sparkle.style.left = Math.random() * 100 + '%';
                 sparkle.style.top = Math.random() * 100 + '%';
                 sparkle.style.animation = 'sparkle 1s ease-out forwards';
-                
+
                 button.appendChild(sparkle);
-                
+
                 setTimeout(() => {
                     sparkle.remove();
                 }, 1000);
@@ -692,25 +710,43 @@ class InnovativeOffersSystem {
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
-    new ThemeManager();
-    const sidebarManager = new SidebarManager();
-    new HeroSlider();
-    new AnimationObserver();
-    new SmoothScrolling();
-    new PerformanceOptimizer();
-    new ErrorHandler();
-    new PWAInstallManager();
-    new InnovativeOffersSystem();
+    if (typeof ThemeManager !== 'undefined') {
+        new ThemeManager();
+    }
+    if (typeof SidebarManager !== 'undefined') {
+        const sidebarManager = new SidebarManager();
+    }
+    if (typeof HeroSlider !== 'undefined') {
+        new HeroSlider();
+    }
+    if (typeof AnimationObserver !== 'undefined') {
+        new AnimationObserver();
+    }
+    if (typeof SmoothScrolling !== 'undefined') {
+        new SmoothScrolling();
+    }
+    if (typeof PerformanceOptimizer !== 'undefined') {
+        new PerformanceOptimizer();
+    }
+    if (typeof ErrorHandler !== 'undefined') {
+        new ErrorHandler();
+    }
+    if (typeof PWAInstallManager !== 'undefined') {
+        new PWAInstallManager();
+    }
+    if (typeof InnovativeOffersSystem !== 'undefined') {
+        new InnovativeOffersSystem();
+    }
 
     // Add loading animation
     document.body.classList.add('loaded');
 
     // Initialize any additional features
     initializeAdditionalFeatures();
-    
+
     // Initialize mobile-specific features
     initializeMobileFeatures();
-    
+
     // Auto-open sidebar on desktop
     setTimeout(() => {
         const sidebar = document.getElementById('sidebar');
@@ -726,16 +762,16 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializeMobileFeatures() {
     // Add mobile touch optimizations
     addMobileTouchOptimizations();
-    
+
     // Add mobile gesture support
     addMobileGestures();
-    
+
     // Add mobile performance optimizations
     addMobilePerformanceOptimizations();
-    
+
     // Add mobile UI enhancements
     addMobileUIEnhancements();
-    
+
     // Add mobile accessibility features
     addMobileAccessibility();
 }
@@ -748,7 +784,7 @@ function initializeAdditionalFeatures() {
 
 function addRippleEffect() {
     const buttons = document.querySelectorAll('.menu-item, .category-card, .theme-toggle');
-    
+
     buttons.forEach(button => {
         button.addEventListener('click', function(e) {
             const ripple = document.createElement('span');
@@ -756,14 +792,14 @@ function addRippleEffect() {
             const size = Math.max(rect.width, rect.height);
             const x = e.clientX - rect.left - size / 2;
             const y = e.clientY - rect.top - size / 2;
-            
+
             ripple.style.width = ripple.style.height = size + 'px';
             ripple.style.left = x + 'px';
             ripple.style.top = y + 'px';
             ripple.classList.add('ripple');
-            
+
             this.appendChild(ripple);
-            
+
             setTimeout(() => {
                 ripple.remove();
             }, 600);
@@ -794,11 +830,11 @@ function addMobileTouchOptimizations() {
         element.addEventListener('touchstart', function() {
             this.style.transform = 'scale(0.98)';
         });
-        
+
         element.addEventListener('touchend', function() {
             this.style.transform = 'scale(1)';
         });
-        
+
         element.addEventListener('touchcancel', function() {
             this.style.transform = 'scale(1)';
         });
@@ -810,13 +846,13 @@ function addMobileGestures() {
     let startX = 0;
     let startY = 0;
     let startTime = 0;
-    
+
     document.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
         startTime = Date.now();
     });
-    
+
     document.addEventListener('touchend', (e) => {
         const endX = e.changedTouches[0].clientX;
         const endY = e.changedTouches[0].clientY;
@@ -824,16 +860,16 @@ function addMobileGestures() {
         const diffX = startX - endX;
         const diffY = startY - endY;
         const diffTime = endTime - startTime;
-        
+
         // Only process quick swipes
         if (diffTime < 300) {
             handleSwipeGesture(diffX, diffY);
         }
     });
-    
+
     function handleSwipeGesture(diffX, diffY) {
         const sidebarManager = new SidebarManager();
-        
+
         // Horizontal swipes
         if (Math.abs(diffX) > 50 && Math.abs(diffY) < 100) {
             if (diffX < -50) {
@@ -844,7 +880,7 @@ function addMobileGestures() {
                 sidebarManager.closeSidebar();
             }
         }
-        
+
         // Vertical swipes
         if (Math.abs(diffY) > 50 && Math.abs(diffX) < 100) {
             if (diffY > 50) {
@@ -862,25 +898,25 @@ function addMobileGestures() {
 function addMobilePerformanceOptimizations() {
     // Optimize scroll performance with throttling
     let ticking = false;
-    
+
     function updateOnScroll() {
         // Scroll-based animations and effects
         ticking = false;
     }
-    
+
     window.addEventListener('scroll', function() {
         if (!ticking) {
             requestAnimationFrame(updateOnScroll);
             ticking = true;
         }
     }, { passive: true });
-    
+
     // Reduce animations on low-end devices
     if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
         document.documentElement.style.setProperty('--transition', 'none');
         document.documentElement.style.setProperty('--animation-duration', '0.1s');
     }
-    
+
     // Optimize images for mobile
     optimizeImages();
 }
@@ -890,7 +926,7 @@ function optimizeImages() {
     images.forEach(img => {
         img.loading = 'lazy';
         img.decoding = 'async';
-        
+
         // Add error handling
         img.addEventListener('error', function() {
             this.style.display = 'none';
@@ -904,13 +940,13 @@ function addMobileUIEnhancements() {
     if (window.innerWidth <= 768) {
         document.body.classList.add('mobile-device');
     }
-    
+
     // Handle orientation change
     handleOrientationChange();
-    
+
     // Add mobile menu enhancements
     enhanceMobileMenu();
-    
+
     // Add mobile search functionality
     enhanceMobileSearch();
 }
@@ -938,7 +974,7 @@ function enhanceMobileSearch() {
         searchInput.addEventListener('focus', function() {
             this.parentElement.classList.add('focused');
         });
-        
+
         searchInput.addEventListener('blur', function() {
             this.parentElement.classList.remove('focused');
         });
@@ -949,10 +985,10 @@ function enhanceMobileSearch() {
 function addMobileAccessibility() {
     // Ensure minimum touch target sizes
     ensureTouchTargetSizes();
-    
+
     // Add keyboard navigation support
     addKeyboardNavigationSupport();
-    
+
     // Add screen reader support
     addScreenReaderSupport();
 }
@@ -973,7 +1009,7 @@ function addKeyboardNavigationSupport() {
             document.body.classList.add('keyboard-navigation');
         }
     });
-    
+
     document.addEventListener('mousedown', () => {
         document.body.classList.remove('keyboard-navigation');
     });
@@ -986,7 +1022,7 @@ function addScreenReaderSupport() {
     screenReaderOnly.className = 'sr-only';
     screenReaderOnly.style.cssText = 'position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;';
     document.body.appendChild(screenReaderOnly);
-    
+
     // Global function for screen reader announcements
     window.announceToScreenReader = function(message) {
         screenReaderOnly.textContent = message;

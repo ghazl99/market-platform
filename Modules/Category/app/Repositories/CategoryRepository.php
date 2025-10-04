@@ -20,6 +20,13 @@ interface CategoryRepository
      */
     public function getAllSubcategories(): mixed;
 
+    /**
+     * Get all categories (main and subcategories) for product forms.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllCategoriesForProducts(): mixed;
+
     public function getAllSubcategoriesById($id): mixed;
 
     /**
@@ -35,6 +42,13 @@ interface CategoryRepository
      * @return Category|null
      */
     public function find(int $id): mixed;
+
+    /**
+     * Get category by ID with store validation.
+     *
+     * @return Category|null
+     */
+    public function getCategoryById($id): ?Category;
 
     /**
      * Update a category and replace its subcategories.

@@ -13,9 +13,15 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'parent_id' => 'nullable|exists:categories,id',
+            'icon' => 'required|string',
             'image' => 'nullable|image|mimes:png,jpg,jpeg',
-            'subcategories' => 'nullable|array',
-            'subcategories.*' => 'nullable|string|max:255',
+            'is_active' => 'required|boolean',
+            'sort_order' => 'nullable|integer|min:0',
+            'seo_title' => 'nullable|string|max:255',
+            'keywords' => 'nullable|string|max:500',
+            'seo_description' => 'nullable|string|max:500',
         ];
     }
 

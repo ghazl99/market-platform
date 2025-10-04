@@ -53,8 +53,8 @@
             </a>
             <a href="{{ route('dashboard.category.index') }}"
                 class="nav-item {{ request()->routeIs('dashboard.category.*') ? 'active' : '' }}">
-                <i class="fas fa-chart-line"></i>
-                <span class="nav-item-text">{{ __('Categories') }}</span>
+                <i class="fas fa-tags"></i>
+                <span class="nav-item-text">{{ __('Sections') }}</span>
             </a>
             <a href="#" class="nav-item">
                 <i class="fas fa-warehouse"></i>

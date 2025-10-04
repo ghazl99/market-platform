@@ -26,7 +26,16 @@ class Product extends Model implements HasMedia
         'description',
         'original_price',
         'price',
+        'sale_price',
         'status',
+        'is_active',
+        'is_featured',
+        'sku',
+        'stock_quantity',
+        'weight',
+        'dimensions',
+        'seo_title',
+        'seo_description',
         'views_count',
         'orders_count',
         'min_quantity',
@@ -34,14 +43,22 @@ class Product extends Model implements HasMedia
     ];
 
     protected $casts = [
-        'status' => 'boolean',
+        'status' => 'string',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'price' => 'decimal:2',
+        'original_price' => 'decimal:2',
+        'sale_price' => 'decimal:2',
+        'stock_quantity' => 'integer',
+        'weight' => 'decimal:2',
+        'views_count' => 'integer',
+        'orders_count' => 'integer',
+        'min_quantity' => 'integer',
+        'max_quantity' => 'integer',
     ];
 
     public $translatable = ['name', 'description'];
-    protected static function newFactory()
-    {
-        return ProductFactory::new();
-    }
+
     public function getCreatedAtInStoreTimezoneAttribute()
     {
         if ($this->store) {

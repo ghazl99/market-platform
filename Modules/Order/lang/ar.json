@@ -10,7 +10,7 @@
     "View Details": "عرض التفاصيل",
     "Order ID": "معرف الطلب",
     "Status": "الحالة",
-    
+
     "Payment Status": "حالة الدفع",
     "Created At": "تاريخ الإنشاء",
     "Items": "العناصر",
@@ -39,5 +39,5 @@
     "Yes, cancel it!": "نعم، قم بالإلغاء!",
     "Success": "نجاح",
     "Payment alert": "تنبيه الدفع",
-    "No orders": "لا يوجد طلبات"
+    "No orders":"لا يوجد طلبات"
 }

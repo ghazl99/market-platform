@@ -1,0 +1,109 @@
+@extends('core::dashboard.layouts.app')
+
+@section('title', __('Dashboard') . ' - ' . __('Manage Sections'))
+
+@push('styles')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('modules/category/css/categories.css') }}">
+@endpush
+
+
+
+
+@section('content')
+    <div class="categories-container">
+        <div class="page-header">
+            <h1 class="page-title">{{ __('Manage Sections') }}</h1>
+            <div class="page-actions">
+                <a href="{{ route('dashboard.category.create') }}" class="add-category-btn">
+                    <i class="fas fa-plus"></i>
+                    {{ __('Add New Section') }}
+                </a>
+            </div>
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="categories-grid" id="categoriesGrid">
+            @forelse ($categories as $category)
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon {{ $category->slug ?? 'default' }}">
+                            @php
+                                $media = $category->getFirstMedia('category_images');
+                            @endphp
+                            @if ($media)
+                                <img src="{{ route('category.image', $media->id) }}" alt="{{ $category->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                            @else
+                                <i class="fas fa-tag"></i>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="category-info">
+                        <h3 class="category-name">{{ $category->name }}</h3>
+                        <p class="category-description">{{ $category->description ?? __('No description available') }}</p>
+                        <div class="category-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">{{ $category->products_count ?? 0 }}</span>
+                                <span class="stat-label">{{ __('Products') }}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">{{ $category->children->count() }}</span>
+                                <span class="stat-label">{{ __('Subsections') }}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">{{ $category->is_active ? '100%' : '0%' }}</span>
+                                <span class="stat-label">{{ __('Active') }}</span>
+                            </div>
+                        </div>
+                        @if ($category->children->count() > 0)
+                            <div class="subcategories-section">
+                                <h4 class="subcategories-title">{{ __('Subsections') }}:</h4>
+                                <div class="subcategories-list">
+                                    @foreach ($category->children->take(4) as $child)
+                                        <span class="subcategory-tag">{{ $child->name }}</span>
+                                    @endforeach
+                                    @if ($category->children->count() > 4)
+                                        <span class="subcategory-tag">+{{ $category->children->count() - 4 }} {{ __('more') }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="category-actions">
+                        <a href="{{ route('dashboard.category.show', $category->id) }}" class="action-btn view">
+                            <i class="fas fa-eye"></i>
+                            {{ __('View') }}
+                        </a>
+                        <a href="{{ route('dashboard.category.edit', $category->id) }}" class="action-btn edit">
+                            <i class="fas fa-edit"></i>
+                            {{ __('Edit') }}
+                        </a>
+                        <form action="{{ route('dashboard.category.destroy', $category->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="action-btn delete delete-btn">
+                                <i class="fas fa-trash"></i>
+                                {{ __('Delete') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @empty
+                <div class="empty-state">
+                    <i class="fas fa-tags"></i>
+                    <h3>{{ __('No Sections Found') }}</h3>
+                    <p>{{ __('Start by adding your first section.') }}</p>
+                    <a href="{{ route('dashboard.category.create') }}" class="add-category-btn">
+                        <i class="fas fa-plus"></i>
+                        {{ __('Add New Section') }}
+                    </a>
+                </div>
+            @endforelse
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
+    <script src="{{ asset('modules/category/js/categories.js') }}"></script>
+@endpush

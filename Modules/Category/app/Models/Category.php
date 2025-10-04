@@ -21,13 +21,21 @@ class Category extends Model implements HasMedia
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = ['name', 'parent_id', 'store_id'];
+    protected $fillable = [
+        'name',
+        'description',
+        'parent_id',
+        'store_id',
+        'icon',
+        'is_active',
+        'sort_order',
+        'seo_title',
+        'keywords',
+        'seo_description'
+    ];
 
     public $translatable = ['name'];
-    protected static function newFactory()
-    {
-        return CategoryFactory::new();
-    }
+
     public function products()
     {
         return $this->belongsToMany(Product::class, 'category_products');

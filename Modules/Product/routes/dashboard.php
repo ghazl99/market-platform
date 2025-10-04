@@ -3,6 +3,17 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Product\Http\Controllers\Admin\ProductController;
 
-Route::middleware(['auth', 'ensure-store-access', 'check.store.status', 'check-permission'])->group(function () {
-    Route::resource('products', ProductController::class)->names('product');
+Route::middleware(['web', 'auth', 'ensure-store-access', 'check.store.status'])->group(function () {
+    Route::resource('products', ProductController::class)->names([
+        'index' => 'product.index',
+        'create' => 'product.create',
+        'store' => 'product.store',
+        'show' => 'product.show',
+        'edit' => 'product.edit',
+        'update' => 'product.update',
+        'destroy' => 'product.destroy',
+    ]);
+
+    // Route لعرض منتجات قسم معين
+    Route::get('/products/category/{category}', [ProductController::class, 'index'])->name('product.category');
 });
