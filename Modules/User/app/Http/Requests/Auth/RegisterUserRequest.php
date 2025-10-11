@@ -32,7 +32,7 @@ class RegisterUserRequest extends FormRequest
             ],
             'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
             'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp'],
-            'role' => ['required', 'string', 'in:owner,customer'],
+            'role' => ['required', 'string', 'in:owner,customer,staff'],
         ];
     }
 

@@ -1,38 +1,56 @@
 @foreach ($users as $k => $user)
+    @php
+        $isActive = $user->stores->firstWhere('id', $store->id)?->pivot->is_active ?? false;
+    @endphp
     <tr id="user-row-{{ $user->id }}">
-        <td>{{ $k + 1 }}</td>
-        <td>{{ $user->name }}</td>
-        <td>{{ $user->email }}</td>
+        <td>
+            <div class="staff-name">
+                <i class="fas fa-user"></i>
+                <span>{{ $user->name }}</span>
+            </div>
+        </td>
+        <td>
+            <span class="email-text">{{ $user->email }}</span>
+        </td>
         <td>
             @if ($user->profile_photo_url ?? false)
                 <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" class="rounded-circle" width="40"
                     height="40">
             @else
-                <i class="fas fa-user-circle fa-2x text-muted"></i>
+                <div class="avatar-placeholder">
+                    <i class="fas fa-user-circle"></i>
+                </div>
             @endif
         </td>
         <td>
-            @if ($user->hasVerifiedEmail())
-                <span class="badge bg-success">{{ __('Verified') }}</span>
+            @if ($isActive)
+                <span class="status-badge verified">{{ __('متفعل') }}</span>
             @else
-                <span class="badge bg-warning">{{ __('Unverified') }}</span>
+                <span class="status-badge unverified">{{ __('غير متفعل') }}</span>
             @endif
         </td>
-        <td>{{ $user->created_at->format('Y-m-d') }}</td>
-        <td>{{ $user->last_login_at ? $user->last_login_at->format('Y-m-d H:i') : '-' }}</td>
         <td>
-            <button
-                class="btn btn-sm {{ $user->stores->firstWhere('id', $store->id)?->pivot->is_active ? 'btn-warning' : 'btn-success' }}"
-                onclick="toggleActivation({{ $user->id }})" id="toggle-btn-{{ $user->id }}"
-                title="{{ $user->stores->firstWhere('id', $store->id)?->pivot->is_active ? __('إلغاء التفعيل') : __('تفعيل') }}">
-                <i
-                    class="fas {{ $user->stores->firstWhere('id', $store->id)?->pivot->is_active ? 'fa-pause' : 'fa-play' }}"></i>
-            </button>
-            <a href="{{ route('dashboard.staff.edit', $user->id) }}" class="btn btn-sm btn-info"
-                title="{{ __('Manage Permissions') }}">
-                <i class="fas fa-user-shield"></i>
-            </a>
+            <span class="date-text">{{ $user->created_at->format('Y-m-d') }}</span>
+        </td>
+        <td>
+            <span class="date-text">{{ $user->last_login_at ? $user->last_login_at->format('Y-m-d H:i') : '-' }}</span>
+        </td>
+        <td>
+            <div class="action-buttons">
+                <button class="action-btn toggle-btn {{ $isActive ? 'deactivate' : 'activate' }}"
+                    onclick="toggleActivation({{ $user->id }})" id="toggle-btn-{{ $user->id }}"
+                    data-user-id="{{ $user->id }}" data-is-active="{{ $isActive ? 'true' : 'false' }}"
+                    title="{{ $isActive ? __('إلغاء التفعيل') : __('تفعيل') }}">
+                    <i class="fas {{ $isActive ? 'fa-pause' : 'fa-play' }}"></i>
+                    <span class="btn-text">{{ $isActive ? __('إلغاء التفعيل') : __('تفعيل') }}</span>
+                </button>
 
+                <a href="{{ route('dashboard.staff.edit', $user->id) }}" class="action-btn edit"
+                    title="{{ __('إدارة الصلاحيات') }}">
+                    <i class="fas fa-user-shield"></i>
+                    <span class="btn-text">{{ __('الصلاحيات') }}</span>
+                </a>
+            </div>
         </td>
     </tr>
 @endforeach

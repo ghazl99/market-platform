@@ -41,6 +41,9 @@ class StaffModelRepository implements StaffRepository
         $pivot->is_active = ! $pivot->is_active;
         $pivot->save();
 
+        // إعادة تحميل العلاقة للتأكد من تحديث البيانات
+        $user->load('stores');
+
         return $user;
     }
 }

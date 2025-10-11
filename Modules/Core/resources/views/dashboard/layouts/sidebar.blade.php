@@ -100,6 +100,15 @@
         </div>
 
         <div class="nav-section">
+            <div class="nav-section-title">الإدارة</div>
+            <a href="{{ route('dashboard.staff.index') }}"
+                class="nav-item {{ request()->is('dashboard/staff*') ? 'active' : '' }}">
+                <i class="fas fa-users-cog"></i>
+                <span class="nav-item-text">الموظفين</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
             <div class="nav-section-title">الإعدادات</div>
             <a href="#" class="nav-item">
                 <i class="fas fa-cog"></i>

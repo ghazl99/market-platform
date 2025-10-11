@@ -17,7 +17,7 @@ class StaffController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role:owner', only: ['index', 'create', 'store', 'toggleActivation', 'edit', 'update']),
+            new Middleware('role:admin|owner', only: ['index', 'create', 'store', 'toggleActivation', 'edit', 'update']),
 
         ];
     }
@@ -85,17 +85,35 @@ class StaffController extends Controller implements HasMiddleware
     {
         $store = Store::currentFromUrl()->firstOrFail();
 
+        // الحصول على الحالة الحالية قبل التغيير
+        $currentStatus = $user->stores->firstWhere('id', $store->id)?->pivot->is_active ?? false;
+
         $this->staffService->toggleActive($user, $store->id);
+
+        // إعادة تحميل العلاقة للحصول على البيانات المحدثة
+        $user->load('stores');
+        $newStatus = $user->stores->firstWhere('id', $store->id)?->pivot->is_active ?? false;
+
+        // للتشخيص
+        \Illuminate\Support\Facades\Log::info('Toggle activation', [
+            'user_id' => $user->id,
+            'store_id' => $store->id,
+            'old_status' => $currentStatus,
+            'new_status' => $newStatus
+        ]);
 
         return response()->json([
             'success' => true,
             'message' => __('Updated successfully'),
-            'is_active' => $user->stores()->where('store_id', $store->id)->first()->pivot->is_active,
+            'is_active' => $newStatus,
         ]);
     }
 
     public function edit(User $user)
     {
+        // تحميل العلاقات المطلوبة
+        $user->load('stores');
+
         $permissions = $this->staffPermissionService->getAllPermissions();
 
         return view('user::dashboard.staff.edit-permissions', compact('user', 'permissions'));
