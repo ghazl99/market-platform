@@ -767,7 +767,7 @@
                 </div>
 
                 <!-- Hidden Wallet ID -->
-                <input type="hidden" name="wallet_id" value="{{ Auth::user()->wallet->id }}">
+                <input type="hidden" name="wallet_id" value="{{ Auth::user()->walletForStore->id }}">
 
                 <div class="action-buttons">
                     <button type="submit" class="btn btn-primary">{{ __('Confirm Payment') }}</button>

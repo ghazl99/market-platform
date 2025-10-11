@@ -2,8 +2,11 @@
 
 namespace Modules\Wallet\Http\Controllers\App;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Modules\Wallet\Pipelines\AddBalance;
+use Modules\Wallet\Pipelines\LogDepositTransaction;
 use Modules\Wallet\Services\App\WalletService;
 
 class WalletController extends Controller
@@ -18,53 +21,28 @@ class WalletController extends Controller
     public function index(Request $request)
     {
 
-    $filters = [
-        'date_from' => $request->input('date_from') ?: null,
-        'date_to'   => $request->input('date_to') ?: null,
-        'quick'     => $request->input('quick') ?: null,
-        'type'      => $request->input('type') ?: null,
-    ];
+        $filters = [
+            'date_from' => $request->input('date_from') ?: null,
+            'date_to'   => $request->input('date_to') ?: null,
+            'quick'     => $request->input('quick') ?: null,
+            'type'      => $request->input('type') ?: null,
+        ];
 
         $transactions = $this->walletService->getTransactions($filters, 10);
         return view('wallet::app.wallet.index', compact('transactions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function deposit(array $data)
     {
-        return view('wallet::create');
+        return DB::transaction(function () use ($data) {
+            return app(\Illuminate\Pipeline\Pipeline::class)
+                ->send($data)
+                ->through([
+                    AddBalance::class,
+                    LogDepositTransaction::class,
+                ])
+                ->thenReturn();
+
+        });
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        return view('wallet::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('wallet::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
 }

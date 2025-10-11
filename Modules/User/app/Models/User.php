@@ -75,7 +75,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         return OwnerFactory::new();
     }
 
-   
+
     public function getLastUpdatedAtPasswordInStoreTimezoneAttribute()
     {
         if (!$this->last_updated_at_password) {
@@ -139,10 +139,14 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
             ->withPivot('is_active')
             ->withTimestamps();
     }
-    public function wallet()
+    public function walletForStore($storeId = null)
     {
-        return $this->hasOne(\Modules\Wallet\Models\Wallet::class);
+        $storeId ??= \Modules\Store\Models\Store::currentFromUrl()->first()?->id;
+
+        return $this->hasOne(\Modules\Wallet\Models\Wallet::class)
+            ->where('store_id', $storeId);
     }
+
     public function toSearchableArray()
     {
         $array = [

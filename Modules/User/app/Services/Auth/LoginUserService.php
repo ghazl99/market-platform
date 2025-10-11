@@ -16,8 +16,12 @@ class LoginUserService
     public function login(array $data): array
     {
         DB::beginTransaction();
+        $store = \Modules\Store\Models\Store::currentFromUrl()->first();
 
-        $user = $this->userRepository->findByEmail($data['email']);
+        if (! $store) {
+            abort(404, 'Store not found');
+        }
+        $user = $this->userRepository->findByEmailAndStore($data['email'], $store->id);
 
         // Check if email exists
         if (! $user) {
@@ -49,10 +53,12 @@ class LoginUserService
         $user->save();
 
         request()->session()->regenerate();
+
         if (!empty($data['fcm_token']) && !empty($data['device_type'])) {
             $this->userRepository->createOrUpdateToken([
                 'user_id' => $user->id,
                 'token' => $data['fcm_token'],
+                'store_id' => $store->id,
                 'device_name' => $data['device_type'],
             ]);
         }

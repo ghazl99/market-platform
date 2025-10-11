@@ -297,7 +297,7 @@
         <div class="current-balance">
             <div class="balance-label">{{ __('Current Balance') }}</div>
             <div class="balance-amount">
-                {{ number_format(Auth::user()->wallet->balance ?? 0, 2) }}
+                {{ number_format(Auth::user()->walletForStore()->first()?->balance ?? 0, 2) }}
             </div>
             <div class="balance-currency">{{ __('USD') }}</div>
         </div>

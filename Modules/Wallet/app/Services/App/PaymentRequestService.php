@@ -2,8 +2,10 @@
 
 namespace Modules\Wallet\Services\App;
 
-use Modules\Wallet\Repositories\App\PaymentRequestRepository;
+use Modules\Wallet\Pipelines\AddBalance;
+use Modules\Wallet\Pipelines\LogDepositTransaction;
 use Mgcodeur\CurrencyConverter\Facades\CurrencyConverter;
+use Modules\Wallet\Repositories\App\PaymentRequestRepository;
 
 class PaymentRequestService
 {
@@ -41,5 +43,36 @@ class PaymentRequestService
         }
 
         return $deposit;
+    }
+
+    public function approvePaymentRequest($paymentRequestId, $authUserId)
+    {
+        $paymentRequest = $this->paymentRequestRepository->findById($paymentRequestId);
+
+        if (!$paymentRequest || $paymentRequest->status !== 'pending') {
+            throw new \Exception('Payment request not found or already processed.');
+        }
+
+        // تحديث حالة الطلب
+        $this->paymentRequestRepository->update($paymentRequest, $authUserId);
+
+        $wallet = $paymentRequest->wallet;
+
+        // إضافة الرصيد عبر Pipeline
+        $data = [
+            'wallet' => $wallet,
+            'amount_usd' => $paymentRequest->amount_usd,
+            'paymentRequest_id' => $paymentRequestId,
+        ];
+
+        app(\Illuminate\Pipeline\Pipeline::class)
+            ->send($data)
+            ->through([
+                AddBalance::class,
+                LogDepositTransaction::class,
+            ])
+            ->thenReturn();
+
+        return $paymentRequest;
     }
 }

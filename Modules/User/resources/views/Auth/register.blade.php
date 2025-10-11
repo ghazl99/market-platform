@@ -66,6 +66,7 @@
 
                     <form method="POST" action="{{ route('auth.register') }}" class="auth-form" id="registerForm">
                         @csrf
+                        
                         <div class="form-group">
                             <label for="name" class="form-label">{{ __('Name') }}</label>
                             <div class="input-wrapper">

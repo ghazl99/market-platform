@@ -10,4 +10,17 @@ class PaymentRequestModelRepository implements PaymentRequestRepository
     {
         return PaymentRequest::create($data);
     }
+    public function findById(int $id): ?PaymentRequest
+    {
+        return PaymentRequest::find($id);
+    }
+
+    public function update(PaymentRequest $paymentRequest, int $approvedBy)
+    {
+        $paymentRequest->status = 'approved';
+        $paymentRequest->approved_by = $approvedBy;
+        $paymentRequest->save();
+
+        return $paymentRequest;
+    }
 }

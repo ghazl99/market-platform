@@ -35,9 +35,12 @@
                  </div>
 
                  <div class="balance-section">
+
                      <div class="balance-info">
                          <span class="balance-label">صافي الرصيد</span>
-                         <span class="balance-value">{{ number_format(Auth::user()->wallet->balance ?? 0, 2) }} $</span>
+                         <span
+                             class="balance-value">{{ number_format(Auth::user()->walletForStore()->first()?->balance ?? 0, 2) }}
+                             $</span>
                      </div>
                      <button class="balance-refresh" title="تحديث">
                          <i class="fas fa-sync-alt"></i>

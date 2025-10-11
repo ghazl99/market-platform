@@ -30,8 +30,8 @@ class PaymentRequest extends Model implements HasMedia
         return $this->belongsTo(Wallet::class);
     }
 
-    public function approver()
+    public function approvedBy()
     {
-        return $this->belongsTo(User::class, 'approved_by');
+        return $this->belongsTo(\Modules\User\Models\User::class, 'approved_by');
     }
 }
