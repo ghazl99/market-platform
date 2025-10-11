@@ -105,11 +105,16 @@
                 <i class="fas fa-cog"></i>
                 <span class="nav-item-text">عام</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="{{ url('dashboard/permissions') }}"
+                class="nav-item {{ request()->is('dashboard/permissions*') ? 'active' : '' }}">
                 <i class="fas fa-shield-alt"></i>
+                <span class="nav-item-text">الصلاحيات</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-lock"></i>
                 <span class="nav-item-text">الأمان</span>
             </a>
-            
+
             <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>
