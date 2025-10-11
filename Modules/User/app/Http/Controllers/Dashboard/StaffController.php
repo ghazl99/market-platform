@@ -35,7 +35,7 @@ class StaffController extends Controller implements HasMiddleware
         $search = $request->get('search');
 
         $users = $this->staffService->getStaffs($search);
-        $store = \Modules\Store\Models\Store::currentFromUrl()->first();
+        $store = Store::currentFromUrl()->first();
 
         if (! $store) {
             abort(404, 'Store not found');
@@ -81,7 +81,7 @@ class StaffController extends Controller implements HasMiddleware
         return view('user::show');
     }
 
-    public function toggleActivation(\Modules\User\Models\User $user)
+    public function toggleActivation(User $user)
     {
         $store = Store::currentFromUrl()->firstOrFail();
 
