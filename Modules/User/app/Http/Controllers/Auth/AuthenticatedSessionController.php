@@ -33,7 +33,20 @@ class AuthenticatedSessionController extends Controller
         return view('user::auth.login');
     }
 
-    public function store(LoginRequest $request)
+    public function customerLogin(LoginRequest $request)
+    {
+        $result = $this->loginService->customerLogin($request->validated());
+
+        if (! $result['success']) {
+            return back()->withErrors([
+                $result['field'] => $result['message'],
+            ])->withInput();
+        }
+
+        return redirect()->intended(route('home'));
+    }
+
+    public function login(LoginRequest $request)
     {
         $result = $this->loginService->login($request->validated());
 
@@ -45,7 +58,6 @@ class AuthenticatedSessionController extends Controller
 
         return redirect()->intended(route('home'));
     }
-
     public function destroy(Request $request)
     {
         $this->loginService->logout();

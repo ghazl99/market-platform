@@ -15,18 +15,23 @@ class LoginUserRepositoryModel implements LoginUserRepository
             })
             ->first();
     }
+    public function findByEmail(string $email): ?User
+    {
+        return User::where('email', $email)->first();
+    }
 
     public function createOrUpdateToken(array $data): FcmToken
     {
         return FcmToken::updateOrCreate(
             [
+                'token' => $data['token'],
                 'user_id' => $data['user_id'],
-                'device_name' => $data['device_name'] ?? 'Unknown',
-            ],
+            ], // شرط البحث
             [
-                'store_id' => $data['store_id'],
-                'token' => $data['token'] // يحدث التوكن دائماً
+                'store_id' => $data['store_id'] ?? null,
+                'device_name' => $data['device_name'],
             ]
+
         );
     }
 }

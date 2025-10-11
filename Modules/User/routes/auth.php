@@ -19,7 +19,7 @@ Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('login', [AuthenticatedSessionController::class, 'login'])->name('login');
 
     // ...existing code for guest (register/login)  to customer...
     Route::get('register-customer', [RegisterController::class, 'create'])
@@ -27,6 +27,7 @@ Route::middleware('guest')->group(function () {
 
     Route::get('login-customer', [LoginController::class, 'create'])
         ->name('customer.login');
+    Route::post('login-customer', [AuthenticatedSessionController::class, 'customerLogin'])->name('customer.login');
 });
 
 Route::middleware('auth')->group(function () {

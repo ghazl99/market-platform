@@ -64,7 +64,7 @@
                         <p class="form-subtitle">{{ __('Welcome back! Log in to access your account') }}</p>
                     </div>
 
-                    <form method="POST" action="{{ route('auth.login') }}" class="auth-form" id="loginForm">
+                    <form method="POST" action="{{ route('auth.customer.login') }}" class="auth-form" id="loginForm">
                         @csrf
 
                         <input type="text" hidden name="fcm_token" id="fcm_token">

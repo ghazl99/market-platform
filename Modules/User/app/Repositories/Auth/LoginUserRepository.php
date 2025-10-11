@@ -8,5 +8,6 @@ use Modules\User\Models\FcmToken;
 interface LoginUserRepository
 {
     public function findByEmailAndStore(string $email, int $storeId): ?User;
+    public function findByEmail(string $email): ?User;
     public function createOrUpdateToken(array $data): FcmToken;
 }
