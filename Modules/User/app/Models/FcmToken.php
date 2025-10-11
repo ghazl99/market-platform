@@ -15,6 +15,7 @@ class FcmToken extends Model
      */
     protected $fillable = [
         'user_id',
+        'store_id',
         'token',
         'device_name'
     ];
