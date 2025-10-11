@@ -25,7 +25,7 @@ class LoginController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $result = $this->loginService->login($request->validated());
+        $result = $this->loginService->customerLogin($request->validated());
 
         if (! $result['success']) {
             return back()->withErrors([

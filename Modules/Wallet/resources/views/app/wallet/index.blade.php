@@ -1060,7 +1060,7 @@
                 <div class="balance-content">
                     <div class="balance-info">
                         <h2>{{ __('Current Balance') }}</h2>
-                        <p class="balance-amount">{{ number_format(Auth::user()->wallet->balance ?? 0, 2) }} $</p>
+                        <p class="balance-amount">{{ number_format(Auth::user()->walletForStore()->first()?->balance ?? 0, 2) }} $</p>
                     </div>
                     <div class="balance-actions">
                         <a class="balance-btn" href="{{ Route('payment-method.index') }}" style="text-decoration: none">

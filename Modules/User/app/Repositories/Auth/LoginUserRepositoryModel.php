@@ -7,6 +7,14 @@ use Modules\User\Models\FcmToken;
 
 class LoginUserRepositoryModel implements LoginUserRepository
 {
+    public function findByEmailAndStore(string $email, int $storeId): ?User
+    {
+        return User::where('email', $email)
+            ->whereHas('stores', function ($q) use ($storeId) {
+                $q->where('store_id', $storeId);
+            })
+            ->first();
+    }
     public function findByEmail(string $email): ?User
     {
         return User::where('email', $email)->first();
@@ -16,12 +24,14 @@ class LoginUserRepositoryModel implements LoginUserRepository
     {
         return FcmToken::updateOrCreate(
             [
+                'token' => $data['token'],
                 'user_id' => $data['user_id'],
-                'device_name' => $data['device_name'] ?? 'Unknown',
-            ],
+            ], // شرط البحث
             [
-                'token' => $data['token'] // يحدث التوكن دائماً
+                'store_id' => $data['store_id'] ?? null,
+                'device_name' => $data['device_name'],
             ]
+
         );
     }
 }

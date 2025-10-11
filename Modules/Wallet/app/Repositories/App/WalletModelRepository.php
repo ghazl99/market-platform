@@ -18,7 +18,7 @@ class WalletModelRepository implements WalletRepository
     {
         $user = Auth::user();
 
-        $query = $user->wallet
+        $query = $user->walletForStore
             ->transactions()
             ->with(['wallet.user', 'order']);
 

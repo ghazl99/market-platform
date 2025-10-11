@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
 
             $table->string('password');
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamp('last_updated_at_password')->nullable();
 
             $table->boolean('is_featured')->default(false);
-            
+
             $table->rememberToken();
             $table->timestamps();
         });

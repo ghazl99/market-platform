@@ -20,7 +20,6 @@ class RegisterOwnerRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                'unique:users,email',
             ],
             'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
             'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp'],
