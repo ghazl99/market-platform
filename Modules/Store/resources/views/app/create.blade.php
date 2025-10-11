@@ -1,0 +1,271 @@
+@extends('core::layouts.app')
+
+@section('title', __('Create New Store') . ' - ' . __('Stores Platform'))
+
+@push('styles')
+<style>
+    /* Reset بعض الأشياء */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+        background-color: #f5f5f5;
+        color: #333;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 100px auto 50px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        color: #10b981;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 48%;
+        min-width: 200px;
+    }
+
+    .form-group.full-width {
+        flex: 1 1 100%;
+    }
+
+    label {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    input[type="text"], input[type="email"], input[type="file"], select, textarea {
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: #10b981;
+        box-shadow: 0 0 5px rgba(16,185,129,0.3);
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .form-text {
+        font-size: 0.8rem;
+        color: #777;
+        margin-top: 3px;
+    }
+
+    .store-type-card {
+        padding: 15px 10px;
+        background: #f8f9fa;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .store-type-card:hover {
+        border-color: #10b981;
+    }
+
+    .store-type-input {
+        display: none;
+    }
+
+    .store-type-input:checked + .store-type-card {
+        border-color: #10b981;
+        background: #d1fae5;
+        box-shadow: 0 5px 15px rgba(16,185,129,0.2);
+    }
+
+    .store-icon {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 8px;
+        background: #e0e0e0;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #10b981;
+        font-size: 1.2rem;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.2s;
+    }
+
+    .btn-primary {
+        background-color: #10b981;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0f766e;
+    }
+
+    .btn-outline-secondary {
+        background: #fff;
+        border: 2px solid #ccc;
+        color: #555;
+    }
+
+    .btn-outline-secondary:hover {
+        border-color: #10b981;
+        color: #10b981;
+    }
+
+    .row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .alert {
+        padding: 12px 15px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .alert-info {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+</style>
+@endpush
+
+@section('content')
+<div class="container">
+    <h2>{{ __('Create New Store') }}</h2>
+
+    <form method="POST" action="{{ route('stores.store') }}" enctype="multipart/form-data">
+        @csrf
+
+        @hasanyrole('owner|staff')
+        <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+        @endhasanyrole
+
+        <div class="form-group">
+            <label for="name">{{ __('Store Name') }}</label>
+            <input type="text" id="name" name="name" value="{{ old('name') }}" required>
+            <small class="form-text">{{ __('Store name as shown to customers') }}</small>
+        </div>
+
+        <div class="form-group">
+            <label for="domain">{{ __('Domain') }}</label>
+            <div style="display:flex;gap:5px;">
+                <input type="text" id="domain" name="domain" value="{{ old('domain') }}" required style="flex:1;">
+                <span style="align-self:center">.{{ config('app.domain', 'localhost') }}</span>
+            </div>
+            <small class="form-text">{{ __('Your store link will be:') }} domain.{{ config('app.domain', 'localhost') }}</small>
+        </div>
+
+        <div class="form-group full-width">
+            <label for="description">{{ __('Store Description') }}</label>
+            <textarea id="description" name="description" rows="3">{{ old('description') }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="theme">{{ __('Theme') }}</label>
+            <select id="theme" name="theme" required>
+                <option value="">{{ __('Select Theme') }}</option>
+                <option value="default" {{ old('theme')=='default'?'selected':'' }}>{{ __('Default Theme') }}</option>
+                <option value="modern" {{ old('theme')=='modern'?'selected':'' }}>{{ __('Modern Theme') }}</option>
+                <option value="classic" {{ old('theme')=='classic'?'selected':'' }}>{{ __('Classic Theme') }}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="timezone">{{ __('Timezone') }}</label>
+            <select name="timezone" id="timezone" required>
+                @foreach (timezone_identifiers_list() as $tz)
+                    <option value="{{ $tz }}" {{ old('timezone')==$tz?'selected':'' }}>{{ $tz }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="logo">{{ __('Store Logo') }}</label>
+            <input type="file" id="logo" name="logo">
+        </div>
+
+        <div class="form-group">
+            <label for="banner">{{ __('Store Banner') }}</label>
+            <input type="file" id="banner" name="banner">
+        </div>
+
+        <!-- Store Type -->
+        <div class="form-group full-width">
+            <label>{{ __('Preferred Store Type') }}</label>
+            <div class="row">
+                <label>
+                    <input type="radio" name="type" value="traditional" class="store-type-input">
+                    <div class="store-type-card">
+                        <div class="store-icon"><i class="fas fa-shopping-bag"></i></div>
+                        <span>{{ __('Traditional') }}</span>
+                    </div>
+                </label>
+
+                <label>
+                    <input type="radio" name="type" value="digital" class="store-type-input">
+                    <div class="store-type-card">
+                        <div class="store-icon"><i class="fas fa-laptop"></i></div>
+                        <span>{{ __('Digital') }}</span>
+                    </div>
+                </label>
+
+                <label>
+                    <input type="radio" name="type" value="educational" class="store-type-input">
+                    <div class="store-type-card">
+                        <div class="store-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <span>{{ __('Educational') }}</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>{{ __('Note:') }}</strong> {{ __('After creating the store, it will be reviewed by the administration before activation.') }}
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button type="submit" class="btn btn-primary">{{ __('Create Store') }}</button>
+            <a href="{{ route('stores.index') }}" class="btn btn-outline-secondary">{{ __('Back') }}</a>
+        </div>
+    </form>
+</div>
+@endsection
