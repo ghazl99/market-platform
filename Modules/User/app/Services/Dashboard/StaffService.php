@@ -31,6 +31,7 @@ class StaffService
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role' => $data['role'] ?? 'staff',
         ]);
         $user->stores()->attach($store->id, ['is_active' => true]);
 
