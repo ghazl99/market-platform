@@ -2,15 +2,19 @@
 
 namespace Modules\Wallet\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Modules\Wallet\Models\PaymentRequest;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Modules\Wallet\Services\Dashboard\PaymentRequestService;
 
 class PaymentRequestController extends Controller implements HasMiddleware
 {
+    public function __construct(
+        protected PaymentRequestService $paymentRequestService
+    ) {}
     public static function middleware(): array
     {
         return [
@@ -31,11 +35,11 @@ class PaymentRequestController extends Controller implements HasMiddleware
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('original_amount', 'like', "%{$search}%")
-                  ->orWhere('status', 'like', "%{$search}%")
-                  ->orWhereHas('wallet.user', function ($userQuery) use ($search) {
-                      $userQuery->where('name', 'like', "%{$search}%")
-                               ->orWhere('email', 'like', "%{$search}%");
-                  });
+                    ->orWhere('status', 'like', "%{$search}%")
+                    ->orWhereHas('wallet.user', function ($userQuery) use ($search) {
+                        $userQuery->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -60,25 +64,21 @@ class PaymentRequestController extends Controller implements HasMiddleware
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validated = $request->validate([
             'status' => 'required|in:approved,rejected',
-            'notes' => 'nullable|string|max:500'
+            'notes'  => 'nullable|string|max:500'
         ]);
 
-        $paymentRequest = PaymentRequest::findOrFail($id);
+        try {
+            
+            $this->paymentRequestService->processPaymentRequest($id, Auth::id(), $validated);
 
-        $userId = Auth::check() ? Auth::user()->id : 1;
-
-        $paymentRequest->update([
-            'status' => $request->status,
-            'approved_by' => $userId
-        ]);
-
-        $message = $request->status === 'approved'
-            ? __('Payment request approved successfully')
-            : __('Payment request rejected successfully');
-
-        return redirect()->route('dashboard.dashboard.payment-requests.index')
-            ->with('success', $message);
+            return redirect()->back()->with('success', __('Updated successfully'));
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

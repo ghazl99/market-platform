@@ -20,8 +20,11 @@ class UserObserver
         if (! $store) {
             abort(404, 'Store not found');
         }
-        $this->walletService->createWalletForUser($user,$store, 0);
-        $user->notify(new \Modules\User\Notifications\RegisterdUser($user));
+        $this->walletService->createWalletForUser($user, $store, 0);
+
+        if ($user->hasRole('customer')) {
+            $user->notify(new \Modules\User\Notifications\RegisterdUser($user));
+        }
     }
 
     /**

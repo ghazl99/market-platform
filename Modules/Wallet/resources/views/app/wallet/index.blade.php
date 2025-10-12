@@ -1060,7 +1060,8 @@
                 <div class="balance-content">
                     <div class="balance-info">
                         <h2>{{ __('Current Balance') }}</h2>
-                        <p class="balance-amount">{{ number_format(Auth::user()->walletForStore()->first()?->balance ?? 0, 2) }} $</p>
+                        <p class="balance-amount">
+                            {{ number_format(Auth::user()->walletForStore()->first()?->balance ?? 0, 2) }} $</p>
                     </div>
                     <div class="balance-actions">
                         <a class="balance-btn" href="{{ Route('payment-method.index') }}" style="text-decoration: none">
@@ -1144,21 +1145,31 @@
                         </div>
                         <div class="transaction-content">
                             <h5 class="transaction-title">
-                                {{ $transaction->order->items->first()->product->name }}
+                                @if ($transaction->order)
+                                    {{ $transaction->order->items->first()?->product->name ?? __('Order Item') }}
+                                @elseif($transaction->paymentRequest)
+                                    {{ __('Add Balance') }} ({{ number_format($transaction->amount, 2) }} $)
+
+                                @endif
                             </h5>
+
                             @php
                                 $date = $transaction->created_at_in_store_timezone;
-                                $formatted = $date->format('Y-m-d h:i A');
-                                if (app()->getLocale() == 'ar') {
+                                $formatted = $date?->format('Y-m-d h:i A');
+                                if ($formatted && app()->getLocale() == 'ar') {
                                     $formatted = str_replace(['AM', 'PM'], ['صباحًا', 'مساءً'], $formatted);
                                 }
                             @endphp
 
-                            <small class="transaction-date">{{ $formatted }}</small>
+                            @if ($formatted)
+                                <small class="transaction-date">{{ $formatted }}</small>
+                            @endif
                         </div>
+
                         <div class="transaction-action">
-                            <h4 class="transaction-amount {{ $transaction->type == 'refunds' ? 'positive' : '' }}">
-                                {{ $transaction->type == 'refunds' ? '+' : '-' }}{{ number_format($transaction->amount, 2) }}
+                            <h4 class="transaction-amount
+                                {{ $transaction->type == 'deposit' ? 'positive' : '' }}">
+                                {{ $transaction->type == 'deposit' ? '+' : '-' }}{{ number_format($transaction->amount, 2) }}
                                 $
                             </h4>
                             <small class="transaction-balance">
@@ -1166,6 +1177,7 @@
                                 - <span class="new-balance">{{ number_format($transaction->new_balance, 2) }}</span>
                             </small>
                         </div>
+
                     </div>
                 @empty
                     <div class="empty-state">

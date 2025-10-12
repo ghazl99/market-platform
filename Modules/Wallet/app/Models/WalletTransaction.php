@@ -54,4 +54,8 @@ class WalletTransaction extends Model
     {
         return $this->belongsTo(\Modules\Order\Models\Order::class);
     }
+    public function paymentRequest()
+    {
+        return $this->belongsTo(\Modules\Wallet\Models\PaymentRequest::class, 'paymentRequest_id');
+    }
 }

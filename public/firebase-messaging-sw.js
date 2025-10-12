@@ -18,14 +18,15 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage(function (payload) {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
 
-    const notificationTitle = payload.data.title || 'إشعار جديد';
+    const notificationTitle = payload.data.title || payload.title || 'New Notification';
     const notificationOptions = {
-        body: payload.data.body || '',
-        icon: payload.data.icon || self.location.origin + '/assets/img/capsule.png',
+        body: payload.data.body || payload.body,
+        icon: payload.data.icon,
         data: {
-            url: payload.data.url || (self.location.origin + '/dashboard')
+            url: payload.data.url
         }
     };
+
 
     // 👇 هذا السطر هو اللي يضمن ظهور الإشعار على الموبايل
     return self.registration.showNotification(notificationTitle, notificationOptions);

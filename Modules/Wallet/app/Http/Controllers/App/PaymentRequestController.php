@@ -29,18 +29,4 @@ class PaymentRequestController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
-    {
-        try {
-            $this->paymentRequestService->approvePaymentRequest($id, Auth::id());
-
-            return redirect()->back()->with('success',  __('Created successfully'));
-        } catch (\Exception $e) {
-            // Log the error or return JSON response for AJAX requests
-            return response()->json([
-                'error' => true,
-                'message' => $e->getMessage(),
-            ], 500);
-        }
-    }
 }

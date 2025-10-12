@@ -16,13 +16,14 @@ class CustomerModelRepository implements CustomerRepository
 
         // البحث عن جميع المستخدمين المرتبطين بهذا المتجر
         $query = User::query()
-            ->whereHas('stores', fn ($q) => $q->where('stores.id', $store->id))
+            ->whereHas('stores', fn($q) => $q->where('stores.id', $store->id))
+            ->whereHas('roles', fn($q) => $q->where('name', 'customer'))
             ->with(['roles', 'stores']);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 

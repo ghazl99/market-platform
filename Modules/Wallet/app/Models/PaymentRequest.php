@@ -6,9 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\User\Models\User;
 use Modules\Store\Models\Store;
+use Spatie\Translatable\HasTranslations;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Notifications\Notifiable;
 
-class PaymentRequest extends Model
+class PaymentRequest extends Model implements HasMedia
 {
+    use HasFactory, HasTranslations, InteractsWithMedia, Notifiable;
+
     protected $fillable = [
         'wallet_id',
         'approved_by',
@@ -31,6 +38,10 @@ class PaymentRequest extends Model
     public function wallet(): BelongsTo
     {
         return $this->belongsTo(Wallet::class);
+    }
+    public function getUserAttribute()
+    {
+        return $this->wallet?->user;
     }
 
     /**
