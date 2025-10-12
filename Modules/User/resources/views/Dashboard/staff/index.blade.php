@@ -147,12 +147,12 @@
                         ])
                     </tbody>
                 </table>
-            </div>
+        </div>
 
             <div class="pagination-container" id="users-pagination">
-                @if ($users->hasPages())
-                    {{ $users->links() }}
-                @endif
+            @if ($users->hasPages())
+                {{ $users->links() }}
+            @endif
             </div>
         </div>
     </div>

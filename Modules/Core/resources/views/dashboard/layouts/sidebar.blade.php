@@ -76,6 +76,11 @@
                 <i class="fas fa-credit-card"></i>
                 <span class="nav-item-text">المدفوعات</span>
             </a>
+            <a href="{{ route('dashboard.dashboard.payment-requests.index') }}"
+                class="nav-item {{ request()->is('dashboard/payment-requests*') ? 'active' : '' }}">
+                <i class="fas fa-money-bill-wave"></i>
+                <span class="nav-item-text">طلبات الدفع</span>
+            </a>
             <a href="#" class="nav-item">
                 <i class="fas fa-percentage"></i>
                 <span class="nav-item-text">الخصومات</span>
