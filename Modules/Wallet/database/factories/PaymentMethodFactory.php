@@ -18,13 +18,13 @@ class PaymentMethodFactory extends Factory
             'store_id' => Store::factory(),
 
             'name' => [
-                'ar' => $fakerAr->randomElement(['بينانس', 'بايبال', 'USDT TRC20']),
-                'en' => $fakerEn->randomElement(['Binance', 'PayPal', 'USDT TRC20']),
+                'ar' => $fakerAr->randomElement(['بينانس', 'بايبال', 'تحويل بنكي']),
+                'en' => $fakerEn->randomElement(['Binance', 'PayPal', 'Bank Transfer']),
             ],
 
             'currencies' => [
-                'ar' => ['دولار', 'يورو'],   // الرموز أو أسماء العملة بالعربي
-                'en' => ['USD', 'EUR'],      // الرموز بالإنجليزي
+                'en' => ['USD', 'SYP', 'TRY'],
+                'ar' => ['دولار أمريكي', 'الليرة السورية', 'الليرة التركية']
             ],
 
 
