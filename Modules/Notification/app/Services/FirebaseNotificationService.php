@@ -1,14 +1,17 @@
 <?php
 
 namespace Modules\Notification\Services;
+
 use Kreait\Firebase\Factory;
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Modules\User\Models\FcmToken;
 use Kreait\Firebase\Messaging\Notification as FirebaseNotification;
+
 class FirebaseNotificationService
 {
-    public function handle() {} protected static $messaging;
+    public function handle() {}
+    protected static $messaging;
 
     /**
      * إعداد Firebase مرة واحدة فقط
@@ -31,7 +34,7 @@ class FirebaseNotificationService
      * @param array|null $data  بيانات إضافية (اختيارية)
      * @return bool
      */
-    public static function send( $user, ?array $data = null): bool
+    public static function send($user, ?array $data = null): bool
     {
         self::init();
 

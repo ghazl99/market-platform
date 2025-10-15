@@ -1110,7 +1110,7 @@
 
                         <div class="filter-actions">
                             <button type="submit" class="search-btn primary">
-                                <i class="fas fa-search"></i> {{ __('Search') }}
+                                <i class="fas fa-search"></i>
                             </button>
                             <button type="button" class="clear-btn secondary" onclick="clearDateFilter()">
                                 <i class="fas fa-times"></i> {{ __('Clear') }}
@@ -1149,7 +1149,6 @@
                                     {{ $transaction->order->items->first()?->product->name ?? __('Order Item') }}
                                 @elseif($transaction->paymentRequest)
                                     {{ __('Add Balance') }} ({{ number_format($transaction->amount, 2) }} $)
-
                                 @endif
                             </h5>
 
@@ -1167,7 +1166,8 @@
                         </div>
 
                         <div class="transaction-action">
-                            <h4 class="transaction-amount
+                            <h4
+                                class="transaction-amount
                                 {{ $transaction->type == 'deposit' ? 'positive' : '' }}">
                                 {{ $transaction->type == 'deposit' ? '+' : '-' }}{{ number_format($transaction->amount, 2) }}
                                 $

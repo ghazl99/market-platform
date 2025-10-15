@@ -14,8 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             \Modules\Core\Database\Seeders\CoreDatabaseSeeder::class,
-            \Modules\User\Database\Seeders\UserDatabaseSeeder::class,
-
+            // \Modules\User\Database\Seeders\UserDatabaseSeeder::class,
         ]);
     }
 }
