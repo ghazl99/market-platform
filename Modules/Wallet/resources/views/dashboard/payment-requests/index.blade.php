@@ -126,12 +126,6 @@
     <!-- Page Header -->
     <div class="page-header">
         <h1 class="page-title">{{ __('طلبات الدفع') }}</h1>
-        <div class="page-actions">
-            <button onclick="refreshTable()" class="refresh-btn">
-                <i class="fas fa-sync-alt"></i>
-                {{ __('تحديث') }}
-            </button>
-        </div>
     </div>
 
     <!-- Statistics Cards -->
@@ -477,27 +471,6 @@
             gap: 1rem;
         }
 
-        .refresh-btn {
-            background: #6b7280;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(107, 114, 128, 0.2);
-            border: none;
-            cursor: pointer;
-        }
-
-        .refresh-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(107, 114, 128, 0.3);
-        }
-
         .payment-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -506,7 +479,7 @@
         }
 
         .stat-card {
-            background: #374151;
+            background: #1a1a1a;
             border-radius: 16px;
             padding: 1.5rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -517,6 +490,7 @@
         .stat-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            background: #2d2d2d;
         }
 
         .stat-icon {
@@ -635,10 +609,15 @@
             border-bottom: 1px solid #4b5563;
             vertical-align: middle;
             color: #ffffff;
+            background: #1a1a1a;
+        }
+
+        .payment-table tbody tr {
+            background: #1a1a1a;
         }
 
         .payment-table tbody tr:hover {
-            background: #4b5563;
+            background: #2d2d2d;
         }
 
         .action-buttons {
@@ -1122,13 +1101,6 @@
             if (event.target === modal) {
                 closeModal();
             }
-        }
-
-        // Refresh table function
-        function refreshTable() {
-            const searchInput = document.getElementById('payment-search');
-            searchInput.value = '';
-            fetchPaymentRequests();
         }
     </script>
 @endpush

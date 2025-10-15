@@ -1,4 +1,18 @@
 <!-- Sidebar -->
+@php
+    // دالة مساعدة لتحديد الصفحة النشطة
+    function isActive($patterns)
+    {
+        $currentPath = request()->path();
+        foreach ($patterns as $pattern) {
+            if (str_contains($currentPath, $pattern)) {
+                return true;
+            }
+        }
+        return false;
+    }
+@endphp
+
 <aside class="dashboard-sidebar" id="sidebar">
 
     <div class="sidebar-header">
@@ -33,7 +47,7 @@
     <nav class="sidebar-nav">
         <div class="nav-section">
             <div class="nav-section-title">{{ __('Dashboard') }}</div>
-            <a href="{{ url('dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
+            <a href="{{ url('dashboard') }}" class="nav-item {{ isActive(['dashboard']) ? 'active' : '' }}">
                 <i class="fas fa-home"></i>
                 <span class="nav-item-text">{{ __('Dashboard') }}</span>
             </a>
@@ -42,7 +56,7 @@
                 <span class="nav-item-text">الإحصائيات</span>
             </a>
             <a href="{{ url('dashboard/orders') }}"
-                class="nav-item {{ request()->is('dashboard/orders*') ? 'active' : '' }}">
+                class="nav-item {{ isActive(['dashboard/orders']) ? 'active' : '' }}">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="nav-item-text">{{ __('Orders') }}</span>
             </a>
@@ -51,12 +65,12 @@
         <div class="nav-section">
             <div class="nav-section-title">إدارة المنتجات</div>
             <a href="{{ url('dashboard/products') }}"
-                class="nav-item {{ request()->is('dashboard/products*') ? 'active' : '' }}">
+                class="nav-item {{ isActive(['dashboard/products']) ? 'active' : '' }}">
                 <i class="fas fa-box"></i>
                 <span class="nav-item-text">{{ __('Products') }}</span>
             </a>
             <a href="{{ url('dashboard/categories') }}"
-                class="nav-item {{ request()->is('dashboard/categories*') ? 'active' : '' }}">
+                class="nav-item {{ isActive(['dashboard/categories']) ? 'active' : '' }}">
                 <i class="fas fa-tags"></i>
                 <span class="nav-item-text">{{ __('Sections') }}</span>
             </a>
@@ -76,8 +90,13 @@
                 <i class="fas fa-credit-card"></i>
                 <span class="nav-item-text">المدفوعات</span>
             </a>
+            <a href="{{ route('dashboard.dashboard.payment-methods.index') }}"
+                class="nav-item {{ isActive(['dashboard/dashboard/payment-methods']) ? 'active' : '' }}">
+                <i class="fas fa-credit-card"></i>
+                <span class="nav-item-text">طرق الدفع</span>
+            </a>
             <a href="{{ route('dashboard.dashboard.payment-requests.index') }}"
-                class="nav-item {{ request()->is('dashboard/payment-requests*') ? 'active' : '' }}">
+                class="nav-item {{ isActive(['dashboard/dashboard/payment-requests']) ? 'active' : '' }}">
                 <i class="fas fa-money-bill-wave"></i>
                 <span class="nav-item-text">طلبات الدفع</span>
             </a>
@@ -90,7 +109,7 @@
         <div class="nav-section">
             <div class="nav-section-title">العملاء</div>
             <a href="{{ url('dashboard/customer') }}"
-                class="nav-item {{ request()->is('dashboard/customer*') ? 'active' : '' }}">
+                class="nav-item {{ isActive(['dashboard/customer']) ? 'active' : '' }}">
                 <i class="fas fa-users"></i>
                 <span class="nav-item-text">العملاء</span>
             </a>
@@ -107,7 +126,7 @@
         <div class="nav-section">
             <div class="nav-section-title">الإدارة</div>
             <a href="{{ route('dashboard.staff.index') }}"
-                class="nav-item {{ request()->is('dashboard/staff*') ? 'active' : '' }}">
+                class="nav-item {{ isActive(['dashboard/staff']) ? 'active' : '' }}">
                 <i class="fas fa-users-cog"></i>
                 <span class="nav-item-text">الموظفين</span>
             </a>
@@ -120,7 +139,7 @@
                 <span class="nav-item-text">عام</span>
             </a>
             <a href="{{ url('dashboard/permissions') }}"
-                class="nav-item {{ request()->is('dashboard/permissions*') ? 'active' : '' }}">
+                class="nav-item {{ isActive(['dashboard/permissions']) ? 'active' : '' }}">
                 <i class="fas fa-shield-alt"></i>
                 <span class="nav-item-text">الصلاحيات</span>
             </a>

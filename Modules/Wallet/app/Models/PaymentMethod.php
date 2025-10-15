@@ -25,6 +25,7 @@ class PaymentMethod extends Model implements HasMedia
         'gateway',
         'image',
         'currencies',
+        'currency',
         'recipient_name',
         'account_number',
         'bank_name',
@@ -32,7 +33,7 @@ class PaymentMethod extends Model implements HasMedia
         'instructions',
         'is_active',
     ];
-    public $translatable = ['name', 'recipient_name','bank_name','instructions'];
+    public $translatable = ['name', 'recipient_name', 'bank_name', 'instructions'];
 
     protected $casts = [
         'name' => 'array',
