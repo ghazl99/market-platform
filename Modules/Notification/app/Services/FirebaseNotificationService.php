@@ -42,8 +42,8 @@ class FirebaseNotificationService
             Log::warning('Firebase Notification: user not provided.');
             return false;
         }
-
-        $fcmTokens = FcmToken::where('user_id', $user->id)->pluck('token');
+        $store = \Modules\Store\Models\Store::currentFromUrl()->first();
+        $fcmTokens = FcmToken::where('user_id', $user->id)->where('store_id', $store->id)->pluck('token');
 
         if ($fcmTokens->isEmpty()) {
             Log::warning("Firebase Notification: No FCM tokens found for user #{$user->id}");

@@ -27,15 +27,15 @@ class OrderController extends Controller
                 ->back()
                 ->with('success', __('Created successfully'));
         } catch (\Illuminate\Validation\ValidationException $e) {
-        // ترجع للصفحة مع الرسائل
-        return redirect()->back()
-            ->withErrors($e->errors())
-            ->withInput();
-    } catch (\Exception $e) {
-        return redirect()->back()
-            ->with('error', $e->getMessage())
-            ->withInput();
-    }
+            // ترجع للصفحة مع الرسائل
+            return redirect()->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        }
     }
 
     /**

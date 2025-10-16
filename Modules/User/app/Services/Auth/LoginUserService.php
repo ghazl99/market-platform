@@ -101,7 +101,7 @@ class LoginUserService
 
         // Login user
         Auth::login($user, isset($data['remember']));
-
+        $store = \Modules\Store\Models\Store::currentFromUrl()->first();
         // تحديث وقت آخر تسجيل دخول
         $user->last_login_at = now();
         $user->save();
@@ -112,6 +112,8 @@ class LoginUserService
             $this->userRepository->createOrUpdateToken([
                 'user_id' => $user->id,
                 'token' => $data['fcm_token'],
+                'store_id' => $store->id ?? null,
+
                 'device_name' => $data['device_type'],
             ]);
         }
