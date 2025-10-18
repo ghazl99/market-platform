@@ -71,12 +71,13 @@ class OrderModelRepository implements OrderRepository
     public function createOrder(array $data): Order
     {
         return DB::transaction(function () use ($data) {
-            // إنشاء الطلب
+            // إنشاء الطلب مع المبلغ الإجمالي المحسوب
             $order = Order::create([
                 'user_id' => Auth::user()->id,
                 'store_id' => $data['store_id'],
                 'status' => 'pending',
                 'payment_status' => 'paid',
+                'total_amount' => $data['total_amount'], // حفظ المبلغ المحسوب
             ]);
 
             // إضافة المنتج للطلب

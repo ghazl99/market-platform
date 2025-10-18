@@ -60,5 +60,37 @@ class Order extends Model
     {
         return $this->hasMany(\Modules\Wallet\Models\WalletTransaction::class);
     }
-    
+
+    /**
+     * حساب المبلغ الإجمالي من عناصر الطلب
+     */
+    public function calculateTotalAmount()
+    {
+        return $this->items->sum(function ($item) {
+            return $item->quantity * ($item->product->price ?? 0);
+        });
+    }
+
+    /**
+     * الحصول على المبلغ الإجمالي (محفوظ أو محسوب)
+     */
+    public function getTotalAmountAttribute($value)
+    {
+        // إذا كان المبلغ محفوظاً، استخدمه
+        if ($value && $value > 0) {
+            return $value;
+        }
+
+        // وإلا احسبه من عناصر الطلب
+        $calculatedAmount = $this->calculateTotalAmount();
+
+        // إذا كان المبلغ المحسوب أكبر من 0، احفظه في قاعدة البيانات
+        if ($calculatedAmount > 0) {
+            $this->attributes['total_amount'] = $calculatedAmount;
+            $this->saveQuietly(); // حفظ صامت بدون تشغيل events
+        }
+
+        return $calculatedAmount;
+    }
+
 }

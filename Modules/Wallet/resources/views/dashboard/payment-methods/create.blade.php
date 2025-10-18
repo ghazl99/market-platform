@@ -102,6 +102,155 @@
             cursor: pointer;
         }
 
+        /* Multi-Select Currency Styles */
+        .multi-select-container {
+            position: relative;
+        }
+
+        .selected-currencies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            min-height: 40px;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+        }
+
+        .currency-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .remove-currency {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .remove-currency:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .currency-input-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .currency-input-container .form-input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .add-currency-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 45px;
+        }
+
+        .add-currency-btn:hover {
+            background: #047857;
+            transform: translateY(-1px);
+        }
+
+        .add-currency-btn i {
+            pointer-events: none;
+        }
+
+        .currency-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .currency-suggestions.show {
+            display: block;
+        }
+
+        .suggestion-group {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .suggestion-group:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-group h6 {
+            margin: 0 0 0.5rem 0;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .suggestion-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        .suggestion-item {
+            padding: 0.25rem 0.5rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            color: var(--text-primary);
+        }
+
+        .suggestion-item:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .suggestion-item.selected {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
         .image-upload-section {
             display: flex;
             align-items: center;
@@ -262,15 +411,90 @@
 
                     <!-- Currency Field -->
                     <div class="form-group">
-                        <label for="currency" class="form-label">{{ __('Currency') }}</label>
-                        <select id="currency" name="currency" class="form-select" required>
-                            <option value="">{{ __('Select Currency') }}</option>
-                            <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>{{ __('US Dollar') }}
-                            </option>
-                            <option value="EUR" {{ old('currency') == 'EUR' ? 'selected' : '' }}>{{ __('Euro') }}
-                            </option>
-                        </select>
-                        @error('currency')
+                        <label for="currencies" class="form-label">{{ __('Currencies') }}</label>
+                        <div class="multi-select-container">
+                            <div class="selected-currencies" id="selected-currencies">
+                                @php
+                                    $currentCurrencies = old('currencies', ['USD']);
+                                    // تأكد من أن $currentCurrencies مصفوفة
+                                    if (!is_array($currentCurrencies)) {
+                                        $currentCurrencies = [$currentCurrencies];
+                                    }
+                                    if (empty($currentCurrencies)) {
+                                        $currentCurrencies = ['USD'];
+                                    }
+
+                                    // إزالة التكرار من المصفوفة
+                                    $currentCurrencies = array_unique($currentCurrencies);
+                                    $currentCurrencies = array_values($currentCurrencies); // إعادة ترقيم المفاتيح
+                                @endphp
+                                @foreach ($currentCurrencies as $currency)
+                                    <span class="currency-tag" data-currency="{{ $currency }}">
+                                        {{ $currency }}
+                                        <button type="button" class="remove-currency"
+                                            onclick="removeCurrency('{{ $currency }}')">&times;</button>
+                                    </span>
+                                @endforeach
+                            </div>
+                            <div class="currency-input-container">
+                                <input type="text" id="currency-input" class="form-input"
+                                    placeholder="{{ __('Add currency (e.g., USD, EUR, BTC)') }}" maxlength="10">
+                                <button type="button" id="add-currency-btn" class="add-currency-btn"
+                                    onclick="addCurrencyFromInput()">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="currency-suggestions" id="currency-suggestions">
+                                <!-- Popular currencies -->
+                                <div class="suggestion-group">
+                                    <h6>{{ __('Popular') }}</h6>
+                                    <div class="suggestion-items">
+                                        <span class="suggestion-item" data-currency="USD">USD -
+                                            {{ __('US Dollar') }}</span>
+                                        <span class="suggestion-item" data-currency="EUR">EUR - {{ __('Euro') }}</span>
+                                        <span class="suggestion-item" data-currency="SAR">SAR -
+                                            {{ __('Saudi Riyal') }}</span>
+                                        <span class="suggestion-item" data-currency="AED">AED -
+                                            {{ __('UAE Dirham') }}</span>
+                                        <span class="suggestion-item" data-currency="KWD">KWD -
+                                            {{ __('Kuwaiti Dinar') }}</span>
+                                        <span class="suggestion-item" data-currency="QAR">QAR -
+                                            {{ __('Qatari Riyal') }}</span>
+                                        <span class="suggestion-item" data-currency="BHD">BHD -
+                                            {{ __('Bahraini Dinar') }}</span>
+                                        <span class="suggestion-item" data-currency="OMR">OMR -
+                                            {{ __('Omani Riyal') }}</span>
+                                        <span class="suggestion-item" data-currency="JOD">JOD -
+                                            {{ __('Jordanian Dinar') }}</span>
+                                        <span class="suggestion-item" data-currency="EGP">EGP -
+                                            {{ __('Egyptian Pound') }}</span>
+                                    </div>
+                                </div>
+                                <div class="suggestion-group">
+                                    <h6>{{ __('Crypto') }}</h6>
+                                    <div class="suggestion-items">
+                                        <span class="suggestion-item" data-currency="BTC">BTC - {{ __('Bitcoin') }}</span>
+                                        <span class="suggestion-item" data-currency="ETH">ETH - {{ __('Ethereum') }}</span>
+                                        <span class="suggestion-item" data-currency="USDT">USDT -
+                                            {{ __('Tether') }}</span>
+                                        <span class="suggestion-item" data-currency="USDC">USDC -
+                                            {{ __('USD Coin') }}</span>
+                                        <span class="suggestion-item" data-currency="BNB">BNB -
+                                            {{ __('Binance Coin') }}</span>
+                                        <span class="suggestion-item" data-currency="ADA">ADA - {{ __('Cardano') }}</span>
+                                        <span class="suggestion-item" data-currency="SOL">SOL - {{ __('Solana') }}</span>
+                                        <span class="suggestion-item" data-currency="DOT">DOT - {{ __('Polkadot') }}</span>
+                                        <span class="suggestion-item" data-currency="MATIC">MATIC -
+                                            {{ __('Polygon') }}</span>
+                                        <span class="suggestion-item" data-currency="AVAX">AVAX -
+                                            {{ __('Avalanche') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="currencies" id="currencies-input"
+                            value="{{ implode(',', $currentCurrencies) }}">
+                        @error('currencies')
                             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                         @enderror
                     </div>
@@ -415,6 +639,236 @@
         // Update instructions on form submit
         document.querySelector('form').addEventListener('submit', function() {
             updateInstructions();
+            // تنظيف الحقول المخفية قبل الإرسال
+            const existingInputs = document.querySelectorAll('input[name="currencies[]"]');
+            existingInputs.forEach(input => input.remove());
+            updateCurrenciesInput();
         });
+
+        // Initialize currency multi-select
+        document.addEventListener('DOMContentLoaded', function() {
+            // تأخير بسيط لضمان تحميل جميع العناصر
+            setTimeout(function() {
+                initializeCurrencyMultiSelect();
+                // إزالة أي حقول مخفية مكررة موجودة مسبقاً
+                const existingInputs = document.querySelectorAll('input[name="currencies[]"]');
+                existingInputs.forEach(input => input.remove());
+                // تهيئة الحقول المخفية للعملات الموجودة
+                updateCurrenciesInput();
+            }, 100);
+        });
+
+        // Global variables for currency management
+        let currencyInput, addCurrencyBtn, suggestions, currenciesInput;
+
+        // Currency Multi-Select Functions
+        function initializeCurrencyMultiSelect() {
+            console.log('Initializing currency multi-select...');
+
+            currencyInput = document.getElementById('currency-input');
+            addCurrencyBtn = document.getElementById('add-currency-btn');
+            suggestions = document.getElementById('currency-suggestions');
+            currenciesInput = document.getElementById('currencies-input');
+
+            console.log('Elements found:', {
+                currencyInput: !!currencyInput,
+                addCurrencyBtn: !!addCurrencyBtn,
+                suggestions: !!suggestions,
+                currenciesInput: !!currenciesInput
+            });
+
+            // Check if elements exist
+            if (!currencyInput || !addCurrencyBtn || !suggestions || !currenciesInput) {
+                console.error('Currency elements not found:', {
+                    currencyInput: !!currencyInput,
+                    addCurrencyBtn: !!addCurrencyBtn,
+                    suggestions: !!suggestions,
+                    currenciesInput: !!currenciesInput
+                });
+                return;
+            }
+
+            console.log('All elements found, setting up event listeners...');
+
+            // Show suggestions when input is focused
+            currencyInput.addEventListener('focus', function() {
+                suggestions.classList.add('show');
+                updateSuggestions();
+            });
+
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.multi-select-container')) {
+                    suggestions.classList.remove('show');
+                }
+            });
+
+            // Add currency when button is clicked
+            addCurrencyBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Add button clicked, input value:', currencyInput.value);
+                console.log('Button element:', addCurrencyBtn);
+                console.log('Input element:', currencyInput);
+                addCurrency(currencyInput.value.trim().toUpperCase());
+            });
+
+            // Alternative: Add currency when button is clicked (mousedown)
+            addCurrencyBtn.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+                console.log('Add button mousedown, input value:', currencyInput.value);
+                addCurrency(currencyInput.value.trim().toUpperCase());
+            });
+
+            console.log('Event listeners added successfully');
+
+            // Add currency when Enter is pressed
+            currencyInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    console.log('Enter pressed, input value:', currencyInput.value);
+                    addCurrency(currencyInput.value.trim().toUpperCase());
+                }
+            });
+
+            // Filter suggestions as user types
+            currencyInput.addEventListener('input', function() {
+                updateSuggestions();
+            });
+
+            // Add currency from suggestion
+            suggestions.addEventListener('click', function(e) {
+                if (e.target.classList.contains('suggestion-item')) {
+                    const currency = e.target.getAttribute('data-currency');
+                    addCurrency(currency);
+                }
+            });
+
+            // Initial update
+            updateSuggestions();
+        }
+
+        // Global addCurrency function
+        function addCurrency(currency) {
+            console.log('addCurrency called with:', currency);
+
+            if (!currency || currency.length < 2) {
+                console.log('Currency too short or empty');
+                return;
+            }
+
+            // Check if currency already exists
+            const existingTags = document.querySelectorAll('.currency-tag');
+            for (let tag of existingTags) {
+                if (tag.getAttribute('data-currency') === currency) {
+                    console.log('Currency already exists:', currency);
+                    if (currencyInput) currencyInput.value = '';
+                    return;
+                }
+            }
+
+            // Add currency tag
+            const selectedCurrencies = document.getElementById('selected-currencies');
+            if (!selectedCurrencies) {
+                console.error('selected-currencies element not found');
+                return;
+            }
+
+            const tag = document.createElement('span');
+            tag.className = 'currency-tag';
+            tag.setAttribute('data-currency', currency);
+            tag.innerHTML =
+                `${currency} <button type="button" class="remove-currency" onclick="removeCurrency('${currency}')">&times;</button>`;
+            selectedCurrencies.appendChild(tag);
+
+            console.log('Currency tag added:', currency);
+
+            // Clear input
+            if (currencyInput) currencyInput.value = '';
+
+            // Update hidden input
+            updateCurrenciesInput();
+
+            // Update suggestions
+            updateSuggestions();
+        }
+
+        function removeCurrency(currency) {
+            console.log('removeCurrency called with:', currency);
+            const tag = document.querySelector(`.currency-tag[data-currency="${currency}"]`);
+            if (tag) {
+                tag.remove();
+                // تنظيف الحقول المخفية وإعادة إنشائها
+                const existingInputs = document.querySelectorAll('input[name="currencies[]"]');
+                existingInputs.forEach(input => input.remove());
+                updateCurrenciesInput();
+                updateSuggestions();
+            }
+        }
+
+        function updateCurrenciesInput() {
+            const tags = document.querySelectorAll('.currency-tag');
+            const currencies = Array.from(tags).map(tag => tag.getAttribute('data-currency'));
+
+            // إزالة التكرار من المصفوفة
+            const uniqueCurrencies = [...new Set(currencies)];
+
+            // إزالة جميع الحقول المخفية القديمة للعملات
+            const existingInputs = document.querySelectorAll('input[name="currencies[]"]');
+            existingInputs.forEach(input => input.remove());
+
+            // إضافة حقول جديدة لكل عملة
+            const container = document.querySelector('.multi-select-container');
+            uniqueCurrencies.forEach(currency => {
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'currencies[]';
+                hiddenInput.value = currency;
+                container.appendChild(hiddenInput);
+            });
+
+            console.log('Updated currencies input:', uniqueCurrencies);
+        }
+
+        function updateSuggestions() {
+            if (!suggestions || !currencyInput) return;
+
+            const inputValue = currencyInput.value.toLowerCase();
+            const suggestionItems = suggestions.querySelectorAll('.suggestion-item');
+            const selectedCurrencies = Array.from(document.querySelectorAll('.currency-tag')).map(tag => tag.getAttribute(
+                'data-currency'));
+
+            suggestionItems.forEach(item => {
+                const currency = item.getAttribute('data-currency');
+                const text = item.textContent.toLowerCase();
+                const isSelected = selectedCurrencies.includes(currency);
+                const matchesInput = !inputValue || text.includes(inputValue);
+
+                if (matchesInput && !isSelected) {
+                    item.style.display = 'block';
+                    item.classList.remove('selected');
+                } else if (isSelected) {
+                    item.style.display = 'block';
+                    item.classList.add('selected');
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Make functions globally available
+        window.addCurrency = addCurrency;
+        window.removeCurrency = removeCurrency;
+
+        // Global function for onclick
+        function addCurrencyFromInput() {
+            console.log('addCurrencyFromInput called');
+            const input = document.getElementById('currency-input');
+            if (input && input.value.trim()) {
+                console.log('Adding currency from input:', input.value.trim().toUpperCase());
+                addCurrency(input.value.trim().toUpperCase());
+            } else {
+                console.log('Input is empty or not found');
+            }
+        }
     </script>
 @endpush
