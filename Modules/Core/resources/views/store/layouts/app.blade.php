@@ -22,9 +22,6 @@
         @yield('content')
     </main>
 
-    <!-- Overlay for mobile -->
-    <div class="overlay" id="overlay"></div>
-
     <!-- Performance optimizations -->
     <script>
 
