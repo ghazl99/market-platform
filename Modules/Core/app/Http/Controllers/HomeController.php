@@ -22,7 +22,7 @@ class HomeController extends Controller
     {
         $host = $request->getHost();
         $mainDomain = config('app.main_domain', 'market-platform.localhost');
-
+        
         if ($this->homeService->isMainDomain($host, $mainDomain)) {
             return view('core::app.home');
         }
@@ -34,6 +34,6 @@ class HomeController extends Controller
         }
         $categories = $this->categoryService->getAllcategories();
 
-        return view('core::store.home', compact('store', 'categories'));
+        return view('core::store.themes.'. $store->theme . '.home', compact('store', 'categories'));
     }
 }

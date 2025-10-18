@@ -17,15 +17,18 @@ class UserObserver
     {
         $store = \Modules\Store\Models\Store::currentFromUrl()->first();
 
-        if (! $store) {
-            abort(404, 'Store not found');
-        }
-        $this->walletService->createWalletForUser($user, $store, 0);
+        // فقط نفذ إنشاء المحفظة والإشعارات إذا كان هناك متجر
+        if ($store) {
+            if ($user->hasRole('customer|staff')) {
+                $this->walletService->createWalletForUser($user, $store, 0);
+            }
 
-        if ($user->hasRole('customer')) {
-            $user->notify(new \Modules\User\Notifications\RegisterdUser($user));
+            if ($user->hasRole('customer')) {
+                $user->notify(new \Modules\User\Notifications\RegisterdUser($user));
+            }
         }
     }
+
 
     /**
      * Handle the User "updated" event.

@@ -13,7 +13,7 @@
         font-size: 14px;
         font-weight: 600;
         text-decoration: none;
-        color: var(--text-color, #333);
+        color: var(--text-color, #101010);
         transition: all 0.2s ease;
         background: transparent;
     }
@@ -59,7 +59,7 @@
 
             <div class="header-center">
                 <div class="search-bar">
-                    <i class="fas fa-search search-icon"></i>
+                    {{-- <i class="fas fa-search search-icon"></i> --}}
                     <input type="text" placeholder="ابحث عن الخدمات..." class="search-input">
                     <button class="search-btn">
                         <i class="fas fa-search"></i>

@@ -9,9 +9,7 @@ class RegisterUserRepositoryModel implements RegisterUserRepository
     public function create(array $data): User
     {
         $user = User::create($data);
-        if (isset($data['role'])) {
-            $user->assignRole($data['role']);
-        }
+        $user->assignRole($data['role']);
 
         return $user;
     }

@@ -42,9 +42,6 @@
                              class="balance-value">{{ number_format(Auth::user()->walletForStore()->first()?->balance ?? 0, 2) }}
                              $</span>
                      </div>
-                     <button class="balance-refresh" title="تحديث">
-                         <i class="fas fa-sync-alt"></i>
-                     </button>
                  </div>
              </div>
          </div>
@@ -92,7 +89,7 @@
 
 
              @auth
-                 <a href="{{ Route('notification.index') }}" class="menu-item">
+                 <a href="{{ Route('notification.index') }}" class="menu-item {{ request()->routeIs('notification.index') ? 'active' : '' }}">
                      <div class="menu-item-icon">
                          <i class="fas fa-bell"></i>
                      </div>
@@ -123,7 +120,7 @@
                      <div class="menu-item-icon">
                          <i class="fas fa-headset"></i>
                      </div>
-                     <span class="menu-item-title">الدعم</span>
+                     <span class="menu-item-title">اتصل بنا</span>
                  </a>
 
                  <!-- Logout Item -->

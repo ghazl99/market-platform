@@ -24,7 +24,7 @@ Route::middleware('guest')->group(function () {
     // ...existing code for guest (register/login)  to customer...
     Route::get('register-customer', [RegisterController::class, 'create'])
         ->name('customer.register');
-
+    Route::post('register-customer', [RegisterController::class, 'store'])->name('customer.register');
     Route::get('login-customer', [LoginController::class, 'create'])
         ->name('customer.login');
     Route::post('login-customer', [AuthenticatedSessionController::class, 'customerLogin'])->name('customer.login');

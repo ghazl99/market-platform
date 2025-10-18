@@ -66,24 +66,34 @@
 
                     <form method="POST" action="{{ route('auth.register') }}" class="auth-form" id="registerForm">
                         @csrf
-                        
+
+                        {{-- Name --}}
                         <div class="form-group">
                             <label for="name" class="form-label">{{ __('Name') }}</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-user input-icon"></i>
-                                <input type="text" id="name" name="name" class="form-input" required>
+                                <input type="text" id="name" name="name" class="form-input"
+                                    value="{{ old('name') }}" required>
                             </div>
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
-
+                        {{-- Email --}}
                         <div class="form-group">
                             <label for="email" class="form-label">{{ __('Email') }}</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-envelope input-icon"></i>
-                                <input type="email" id="email" name="email" class="form-input" required>
+                                <input type="email" id="email" name="email" class="form-input"
+                                    value="{{ old('email') }}" required>
                             </div>
+                            @error('email')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
+                        {{-- Password --}}
                         <div class="form-group">
                             <label for="password" class="form-label">{{ __('Password') }}</label>
                             <div class="input-wrapper">
@@ -93,39 +103,53 @@
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
-
+                            @error('password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
+                        {{-- Password Confirmation --}}
                         <div class="form-group">
                             <label for="password_confirmation" class="form-label">{{ __('Confirm Password') }}</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-lock input-icon"></i>
-                                <input type="password" id="password_confirmation" name="password_confirmation" class="form-input"
-                                    required>
+                                <input type="password" id="password_confirmation" name="password_confirmation"
+                                    class="form-input" required>
                                 <button type="button" class="password-toggle" id="password_confirmationToggle">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
+                            @error('password_confirmation')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
-
                         <input type="hidden" name="role" id="role" value="owner" />
 
+                        {{-- Terms --}}
                         <div class="form-options">
                             <label class="checkbox-wrapper">
-                                <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                                <input type="checkbox" id="agreeTerms" name="agreeTerms"
+                                    {{ old('agreeTerms') ? 'checked' : '' }} required>
                                 <span class="checkmark"></span>
-                                <span class="checkbox-label">{{ __('I agree to') }} <a href="#"
-                                        class="terms-link">{{ __('terms of use') }}</a>
-                                    {{ __('and') }} <a href="#"
-                                        class="terms-link">{{ __('privacy policy') }}</a></span>
+                                <span class="checkbox-label">
+                                    {{ __('I agree to') }}
+                                    <a href="#" class="terms-link">{{ __('terms of use') }}</a>
+                                    {{ __('and') }}
+                                    <a href="#" class="terms-link">{{ __('privacy policy') }}</a>
+                                </span>
                             </label>
+                            @error('agreeTerms')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
+                        {{-- Submit --}}
                         <button type="submit" class="submit-btn">
                             <i class="fas fa-user-plus"></i>
                             <span>{{ __('Save') }}</span>
                         </button>
                     </form>
+
 
                     <!-- Divider -->
                     <div class="divider">

@@ -18,9 +18,9 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage(function (payload) {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
 
-    const notificationTitle = payload.data.title || payload.title || 'New Notification';
+    const notificationTitle = payload.data.title || 'New Notification';
     const notificationOptions = {
-        body: payload.data.body || payload.body,
+        body: payload.data.body || '',
         icon: payload.data.icon,
         data: {
             url: payload.data.url

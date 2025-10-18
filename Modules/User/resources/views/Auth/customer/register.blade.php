@@ -64,7 +64,8 @@
                         <p class="form-subtitle">{{ __('Start your business journey today') }}</p>
                     </div>
 
-                    <form method="POST" action="{{ route('auth.register') }}" class="auth-form" id="registerForm">
+                    <form method="POST" action="{{ route('auth.customer.register') }}" class="auth-form"
+                        id="registerForm">
                         @csrf
 
                         <div class="form-group">
@@ -119,7 +120,6 @@
                                 <span class="form-error">{{ $message }}</span>
                             @enderror
                         </div>
-
                         <input type="hidden" name="role" id="role" value="customer" />
 
                         <div class="form-options">
