@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer([
             'core::dashboard.layouts.app',
-            'core::store.layouts.app',
+            'themes.app',
         ], function ($view) {
             $host = request()->getHost();
             $store = app(\Modules\Core\Services\Admin\HomeService::class)->getStoreByHost($host);

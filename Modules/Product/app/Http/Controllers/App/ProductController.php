@@ -58,7 +58,8 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $product->load(['categories', 'attributes', 'store']);
+        $theme = current_store()->theme;
 
-        return view('product::app.show', compact('product'));
+        return view("themes.$theme.product-purchase", compact('product'));
     }
 }

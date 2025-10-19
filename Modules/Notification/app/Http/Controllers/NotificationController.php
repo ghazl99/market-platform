@@ -13,7 +13,9 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        return view('notification::App.index');
+        $theme = current_store()->theme;
+
+        return view("themes.$theme.notifications");
     }
 
     public function markAsRead($id)

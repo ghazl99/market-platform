@@ -16,7 +16,9 @@ class PassWordController extends Controller
 
     public function changePasswordForm()
     {
-        return view('user::Auth.reset-password');
+        $theme = current_store()->theme;
+
+        return view("themes.$theme.reset-password");
     }
     public function changePassword(ChangePasswordRequest $request)
     {

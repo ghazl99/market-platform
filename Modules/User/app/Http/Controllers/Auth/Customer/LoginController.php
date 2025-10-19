@@ -17,7 +17,8 @@ class LoginController extends Controller
      */
     public function create()
     {
-        return view('user::Auth.customer.login');
+        $theme = current_store()->theme;
+        return view("themes.$theme.login");
     }
 
     /**

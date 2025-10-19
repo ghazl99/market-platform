@@ -25,7 +25,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../Digitaltheme/images/icon-16x16.png">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ asset('assets/css/styles-store.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/themes/default.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/css/notifications.css') }}?v={{ time() }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">

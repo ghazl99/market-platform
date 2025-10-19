@@ -17,7 +17,8 @@ class RegisterController extends Controller
      */
     public function create()
     {
-        return view('user::Auth.customer.register');
+        $theme = current_store()->theme;
+        return view("themes.$theme.register");
     }
 
     /**
