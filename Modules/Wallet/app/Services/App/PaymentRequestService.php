@@ -14,6 +14,10 @@ class PaymentRequestService
     public function __construct(
         protected PaymentRequestRepository $paymentRequestRepository
     ) {}
+    public function getAllForCurrentStore(int $storeId)
+    {
+        return $this->paymentRequestRepository->getAllForCurrentStore($storeId);
+    }
     public function storeDeposit(array $data)
     {
         // تحويل المبلغ إلى USD
@@ -44,6 +48,4 @@ class PaymentRequestService
 
         return $deposit;
     }
-
-   
 }

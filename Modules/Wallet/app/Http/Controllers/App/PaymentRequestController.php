@@ -14,6 +14,27 @@ class PaymentRequestController extends Controller
     public function __construct(
         protected PaymentRequestService $paymentRequestService
     ) {}
+
+    public function index()
+    {
+        // افتراضياً عندك Middleware أو Auth
+        $store = current_store();
+
+        if (!$store) {
+            abort(403, 'Store not found.');
+        }
+
+        $paymentRequests = $this->paymentRequestService->getAllForCurrentStore($store->id);
+
+        // Labels للحالة
+        $statusLabels = [
+            'pending' => __('Pending'),
+            'approved' => __('Approved'),
+            'rejected' => __('Rejected'),
+        ];
+
+        return view("themes.{$store->theme}.payments", compact('paymentRequests', 'statusLabels'));
+    }
     public function store(PaymentRequestStore $request)
     {
         try {
@@ -28,5 +49,4 @@ class PaymentRequestController extends Controller
             ], 500);
         }
     }
-
 }

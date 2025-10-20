@@ -39,7 +39,11 @@
              <i class="fas fa-wallet"></i>
              <span>{{ __('Wallet') }}</span>
          </a>
-
+         <a href="{{ route('wallet.payment-requests.index') }}"
+             class="nav-item {{ request()->routeIs('wallet.payment-requests.*') ? 'active' : '' }}">
+                 <i class="fas fa-file-invoice-dollar"></i>
+             <span>{{ __('Payment Requests') }}</span>
+         </a>
          <a href="{{ Route('payment-method.index') }}"
              class="nav-item {{ request()->routeIs('payment-method.index') ? 'active' : '' }}">
              <i class="fas fa-plus"></i>

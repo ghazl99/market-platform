@@ -23,4 +23,14 @@ class PaymentRequestModelRepository implements PaymentRequestRepository
 
         return $paymentRequest;
     }
+
+    public function getAllForCurrentStore(int $storeId)
+    {
+        return PaymentRequest::query()
+            ->whereHas('wallet', function ($q) use ($storeId) {
+                $q->where('store_id', $storeId);
+            })
+            ->orderByDesc('created_at')
+            ->paginate(15);
+    }
 }

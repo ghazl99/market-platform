@@ -78,6 +78,14 @@
                  </div>
                  <span class="menu-item-title">{{ __('Wallet') }}</span>
              </a>
+             
+             <a href="{{ route('wallet.payment-requests.index') }}"
+                 class="menu-item {{ request()->routeIs('wallet.payment-requests.*') ? 'active' : '' }}">
+                 <div class="menu-item-icon">
+                     <i class="fas fa-file-invoice-dollar"></i>
+                 </div>
+                 <span class="menu-item-title">{{ __('Payment Requests') }}</span>
+             </a>
 
              <a href="{{ Route('payment-method.index') }}"
                  class="menu-item {{ request()->routeIs('payment-method.index') ? 'active' : '' }}">
@@ -89,7 +97,8 @@
 
 
              @auth
-                 <a href="{{ Route('notification.index') }}" class="menu-item {{ request()->routeIs('notification.index') ? 'active' : '' }}">
+                 <a href="{{ Route('notification.index') }}"
+                     class="menu-item {{ request()->routeIs('notification.index') ? 'active' : '' }}">
                      <div class="menu-item-icon">
                          <i class="fas fa-bell"></i>
                      </div>

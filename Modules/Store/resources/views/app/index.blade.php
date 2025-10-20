@@ -103,13 +103,10 @@
                     <i class="fas fa-store fa-5x text-muted mb-4"></i>
                     <h4 class="text-muted">{{ __('No Stores Yet') }}</h4>
                     <p class="text-muted">{{ __('Start by creating your first store') }}</p>
-                    <a href="{{ route('stores.create') }}" class="btn btn-primary btn-lg">
-                        <i class="fas fa-plus me-2"></i>
-                        {{ __('Create New Store') }}
-                    </a>
+                    
                 </div>
             @endif
         </div>
     </section>
-   
+
 @endsection

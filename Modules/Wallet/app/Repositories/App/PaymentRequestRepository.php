@@ -9,4 +9,5 @@ interface PaymentRequestRepository
     public function create(array $data);
     public function findById(int $id): ?PaymentRequest;
     public function update(PaymentRequest $paymentRequest, int $approvedBy);
+    public function getAllForCurrentStore(int $storeId);
 }
