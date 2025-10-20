@@ -74,7 +74,7 @@
                  <i class="fas fa-phone"></i>
                  <span>اتصل بنا</span>
              </a>
-             <form method="POST" action="{{ route('auth.logout') }}">
+             {{-- <form method="POST" action="{{ route('auth.logout') }}">
                      @csrf
                      <button type="submit" class="menu-item logout-item ">
                          <div class="menu-item-icon">
@@ -82,18 +82,18 @@
                          </div>
                          <span class="menu-item-title">{{ __('Logout') }}</span>
                      </button>
-                 </form>
+                 </form> --}}
          </nav>
      @endauth
      <div class="sidebar-footer">
-         {{-- <div class="dark-mode-toggle">
+         <div class="dark-mode-toggle">
              <i class="fas fa-moon"></i>
              <span>الوضع الليلي</span>
              <label class="switch">
                  <input type="checkbox" id="darkModeToggle">
                  <span class="slider"></span>
              </label>
-         </div> --}}
+         </div>
          <div class="footer-text">
              بواسطة: <a href="https://kaymn.com" target="_blank">كايمن للخدمات</a>
          </div>

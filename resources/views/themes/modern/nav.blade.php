@@ -290,33 +290,38 @@
 
     /* Notification Container */
     .notification-container {
-    position: relative; /* ضروري لاحتواء العداد */
-}
+        position: relative;
+        /* ضروري لاحتواء العداد */
+    }
 
-.notification-btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: visible; /* مهم للسماح للعداد بالخروج من حدود الزر */
-}
+    .notification-btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: visible;
+        /* مهم للسماح للعداد بالخروج من حدود الزر */
+    }
 
-.notification-badge {
-    position: absolute;
-    top: -5px;      /* فوق الزر */
-    right: -5px;     /* على الركن الأيمن العلوي */
-    background: linear-gradient(135deg, #ff4757, #c44569);
-    color: white;
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 0.2rem 0.4rem;
-    border-radius: 50%;
-    min-width: 18px;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
-    animation: pulse 2s infinite;
-    z-index: 10; /* للتأكد أن العداد فوق كل شيء */
-}
+    .notification-badge {
+        position: absolute;
+        top: -5px;
+        /* فوق الزر */
+        right: -5px;
+        /* على الركن الأيمن العلوي */
+        background: linear-gradient(135deg, #ff4757, #c44569);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: bold;
+        padding: 0.2rem 0.4rem;
+        border-radius: 50%;
+        min-width: 18px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+        animation: pulse 2s infinite;
+        z-index: 10;
+        /* للتأكد أن العداد فوق كل شيء */
+    }
 
 
     @keyframes pulse {
@@ -833,10 +838,10 @@
 
                 <!-- User Profile -->
                 <div class="user-profile-container">
-                    <a class="user-profile" href="{{ route('auth.profile.edit', Auth::user()->id) }}"style="text-decoration: none;">
+                    <a class="user-profile"
+                        href="{{ route('auth.profile.edit', Auth::user()->id) }}"style="text-decoration: none;">
                         <div class="user-avatar">
-                            <img src="{{ Auth::user()->profilePhotoUrl }}"
-                                alt="{{ Auth::user()->name }}">
+                            <img src="{{ Auth::user()->profilePhotoUrl }}" alt="{{ Auth::user()->name }}">
                         </div>
                         <div class="user-info">
                             <span class="user-name">{{ Auth::user()->name }}</span>
@@ -845,10 +850,13 @@
                     </a>
 
                 </div>
-            @else
-                <a href="{{ route('auth.customer.login') }}" class="btn btn-success" title="{{ __('Login') }}">
-                    تسجيل الدخول
+                 <a href="{{ route('auth.customer.login') }}" style="text-decoration: none" class="action-btn" title="{{ __('Login') }}">
+                    {{ __('Logout') }}
                 </a>
+            @else
+ <a href="{{ route('auth.customer.login') }}"  style="text-decoration: none" class="action-btn" title="{{ __('Login') }}">
+                         {{ __('Login') }}
+                    </a>
             @endauth
             <!-- Mobile Menu Toggle -->
             <button class="menu-toggle" id="menuToggle">
