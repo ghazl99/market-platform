@@ -445,5 +445,6 @@
             </div>
         </div>
     </section>
+    @include('core::layouts.footer')
 
 @endsection
