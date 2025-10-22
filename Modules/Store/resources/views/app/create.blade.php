@@ -184,64 +184,101 @@
                 <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
             @endhasanyrole
 
+            {{-- Store Name --}}
             <div class="form-group">
                 <label for="name">{{ __('Store Name') }}</label>
                 <input type="text" id="name" name="name" value="{{ old('name') }}" required>
-                <small class="form-text">{{ __('Store name as shown to customers') }}</small>
+                @error('name')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
+
+            {{-- Domain --}}
+            @php
+                $isProduction = app()->environment('production');
+                $mainDomain = config('app.main_domain', 'localhost');
+            @endphp
 
             <div class="form-group">
                 <label for="domain">{{ __('Domain') }}</label>
                 <div style="display:flex;gap:5px;">
                     <input type="text" id="domain" name="domain" value="{{ old('domain') }}" required
                         style="flex:1;">
-                    <span style="align-self:center">.{{ config('app.domain', 'localhost') }}</span>
+                    @unless ($isProduction)
+                        <span style="align-self:center">.localhost</span>
+                    @endunless
                 </div>
-                <small class="form-text">{{ __('Your store link will be:') }}
-                    domain.{{ config('app.domain', 'localhost') }}</small>
+                @error('domain')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
+            {{-- Description --}}
             <div class="form-group full-width">
                 <label for="description">{{ __('Store Description') }}</label>
                 <textarea id="description" name="description" rows="3">{{ old('description') }}</textarea>
+                @error('description')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
+            {{-- Theme --}}
             <div class="form-group">
                 <label for="theme">{{ __('Theme') }}</label>
                 <select id="theme" name="theme" required>
                     <option value="">{{ __('Select Theme') }}</option>
-                    <option value="default" {{ old('theme') == 'default' ? 'selected' : '' }}>{{ __('Default Theme') }}</option>
-                    <option value="modern" {{ old('theme') == 'modern' ? 'selected' : '' }}>{{ __('Modern Theme') }}</option>
-                    <option value="classic" {{ old('theme') == 'classic' ? 'selected' : '' }}>{{ __('Classic Theme') }}</option>
+                    <option value="default" {{ old('theme') == 'default' ? 'selected' : '' }}>{{ __('Default Theme') }}
+                    </option>
+                    <option value="modern" {{ old('theme') == 'modern' ? 'selected' : '' }}>{{ __('Modern Theme') }}
+                    </option>
+                    <option value="classic" {{ old('theme') == 'classic' ? 'selected' : '' }}>{{ __('Classic Theme') }}
+                    </option>
                 </select>
+                @error('theme')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
+            {{-- Timezone --}}
             <div class="form-group">
                 <label for="timezone">{{ __('Timezone') }}</label>
                 <select name="timezone" id="timezone" required>
                     @foreach (timezone_identifiers_list() as $tz)
-                        <option value="{{ $tz }}" {{ old('timezone') == $tz ? 'selected' : '' }}>{{ $tz }}
+                        <option value="{{ $tz }}" {{ old('timezone') == $tz ? 'selected' : '' }}>
+                            {{ $tz }}
                         </option>
                     @endforeach
                 </select>
+                @error('timezone')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
+            {{-- Logo --}}
             <div class="form-group">
                 <label for="logo">{{ __('Store Logo') }}</label>
                 <input type="file" id="logo" name="logo">
+                @error('logo')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
+            {{-- Banner --}}
             <div class="form-group">
                 <label for="banner">{{ __('Store Banner') }}</label>
                 <input type="file" id="banner" name="banner">
+                @error('banner')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
-            <!-- Store Type -->
+            {{-- Store Type --}}
             <div class="form-group full-width">
                 <label>{{ __('Preferred Store Type') }}</label>
                 <div class="row">
                     <label>
-                        <input type="radio" name="type" value="traditional" class="store-type-input">
+                        <input type="radio" name="type" value="traditional" class="store-type-input"
+                            {{ old('type') == 'traditional' ? 'checked' : '' }}>
                         <div class="store-type-card">
                             <div class="store-icon"><i class="fas fa-shopping-bag"></i></div>
                             <span>{{ __('Traditional') }}</span>
@@ -249,7 +286,8 @@
                     </label>
 
                     <label>
-                        <input type="radio" name="type" value="digital" class="store-type-input">
+                        <input type="radio" name="type" value="digital" class="store-type-input"
+                            {{ old('type') == 'digital' ? 'checked' : '' }}>
                         <div class="store-type-card">
                             <div class="store-icon"><i class="fas fa-laptop"></i></div>
                             <span>{{ __('Digital') }}</span>
@@ -257,21 +295,27 @@
                     </label>
 
                     <label>
-                        <input type="radio" name="type" value="educational" class="store-type-input">
+                        <input type="radio" name="type" value="educational" class="store-type-input"
+                            {{ old('type') == 'educational' ? 'checked' : '' }}>
                         <div class="store-type-card">
                             <div class="store-icon"><i class="fas fa-graduation-cap"></i></div>
                             <span>{{ __('Educational') }}</span>
                         </div>
                     </label>
                 </div>
+                @error('type')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
+            {{-- Info Alert --}}
             <div class="alert alert-info">
                 <i class="fas fa-info-circle"></i>
                 <strong>{{ __('Note:') }}</strong>
                 {{ __('After creating the store, it will be reviewed by the administration before activation.') }}
             </div>
 
+            {{-- Submit Buttons --}}
             <div style="display:flex; gap:10px; margin-top:20px;">
                 <button type="submit" class="btn btn-primary">{{ __('Create Store') }}</button>
                 <a href="{{ route('stores.index') }}" class="btn btn-outline-secondary">{{ __('Back') }}</a>

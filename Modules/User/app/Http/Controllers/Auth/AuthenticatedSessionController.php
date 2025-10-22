@@ -2,11 +2,12 @@
 
 namespace Modules\User\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Modules\Core\Services\Admin\HomeService;
-use Modules\User\Http\Requests\Auth\LoginRequest;
 use Modules\User\Services\Auth\LoginUserService;
+use Modules\User\Http\Requests\Auth\LoginRequest;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AuthenticatedSessionController extends Controller
@@ -55,15 +56,18 @@ class AuthenticatedSessionController extends Controller
                 $result['field'] => $result['message'],
             ])->withInput();
         }
-
-        return redirect()->intended(route('home'));
+        if (Auth::user()->hasRole('admin|owner|staff')) {
+            return redirect()->route('dashboard.admin.dashboard');
+        } else
+            return redirect()->intended(route('home'));
     }
     public function destroy(Request $request)
     {
         $this->loginService->logout();
         $host = $request->getHost();
-        $mainDomain = config('app.main_domain', 'market-platform.localhost');
-
+        $mainDomain = app()->environment('production')
+            ? config('app.main_domain', 'soqsyria.com')
+            : 'market-platform.localhost';
         if ($this->homeService->isMainDomain($host, $mainDomain)) {
             return redirect()->route('auth.login');
         }

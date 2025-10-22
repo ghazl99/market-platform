@@ -149,6 +149,20 @@
             font-size: 1rem;
             margin: 0;
         }
+
+        .request-notes {
+            margin-top: 1rem;
+            background: rgba(0, 0, 0, 0.03);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .request-notes strong {
+            color: var(--text-primary);
+        }
     </style>
 @endpush
 
@@ -171,6 +185,7 @@
                             <div>{{ __('Exchange Rate:') }} {{ $request->exchange_rate }}</div>
                             <div>{{ __('USD:') }} {{ $request->amount_usd }} $</div>
                         </div>
+
                         @php
                             $statusClass = match ($request->status) {
                                 'pending' => 'pending',
@@ -179,6 +194,7 @@
                                 default => 'pending',
                             };
                         @endphp
+
                         <div class="request-status {{ $statusClass }}">
                             @if ($statusClass == 'accepted')
                                 <i class="fas fa-check-circle"></i>
@@ -189,6 +205,15 @@
                             @endif
                             <span>{{ $statusLabels[$request->status] ?? $request->status }}</span>
                         </div>
+
+                        {{-- Show notes only if approved or rejected --}}
+                        @if (in_array($request->status, ['approved', 'rejected']) && $request->notes)
+                            <div class="request-notes">
+                                <strong>{{ __('Notes:') }}</strong>
+                                <span>{{ $request->notes }}</span>
+                            </div>
+                        @endif
+
                         <div class="request-date">{{ $request->created_at->format('Y-m-d H:i:s') }}</div>
                     </div>
                 @empty
@@ -198,6 +223,7 @@
                         <p>{{ __('There are no payment requests yet.') }}</p>
                     </div>
                 @endforelse
+
             </div>
 
             <!-- Pagination -->

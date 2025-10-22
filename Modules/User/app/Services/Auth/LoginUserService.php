@@ -30,7 +30,7 @@ class LoginUserService
             return [
                 'success' => false,
                 'field' => 'email',
-                'message' => 'البريد الإلكتروني غير موجود.',
+                'message' => __('Email not found.'),
             ];
         }
 
@@ -41,7 +41,7 @@ class LoginUserService
             return [
                 'success' => false,
                 'field' => 'password',
-                'message' => 'كلمة المرور خاطئة.',
+                'message' => __('Invalid password.'),
             ];
         }
 
@@ -84,7 +84,7 @@ class LoginUserService
             return [
                 'success' => false,
                 'field' => 'email',
-                'message' => 'البريد الإلكتروني غير موجود.',
+                'message' => __('Email not found.'),
             ];
         }
 
@@ -95,7 +95,7 @@ class LoginUserService
             return [
                 'success' => false,
                 'field' => 'password',
-                'message' => 'كلمة المرور خاطئة.',
+                'message' => __('Invalid password.'),
             ];
         }
 

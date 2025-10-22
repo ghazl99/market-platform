@@ -22,7 +22,9 @@ class HomeController extends Controller
     {
         $host = $request->getHost();
 
-        $mainDomain = config('app.main_domain', 'market-platform.localhost');
+        $mainDomain = app()->environment('production')
+            ? config('app.main_domain', 'soqsyria.com')
+            : 'market-platform.localhost';
 
         if ($this->homeService->isMainDomain($host, $mainDomain)) {
             return view('core::app.home');

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             if (! Schema::hasColumn('users', 'debt_limit')) {
-                $table->decimal('debt_limit', 12, 2)->nullable()->default(0)->after('is_featured');
+                $table->decimal('debt_limit', 12, 2)->nullable()->default(0)->after('password');
             }
         });
     }

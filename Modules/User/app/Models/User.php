@@ -42,7 +42,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'sms_notifications',
         'last_login_at',
         'last_updated_at_password',
-        'is_featured',
         'debt_limit',
     ];
 

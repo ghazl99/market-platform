@@ -1,7 +1,7 @@
 {
     "My Orders": "طلباتي",
-    "All Orders":"كل الطلبات",
-    "Export Excel":"تصدير إكسل",
+    "All Orders": "كل الطلبات",
+    "Export Excel": "تصدير إكسل",
     "From": "من",
     "To": "إلى",
     "Search orders...": "ابحث عن الطلبات...",
@@ -39,7 +39,7 @@
     "Yes, cancel it!": "نعم، قم بالإلغاء!",
     "Success": "نجاح",
     "Payment alert": "تنبيه الدفع",
-    "No orders":"لا يوجد طلبات",
+    "No orders": "لا يوجد طلبات",
     "Export Data": "تصدير البيانات",
     "Total Orders": "إجمالي الطلبات",
     "Cancelled": "ملغى",
@@ -124,5 +124,5 @@
     "has been permanently deleted": "تم حذفه نهائياً",
     "has been updated successfully": "تم تحديثه بنجاح",
     "has been created successfully": "تم إنشاؤه بنجاح",
-    "Your premium limit exceeded. Maximum allowed debt is :1000 $": "لقد تجاوزت الحد المسموح به للمستخدمين المميزين. الحد الأقصى للدين المسموح به هو :1000 $"
+    "Your premium limit exceeded. Maximum allowed debt is :amount $": "لقد تجاوزت الحد المسموح به للمستخدمين المميزين. الحد الأقصى للدين المسموح به هو :amount $"
 }

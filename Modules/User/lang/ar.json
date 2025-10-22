@@ -233,5 +233,7 @@
     "Total Spent": "إجمالي الإنفاق",
     "Last Order": "آخر طلب",
     "Email Notifications": "إشعارات البريد الإلكتروني",
-    "SMS Notifications": "إشعارات الرسائل النصية"
+    "SMS Notifications": "إشعارات الرسائل النصية",
+    "Email not found.": "البريد الإلكتروني غير موجود.",
+    "Invalid password.": "كلمة المرور غير صحيحة."
 }

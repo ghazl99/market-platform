@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Store extends Model implements HasMedia
 {
-    use HasFactory,HasTranslations, InteractsWithMedia;
+    use HasFactory, HasTranslations, InteractsWithMedia;
 
     protected $fillable = [
         'name',
@@ -46,8 +46,9 @@ class Store extends Model implements HasMedia
     public function scopeCurrentFromUrl($query)
     {
         $host = request()->getHost(); // e.g., my-pharma.market-platform.localhost
-        $mainDomain = config('app.main_domain', 'market-platform.localhost');
-
+        $mainDomain = app()->environment('production')
+            ? config('app.main_domain', 'soqsyria.com')
+            : 'market-platform.localhost';
         // إذا الدومين هو الرئيسي، رجع null
         if ($host === $mainDomain) {
             return $query->whereNull('id');
@@ -172,7 +173,7 @@ class Store extends Model implements HasMedia
     public function getStoreByIdUrlAttribute(): string
     {
         $appUrl = config('app.url', 'http://127.0.0.1:8000');
-        return $appUrl.'/view/'.$this->id;
+        return $appUrl . '/view/' . $this->id;
     }
 
     public function products()

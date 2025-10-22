@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
-            $table->json('name'); // اسم المتجر
+            $table->json('name'); 
             $table->enum('type', ['traditional', 'digital', 'educational']);
             $table->string('domain')->unique(); // الدومين الخاص بالمتجر
             $table->json('description')->nullable(); // وصف المتجر

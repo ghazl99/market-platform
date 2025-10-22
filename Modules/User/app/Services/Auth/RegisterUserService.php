@@ -19,7 +19,9 @@ class RegisterUserService
     // Register a new user
     public function register(array $data, $host)
     {
-        $mainDomain = config('app.main_domain', 'market-platform.localhost');
+        $mainDomain = app()->environment('production')
+            ? config('app.main_domain', 'soqsyria.com')
+            : 'market-platform.localhost';
         return DB::transaction(function () use ($data, $host, $mainDomain) {
 
             // Create user with hashed password
@@ -35,7 +37,9 @@ class RegisterUserService
                 if (! $store) {
                     abort(404, 'Store not found');
                 }
-                $user->stores()->attach($store->id, ['is_active' => true]);
+                if (! $user->stores()->where('store_id', $store->id)->exists()) {
+                    $user->stores()->attach($store->id, ['is_active' => true]);
+                }
             }
 
             // Log the user in after successful registration

@@ -15,6 +15,26 @@
             margin: 0;
             /* منع نزول العنوان لسطر جديد */
         }
+
+        /* Delete Button Style */
+        .btn-delete {
+            border: 1px solid #dc3545;
+            color: #dc3545;
+            background-color: transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-delete:hover {
+            background-color: #dc3545;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 6px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-delete i {
+            margin-right: 5px;
+        }
     </style>
 @endpush
 @section('content')
@@ -93,6 +113,15 @@
                                     <i class="fas fa-edit me-1"></i>
                                     {{ __('Edit') }}
                                 </a>
+                                <form action="{{ route('stores.destroy', $store) }}" method="POST" class="flex-fill"
+                                    onsubmit="return confirm('{{ __('Are you sure you want to delete this store?') }}');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-delete btn btn-sm w-100">
+                                        <i class="fas fa-trash"></i>{{ __('Delete') }}
+                                    </button>
+                                </form>
+
                             </div>
 
                         </div>
@@ -103,7 +132,7 @@
                     <i class="fas fa-store fa-5x text-muted mb-4"></i>
                     <h4 class="text-muted">{{ __('No Stores Yet') }}</h4>
                     <p class="text-muted">{{ __('Start by creating your first store') }}</p>
-                    
+
                 </div>
             @endif
         </div>

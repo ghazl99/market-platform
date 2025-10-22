@@ -59,22 +59,15 @@ class StoreController extends Controller implements HasMiddleware
      */
     public function store(StoreCreateRequest $request)
     {
-        try {
-            $data = $request->validated();
+        $data = $request->validated();
 
-            // Delegate store creation to the service layer
-            $store = $this->storeService->store($data);
+        $store = $this->storeService->store($data);
 
-            return redirect()->route('stores.show', $store)
-                ->with('success', __('Created successfully'));
-        } catch (\Exception $e) {
-            // Log the error or return JSON response for AJAX requests
-            return response()->json([
-                'error' => true,
-                'message' => $e->getMessage(),
-            ], 500);
-        }
+        return redirect()
+            ->route('stores.show', $store)
+            ->with('success', __('Created successfully'));
     }
+
 
     /**
      * Display a specific store if the authenticated user is a member.

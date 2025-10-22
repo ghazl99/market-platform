@@ -93,7 +93,7 @@ class PaymentRequestObserver
                 'type'  => 'payment_request',
                 'payment_request_id' => $paymentRequest->id,
                 'wallet_id' => $paymentRequest->wallet_id,
-                'url' => route('wallet.index'),
+                'url' => route('wallet.payment-requests.index'),
                 'icon' => asset('assets/img/payment.png'),
             ];
             // dd($data);
@@ -108,7 +108,7 @@ class PaymentRequestObserver
                 'type'  => 'payment_request',
                 'payment_request_id' => $paymentRequest->id,
                 'wallet_id' => $paymentRequest->wallet_id,
-                'url' => route('wallet.index'),
+                'url' => route('wallet.payment-requests.index'),
                 'icon' => asset('assets/img/payment.png'),
             ];
             FirebaseNotificationService::send($user, $data);

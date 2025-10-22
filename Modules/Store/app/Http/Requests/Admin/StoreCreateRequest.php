@@ -12,8 +12,14 @@ class StoreCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'domain' => 'required|string|max:255|unique:stores,domain',
+            'name' => 'required|string|max:255|unique:stores,name',
+            'domain' =>
+            'required|
+                string|
+                regex:/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/ |
+                min:3|
+                max:50|
+                unique:stores,domain',
             'description' => 'nullable|string',
             'theme' => 'required|string',
             'status' => 'required|string|in:active,pending,inactive',
@@ -21,7 +27,7 @@ class StoreCreateRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'logo' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
             'banner' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
-            'timezone' => 'required|string|in:'.implode(',', timezone_identifiers_list()),
+            'timezone' => 'required|string|in:' . implode(',', timezone_identifiers_list()),
         ];
     }
 

@@ -22,7 +22,6 @@ class StoreOwnerSeeder extends Seeder
                 'name' => 'Store Owner',
                 'email' => 'owner@example.com',
                 'password' => Hash::make('password'),
-                'is_featured' => true,
             ]);
             $owner->assignRole('owner');
 

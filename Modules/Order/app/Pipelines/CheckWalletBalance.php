@@ -19,15 +19,15 @@ class CheckWalletBalance
         $totalCost = $product->price * $quantity;
 
         // إذا المستخدم مميز يسمح له بالدين حتى 1000
-        if ($user->is_featured) {
-            $maxDebt = 1000; // الحد الأقصى للدين
+        if ($user->debt_limit) {
+            $maxDebt = $user->debt_limit; // الحد الأقصى للدين
             $currentDebt = max(0, $totalCost - $wallet->balance);
 
             if ($currentDebt > $maxDebt) {
                 return redirect()
                     ->back()
                     ->withInput()
-                    ->with('error', __('Your premium limit exceeded. Maximum allowed debt is :1000 $'));
+                    ->with('error', __('Your premium limit exceeded. Maximum allowed debt is :amount $', ['amount' => $maxDebt]));
             }
         } else {
             // مستخدم عادي: الرصيد يجب أن يكون كافي
