@@ -295,7 +295,7 @@
         <div class="page-header">
             <h1 class="page-title">{{ __('Add New Customer') }}</h1>
             <div class="page-actions">
-                <a href="{{ url('dashboard/customer') }}" class="back-btn">
+                <a href="{{ route('dashboard.customer.index') }}" class="back-btn">
                     <i class="fas fa-arrow-right"></i>
                     {{ __('Back to Customers') }}
                 </a>
@@ -303,7 +303,7 @@
         </div>
 
 
-        <form class="form-container" id="userForm" method="POST" action="{{ url('dashboard/customer') }}">
+        <form class="form-container" id="userForm" method="POST" action="{{ route('dashboard.customer.store') }}">
             @csrf
 
             <!-- Personal Information -->
@@ -404,6 +404,16 @@
                         @error('status')
                             <div class="form-error">{{ $message }}</div>
                         @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ __('Debt Limit') }}</label>
+                        <input type="number" step="0.01" min="0"
+                            class="form-input @error('debt_limit') is-invalid @enderror" name="debt_limit"
+                            placeholder="0.00" value="{{ old('debt_limit', 0) }}">
+                        @error('debt_limit')
+                            <div class="form-error">{{ $message }}</div>
+                        @enderror
+                        <div class="form-help">{{ __('Leave 0 for no credit allowed') }}</div>
                     </div>
                 </div>
             </div>
@@ -922,7 +932,7 @@
         function cancelForm() {
             if (confirm(
                     '{{ __('Are you sure you want to cancel adding the customer? All entered data will be lost.') }}')) {
-                window.location.href = '{{ url('dashboard/customer') }}';
+                window.location.href = '{{ route('dashboard.customer.index') }}';
             }
         }
 

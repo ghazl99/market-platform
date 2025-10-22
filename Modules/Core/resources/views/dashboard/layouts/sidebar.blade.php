@@ -1,5 +1,6 @@
 <!-- Sidebar -->
 @php
+    use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
     // دالة مساعدة لتحديد الصفحة النشطة
     function isActive($patterns)
     {
@@ -47,7 +48,8 @@
     <nav class="sidebar-nav">
         <div class="nav-section">
             <div class="nav-section-title">{{ __('Dashboard') }}</div>
-            <a href="{{ url('dashboard') }}" class="nav-item {{ isActive(['dashboard']) ? 'active' : '' }}">
+            <a href="{{ LaravelLocalization::localizeURL('dashboard') }}"
+                class="nav-item {{ isActive(['dashboard']) ? 'active' : '' }}">
                 <i class="fas fa-home"></i>
                 <span class="nav-item-text">{{ __('Dashboard') }}</span>
             </a>
@@ -55,7 +57,18 @@
                 <i class="fas fa-chart-line"></i>
                 <span class="nav-item-text">الإحصائيات</span>
             </a>
-            <a href="{{ url('dashboard/orders') }}"
+            <a href="{{ route('dashboard.notifications') }}"
+                class="nav-item {{ isActive(['dashboard/notifications']) ? 'active' : '' }}">
+                <i class="fas fa-bell"></i>
+                <span class="nav-item-text">{{ __('الإشعارات') }}</span>
+                @php
+                    $unreadCount = Auth::user()->unreadNotifications()->count();
+                @endphp
+                @if ($unreadCount > 0)
+                    <span class="nav-badge">{{ $unreadCount }}</span>
+                @endif
+            </a>
+            <a href="{{ LaravelLocalization::localizeURL('dashboard/orders') }}"
                 class="nav-item {{ isActive(['dashboard/orders']) ? 'active' : '' }}">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="nav-item-text">{{ __('Orders') }}</span>
@@ -64,12 +77,12 @@
 
         <div class="nav-section">
             <div class="nav-section-title">إدارة المنتجات</div>
-            <a href="{{ url('dashboard/products') }}"
+            <a href="{{ LaravelLocalization::localizeURL('dashboard/products') }}"
                 class="nav-item {{ isActive(['dashboard/products']) ? 'active' : '' }}">
                 <i class="fas fa-box"></i>
                 <span class="nav-item-text">{{ __('Products') }}</span>
             </a>
-            <a href="{{ url('dashboard/categories') }}"
+            <a href="{{ LaravelLocalization::localizeURL('dashboard/categories') }}"
                 class="nav-item {{ isActive(['dashboard/categories']) ? 'active' : '' }}">
                 <i class="fas fa-tags"></i>
                 <span class="nav-item-text">{{ __('Sections') }}</span>
@@ -108,7 +121,7 @@
 
         <div class="nav-section">
             <div class="nav-section-title">العملاء</div>
-            <a href="{{ url('dashboard/customer') }}"
+            <a href="{{ LaravelLocalization::localizeURL('dashboard/customer') }}"
                 class="nav-item {{ isActive(['dashboard/customer']) ? 'active' : '' }}">
                 <i class="fas fa-users"></i>
                 <span class="nav-item-text">العملاء</span>
@@ -138,7 +151,7 @@
                 <i class="fas fa-cog"></i>
                 <span class="nav-item-text">عام</span>
             </a>
-            <a href="{{ url('dashboard/permissions') }}"
+            <a href="{{ LaravelLocalization::localizeURL('dashboard/permissions') }}"
                 class="nav-item {{ isActive(['dashboard/permissions']) ? 'active' : '' }}">
                 <i class="fas fa-shield-alt"></i>
                 <span class="nav-item-text">الصلاحيات</span>

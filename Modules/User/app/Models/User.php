@@ -43,6 +43,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'last_login_at',
         'last_updated_at_password',
         'is_featured',
+        'debt_limit',
     ];
 
     /**
@@ -68,6 +69,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
             'last_login_at' => 'datetime',
             'birth_date' => 'date',
             'password' => 'hashed',
+            'debt_limit' => 'decimal:2',
         ];
     }
     protected static function newFactory()

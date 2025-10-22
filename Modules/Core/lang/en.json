@@ -1,0 +1,12 @@
+{
+    "الإشعارات": "Notifications",
+    "لا توجد إشعارات": "No Notifications",
+    "لم تتلق أي إشعارات بعد.": "You haven't received any notifications yet.",
+    "تمييز كمقروء": "Mark as Read",
+    "حذف": "Delete",
+    "تم حذف الإشعار بنجاح": "Notification deleted successfully",
+    "هل أنت متأكد من حذف هذا الإشعار؟": "Are you sure you want to delete this notification?",
+    "تأكيد الحذف": "Confirm Delete",
+    "لا يمكن التراجع عن هذا الإجراء.": "This action cannot be undone.",
+    "إلغاء": "Cancel"
+}

@@ -492,8 +492,8 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" name="currencies" id="currencies-input"
-                            value="{{ implode(',', $currentCurrencies) }}">
+                        <!-- currencies[] inputs will be generated dynamically; no single hidden 'currencies' field -->
+                        <input type="hidden" id="currencies-input" value="{{ implode(',', $currentCurrencies) }}">
                         @error('currencies')
                             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                         @enderror

@@ -370,11 +370,11 @@
         <div class="page-header">
             <h1 class="page-title">{{ __('Customer Details') }}</h1>
             <div class="page-actions">
-                <a href="{{ url('dashboard/customer') }}" class="back-btn">
+                <a href="{{ route('dashboard.customer.index') }}" class="back-btn">
                     <i class="fas fa-arrow-right"></i>
                     {{ __('Back to Customers') }}
                 </a>
-                <a href="{{ url('dashboard/customer/' . $customer->id . '/edit') }}" class="edit-btn">
+                <a href="{{ route('dashboard.customer.edit', $customer->id) }}" class="edit-btn">
                     <i class="fas fa-edit"></i>
                     {{ __('Edit Customer') }}
                 </a>

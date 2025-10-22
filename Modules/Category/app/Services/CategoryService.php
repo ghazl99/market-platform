@@ -110,7 +110,19 @@ class CategoryService
         DB::beginTransaction();
 
         try {
-            $data = $this->prepareUserData($data);
+            // إلغاء الترجمة التلقائية أثناء الإنشاء لتسريع الأداء
+            // $data = $this->prepareUserData($data);
+
+            // Ensure optional keys exist to avoid undefined index
+            $data = array_merge([
+                'parent_id' => $data['parent_id'] ?? null,
+                'icon' => $data['icon'] ?? 'fas fa-tag',
+                'is_active' => isset($data['is_active']) ? (bool) $data['is_active'] : true,
+                'sort_order' => $data['sort_order'] ?? 0,
+                'seo_title' => $data['seo_title'] ?? null,
+                'keywords' => $data['keywords'] ?? null,
+                'seo_description' => $data['seo_description'] ?? null,
+            ], $data);
 
             $category = $this->categoryRepository->store($data);
 

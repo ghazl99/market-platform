@@ -5,6 +5,7 @@ namespace Modules\Wallet\Http\Controllers\Dashboard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Modules\Store\Models\Store;
 use Modules\Wallet\Models\PaymentRequest;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -27,9 +28,13 @@ class PaymentRequestController extends Controller implements HasMiddleware
      */
     public function index(Request $request)
     {
+        $store = Store::currentFromUrl()->firstOrFail();
         $search = $request->get('search');
 
         $query = PaymentRequest::with(['wallet.user', 'wallet.store', 'approvedBy'])
+            ->whereHas('wallet', function ($q) use ($store) {
+                $q->where('store_id', $store->id);
+            })
             ->orderBy('created_at', 'desc');
 
         if ($search) {
@@ -70,7 +75,7 @@ class PaymentRequestController extends Controller implements HasMiddleware
         ]);
 
         try {
-            
+
             $this->paymentRequestService->processPaymentRequest($id, Auth::id(), $validated);
 
             return redirect()->back()->with('success', __('Updated successfully'));

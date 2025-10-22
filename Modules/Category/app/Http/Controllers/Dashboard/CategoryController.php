@@ -51,7 +51,14 @@ class CategoryController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        $categories = $this->categoryService->getAllcategories();
+        // إذا كان هناك parent_id لا داعي لجلب كل الأقسام لتسريع الصفحة
+        $parentId = request('parent_id');
+        if ($parentId) {
+            $parent = $this->categoryService->getCategoryById((int) $parentId);
+            $categories = $parent ? collect([$parent]) : collect();
+        } else {
+            $categories = $this->categoryService->getAllcategories();
+        }
         return view('category::dashboard.create', compact('categories'));
     }
 
@@ -120,15 +127,27 @@ class CategoryController extends Controller implements HasMiddleware
         try {
             $this->categoryService->deleteCategory($category);
 
-            return response()->json([
-                'success' => true,
-                'message' => __('Category deleted successfully'),
-            ]);
+            if (request()->expectsJson() || request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => __('Category deleted successfully'),
+                ]);
+            }
+
+            return redirect()
+                ->route('dashboard.category.index')
+                ->with('success', __('Category deleted successfully'));
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => __('Error deleting category: ') . $e->getMessage(),
-            ], 500);
+            if (request()->expectsJson() || request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('Error deleting category: ') . $e->getMessage(),
+                ], 500);
+            }
+
+            return redirect()
+                ->back()
+                ->with('error', __('Error deleting category: ') . $e->getMessage());
         }
     }
 

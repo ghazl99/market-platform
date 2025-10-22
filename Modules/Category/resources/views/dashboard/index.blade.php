@@ -108,12 +108,13 @@
             </h1>
             <div class="page-actions">
                 @if ($parentCategory)
-                    <a href="{{ route('dashboard.category.index') }}" class="back-btn">
+                    <a href="{{ route('dashboard.category.index') }}" class="back-btn" title="{{ __('Back') }}"
+                        aria-label="{{ __('Back') }}">
                         <i class="fas fa-arrow-right"></i>
-                        {{ __('Back') }}
                     </a>
                 @endif
-                <a href="{{ route('dashboard.category.create') }}" class="add-category-btn">
+                <a href="{{ $parentCategory ? route('dashboard.category.create', ['parent_id' => $parentCategory->id]) : route('dashboard.category.create') }}"
+                    class="add-category-btn">
                     <i class="fas fa-plus"></i>
                     {{ __('Add New Section') }}
                 </a>
@@ -664,21 +665,14 @@
 
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
-                e.preventDefault();
-
                 const categoryCard = this.closest('.category-card');
-                const categoryName = categoryCard.querySelector('.category-name').textContent;
-                const form = this.closest('form');
-
-                // Store references for later use
-                currentDeleteForm = form;
-                currentDeleteBtn = this;
-
-                // Update modal content
-                document.getElementById('categoryNameToDelete').textContent = categoryName;
-
-                // Show modal
-                document.getElementById('deleteModal').style.display = 'flex';
+                const nameEl = categoryCard ? categoryCard.querySelector('.category-name') : null;
+                const categoryName = nameEl ? nameEl.textContent : '';
+                const confirmed = confirm(
+                    `{{ __('Are you sure you want to delete the section') }} ${categoryName}?`);
+                if (!confirmed) {
+                    e.preventDefault();
+                }
             });
         });
 
@@ -769,11 +763,11 @@
                     <div class="notification-title">{{ __('Success') }}</div>
                     <div class="notification-message">${message}</div>
                     ${categoryId ? `
-                                                                                                                                <div class="notification-details">
-                                                                                                                                    <i class="fas fa-info-circle"></i>
-                                                                                                                                    {{ __('Category') }} #${categoryId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
-                                                                                                                                </div>
-                                                                                                                                ` : ''}
+                                                                                                                                                                <div class="notification-details">
+                                                                                                                                                                    <i class="fas fa-info-circle"></i>
+                                                                                                                                                                    {{ __('Category') }} #${categoryId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
+                                                                                                                                                                </div>
+                                                                                                                                                                ` : ''}
                 </div>
                 <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
                 <div class="notification-progress"></div>

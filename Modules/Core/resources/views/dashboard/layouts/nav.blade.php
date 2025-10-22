@@ -36,10 +36,15 @@
             <i class="fas fa-moon" id="theme-icon"></i>
         </button>
 
-        <button class="notifications">
+        <a href="{{ route('dashboard.notifications') }}" class="notifications" title="{{ __('الإشعارات') }}">
             <i class="fas fa-bell"></i>
-            <span class="notification-badge">3</span>
-        </button>
+            @php
+                $unreadCount = Auth::user()->unreadNotifications()->count();
+            @endphp
+            @if ($unreadCount > 0)
+                <span class="notification-badge">{{ $unreadCount }}</span>
+            @endif
+        </a>
 
         <div class="user-menu">
             <div class="user-avatar">أ</div>

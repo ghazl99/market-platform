@@ -295,11 +295,11 @@
         <div class="page-header">
             <h1 class="page-title">{{ __('Customers List') }}</h1>
             <div class="page-actions">
-                <a href="{{ url('dashboard/customer/create') }}" class="add-user-btn">
+                <a href="{{ route('dashboard.customer.create') }}" class="add-user-btn">
                     <i class="fas fa-plus"></i>
                     {{ __('Add New Customer') }}
                 </a>
-                <a href="{{ url('dashboard') }}" class="add-user-btn"
+                <a href="{{ route('dashboard') }}" class="add-user-btn"
                     style="background: var(--bg-secondary, #f9fafb); color: var(--text-secondary, #6b7280); border: 1px solid var(--border-color, #e5e7eb);">
                     <i class="fas fa-arrow-right"></i>
                     {{ __('Back to Dashboard') }}
@@ -375,6 +375,7 @@
                         <th>{{ __('Registration Date') }}</th>
                         <th>{{ __('Status') }}</th>
                         <th>{{ __('Last Activity') }}</th>
+                        <th>{{ __('Debt Limit') }}</th>
                         <th>{{ __('Actions') }}</th>
                     </tr>
                 </thead>
@@ -427,6 +428,15 @@
     </div>
 @endsection
 @push('scripts')
+    <script>
+        // Prepare localized base URLs for navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.setAttribute('data-customer-show-base',
+                `{{ route('dashboard.customer.show', ['customer' => 'CUSTOMER_ID']) }}`);
+            document.body.setAttribute('data-customer-edit-base',
+                `{{ route('dashboard.customer.edit', ['customer' => 'CUSTOMER_ID']) }}`);
+        });
+    </script>
     <style>
         /* Customers Page Specific Styles */
         .users-container {
@@ -1030,7 +1040,7 @@
                     page: page
                 });
 
-                fetch(`{{ url('dashboard/customer') }}?${params}`, {
+                fetch(`{{ route('dashboard.customer.index') }}?${params}`, {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
                         }
@@ -1086,7 +1096,7 @@
                 role: roleFilter
             });
 
-            fetch(`{{ url('dashboard/customer') }}?${params}`, {
+            fetch(`{{ route('dashboard.customer.index') }}?${params}`, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
@@ -1105,12 +1115,14 @@
 
         function viewCustomer(customerId) {
             console.log('Viewing customer:', customerId);
-            window.location.href = `{{ url('dashboard/customer') }}/${customerId}`;
+            const base = document.body.getAttribute('data-customer-show-base');
+            window.location.href = base.replace('CUSTOMER_ID', customerId);
         }
 
         function editCustomer(customerId) {
             console.log('Editing customer:', customerId);
-            window.location.href = `{{ url('dashboard/customer') }}/${customerId}/edit`;
+            const base = document.body.getAttribute('data-customer-edit-base');
+            window.location.href = base.replace('CUSTOMER_ID', customerId);
         }
 
 

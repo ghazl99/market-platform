@@ -106,11 +106,18 @@ class CategoryModelRepository implements CategoryRepository
             }
         }
 
-        // Create main category
+        // Create main or sub category
         $category = Category::create([
             'name' => $data['name'],
             'description' => $data['description'] ?? null,
             'store_id' => $store->id,
+            'parent_id' => $data['parent_id'] ?? null,
+            'icon' => $data['icon'] ?? (!empty($data['parent_id']) ? 'fas fa-tag' : 'fas fa-tag'),
+            'is_active' => $data['is_active'] ?? true,
+            'sort_order' => $data['sort_order'] ?? 0,
+            'seo_title' => $data['seo_title'] ?? null,
+            'keywords' => $data['keywords'] ?? null,
+            'seo_description' => $data['seo_description'] ?? null,
         ]);
 
         // Create subcategories if provided

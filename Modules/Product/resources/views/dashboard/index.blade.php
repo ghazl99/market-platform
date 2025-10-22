@@ -260,8 +260,430 @@
             transform: translateY(-1px);
         }
 
-        /* Mobile responsiveness */
+        /* Products Grid - 6 items per row */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1.5rem;
+            padding: 2rem 0;
+        }
+
+        .product-card {
+            background: #1f2937;
+            border-radius: 16px;
+            padding: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid #374151;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            border-color: #4b5563;
+        }
+
+        .product-card:hover .product-logo {
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        .product-card:hover .menu-toggle {
+            background: rgba(156, 163, 175, 0.4);
+            color: #ffffff;
+            border-color: rgba(156, 163, 175, 0.6);
+            transform: scale(1.1);
+        }
+
+        /* Product Logo */
+        .product-logo {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            color: #9ca3af;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Three Dots Menu */
+        .product-menu {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            z-index: 10;
+        }
+
+        .product-menu * {
+            pointer-events: auto;
+        }
+
+        .menu-toggle {
+            background: rgba(55, 65, 81, 0.5);
+            border: 1px solid rgba(156, 163, 175, 0.3);
+            color: #9ca3af;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.4rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle:hover {
+            background: rgba(156, 163, 175, 0.3);
+            color: #ffffff;
+            border-color: rgba(156, 163, 175, 0.5);
+            transform: scale(1.05);
+        }
+
+        .menu-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .menu-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #1f2937;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            min-width: 150px;
+            z-index: 1000;
+            display: none;
+            border: 1px solid #374151;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .menu-dropdown.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: #e5e7eb;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: right;
+            font-size: 0.875rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .menu-item:hover {
+            background: #374151;
+            color: #ffffff;
+            transform: translateX(-2px);
+        }
+
+        .menu-item:active {
+            transform: scale(0.98);
+        }
+
+        .menu-item.delete-item {
+            color: #ef4444;
+        }
+
+        .menu-item.delete-item:hover {
+            background: #ef4444;
+            color: #ffffff;
+            transform: translateX(-2px);
+        }
+
+        .menu-item-form {
+            width: 100%;
+        }
+
+        /* Product Icon */
+        .product-icon {
+            margin: 1rem 0 0.5rem 0;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: transparent;
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
+
+        .product-card:hover .product-icon::before {
+            animation: none;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-image:not([src]) {
+            display: none;
+        }
+
+        .product-image[src=""] {
+            display: none;
+        }
+
+        .product-image-placeholder {
+            color: #ffffff;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .product-image-placeholder:not([style*="display: none"]) {
+            display: flex !important;
+        }
+
+
+        .product-card:hover .product-image-placeholder {
+            transform: scale(1.05);
+        }
+
+        .product-card:hover .product-image-placeholder i {
+            color: #ffffff;
+        }
+
+        /* Debug styles for images */
+        .product-image {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-image-placeholder {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Ensure proper image display */
+        .product-icon img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+        /* Fallback for broken images */
+        .product-icon img[src=""],
+        .product-icon img:not([src]) {
+            display: none;
+        }
+
+        .product-icon img[src=""]+.product-image-placeholder,
+        .product-icon img:not([src])+.product-image-placeholder {
+            display: flex !important;
+        }
+
+        /* Ensure placeholder shows when image fails to load */
+        .product-icon img[onerror] {
+            position: relative;
+        }
+
+        .product-icon img[onerror]+.product-image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* Debug: Add background to see if images are loading */
+        .product-icon {
+            background: transparent;
+            position: relative;
+        }
+
+        .product-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+            z-index: -1;
+        }
+
+        /* Ensure images are properly displayed */
+        .product-icon img {
+            z-index: 1;
+            position: relative;
+        }
+
+        .product-image-placeholder {
+            z-index: 1;
+            position: relative;
+        }
+
+        /* Product Info */
+        .product-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .product-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0 0 0.25rem 0;
+            line-height: 1.4;
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-name-english {
+            font-size: 0.8rem;
+            color: #d1d5db;
+            margin: 0;
+            line-height: 1.4;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Add some variety to product icons */
+        .product-card:nth-child(6n+1) .product-icon {
+            background: transparent;
+        }
+
+        .product-card:nth-child(6n+2) .product-icon {
+            background: transparent;
+        }
+
+        .product-card:nth-child(6n+3) .product-icon {
+            background: transparent;
+        }
+
+        .product-card:nth-child(6n+4) .product-icon {
+            background: transparent;
+        }
+
+        .product-card:nth-child(6n+5) .product-icon {
+            background: transparent;
+        }
+
+        .product-card:nth-child(6n+6) .product-icon {
+            background: transparent;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .product-card {
+                padding: 0.75rem;
+                min-height: 180px;
+            }
+
+            .product-icon {
+                width: 80px;
+                height: 80px;
+                margin: 1rem 0 0.5rem 0;
+            }
+
+            .product-image {
+                width: 60px;
+                height: 60px;
+            }
+
+            .product-image-placeholder {
+                font-size: 2rem;
+            }
+
             .notification-container {
                 top: 10px;
                 right: 10px;
@@ -292,6 +714,39 @@
                 margin-right: 0;
                 width: 100%;
                 justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-card {
+                min-height: 160px;
+            }
+
+            .product-icon {
+                width: 70px;
+                height: 70px;
+                margin: 0.75rem 0 0.5rem 0;
+            }
+
+            .product-image {
+                width: 50px;
+                height: 50px;
+            }
+
+            .product-image-placeholder {
+                font-size: 1.8rem;
+            }
+
+            .product-name {
+                font-size: 0.8rem;
+            }
+
+            .product-name-english {
+                font-size: 0.7rem;
             }
         }
     </style>
@@ -437,58 +892,56 @@
 
         <div class="products-grid" id="productsGrid">
             @forelse ($products as $product)
-                <div class="product-card">
-                    @if ($product->image_url)
-                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="product-image">
-                    @else
-                        <div class="product-image no-image-placeholder">
-                            <div class="placeholder-content">
-                                <i class="fas fa-box-open placeholder-icon"></i>
-                                <span class="placeholder-text">{{ __('No Image') }}</span>
+                <div class="product-card"
+                    onclick="window.location.href='{{ route('dashboard.product.show', $product) }}'">
+                    <!-- Product Logo -->
+                    <div class="product-logo">
+                        <i class="fas fa-store"></i>
                             </div>
-                        </div>
-                    @endif
 
-                    <div class="product-info">
-                        <h3 class="product-name">{{ $product->name }}</h3>
-                        <p class="product-description">{{ Str::limit($product->description, 100) }}</p>
-
-                        <div class="product-meta">
-                            <span class="product-price">{{ number_format($product->price, 0) }}
-                                {{ __('ريال') }}</span>
-
-                            @if ($product->stock_quantity > 10)
-                                <span class="product-stock in-stock">{{ __('متوفر') }}</span>
-                            @elseif ($product->stock_quantity > 0)
-                                <span class="product-stock low-stock">{{ __('قليل') }}</span>
-                            @else
-                                <span class="product-stock out-of-stock">{{ __('غير متوفر') }}</span>
-                            @endif
+                    <!-- Three Dots Menu -->
+                    <div class="product-menu">
+                        <button class="menu-toggle" onclick="toggleMenu(this, event)">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="menu-dropdown">
+                            <a href="{{ route('dashboard.product.edit', $product) }}" class="menu-item">
+                            <i class="fas fa-edit"></i>
+                                {{ __('تعديل') }}
+                        </a>
+                        <form action="{{ route('dashboard.product.destroy', $product) }}" method="POST"
+                                class="menu-item-form">
+                            @csrf
+                            @method('DELETE')
+                                <button type="submit" class="menu-item delete-item"
+                                    onclick="return confirm('هل أنت متأكد من حذف هذا المنتج؟')">
+                                <i class="fas fa-trash"></i>
+                                    {{ __('حذف') }}
+                            </button>
+                        </form>
                         </div>
                     </div>
 
-                    <div class="product-actions">
-                        <a href="{{ route('dashboard.product.show', $product) }}" class="action-btn view"
-                            title="{{ __('View Product') }}">
-                            <i class="fas fa-eye"></i>
-                            <span>{{ __('View') }}</span>
-                        </a>
-                        <a href="{{ route('dashboard.product.edit', $product) }}" class="action-btn edit"
-                            title="{{ __('Edit Product') }}">
-                            <i class="fas fa-edit"></i>
-                            <span>{{ __('Edit') }}</span>
-                        </a>
+                    <!-- Product Icon -->
+                    <div class="product-icon">
+                        @if ($product->image_url)
+                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="product-image"
+                                loading="lazy"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="product-image-placeholder" style="display: none;">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                        @else
+                            <div class="product-image-placeholder">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                        @endif
+                    </div>
 
-                        <form action="{{ route('dashboard.product.destroy', $product) }}" method="POST"
-                            style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="action-btn delete delete-btn"
-                                title="{{ __('Delete Product') }}">
-                                <i class="fas fa-trash"></i>
-                                <span>{{ __('Delete') }}</span>
-                            </button>
-                        </form>
+                    <!-- Product Info -->
+                    <div class="product-info">
+                        <h3 class="product-name">{{ $product->name }}</h3>
+                        <p class="product-name-english">{{ $product->name_en ?? $product->name }}</p>
                     </div>
                 </div>
             @empty
@@ -803,6 +1256,36 @@
             document.getElementById('deleteModal').style.display = 'none';
             currentDeleteForm = null;
             currentDeleteBtn = null;
+        });
+
+        // Toggle menu dropdown
+        function toggleMenu(button, event) {
+            event.stopPropagation(); // منع انتشار الحدث
+            const dropdown = button.nextElementSibling;
+            const isOpen = dropdown.classList.contains('show');
+
+            // Close all other dropdowns
+            document.querySelectorAll('.menu-dropdown.show').forEach(menu => {
+                if (menu !== dropdown) {
+                    menu.classList.remove('show');
+                }
+            });
+
+            // Toggle current dropdown
+            if (isOpen) {
+                dropdown.classList.remove('show');
+            } else {
+                dropdown.classList.add('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.product-menu')) {
+                document.querySelectorAll('.menu-dropdown.show').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
         });
 
         // Handle delete confirmation

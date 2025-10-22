@@ -41,10 +41,26 @@ class PaymentMethodController extends Controller
         try {
             $store = Store::currentFromUrl()->firstOrFail();
 
+            // Normalize currencies input to an array
+            $currencies = $request->input('currencies', []);
+            if (is_string($currencies)) {
+                $currencies = array_filter(array_map('trim', explode(',', $currencies)));
+            }
+            if (empty($currencies)) {
+                // Try collect from repeated inputs currencies[] if present
+                $currencies = (array) $request->input('currencies', []);
+            }
+            // Ensure unique, reindex
+            if (is_array($currencies)) {
+                $currencies = array_values(array_unique(array_filter($currencies)));
+            }
+            // Merge back for validation
+            $request->merge(['currencies' => $currencies]);
+
             $request->validate([
                 'name' => 'required|string|max:255',
                 'currencies' => 'required|array|min:1',
-                'currencies.*' => 'string|max:3',
+                'currencies.*' => 'string|max:10',
                 'recipient_name' => 'nullable|string|max:255',
                 'account_number' => 'nullable|string|max:255',
                 'bank_name' => 'nullable|string|max:255',

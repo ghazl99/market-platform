@@ -91,6 +91,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'timezone' => 'nullable|string',
                 'email_notifications' => 'nullable|string|in:on,off',
                 'sms_notifications' => 'nullable|string|in:on,off',
+                'debt_limit' => 'nullable|numeric|min:0',
             ]);
 
             Log::info('Validation passed successfully!');
@@ -121,6 +122,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'email_notifications' => $request->email_notifications === 'on',
                 'sms_notifications' => $request->sms_notifications === 'on',
                 'email_verified_at' => $request->status === 'active' ? now() : null,
+                'debt_limit' => $request->debt_limit !== null && $request->debt_limit !== '' ? (float) $request->debt_limit : 0,
             ]);
 
             Log::info('User created successfully:', ['user_id' => $user->id]);
@@ -287,6 +289,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'timezone' => 'nullable|string',
                 'email_notifications' => 'nullable|string|in:on,off',
                 'sms_notifications' => 'nullable|string|in:on,off',
+                'debt_limit' => 'nullable|numeric|min:0',
             ];
 
             // Add password validation only if password is provided
@@ -313,6 +316,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'email_notifications' => $request->email_notifications === 'on',
                 'sms_notifications' => $request->sms_notifications === 'on',
                 'email_verified_at' => $request->status === 'active' ? now() : null,
+                'debt_limit' => $request->debt_limit !== null && $request->debt_limit !== '' ? (float) $request->debt_limit : 0,
             ];
 
             // Add password only if provided

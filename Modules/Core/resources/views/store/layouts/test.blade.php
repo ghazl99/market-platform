@@ -11,7 +11,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="{{ $store->name }}>
-    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection"
+        content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
 
     <!-- PWA Meta Tags -->
@@ -99,7 +100,8 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
+                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}"
+                            href="{{ route('home') }}">
                             <i class="fas fa-home me-1"></i>
                             {{ __('Home') }}
                         </a>

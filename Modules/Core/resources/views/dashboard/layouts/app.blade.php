@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/themes/default.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/css/notifications.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/dashboard-notifications.css') }}?v={{ time() }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
@@ -60,6 +61,7 @@
     <script src="{{ asset('assets/js/script-store.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('assets/js/dashboard.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('assets/js/notifications.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/js/dashboard-notifications.js') }}?v={{ time() }}" defer></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

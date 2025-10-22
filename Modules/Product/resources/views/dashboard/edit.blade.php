@@ -13,6 +13,267 @@
     <link rel="stylesheet" href="{{ asset('assets/css/notifications.css') }}">
 
     <style>
+        /* Dark Theme Product Edit Page - Same as Show Page */
+        body {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .product-edit-container {
+            background: #1a1a1a;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        /* Product Header Section */
+        .product-header {
+            background: #2d2d2d;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #404040;
+        }
+
+        .product-title-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-title-info {
+            flex: 1;
+        }
+
+        .product-status-info {
+            display: flex;
+            flex-direction: row;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .status-info {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-info.available {
+            background: #10b981;
+            color: #ffffff;
+        }
+
+        .status-info.api {
+            background: #f59e0b;
+            color: #000000;
+        }
+
+        .product-image-small {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid #404040;
+        }
+
+        .product-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .product-subtitle {
+            color: #a0a0a0;
+            font-size: 1rem;
+            margin: 0.5rem 0 0 0;
+        }
+
+        .product-warning {
+            background: #3a3a3a;
+            border: 1px solid #555;
+            border-radius: 8px;
+            padding: 1rem;
+            color: #ffcc00;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Navigation Tabs */
+        .product-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #404040;
+        }
+
+        .tab-item {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: none;
+            color: #a0a0a0;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-item.active {
+            color: #ffffff;
+            border-bottom-color: #f59e0b;
+        }
+
+        .tab-item:hover {
+            color: #ffffff;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: #2d2d2d;
+            border-radius: 12px;
+            border: 1px solid #404040;
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #3a3a3a;
+            border: 1px solid #555;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #3a3a3a;
+            border: 1px solid #555;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #3a3a3a;
+            border: 1px solid #555;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .form-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: #f59e0b;
+        }
+
+        .btn-primary {
+            background: #f59e0b;
+            color: #000000;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #d97706;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        /* Image Upload */
+        .image-upload-area {
+            border: 2px dashed #555;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background: #3a3a3a;
+            transition: all 0.3s ease;
+        }
+
+        .image-upload-area:hover {
+            border-color: #f59e0b;
+            background: #404040;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .product-tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-item {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+
+    <style>
         /* تحسين مظهر قائمة الأقسام - تنسيق داكن */
         .form-input {
             background-color: #374151 !important;
@@ -158,257 +419,279 @@
         @endif
     </div>
 
-    <div class="product-create-container">
-        <div class="page-header">
-            <h1 class="page-title">{{ __('Edit Product') }}</h1>
-            <div class="page-actions">
-                <a href="{{ route('dashboard.product.index') }}" class="back-btn">
-                    <i class="fas fa-arrow-right"></i>
-                    {{ __('Back to Products') }}
-                </a>
+    <!-- Product Header Section -->
+    <div class="product-header">
+        <div class="product-title-section">
+            @if ($product->getFirstMedia('product_images'))
+                <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}" alt="{{ $product->name }}"
+                    class="product-image-small">
+            @else
+                <div class="product-image-small"
+                    style="background: #3a3a3a; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-box-open" style="font-size: 2rem; color: #a0a0a0;"></i>
+                </div>
+            @endif
+            <div class="product-title-info">
+                <h1 class="product-title">{{ $product->getTranslation('name', app()->getLocale()) }}</h1>
+                <p class="product-subtitle">{{ $product->getTranslation('name', 'en') }}</p>
+            </div>
+            <div class="product-status-info">
+                <span class="status-info available">{{ __('Available') }}</span>
+                <span class="status-info api">{{ __('API') }}</span>
             </div>
         </div>
 
-        <form class="form-container" id="productForm" method="POST"
-            action="{{ route('dashboard.product.update', $product->id) }}" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
+        <div class="product-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            {{ __('Make sure to enter information correctly') }}
+        </div>
+    </div>
 
-            <!-- Basic Information -->
-            <div class="form-section">
-                <h3 class="section-title">{{ __('Basic Information') }}</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label required">{{ __('Product Name') }}</label>
-                        <input type="text" class="form-input @error('name') is-invalid @enderror" name="name"
-                            value="{{ old('name', $product->name) }}" placeholder="{{ __('Enter product name') }}"
-                            required>
-                        @error('name')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">{{ __('Product name should be clear and distinctive') }}</div>
-                    </div>
+    <!-- Navigation Tabs -->
+    <div class="product-tabs">
+        <button class="tab-item">{{ __('Product Overview') }}</button>
+        <button class="tab-item active">{{ __('Product Settings') }}</button>
+        <button class="tab-item">{{ __('Custom Prices') }}</button>
+        <button class="tab-item">{{ __('Inventory') }}</button>
+    </div>
 
-                    <div class="form-group">
-                        <label class="form-label required">{{ __('Price') }}</label>
-                        <input type="number" class="form-input @error('price') is-invalid @enderror" name="price"
-                            value="{{ old('price', $product->price) }}" placeholder="0.00" step="0.01" required>
-                        @error('price')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">{{ __('Enter selling price in SAR') }}</div>
-                    </div>
+    <form class="form-container" id="productForm" method="POST"
+        action="{{ route('dashboard.product.update', $product->id) }}" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
 
-                    <div class="form-group">
-                        <label class="form-label">{{ __('Original Price') }}</label>
-                        <input type="number" class="form-input @error('original_price') is-invalid @enderror"
-                            name="original_price" value="{{ old('original_price', $product->original_price) }}"
-                            placeholder="0.00" step="0.01">
-                        @error('original_price')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">{{ __('Original price before discount (optional)') }}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label required">{{ __('Stock Quantity') }}</label>
-                        <input type="number" class="form-input @error('stock_quantity') is-invalid @enderror"
-                            name="stock_quantity" value="{{ old('stock_quantity', $product->stock_quantity) }}"
-                            placeholder="0" min="0" required>
-                        @error('stock_quantity')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">{{ __('Available quantity in stock') }}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">{{ __('Minimum Quantity') }}</label>
-                        <input type="number" class="form-input @error('min_quantity') is-invalid @enderror"
-                            name="min_quantity" value="{{ old('min_quantity', $product->min_quantity) }}"
-                            placeholder="1" min="1">
-                        @error('min_quantity')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">{{ __('Minimum quantity per order') }}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">{{ __('Maximum Quantity') }}</label>
-                        <input type="number" class="form-input @error('max_quantity') is-invalid @enderror"
-                            name="max_quantity" value="{{ old('max_quantity', $product->max_quantity) }}"
-                            placeholder="100" min="1">
-                        @error('max_quantity')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">{{ __('Maximum quantity per order') }}</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Description -->
-            <div class="form-section">
-                <h3 class="section-title">{{ __('Description') }}</h3>
+        <!-- Basic Information -->
+        <div class="form-section">
+            <h3 class="section-title">{{ __('Basic Information') }}</h3>
+            <div class="form-grid">
                 <div class="form-group">
-                    <label class="form-label required">{{ __('Product Description') }}</label>
-                    <textarea class="form-input @error('description') is-invalid @enderror" name="description" rows="4"
-                        placeholder="{{ __('Enter detailed product description') }}" required>{{ old('description', $product->description) }}</textarea>
-                    @error('description')
+                    <label class="form-label required">{{ __('Product Name') }}</label>
+                    <input type="text" class="form-input @error('name') is-invalid @enderror" name="name"
+                        value="{{ old('name', $product->name) }}" placeholder="{{ __('Enter product name') }}" required>
+                    @error('name')
                         <div class="form-error">{{ $message }}</div>
                     @enderror
-                    <div class="form-help">{{ __('Provide detailed information about the product') }}</div>
+                    <div class="form-help">{{ __('Product name should be clear and distinctive') }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">{{ __('Price') }}</label>
+                    <input type="number" class="form-input @error('price') is-invalid @enderror" name="price"
+                        value="{{ old('price', $product->price) }}" placeholder="0.00" step="0.01" required>
+                    @error('price')
+                        <div class="form-error">{{ $message }}</div>
+                    @enderror
+                    <div class="form-help">{{ __('Enter selling price in SAR') }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">{{ __('Original Price') }}</label>
+                    <input type="number" class="form-input @error('original_price') is-invalid @enderror"
+                        name="original_price" value="{{ old('original_price', $product->original_price) }}"
+                        placeholder="0.00" step="0.01">
+                    @error('original_price')
+                        <div class="form-error">{{ $message }}</div>
+                    @enderror
+                    <div class="form-help">{{ __('Original price before discount (optional)') }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">{{ __('Stock Quantity') }}</label>
+                    <input type="number" class="form-input @error('stock_quantity') is-invalid @enderror"
+                        name="stock_quantity" value="{{ old('stock_quantity', $product->stock_quantity) }}"
+                        placeholder="0" min="0" required>
+                    @error('stock_quantity')
+                        <div class="form-error">{{ $message }}</div>
+                    @enderror
+                    <div class="form-help">{{ __('Available quantity in stock') }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">{{ __('Minimum Quantity') }}</label>
+                    <input type="number" class="form-input @error('min_quantity') is-invalid @enderror"
+                        name="min_quantity" value="{{ old('min_quantity', $product->min_quantity) }}" placeholder="1"
+                        min="1">
+                    @error('min_quantity')
+                        <div class="form-error">{{ $message }}</div>
+                    @enderror
+                    <div class="form-help">{{ __('Minimum quantity per order') }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">{{ __('Maximum Quantity') }}</label>
+                    <input type="number" class="form-input @error('max_quantity') is-invalid @enderror"
+                        name="max_quantity" value="{{ old('max_quantity', $product->max_quantity) }}" placeholder="100"
+                        min="1">
+                    @error('max_quantity')
+                        <div class="form-error">{{ $message }}</div>
+                    @enderror
+                    <div class="form-help">{{ __('Maximum quantity per order') }}</div>
                 </div>
             </div>
+        </div>
 
-            <!-- Category -->
-            <div class="form-section">
-                <h3 class="section-title">الفئة</h3>
-                <div class="form-group">
-                    <label class="form-label required">فئة المنتج</label>
-                    <select class="form-input @error('category') is-invalid @enderror" name="category" required>
-                        <option value="">{{ __('Choose Category') }}</option>
-                        @if (isset($categories) && $categories->count() > 0)
-                            @foreach ($categories as $category)
-                                @if ($category->parent_id)
-                                    {{-- الأقسام الفرعية --}}
-                                    <option value="{{ $category->id }}"
-                                        {{ old('category', $product->categories->first()?->id) == $category->id ? 'selected' : '' }}>
-                                        &nbsp;&nbsp;&nbsp;└─ {{ $category->getTranslation('name', app()->getLocale()) }}
-                                    </option>
-                                @else
-                                    {{-- الأقسام الرئيسية --}}
-                                    <option value="{{ $category->id }}"
-                                        {{ old('category', $product->categories->first()?->id) == $category->id ? 'selected' : '' }}>
-                                        📁 {{ $category->getTranslation('name', app()->getLocale()) }}
-                                    </option>
-                                    {{-- عرض الأقسام الفرعية تحت القسم الرئيسي --}}
-                                    @if ($category->children && $category->children->count() > 0)
-                                        @foreach ($category->children as $child)
-                                            <option value="{{ $child->id }}"
-                                                {{ old('category', $product->categories->first()?->id) == $child->id ? 'selected' : '' }}>
-                                                &nbsp;&nbsp;&nbsp;└─
-                                                {{ $child->getTranslation('name', app()->getLocale()) }}
-                                            </option>
-                                        @endforeach
-                                    @endif
+        <!-- Description -->
+        <div class="form-section">
+            <h3 class="section-title">{{ __('Description') }}</h3>
+            <div class="form-group">
+                <label class="form-label required">{{ __('Product Description') }}</label>
+                <textarea class="form-input @error('description') is-invalid @enderror" name="description" rows="4"
+                    placeholder="{{ __('Enter detailed product description') }}" required>{{ old('description', $product->description) }}</textarea>
+                @error('description')
+                    <div class="form-error">{{ $message }}</div>
+                @enderror
+                <div class="form-help">{{ __('Provide detailed information about the product') }}</div>
+            </div>
+        </div>
+
+        <!-- Category -->
+        <div class="form-section">
+            <h3 class="section-title">الفئة</h3>
+            <div class="form-group">
+                <label class="form-label required">فئة المنتج</label>
+                <select class="form-input @error('category') is-invalid @enderror" name="category" required>
+                    <option value="">{{ __('Choose Category') }}</option>
+                    @if (isset($categories) && $categories->count() > 0)
+                        @foreach ($categories as $category)
+                            @if ($category->parent_id)
+                                {{-- الأقسام الفرعية --}}
+                                <option value="{{ $category->id }}"
+                                    {{ old('category', $product->categories->first()?->id) == $category->id ? 'selected' : '' }}>
+                                    &nbsp;&nbsp;&nbsp;└─ {{ $category->getTranslation('name', app()->getLocale()) }}
+                                </option>
+                            @else
+                                {{-- الأقسام الرئيسية --}}
+                                <option value="{{ $category->id }}"
+                                    {{ old('category', $product->categories->first()?->id) == $category->id ? 'selected' : '' }}>
+                                    📁 {{ $category->getTranslation('name', app()->getLocale()) }}
+                                </option>
+                                {{-- عرض الأقسام الفرعية تحت القسم الرئيسي --}}
+                                @if ($category->children && $category->children->count() > 0)
+                                    @foreach ($category->children as $child)
+                                        <option value="{{ $child->id }}"
+                                            {{ old('category', $product->categories->first()?->id) == $child->id ? 'selected' : '' }}>
+                                            &nbsp;&nbsp;&nbsp;└─
+                                            {{ $child->getTranslation('name', app()->getLocale()) }}
+                                        </option>
+                                    @endforeach
                                 @endif
-                            @endforeach
-                        @else
-                            <option value="" disabled>{{ __('No categories available') }}</option>
-                        @endif
-                    </select>
-                    @error('category')
+                            @endif
+                        @endforeach
+                    @else
+                        <option value="" disabled>{{ __('No categories available') }}</option>
+                    @endif
+                </select>
+                @error('category')
+                    <div class="form-error">{{ $message }}</div>
+                @enderror
+                <div class="form-help">اختر الفئة الأنسب للمنتج</div>
+            </div>
+        </div>
+
+        <!-- Image -->
+        <div class="form-section">
+            <h3 class="section-title">صورة المنتج</h3>
+            <div class="form-group">
+                <label class="form-label">رفع صورة</label>
+                <div class="image-upload-container">
+                    <input type="file" class="form-input @error('image') is-invalid @enderror" id="productImages"
+                        name="image" accept="image/*">
+                    @error('image')
                         <div class="form-error">{{ $message }}</div>
                     @enderror
-                    <div class="form-help">اختر الفئة الأنسب للمنتج</div>
+                    <div class="image-preview" id="imagePreview">
+                        @if ($product->image_url)
+                            <img src="{{ $product->image_url }}" alt="Current Product Image" class="preview-image">
+                            <div class="image-overlay">
+                                <span class="image-text">الصورة الحالية</span>
+                            </div>
+                        @endif
+                    </div>
                 </div>
+                <div class="form-help">ارفع صورة عالية الجودة للمنتج (JPG, PNG, GIF)</div>
             </div>
+        </div>
 
-            <!-- Image -->
-            <div class="form-section">
-                <h3 class="section-title">صورة المنتج</h3>
+        <!-- Status -->
+        <div class="form-section">
+            <h3 class="section-title">حالة المنتج</h3>
+            <div class="form-grid">
                 <div class="form-group">
-                    <label class="form-label">رفع صورة</label>
-                    <div class="image-upload-container">
-                        <input type="file" class="form-input @error('image') is-invalid @enderror" id="productImages"
-                            name="image" accept="image/*">
-                        @error('image')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="image-preview" id="imagePreview">
-                            @if ($product->image_url)
-                                <img src="{{ $product->image_url }}" alt="Current Product Image" class="preview-image">
-                                <div class="image-overlay">
-                                    <span class="image-text">الصورة الحالية</span>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="form-help">ارفع صورة عالية الجودة للمنتج (JPG, PNG, GIF)</div>
+                    <label class="form-label required">حالة المنتج</label>
+                    <select class="form-input @error('status') is-invalid @enderror" name="status" required>
+                        <option value="active" {{ old('status', $product->status) == 'active' ? 'selected' : '' }}>
+                            نشط
+                        </option>
+                        <option value="inactive" {{ old('status', $product->status) == 'inactive' ? 'selected' : '' }}>
+                            غير نشط
+                        </option>
+                        <option value="draft" {{ old('status', $product->status) == 'draft' ? 'selected' : '' }}>
+                            مسودة
+                        </option>
+                    </select>
+                    @error('status')
+                        <div class="form-error">{{ $message }}</div>
+                    @enderror
+                    <div class="form-help">اختر حالة المنتج</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">منتج مميز</label>
+                    <select class="form-input @error('is_featured') is-invalid @enderror" name="is_featured">
+                        <option value="0" {{ old('is_featured', $product->is_featured) == 0 ? 'selected' : '' }}>
+                            لا
+                        </option>
+                        <option value="1" {{ old('is_featured', $product->is_featured) == 1 ? 'selected' : '' }}>
+                            نعم
+                        </option>
+                    </select>
+                    @error('is_featured')
+                        <div class="form-error">{{ $message }}</div>
+                    @enderror
+                    <div class="form-help">المنتجات المميزة تظهر بشكل بارز</div>
                 </div>
             </div>
+        </div>
 
-            <!-- Status -->
-            <div class="form-section">
-                <h3 class="section-title">حالة المنتج</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label required">حالة المنتج</label>
-                        <select class="form-input @error('status') is-invalid @enderror" name="status" required>
-                            <option value="active" {{ old('status', $product->status) == 'active' ? 'selected' : '' }}>
-                                نشط
-                            </option>
-                            <option value="inactive"
-                                {{ old('status', $product->status) == 'inactive' ? 'selected' : '' }}>
-                                غير نشط
-                            </option>
-                            <option value="draft" {{ old('status', $product->status) == 'draft' ? 'selected' : '' }}>
-                                مسودة
-                            </option>
-                        </select>
-                        @error('status')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">اختر حالة المنتج</div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="form-label">منتج مميز</label>
-                        <select class="form-input @error('is_featured') is-invalid @enderror" name="is_featured">
-                            <option value="0" {{ old('is_featured', $product->is_featured) == 0 ? 'selected' : '' }}>
-                                لا
-                            </option>
-                            <option value="1" {{ old('is_featured', $product->is_featured) == 1 ? 'selected' : '' }}>
-                                نعم
-                            </option>
-                        </select>
-                        @error('is_featured')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">المنتجات المميزة تظهر بشكل بارز</div>
-                    </div>
+        <!-- SEO Settings -->
+        <div class="form-section">
+            <h3 class="section-title">إعدادات SEO</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">عنوان SEO</label>
+                    <input type="text" class="form-input @error('seo_title') is-invalid @enderror" name="seo_title"
+                        value="{{ old('seo_title', $product->seo_title) }}" placeholder="عنوان SEO لمحركات البحث">
+                    @error('seo_title')
+                        <div class="form-error">{{ $message }}</div>
+                    @enderror
+                    <div class="form-help">تحسين لمحركات البحث (اختياري)</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">وصف SEO</label>
+                    <textarea class="form-input @error('seo_description') is-invalid @enderror" name="seo_description" rows="2"
+                        placeholder="وصف SEO لمحركات البحث">{{ old('seo_description', $product->seo_description) }}</textarea>
+                    @error('seo_description')
+                        <div class="form-error">{{ $message }}</div>
+                    @enderror
+                    <div class="form-help">وصف مختصر لنتائج البحث</div>
                 </div>
             </div>
+        </div>
 
-
-            <!-- SEO Settings -->
-            <div class="form-section">
-                <h3 class="section-title">إعدادات SEO</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">عنوان SEO</label>
-                        <input type="text" class="form-input @error('seo_title') is-invalid @enderror"
-                            name="seo_title" value="{{ old('seo_title', $product->seo_title) }}"
-                            placeholder="عنوان SEO لمحركات البحث">
-                        @error('seo_title')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">تحسين لمحركات البحث (اختياري)</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">وصف SEO</label>
-                        <textarea class="form-input @error('seo_description') is-invalid @enderror" name="seo_description" rows="2"
-                            placeholder="وصف SEO لمحركات البحث">{{ old('seo_description', $product->seo_description) }}</textarea>
-                        @error('seo_description')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">وصف مختصر لنتائج البحث</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Form Actions -->
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary btn-lg" id="updateBtn">
-                    <i class="fas fa-save"></i>
-                    {{ __('Update Product') }}
-                </button>
-                <a href="{{ route('dashboard.product.index') }}" class="btn btn-secondary btn-lg">
-                    <i class="fas fa-times"></i>
-                    إلغاء
-                </a>
-            </div>
-        </form>
+        <!-- Form Actions -->
+        <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+            <button type="submit" class="btn-primary" id="updateBtn">
+                <i class="fas fa-save"></i>
+                {{ __('Update Product') }}
+            </button>
+            <a href="{{ route('dashboard.product.index') }}" class="btn-secondary">
+                <i class="fas fa-times"></i>
+                إلغاء
+            </a>
+        </div>
+    </form>
     </div>
 @endsection
 

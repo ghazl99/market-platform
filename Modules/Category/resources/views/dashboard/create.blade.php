@@ -87,10 +87,18 @@
         <div class="page-header">
             <h1 class="page-title">{{ __('Add New Section') }}</h1>
             <div class="page-actions">
-                <a href="{{ route('dashboard.category.index') }}" class="back-btn">
-                    <i class="fas fa-arrow-right"></i>
-                    {{ __('Back to Sections') }}
-                </a>
+                @php $preselectedParent = request('parent_id'); @endphp
+                @if ($preselectedParent)
+                    <a href="{{ route('dashboard.category.show', $preselectedParent) }}" class="back-btn professional-back"
+                        title="{{ __('Back') }}" aria-label="{{ __('Back') }}">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                @else
+                    <a href="{{ route('dashboard.category.index') }}" class="back-btn professional-back"
+                        title="{{ __('Back') }}" aria-label="{{ __('Back') }}">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                @endif
             </div>
         </div>
 
@@ -110,20 +118,39 @@
                             <div class="form-error">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">{{ __('Parent Section') }}</label>
-                        <select class="form-select" name="parent_id">
-                            <option value="">{{ __('Main Section') }}</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">
-                                    {{ $category->getTranslation('name', app()->getLocale()) }}</option>
-                            @endforeach
-                        </select>
-                        <div class="form-help">{{ __('Choose a parent section if this is a subsection') }}</div>
-                        @error('parent_id')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    @php
+                        $parentCategory = null;
+                        if ($preselectedParent) {
+                            $parentCategory = collect($categories)->firstWhere('id', (int) $preselectedParent);
+                        }
+                    @endphp
+                    @if ($preselectedParent && $parentCategory)
+                        <input type="hidden" name="parent_id" value="{{ $preselectedParent }}">
+                        <div class="form-group">
+                            <label class="form-label">{{ __('Parent Section') }}</label>
+                            <div class="form-input" style="background: var(--bg-secondary); opacity: .9;">
+                                <i class="fas fa-folder"></i>
+                                {{ $parentCategory->getTranslation('name', app()->getLocale()) }}
+                            </div>
+                            <div class="form-help">
+                                {{ __('This section will be created as a subsection of the selected parent') }}</div>
+                        </div>
+                    @else
+                        <div class="form-group">
+                            <label class="form-label">{{ __('Parent Section') }}</label>
+                            <select class="form-select" name="parent_id">
+                                <option value="">{{ __('Main Section') }}</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">
+                                        {{ $category->getTranslation('name', app()->getLocale()) }}</option>
+                                @endforeach
+                            </select>
+                            <div class="form-help">{{ __('Choose a parent section if this is a subsection') }}</div>
+                            @error('parent_id')
+                                <div class="form-error">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    @endif
                     <div class="form-group">
                         <label class="form-label required">{{ __('Section Icon') }}</label>
                         <div class="icon-picker" id="iconPicker">

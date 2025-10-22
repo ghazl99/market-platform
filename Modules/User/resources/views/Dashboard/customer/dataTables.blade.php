@@ -34,6 +34,9 @@
             @endif
         </td>
         <td>
+            <span class="role-badge">{{ number_format((float) ($user->debt_limit ?? 0), 2) }}</span>
+        </td>
+        <td>
             <div class="action-buttons">
                 <button class="action-btn view" onclick="viewCustomer({{ $user->id }})">
                     <i class="fas fa-eye"></i>

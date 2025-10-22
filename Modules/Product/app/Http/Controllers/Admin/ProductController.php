@@ -153,7 +153,51 @@ class ProductController extends Controller implements HasMiddleware
     public function show(Product $product)
     {
         $product->load(['categories', 'attributes']);
-        return view('product::dashboard.show', compact('product'));
+
+        // جلب البيانات الحقيقية من قاعدة البيانات
+        $maxQuantity = $product->max_quantity ?? 0;
+        $minQuantity = $product->min_quantity ?? 0;
+        $capital = $product->cost ?? 0;
+
+        // حساب كمية المبيعات من جدول الطلبات
+        $salesQuantity = \Modules\Order\Models\OrderItem::where('product_id', $product->id)
+            ->whereHas('order', function($query) {
+                $query->where('status', 'completed');
+            })
+            ->sum('quantity');
+
+        // حساب البيانات المالية
+        $totalSales = \Modules\Order\Models\OrderItem::where('product_id', $product->id)
+            ->whereHas('order', function($query) {
+                $query->where('status', 'completed');
+            })
+            ->get()
+            ->sum(function($item) {
+                return $item->quantity * ($item->product->price ?? 0);
+            });
+
+        $netProfit = $totalSales - $capital;
+
+        // جلب بيانات الجدول (آخر 10 طلبات)
+        $recentOrders = \Modules\Order\Models\OrderItem::where('product_id', $product->id)
+            ->with(['order', 'product'])
+            ->whereHas('order', function($query) {
+                $query->where('status', 'completed');
+            })
+            ->latest()
+            ->limit(10)
+            ->get();
+
+        return view('product::dashboard.show', compact(
+            'product',
+            'maxQuantity',
+            'minQuantity',
+            'capital',
+            'salesQuantity',
+            'totalSales',
+            'netProfit',
+            'recentOrders'
+        ));
     }
 
     /**
