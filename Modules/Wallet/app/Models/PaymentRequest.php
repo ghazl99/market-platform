@@ -24,6 +24,7 @@ class PaymentRequest extends Model implements HasMedia
         'amount_usd',
         'exchange_rate',
         'status',
+        'notes',
     ];
 
     protected $casts = [

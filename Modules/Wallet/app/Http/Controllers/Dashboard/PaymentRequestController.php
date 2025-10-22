@@ -41,6 +41,7 @@ class PaymentRequestController extends Controller implements HasMiddleware
             $query->where(function ($q) use ($search) {
                 $q->where('original_amount', 'like', "%{$search}%")
                     ->orWhere('status', 'like', "%{$search}%")
+                    ->orWhere('notes', 'like', "%{$search}%")
                     ->orWhereHas('wallet.user', function ($userQuery) use ($search) {
                         $userQuery->where('name', 'like', "%{$search}%")
                             ->orWhere('email', 'like', "%{$search}%");

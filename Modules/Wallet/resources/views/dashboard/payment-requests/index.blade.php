@@ -774,6 +774,7 @@
             font-size: 0.9rem;
         }
 
+
         .pagination-container {
             padding: 1.5rem;
             display: flex;

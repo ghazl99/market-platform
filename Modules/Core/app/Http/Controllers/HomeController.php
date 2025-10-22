@@ -21,7 +21,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $host = $request->getHost();
-        
+
         $mainDomain = config('app.main_domain', 'market-platform.localhost');
 
         if ($this->homeService->isMainDomain($host, $mainDomain)) {
