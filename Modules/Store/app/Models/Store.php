@@ -206,13 +206,16 @@ class Store extends Model implements HasMedia
     {
         $host = request()->getHost();
 
-        // Extract subdomain from host
-        if (strpos($host, '.market-platform.localhost') !== false) {
+        // إزالة www إذا موجود
+        $host = preg_replace('/^www\./', '', $host);
+
+        // Localhost subdomain support
+        if (str_contains($host, 'market-platform.localhost')) {
             $subdomain = str_replace('.market-platform.localhost', '', $host);
             return static::where('domain', $subdomain);
         }
 
-        // If no subdomain found, return empty query
-        return static::where('id', 0);
+        // Production main domain or subdomain
+        return static::where('domain', $host);
     }
 }
