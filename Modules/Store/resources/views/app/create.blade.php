@@ -213,14 +213,6 @@
                 @enderror
             </div>
 
-            {{-- Description --}}
-            <div class="form-group full-width">
-                <label for="description">{{ __('Store Description') }}</label>
-                <textarea id="description" name="description" rows="3">{{ old('description') }}</textarea>
-                @error('description')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
 
             {{-- Theme --}}
             <div class="form-group">
@@ -263,14 +255,6 @@
                 @enderror
             </div>
 
-            {{-- Banner --}}
-            <div class="form-group">
-                <label for="banner">{{ __('Store Banner') }}</label>
-                <input type="file" id="banner" name="banner">
-                @error('banner')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
 
             {{-- Store Type --}}
             <div class="form-group full-width">

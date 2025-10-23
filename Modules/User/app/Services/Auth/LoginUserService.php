@@ -48,7 +48,6 @@ class LoginUserService
         // Login user
         Auth::login($user, isset($data['remember']));
 
-        // تحديث وقت آخر تسجيل دخول
         $user->last_login_at = now();
         $user->save();
 

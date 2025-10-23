@@ -16,17 +16,15 @@ class StoreCreateRequest extends FormRequest
             'domain' =>
             'required|
                 string|
-                regex:/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/ |
+                regex:/^(?!-)([a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$/|
                 min:3|
                 max:50|
                 unique:stores,domain',
-            'description' => 'nullable|string',
             'theme' => 'required|string',
             'status' => 'required|string|in:active,pending,inactive',
             'type' => 'required|string|in:traditional,digital',
             'user_id' => 'required|exists:users,id',
             'logo' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
-            'banner' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
             'timezone' => 'required|string|in:' . implode(',', timezone_identifiers_list()),
         ];
     }

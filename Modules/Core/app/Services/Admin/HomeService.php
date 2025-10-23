@@ -34,8 +34,15 @@ class HomeService
      */
     public function getStoreByHost(string $host): ?Store
     {
-        $storeDomain = $this->extractSubdomain($host);
+        // أولاً جرب البحث بالدومين الكامل (للدومينات المستقلة)
+        $store = $this->storeRepository->findStoreByDomain($host);
 
+        if ($store) {
+            return $store;
+        }
+
+        // إذا لم يوجد، جرب البحث بالدومين الفرعي (للدومينات الفرعية)
+        $storeDomain = $this->extractSubdomain($host);
         return $this->storeRepository->findStoreByDomain($storeDomain);
     }
 }

@@ -23,7 +23,6 @@ class Store extends Model implements HasMedia
         'name',
         'domain',
         'type',
-        'description',
         'status',
         'theme',
         'settings',

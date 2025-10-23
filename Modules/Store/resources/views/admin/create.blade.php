@@ -5,8 +5,8 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         /* ==========================
-       Store Type Selection
-    ========================== */
+           Store Type Selection
+        ========================== */
         .field-label {
             display: block;
             color: #333;
@@ -216,7 +216,7 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label for="description" class="form-label">{{ __('Store Description') }}</label>
                                 <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
                                     rows="3">{{ old('description') }}</textarea>
@@ -225,7 +225,7 @@
                                 @enderror
                                 <small
                                     class="form-text text-muted">{{ __('Short description about your store and products') }}</small>
-                            </div>
+                            </div> --}}
 
                             <div class="row">
                                 <div class="col-md-6">
@@ -289,7 +289,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="banner" class="form-label">{{ __('Store Banner') }}</label>
                                         <input type="file" class="form-control @error('banner') is-invalid @enderror"
@@ -300,7 +300,7 @@
                                         <small
                                             class="form-text text-muted">{{ __('Store banner image link (optional)') }}</small>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <!-- Timezone -->
@@ -345,7 +345,8 @@
                                         </div>
                                     </label>
                                     <label class="store-type-option">
-                                        <input type="radio" name="type" value="educational" class="store-type-input">
+                                        <input type="radio" name="type" value="educational"
+                                            class="store-type-input">
                                         <div class="store-type-card">
                                             <div class="store-icon">
                                                 <i class="fas fa-graduation-cap"></i>

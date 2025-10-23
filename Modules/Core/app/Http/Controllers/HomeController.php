@@ -22,9 +22,7 @@ class HomeController extends Controller
     {
         $host = $request->getHost();
 
-        $mainDomain = app()->environment('production')
-            ? config('app.main_domain', 'soqsyria.com')
-            : 'market-platform.localhost';
+        $mainDomain = config('app.main_domain', 'market-platform.localhost');
 
         if ($this->homeService->isMainDomain($host, $mainDomain)) {
             return view('core::app.home');
@@ -37,6 +35,6 @@ class HomeController extends Controller
         }
         $categories = $this->categoryService->getAllcategories();
 
-        return view('themes.' . current_store()->theme . '.home', compact('store', 'categories'));
+        return view('themes.' . $store->theme . '.home', compact('store', 'categories'));
     }
 }

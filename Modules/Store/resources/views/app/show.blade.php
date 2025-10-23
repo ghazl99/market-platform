@@ -233,9 +233,15 @@
                             <strong>{{ __('Store Name') }}</strong>
                             <p>{{ $store->name }}</p>
                         </div>
+                        @php
+                            $isProduction = app()->environment('production');
+                            $mainDomain = config('app.main_domain', 'localhost');
+                        @endphp
                         <div style="flex:1; min-width:200px;">
                             <strong>{{ __('Domain') }}</strong>
-                            <p><code>{{ $store->domain }}.{{ config('app.domain', 'localhost') }}</code></p>
+                            <p><code>{{ $store->domain }}@unless ($isProduction)
+                                    .localhost
+                                @endunless</code></p>
                         </div>
                         <div style="flex:1; min-width:200px;">
                             <strong>{{ __('Status') }}</strong>

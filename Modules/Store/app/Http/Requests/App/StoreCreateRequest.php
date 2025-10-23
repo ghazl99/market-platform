@@ -19,13 +19,11 @@ class StoreCreateRequest extends FormRequest
             'domain' => [
                 'required',
                 'string',
-                'regex:/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/', // حروف لاتينية فقط وأرقام وشرطة
+                'regex/^(?!-)([a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$/', // حروف لاتينية فقط وأرقام وشرطة
                 'min:3',
                 'max:50',
                 'unique:stores,domain',
             ],
-
-            'description' => ['nullable', 'string'],
 
             'theme' => ['required', 'string', 'in:default,modern,classic'],
 
@@ -35,8 +33,6 @@ class StoreCreateRequest extends FormRequest
 
             // ميم تايبز بشكل آمن لجميع الإصدارات
             'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
-            'banner' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:4096'],
-
             // نتحقق فقط من أنه timezone صالح من القائمة المسموحة
             'timezone' => ['required', 'string', "in:$timezones"],
         ];

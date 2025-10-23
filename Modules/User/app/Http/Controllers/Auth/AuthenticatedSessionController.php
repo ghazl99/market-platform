@@ -56,10 +56,8 @@ class AuthenticatedSessionController extends Controller
                 $result['field'] => $result['message'],
             ])->withInput();
         }
-        if (Auth::user()->hasRole('admin|owner|staff')) {
-            return redirect()->route('dashboard.admin.dashboard');
-        } else
-            return redirect()->intended(route('home'));
+
+        return redirect()->intended(route('home'));
     }
     public function destroy(Request $request)
     {
