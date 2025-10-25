@@ -85,6 +85,9 @@ class ProductService
             $data['stock_quantity'] = $data['stock_quantity'] ?? 0;
             $data['min_quantity'] = $data['min_quantity'] ?? 1;
             $data['max_quantity'] = $data['max_quantity'] ?? 10;
+            $data['product_type'] = $data['product_type'] ?? 'transfer';
+            $data['linking_type'] = $data['linking_type'] ?? 'automatic';
+            $data['notes'] = $data['notes'] ?? null;
             $data['views_count'] = 0;
             $data['orders_count'] = 0;
 

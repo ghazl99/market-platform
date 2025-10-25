@@ -372,6 +372,7 @@
                         <th>{{ __('Customer') }}</th>
                         <th>{{ __('Email') }}</th>
                         <th>{{ __('Phone') }}</th>
+                        <th>{{ __('Group') }}</th>
                         <th>{{ __('Registration Date') }}</th>
                         <th>{{ __('Status') }}</th>
                         <th>{{ __('Last Activity') }}</th>
@@ -741,6 +742,22 @@
             font-weight: 600;
             background: rgba(59, 130, 246, 0.1);
             color: #3b82f6;
+        }
+
+        .group-badge {
+            background: #3b82f6;
+            color: #ffffff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 0.25rem;
+        }
+
+        .text-muted {
+            color: #6b7280;
+            font-size: 0.8rem;
         }
 
         .action-buttons {

@@ -506,6 +506,232 @@
         }
 
 
+        /* Product Settings Section */
+        .product-settings-section {
+            background: #2d2d2d;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #404040;
+        }
+
+        .settings-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .settings-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .settings-product-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid #404040;
+        }
+
+        .settings-form {
+            background: #1f2937;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid #374151;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .settings-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .settings-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .settings-label {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .settings-select,
+        .settings-input,
+        .settings-textarea {
+            background: #374151;
+            border: 1px solid #4b5563;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #ffffff;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .settings-select:focus,
+        .settings-input:focus,
+        .settings-textarea:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .settings-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .settings-input:disabled {
+            background: #1f2937;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        /* Availability Options */
+        .availability-options {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+        }
+
+        .availability-option {
+            background: #374151;
+            border: 1px solid #4b5563;
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .availability-option.active {
+            background: #374151;
+            border-color: #f59e0b;
+        }
+
+        .availability-option:hover {
+            background: #4b5563;
+        }
+
+        .availability-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ffffff;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+
+        .availability-label.available {
+            color: #ffffff;
+        }
+
+        .availability-label.unavailable {
+            color: #ffffff;
+        }
+
+        .quantity-field {
+            margin-top: 0.5rem;
+        }
+
+        .quantity-label {
+            color: #9ca3af;
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .quantity-input {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            color: #ffffff;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        .quantity-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
+
+        /* Settings Actions */
+        .settings-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .settings-save-btn {
+            background: #f59e0b;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-save-btn:hover {
+            background: #d97706;
+            transform: translateY(-1px);
+        }
+
+        /* Custom Prices and Inventory Sections */
+        .custom-prices-section,
+        .inventory-section {
+            background: #2d2d2d;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #404040;
+        }
+
+        .prices-header,
+        .inventory-header {
+            margin-bottom: 2rem;
+        }
+
+        .prices-title,
+        .inventory-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .prices-content,
+        .inventory-content {
+            background: #1f2937;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid #374151;
+            text-align: center;
+        }
+
+        .prices-placeholder,
+        .inventory-placeholder {
+            color: #9ca3af;
+            font-size: 1rem;
+            margin: 0;
+        }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
             .metrics-grid {
@@ -514,6 +740,10 @@
 
             .financial-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -533,6 +763,20 @@
             .tab-item {
                 padding: 0.75rem 1rem;
                 font-size: 0.9rem;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .availability-options {
+                flex-direction: column;
             }
         }
     </style>
@@ -575,6 +819,42 @@
                     }
                 });
             });
+
+            // Tab functionality
+            function showTab(tabName) {
+                // Hide all tabs
+                const tabs = ['overview', 'settings', 'prices', 'inventory'];
+                tabs.forEach(tab => {
+                    const tabElement = document.getElementById(tab + '-tab');
+                    if (tabElement) {
+                        tabElement.style.display = 'none';
+                    }
+                });
+
+                // Remove active class from all tab buttons
+                const tabButtons = document.querySelectorAll('.tab-item');
+                tabButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+
+                // Show selected tab
+                const selectedTab = document.getElementById(tabName + '-tab');
+                if (selectedTab) {
+                    selectedTab.style.display = 'block';
+                }
+
+                // Add active class to clicked button
+                const clickedButton = document.querySelector(`[onclick="showTab('${tabName}')"]`);
+                if (clickedButton) {
+                    clickedButton.classList.add('active');
+                }
+            }
+
+            // Make showTab function globally available
+            window.showTab = showTab;
+
+            // Initialize with overview tab active
+            showTab('overview');
         });
     </script>
 @endpush
@@ -644,14 +924,14 @@
 
         <!-- Navigation Tabs -->
         <div class="product-tabs">
-            <button class="tab-item active">{{ __('Product Overview') }}</button>
-            <button class="tab-item">{{ __('Product Settings') }}</button>
-            <button class="tab-item">{{ __('Custom Prices') }}</button>
-            <button class="tab-item">{{ __('Inventory') }}</button>
+            <button class="tab-item active" onclick="showTab('overview')">{{ __('Product Overview') }}</button>
+            <button class="tab-item" onclick="showTab('settings')">{{ __('Product Settings') }}</button>
+            <button class="tab-item" onclick="showTab('prices')">{{ __('Custom Prices') }}</button>
+            <button class="tab-item" onclick="showTab('inventory')">{{ __('Inventory') }}</button>
         </div>
 
         <!-- Overview Section -->
-        <div class="overview-section">
+        <div class="overview-section" id="overview-tab">
             <div class="overview-header">
                 <h2 class="overview-title">{{ __('Product Overview') }}</h2>
                 <div class="date-range-picker">
@@ -706,62 +986,200 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-
-        <!-- Sales Table -->
-        <div class="sales-table-container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>
-                            <input type="checkbox">
-                        </th>
-                        <th>{{ __('Product') }}</th>
-                        <th>{{ __('Price') }}</th>
-                        <th>{{ __('Status') }}</th>
-                        <th>{{ __('Date') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($recentOrders as $index => $orderItem)
+            <!-- Sales Table -->
+            <div class="sales-table-container">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td><input type="checkbox"></td>
-                            <td>
-                                <div class="product-cell">
-                                    @if ($product->getFirstMedia('product_images'))
-                                        <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}"
-                                            alt="{{ $product->name }}" class="product-image-tiny">
-                                    @else
-                                        <div class="product-image-tiny"
-                                            style="background: #3a3a3a; display: flex; align-items: center; justify-content: center;">
-                                            <i class="fas fa-box-open" style="font-size: 1rem; color: #a0a0a0;"></i>
+                            <th>#</th>
+                            <th>
+                                <input type="checkbox">
+                            </th>
+                            <th>{{ __('Product') }}</th>
+                            <th>{{ __('Price') }}</th>
+                            <th>{{ __('Status') }}</th>
+                            <th>{{ __('Date') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($recentOrders as $index => $orderItem)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td><input type="checkbox"></td>
+                                <td>
+                                    <div class="product-cell">
+                                        @if ($product->getFirstMedia('product_images'))
+                                            <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}"
+                                                alt="{{ $product->name }}" class="product-image-tiny">
+                                        @else
+                                            <div class="product-image-tiny"
+                                                style="background: #3a3a3a; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-box-open" style="font-size: 1rem; color: #a0a0a0;"></i>
+                                            </div>
+                                        @endif
+                                        <div class="product-name-cell">
+                                            {{ $product->getTranslation('name', app()->getLocale()) }} /
+                                            {{ $product->getTranslation('name', 'en') }}
                                         </div>
-                                    @endif
-                                    <div class="product-name-cell">
-                                        {{ $product->getTranslation('name', app()->getLocale()) }} /
-                                        {{ $product->getTranslation('name', 'en') }}
                                     </div>
-                                </div>
-                            </td>
-                            <td class="price-cell">${{ number_format($orderItem->product->price ?? 0, 4) }}</td>
-                            <td><span class="status-badge">{{ __('Completed') }}</span></td>
-                            <td class="date-cell">{{ $orderItem->created_at->format('H:i:s Y-m-d') }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center" style="padding: 2rem; color: #a0a0a0;">
-                                <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                                <br>
-                                {{ __('No orders found for this product') }}
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                </td>
+                                <td class="price-cell">${{ number_format($orderItem->product->price ?? 0, 4) }}</td>
+                                <td><span class="status-badge">{{ __('Completed') }}</span></td>
+                                <td class="date-cell">{{ $orderItem->created_at->format('H:i:s Y-m-d') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center" style="padding: 2rem; color: #a0a0a0;">
+                                    <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                                    <br>
+                                    {{ __('No orders found for this product') }}
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+        <!-- Product Settings Section -->
+        <div class="product-settings-section" id="settings-tab" style="display: none;">
+            <div class="settings-header">
+                <h2 class="settings-title">{{ __('Product Settings') }}</h2>
+                @if ($product->getFirstMedia('product_images'))
+                    <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}" alt="{{ $product->name }}"
+                        class="settings-product-image">
+                @else
+                    <div class="settings-product-image"
+                        style="background: #3a3a3a; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-box-open" style="font-size: 1.5rem; color: #a0a0a0;"></i>
+                    </div>
+                @endif
+            </div>
+
+            <form class="settings-form" method="POST" action="{{ route('dashboard.product.update', $product->id) }}">
+                @csrf
+                @method('PUT')
+
+                <div class="settings-grid">
+                    <!-- Product Type -->
+                    <div class="settings-group">
+                        <label class="settings-label">{{ __('Product Type') }}</label>
+                        <select class="settings-select" name="product_type">
+                            <option value="transfer"
+                                {{ old('product_type', $product->product_type ?? 'transfer') == 'transfer' ? 'selected' : '' }}>
+                                {{ __('Transfer') }}
+                            </option>
+                            <option value="code"
+                                {{ old('product_type', $product->product_type ?? 'transfer') == 'code' ? 'selected' : '' }}>
+                                {{ __('Code') }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Linking Type -->
+                    <div class="settings-group">
+                        <label class="settings-label">{{ __('Linking Type') }}</label>
+                        <select class="settings-select" name="linking_type">
+                            <option value="automatic"
+                                {{ old('linking_type', $product->linking_type ?? 'automatic') == 'automatic' ? 'selected' : '' }}>
+                                {{ __('Automatic Linking') }}
+                            </option>
+                            <option value="manual"
+                                {{ old('linking_type', $product->linking_type ?? 'automatic') == 'manual' ? 'selected' : '' }}>
+                                {{ __('Manual Linking') }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Provider Names (Empty for now) -->
+                    <div class="settings-group">
+                        <label class="settings-label">{{ __('Provider Names') }}</label>
+                        <input type="text" class="settings-input"
+                            placeholder="{{ __('Provider names will be added later') }}" disabled>
+                    </div>
+
+                    <!-- Product Number at Provider (Empty for now) -->
+                    <div class="settings-group">
+                        <label class="settings-label">{{ __('Product Number at Provider') }}</label>
+                        <input type="text" class="settings-input"
+                            placeholder="{{ __('Product number will be added later') }}" disabled>
+                    </div>
+
+                    <!-- Min and Max Quantity - Side by Side -->
+                    <div class="settings-group">
+                        <label class="settings-label">{{ __('Min Quantity') }}</label>
+                        <input type="number" class="settings-input" name="min_quantity"
+                            value="{{ old('min_quantity', $product->min_quantity) }}" placeholder="1000">
+                    </div>
+
+                    <div class="settings-group">
+                        <label class="settings-label">{{ __('Max Quantity') }}</label>
+                        <input type="number" class="settings-input" name="max_quantity"
+                            value="{{ old('max_quantity', $product->max_quantity) }}" placeholder="150000">
+                    </div>
+
+                    <!-- Product Availability -->
+                    <div class="settings-group full-width">
+                        <label class="settings-label">{{ __('Product Availability') }}</label>
+                        <div class="availability-options">
+                            <div class="availability-option {{ $product->is_active ? 'active' : '' }}">
+                                <input type="radio" name="is_active" value="1" id="available"
+                                    {{ $product->is_active ? 'checked' : '' }}>
+                                <label for="available" class="availability-label available">
+                                    {{ __('Product Available') }}
+                                </label>
+                            </div>
+
+                            <div class="availability-option {{ !$product->is_active ? 'active' : '' }}">
+                                <input type="radio" name="is_active" value="0" id="unavailable"
+                                    {{ !$product->is_active ? 'checked' : '' }}>
+                                <label for="unavailable" class="availability-label unavailable">
+                                    {{ __('Product Unavailable') }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="settings-group full-width">
+                        <label class="settings-label">{{ __('Notes') }}</label>
+                        <textarea class="settings-textarea" name="notes" rows="3"
+                            placeholder="{{ __('Make sure to enter information correctly') }}">{{ old('notes', $product->notes) }}</textarea>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <div class="settings-actions">
+                    <button type="submit" class="settings-save-btn">
+                        <i class="fas fa-save"></i>
+                        {{ __('Save') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Custom Prices Section -->
+        <div class="custom-prices-section" id="prices-tab" style="display: none;">
+            <div class="prices-header">
+                <h2 class="prices-title">{{ __('Custom Prices') }}</h2>
+            </div>
+            <div class="prices-content">
+                <p class="prices-placeholder">{{ __('Custom prices section will be implemented later') }}</p>
+            </div>
+        </div>
+
+        <!-- Inventory Section -->
+        <div class="inventory-section" id="inventory-tab" style="display: none;">
+            <div class="inventory-header">
+                <h2 class="inventory-title">{{ __('Inventory') }}</h2>
+            </div>
+            <div class="inventory-content">
+                <p class="inventory-placeholder">{{ __('Inventory section will be implemented later') }}</p>
+            </div>
+        </div>
+
+
     </div>
 @endsection
 

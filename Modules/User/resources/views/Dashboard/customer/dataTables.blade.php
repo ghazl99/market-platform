@@ -18,6 +18,14 @@
         </td>
         <td>{{ $user->email }}</td>
         <td>{{ $user->phone ?? __('No phone') }}</td>
+        <td>
+            @if ($user->group)
+                <span class="group-badge">{{ $user->group->name }}</span>
+                <small class="text-muted">({{ $user->group->profit_percentage }}%)</small>
+            @else
+                <span class="text-muted">{{ __('No Group') }}</span>
+            @endif
+        </td>
         <td>{{ $user->created_at->format('Y-m-d') }}</td>
         <td>
             @if ($user->hasVerifiedEmail())

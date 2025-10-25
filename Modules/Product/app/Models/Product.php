@@ -28,6 +28,9 @@ class Product extends Model implements HasMedia
         'price',
         'sale_price',
         'status',
+        'product_type',
+        'linking_type',
+        'notes',
         'is_active',
         'is_featured',
         'sku',
@@ -44,6 +47,8 @@ class Product extends Model implements HasMedia
 
     protected $casts = [
         'status' => 'string',
+        'product_type' => 'string',
+        'linking_type' => 'string',
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
         'price' => 'decimal:2',
@@ -63,7 +68,7 @@ class Product extends Model implements HasMedia
     {
         return ProductFactory::new();
     }
-    
+
     public function getImagePathAttribute()
     {
         $media = $this->getFirstMedia('product_images');
@@ -131,5 +136,43 @@ class Product extends Model implements HasMedia
             'price' => $this->price,
             'status' => $this->status,
         ];
+    }
+
+    /**
+     * Get product type options
+     */
+    public static function getProductTypeOptions()
+    {
+        return [
+            'transfer' => __('Transfer'),
+            'code' => __('Code'),
+        ];
+    }
+
+    /**
+     * Get linking type options
+     */
+    public static function getLinkingTypeOptions()
+    {
+        return [
+            'automatic' => __('Automatic Linking'),
+            'manual' => __('Manual Linking'),
+        ];
+    }
+
+    /**
+     * Get product type label
+     */
+    public function getProductTypeLabelAttribute()
+    {
+        return self::getProductTypeOptions()[$this->product_type] ?? $this->product_type;
+    }
+
+    /**
+     * Get linking type label
+     */
+    public function getLinkingTypeLabelAttribute()
+    {
+        return self::getLinkingTypeOptions()[$this->linking_type] ?? $this->linking_type;
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Modules\User\Models\User;
 use Modules\User\Services\Dashboard\CustomerService;
 
@@ -82,6 +83,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'birth_date' => 'nullable|date',
                 'password' => 'required|string|min:8|confirmed',
                 'role' => 'required|string|in:customer,staff,owner',
+                'group_id' => 'nullable|exists:groups,id',
                 'status' => 'nullable|string|in:active,inactive,pending',
                 'address' => 'nullable|string|max:500',
                 'city' => 'nullable|string|max:100',
@@ -123,6 +125,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'sms_notifications' => $request->sms_notifications === 'on',
                 'email_verified_at' => $request->status === 'active' ? now() : null,
                 'debt_limit' => $request->debt_limit !== null && $request->debt_limit !== '' ? (float) $request->debt_limit : 0,
+                'group_id' => $request->group_id ?? \App\Group::getDefaultGroup()?->id,
             ]);
 
             Log::info('User created successfully:', ['user_id' => $user->id]);
@@ -139,7 +142,7 @@ class CustomerController extends Controller implements HasMiddleware
             $user->assignRole($role);
 
             Log::info('Customer creation completed successfully');
-            return redirect('/dashboard/customer')
+            return redirect()->to(LaravelLocalization::localizeURL('/dashboard/customer'))
                 ->with('success', __('Customer created successfully'));
 
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -280,6 +283,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'phone' => 'nullable|string|max:20',
                 'birth_date' => 'nullable|date',
                 'role' => 'required|string|in:customer,staff,owner',
+                'group_id' => 'nullable|exists:groups,id',
                 'status' => 'nullable|string|in:active,inactive,pending',
                 'address' => 'nullable|string|max:500',
                 'city' => 'nullable|string|max:100',
@@ -317,6 +321,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'sms_notifications' => $request->sms_notifications === 'on',
                 'email_verified_at' => $request->status === 'active' ? now() : null,
                 'debt_limit' => $request->debt_limit !== null && $request->debt_limit !== '' ? (float) $request->debt_limit : 0,
+                'group_id' => $request->group_id,
             ];
 
             // Add password only if provided
@@ -342,7 +347,7 @@ class CustomerController extends Controller implements HasMiddleware
                 ], 200);
             }
 
-            return redirect('/dashboard/customer')
+            return redirect()->to(LaravelLocalization::localizeURL('/dashboard/customer'))
                 ->with('success', __('Customer updated successfully'));
 
         } catch (\Illuminate\Validation\ValidationException $e) {

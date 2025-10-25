@@ -303,7 +303,8 @@
         </div>
 
 
-        <form class="form-container" id="userForm" method="POST" action="{{ route('dashboard.customer.store') }}">
+        <form class="form-container" id="userForm" method="POST"
+            action="{{ LaravelLocalization::localizeURL(route('dashboard.customer.store')) }}">
             @csrf
 
             <!-- Personal Information -->
@@ -389,6 +390,22 @@
                             <div class="form-error">{{ $message }}</div>
                         @enderror
                         <div class="form-help">{{ __('Define user permissions') }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ __('Group') }}</label>
+                        <select class="form-select @error('group_id') is-invalid @enderror" name="group_id">
+                            <option value="">{{ __('Choose Group') }}</option>
+                            @foreach (\App\Group::all() as $group)
+                                <option value="{{ $group->id }}"
+                                    {{ old('group_id') == $group->id ? 'selected' : '' }}>
+                                    {{ $group->name }} ({{ $group->profit_percentage }}%)
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('group_id')
+                            <div class="form-error">{{ $message }}</div>
+                        @enderror
+                        <div class="form-help">{{ __('Select user group for profit calculation') }}</div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">{{ __('Status') }}</label>

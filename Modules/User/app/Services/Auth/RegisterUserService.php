@@ -30,6 +30,7 @@ class RegisterUserService
                 'email' => $data['email'],
                 'role' => $data['role'],
                 'password' => Hash::make($data['password']),
+                'group_id' => \App\Group::getDefaultGroup()?->id,
             ]);
             if (! $this->homeService->isMainDomain($host, $mainDomain)) {
                 $store = \Modules\Store\Models\Store::currentFromUrl()->first();

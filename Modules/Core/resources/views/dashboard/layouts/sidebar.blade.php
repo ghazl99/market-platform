@@ -143,6 +143,11 @@
                 <i class="fas fa-users-cog"></i>
                 <span class="nav-item-text">الموظفين</span>
             </a>
+            <a href="{{ route('admin.groups.index') }}"
+                class="nav-item {{ isActive(['admin/groups']) ? 'active' : '' }}">
+                <i class="fas fa-layer-group"></i>
+                <span class="nav-item-text">{{ __('Groups') }}</span>
+            </a>
         </div>
 
         <div class="nav-section">

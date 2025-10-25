@@ -18,7 +18,7 @@ class CustomerModelRepository implements CustomerRepository
         $query = User::query()
             ->whereHas('stores', fn($q) => $q->where('stores.id', $store->id))
             ->whereHas('roles', fn($q) => $q->where('name', 'customer'))
-            ->with(['roles', 'stores']);
+            ->with(['roles', 'stores', 'group']);
 
         if ($search) {
             $query->where(function ($q) use ($search) {

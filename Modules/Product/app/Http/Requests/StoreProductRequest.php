@@ -38,6 +38,9 @@ class StoreProductRequest extends FormRequest
             'dimensions' => 'nullable|string|max:100',
             'seo_title' => 'nullable|string|max:255',
             'seo_description' => 'nullable|string|max:500',
+            'product_type' => 'nullable|string|in:transfer,code',
+            'linking_type' => 'nullable|string|in:automatic,manual',
+            'notes' => 'nullable|string|max:1000',
         ];
     }
 

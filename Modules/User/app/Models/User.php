@@ -43,6 +43,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'last_login_at',
         'last_updated_at_password',
         'debt_limit',
+        'group_id',
     ];
 
     /**
@@ -157,5 +158,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         ];
 
         return $array;
+    }
+
+    /**
+     * Get the group that the user belongs to.
+     */
+    public function group()
+    {
+        return $this->belongsTo(\App\Group::class);
     }
 }
