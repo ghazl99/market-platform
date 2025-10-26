@@ -12,22 +12,26 @@ Route::middleware('guest')->group(function () {
 
     // ...existing code for guest (register/login)  to owner...
     Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
+        ->name('register.get');
 
-    Route::post('register', [RegisteredUserController::class, 'store'])->name('register');
+    Route::post('register', [RegisteredUserController::class, 'store'])->name('register.post');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
-    Route::post('login', [AuthenticatedSessionController::class, 'login'])->name('login');
+    Route::post('login', [AuthenticatedSessionController::class, 'login'])->name('login.post');
+
+    // Add auth.login for compatibility
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+        ->name('auth.login');
 
     // ...existing code for guest (register/login)  to customer...
     Route::get('register-customer', [RegisterController::class, 'create'])
-        ->name('customer.register');
-    Route::post('register-customer', [RegisterController::class, 'store'])->name('customer.register');
+        ->name('customer.register.get');
+    Route::post('register-customer', [RegisterController::class, 'store'])->name('customer.register.post');
     Route::get('login-customer', [LoginController::class, 'create'])
-        ->name('customer.login');
-    Route::post('login-customer', [AuthenticatedSessionController::class, 'customerLogin'])->name('customer.login');
+        ->name('customer.login.get');
+    Route::post('login-customer', [AuthenticatedSessionController::class, 'customerLogin'])->name('customer.login.post');
 });
 
 Route::middleware('auth')->group(function () {

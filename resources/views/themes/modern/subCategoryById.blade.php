@@ -295,6 +295,137 @@
                 min-width: 40px;
             }
         }
+
+        /* Empty State Styles */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            text-align: center;
+            background: #ffffff;
+            border-radius: 20px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .empty-state-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.75rem;
+        }
+
+        .empty-state-message {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .empty-state-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-outline:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-lg {
+            padding: 1.125rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 480px) {
+            .empty-state {
+                padding: 2rem 1rem;
+            }
+
+            .empty-state-icon {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+            }
+
+            .empty-state-title {
+                font-size: 1.25rem;
+            }
+
+            .empty-state-message {
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .empty-state-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 @endpush
 @section('content')
@@ -323,8 +454,32 @@
                         </a>
                     @endforeach
                 @else
-                    <div class="alert alert-info text-center">
-                        {{ __('No products found for this category.') }}
+                    <!-- Empty State -->
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <h3 class="empty-state-title">{{ __('No Subcategories Yet') }}</h3>
+                        <p class="empty-state-message">{{ __('This category doesn\'t have any subcategories yet') }}</p>
+
+                        <div class="empty-state-actions">
+                            <!-- عرض المنتجات مباشرة -->
+                            <a href="{{ route('category.show', $category->id) }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-shopping-bag"></i>
+                                <span>{{ __('View Products') }}</span>
+                            </a>
+
+                            <!-- زر إضافة قسم فرعي (فقط للمالك) -->
+                            @auth
+                                @role('owner')
+                                    <a href="{{ route('dashboard.category.create', ['parent_id' => $category->id]) }}"
+                                        class="btn btn-outline btn-lg">
+                                        <i class="fas fa-plus-circle"></i>
+                                        <span>{{ __('Add Subcategory') }}</span>
+                                    </a>
+                                @endrole
+                            @endauth
+                        </div>
                     </div>
                 @endif
             </div>

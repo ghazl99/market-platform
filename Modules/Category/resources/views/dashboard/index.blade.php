@@ -213,11 +213,16 @@
                                     {{ __('View Subsections') }}
                                 </a>
                             @else
-                                <!-- إذا لم يكن له أقسام فرعية: عرض المنتجات مباشرة -->
+                                <!-- إذا لم يكن له أقسام فرعية: زر عرض المنتجات وزر إضافة قسم فرعي -->
                                 <a href="{{ route('dashboard.product.category', $category->id) }}"
                                     class="action-btn products">
                                     <i class="fas fa-box"></i>
                                     {{ __('View Products') }}
+                                </a>
+                                <a href="{{ route('dashboard.category.create', ['parent_id' => $category->id]) }}"
+                                    class="action-btn add-subsection">
+                                    <i class="fas fa-plus-circle"></i>
+                                    {{ __('Add Subsection') }}
                                 </a>
                             @endif
                         @endif
@@ -387,6 +392,19 @@
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            color: #ffffff !important;
+        }
+
+        .action-btn.add-subsection {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border: 1px solid #7c3aed;
+            color: #ffffff !important;
+        }
+
+        .action-btn.add-subsection:hover {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
             color: #ffffff !important;
         }
 
@@ -763,11 +781,11 @@
                     <div class="notification-title">{{ __('Success') }}</div>
                     <div class="notification-message">${message}</div>
                     ${categoryId ? `
-                                                                                                                                                                <div class="notification-details">
-                                                                                                                                                                    <i class="fas fa-info-circle"></i>
-                                                                                                                                                                    {{ __('Category') }} #${categoryId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
-                                                                                                                                                                </div>
-                                                                                                                                                                ` : ''}
+                                                                                                                                                                    <div class="notification-details">
+                                                                                                                                                                        <i class="fas fa-info-circle"></i>
+                                                                                                                                                                        {{ __('Category') }} #${categoryId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
+                                                                                                                                                                    </div>
+                                                                                                                                                                    ` : ''}
                 </div>
                 <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
                 <div class="notification-progress"></div>
