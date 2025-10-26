@@ -11,13 +11,14 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        // التحقق من نوع المنتج (فرعي أو رئيسي)
+        $isSubProduct = $this->has('parent_id') && $this->parent_id;
+
+        $rules = [
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
+            'parent_id' => 'nullable|exists:products,id',
             'original_price' => 'nullable|numeric|min:0',
             'price' => 'required|numeric|min:0',
-            'sale_price' => 'nullable|numeric|min:0',
-            'category' => 'required|exists:categories,id',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
             'names' => 'nullable|array',
@@ -41,6 +42,32 @@ class StoreProductRequest extends FormRequest
             'product_type' => 'nullable|string|in:transfer,code',
             'linking_type' => 'nullable|string|in:automatic,manual',
             'notes' => 'nullable|string|max:1000',
+        ];
+
+        // قواعد مخصصة للمنتجات الفرعية والرئيسية
+        if ($isSubProduct) {
+            // المنتج الفرعي: الفئة والوصف اختياريين (سيتم نسخهما من الأب)
+            $rules['category'] = 'nullable';
+            $rules['description'] = 'nullable|string';
+        } else {
+            // المنتج الرئيسي: الفئة والوصف مطلوبان
+            $rules['category'] = 'required|exists:categories,id';
+            $rules['description'] = 'required|string';
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => __('The product name is required'),
+            'description.required' => __('The product description is required'),
+            'price.required' => __('The product price is required'),
+            'stock_quantity.required' => __('The available quantity is required'),
         ];
     }
 

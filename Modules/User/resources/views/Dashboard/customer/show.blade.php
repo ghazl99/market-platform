@@ -130,16 +130,6 @@
             box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
         }
 
-        .action-btn.record-payment {
-            background: linear-gradient(135deg, var(--dark-warning), #d97706);
-            color: white;
-        }
-
-        .action-btn.record-payment:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
-        }
-
         /* Account Information */
         .account-info {
             background: var(--dark-bg-secondary);
@@ -998,10 +988,6 @@
                     <i class="fas fa-plus"></i>
                     {{ __('إضافة رصيد') }}
                 </button>
-                <button class="action-btn record-payment" onclick="recordPayment()">
-                    <i class="fas fa-credit-card"></i>
-                    {{ __('تسديد دفعة') }}
-                </button>
             </div>
         </div>
 
@@ -1029,7 +1015,7 @@
                     <div class="detail-icon balance"></div>
                     <div class="detail-content">
                         <div class="detail-label">{{ __('الرصيد') }}</div>
-                        <div class="detail-value">${{ number_format($customer->walletForStore()?->balance ?? 0, 4) }}</div>
+                        <div class="detail-value">${{ number_format($customer->wallet?->balance ?? 0, 4) }}</div>
                     </div>
                 </div>
                 <div class="account-detail-item">
@@ -1118,14 +1104,25 @@
                                         <div class="transaction-name">{{ $payment->note ?? 'معاملة' }}</div>
                                         <div class="transaction-description">
                                             {{ isset($payment->type) && $payment->type === 'deposit' ? 'إيداع' : 'سحب' }}
-                                            - {{ $payment->note ?? 'معاملة' }}
+                                            @if ($payment->note)
+                                                - {{ $payment->note }}
+                                            @endif
                                         </div>
-                                        <div class="transaction-time">{{ $payment->created_at->format('H:i:s Y-m-d') }}
+                                        <div class="transaction-time">
+                                            @if ($payment->created_at instanceof \Illuminate\Support\Carbon)
+                                                {{ $payment->created_at->format('H:i:s Y-m-d') }}
+                                            @else
+                                                {{ \Carbon\Carbon::parse($payment->created_at)->format('H:i:s Y-m-d') }}
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="transaction-amounts">
-                                        <div class="primary-amount">${{ number_format($payment->amount, 8) }}</div>
-                                        <div class="secondary-amount">${{ number_format($payment->new_balance ?? 0, 8) }}
+                                        <div
+                                            class="primary-amount {{ isset($payment->type) && $payment->type === 'deposit' ? 'positive' : 'negative' }}">
+                                            ${{ number_format($payment->amount, 2) }}
+                                        </div>
+                                        <div class="secondary-amount">
+                                            ${{ number_format($payment->new_balance ?? 0, 2) }}
                                         </div>
                                     </div>
                                 </div>
@@ -1364,10 +1361,126 @@
                 </div>
             </div>
             </div>
+
+            <!-- Add Balance Modal -->
+            <div id="addBalanceModal"
+                style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 10000; align-items: center; justify-content: center;">
+                <div
+                    style="background: var(--dark-bg-secondary); border-radius: 16px; padding: 2rem; max-width: 500px; width: 90%; border: 1px solid var(--dark-border); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h2 style="color: var(--dark-text-primary); font-size: 1.5rem; font-weight: 700;">{{ __('إضافة رصيد') }}
+                        </h2>
+                        <button type="button" onclick="closeAddBalanceModal()"
+                            style="background: none; border: none; color: var(--dark-text-muted); font-size: 1.5rem; cursor: pointer; padding: 0.5rem;">&times;</button>
+                    </div>
+
+                    <form id="addBalanceForm" action="{{ route('dashboard.customer.addBalance', $customer->id) }}"
+                        method="POST" onsubmit="handleFormSubmit(event)">
+                        @csrf
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label
+                                style="display: block; color: var(--dark-text-primary); margin-bottom: 0.5rem; font-weight: 600;">{{ __('المبلغ') }}
+                                <span style="color: var(--dark-danger);">*</span></label>
+                            <input type="number" step="0.01" min="0.01" name="amount" id="balance-amount"
+                                placeholder="0.00" required
+                                style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--dark-border); border-radius: 8px; background: var(--dark-bg-tertiary); color: var(--dark-text-primary); font-size: 1rem;">
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label
+                                style="display: block; color: var(--dark-text-primary); margin-bottom: 0.5rem; font-weight: 600;">{{ __('ملاحظة') }}
+                                ({{ __('اختياري') }})</label>
+                            <textarea name="note" id="balance-note" placeholder="{{ __('أضف ملاحظة عن عملية الإضافة...') }}" rows="3"
+                                style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--dark-border); border-radius: 8px; background: var(--dark-bg-tertiary); color: var(--dark-text-primary); font-size: 1rem; resize: vertical;"></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                            <button type="button" onclick="closeAddBalanceModal()"
+                                style="padding: 0.75rem 1.5rem; border: none; border-radius: 8px; background: var(--dark-text-muted); color: white; font-weight: 600; cursor: pointer;">
+                                {{ __('إلغاء') }}
+                            </button>
+                            <button type="submit" id="submit-add-balance"
+                                style="padding: 0.75rem 1.5rem; border: none; border-radius: 8px; background: linear-gradient(135deg, var(--dark-success), #059669); color: white; font-weight: 600; cursor: pointer;">
+                                {{ __('إضافة الرصيد') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         @endsection
 
         @push('scripts')
             <script>
+                // Handle session messages - حل جذري
+                document.addEventListener('DOMContentLoaded', function() {
+                    @if (session('success'))
+                        // Create toast notification directly
+                        const toast = document.createElement('div');
+                        toast.style.cssText =
+                            'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 99999; max-width: 400px; animation: slideInRight 0.3s ease;';
+                        toast.innerHTML =
+                            '<div style="display: flex; align-items: center; gap: 10px;"><i class="fas fa-check-circle" style="font-size: 1.5rem;"></i><div><strong>تم بنجاح!</strong><div>{{ session('success') }}</div></div></div>';
+                        document.body.appendChild(toast);
+
+                        // Remove after 3 seconds
+                        setTimeout(() => {
+                            toast.style.animation = 'slideOutRight 0.3s ease';
+                            setTimeout(() => toast.remove(), 300);
+                        }, 3000);
+
+                        // Add keyframe animations if not exist
+                        if (!document.getElementById('toast-animations')) {
+                            const style = document.createElement('style');
+                            style.id = 'toast-animations';
+                            style.textContent = `
+                                @keyframes slideInRight {
+                                    from { transform: translateX(100%); opacity: 0; }
+                                    to { transform: translateX(0); opacity: 1; }
+                                }
+                                @keyframes slideOutRight {
+                                    from { transform: translateX(0); opacity: 1; }
+                                    to { transform: translateX(100%); opacity: 0; }
+                                }
+                            `;
+                            document.head.appendChild(style);
+                        }
+                    @endif
+
+                    @if (session('error'))
+                        // Create error toast notification directly
+                        const toast = document.createElement('div');
+                        toast.style.cssText =
+                            'position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 99999; max-width: 400px; animation: slideInRight 0.3s ease;';
+                        toast.innerHTML =
+                            '<div style="display: flex; align-items: center; gap: 10px;"><i class="fas fa-times-circle" style="font-size: 1.5rem;"></i><div><strong>حدث خطأ!</strong><div>{{ session('error') }}</div></div></div>';
+                        document.body.appendChild(toast);
+
+                        // Remove after 4 seconds
+                        setTimeout(() => {
+                            toast.style.animation = 'slideOutRight 0.3s ease';
+                            setTimeout(() => toast.remove(), 300);
+                        }, 4000);
+
+                        // Add keyframe animations if not exist
+                        if (!document.getElementById('toast-animations')) {
+                            const style = document.createElement('style');
+                            style.id = 'toast-animations';
+                            style.textContent = `
+                                @keyframes slideInRight {
+                                    from { transform: translateX(100%); opacity: 0; }
+                                    to { transform: translateX(0); opacity: 1; }
+                                }
+                                @keyframes slideOutRight {
+                                    from { transform: translateX(0); opacity: 1; }
+                                    to { transform: translateX(100%); opacity: 0; }
+                                }
+                            `;
+                            document.head.appendChild(style);
+                        }
+                    @endif
+                });
+
                 // Tab functionality
                 document.querySelectorAll('.tab-button').forEach(button => {
                     button.addEventListener('click', function() {
@@ -1383,17 +1496,48 @@
                     });
                 });
 
-                // Add balance function
+                // Add balance modal and functions
                 function addBalance() {
-                    // Placeholder for add balance functionality
-                    alert('{{ __('سيتم إضافة وظيفة إضافة الرصيد قريباً') }}');
+                    const addBalanceModal = document.getElementById('addBalanceModal');
+                    const balanceAmountInput = document.getElementById('balance-amount');
+                    const balanceNoteInput = document.getElementById('balance-note');
+
+                    if (addBalanceModal) {
+                        addBalanceModal.style.display = 'flex';
+                        if (balanceAmountInput) balanceAmountInput.value = '';
+                        if (balanceNoteInput) balanceNoteInput.value = '';
+                    }
                 }
 
-                // Record payment function
-                function recordPayment() {
-                    // Placeholder for record payment functionality
-                    alert('{{ __('سيتم إضافة وظيفة تسجيل الدفعة قريباً') }}');
+                // Close modal
+                function closeAddBalanceModal() {
+                    const addBalanceModal = document.getElementById('addBalanceModal');
+                    if (addBalanceModal) {
+                        addBalanceModal.style.display = 'none';
+                    }
                 }
+
+                // Handle form submit
+                function handleFormSubmit(event) {
+                    const submitBtn = document.getElementById('submit-add-balance');
+                    if (submitBtn) {
+                        submitBtn.textContent = '{{ __('جاري المعالجة...') }}';
+                        submitBtn.disabled = true;
+                    }
+                    // Form سيرسل طبيعياً بدون AJAX
+                }
+
+                // Close modal when clicking outside
+                document.addEventListener('DOMContentLoaded', function() {
+                    const addBalanceModal = document.getElementById('addBalanceModal');
+                    if (addBalanceModal) {
+                        addBalanceModal.addEventListener('click', function(e) {
+                            if (e.target === addBalanceModal) {
+                                closeAddBalanceModal();
+                            }
+                        });
+                    }
+                });
 
                 // Sub-tab functionality
                 document.querySelectorAll('.sub-tab-button').forEach(button => {

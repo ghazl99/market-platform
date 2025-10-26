@@ -73,13 +73,19 @@ class ProductController extends Controller implements HasMiddleware
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $user = Auth::user();
         $attributes = $this->attributeService->getAllAttributes();
         $categories = $this->categoryService->getAllCategoriesForProducts();
 
-        return view('product::dashboard.create', compact('attributes', 'categories'));
+        // Get parent product if parent_id is provided
+        $parentProduct = null;
+        if ($request->has('parent_id')) {
+            $parentProduct = Product::with('categories')->find($request->parent_id);
+        }
+
+        return view('product::dashboard.create', compact('attributes', 'categories', 'parentProduct'));
     }
 
     /**
@@ -88,51 +94,53 @@ class ProductController extends Controller implements HasMiddleware
     public function store(StoreProductRequest $request)
     {
         try {
-            // Check if this is a duplicate request (same data within 5 seconds)
-            $requestHash = md5(json_encode($request->except(['_token', 'image'])));
-            $cacheKey = 'product_creation_' . $requestHash;
+            // Log all request data first
+            Log::info('=== PRODUCT CREATION REQUEST START ===');
+            Log::info('Request All Data:', $request->all());
+            Log::info('Is AJAX: ' . ($request->ajax() ? 'Yes' : 'No'));
+            Log::info('Is Sub-Product: ' . ($request->has('parent_id') ? 'Yes (Parent ID: ' . $request->parent_id . ')' : 'No'));
 
-            if (Cache::has($cacheKey)) {
-                Log::info('Duplicate product creation request detected, ignoring...');
-                return response()->json([
-                    'success' => false,
-                    'message' => 'تم إرسال الطلب مسبقاً، يرجى الانتظار...'
-                ]);
-            }
-
-            // Cache the request for 5 seconds
-            Cache::put($cacheKey, true, 5);
-
+            // Skip duplicate check
             $data = $request->validated();
 
-            // Skip duplicate check for now to test
-            Log::info('Skipping duplicate check for testing');
-
-            // Log request details
-            Log::info('Product store request:', [
-                'is_ajax' => $request->ajax(),
-                'expects_json' => $request->expectsJson(),
-                'content_type' => $request->header('Content-Type'),
-                'x_requested_with' => $request->header('X-Requested-With'),
-                'accept' => $request->header('Accept')
-            ]);
-
-            Log::info('Creating product with data:', $data);
+            Log::info('Validation Passed');
+            Log::info('Validated Data:', $data);
 
             $product = $this->productService->createProduct($data);
 
-            Log::info('Product created successfully with ID:', ['id' => $product->id]);
+            Log::info('Product created successfully with ID: ' . $product->id);
 
-            // Always return redirect with success message like Category
-            Log::info('Returning redirect response with success message');
+            // إذا كان منتج فرعي، إعادة التوجيه إلى صفحة المنتج الأب مع تاب المنتجات الفرعية
+            if (isset($data['parent_id']) && $data['parent_id']) {
+                Log::info('Redirecting to parent product page with sub-products tab: ' . $data['parent_id']);
+                return redirect()
+                    ->to(route('dashboard.product.show', $data['parent_id']) . '#subproducts-tab')
+                    ->with('success', __('Sub-product created successfully'))
+                    ->with('active_tab', 'subproducts');
+            }
+
+            Log::info('Redirecting to products index');
             return redirect()->route('dashboard.product.index')
                 ->with('success', __('تم إنشاء المنتج بنجاح'));
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('=== VALIDATION ERROR ===');
+            Log::error('Validation errors: ' . json_encode($e->errors()));
+            Log::error('Request data: ' . json_encode($request->all()));
+            Log::error('==========');
+
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
+
         } catch (\Exception $e) {
-            Log::error('Product creation error: ' . $e->getMessage());
+            Log::error('=== PRODUCT CREATION ERROR ===');
+            Log::error('Error: ' . $e->getMessage());
+            Log::error('File: ' . $e->getFile() . ' Line: ' . $e->getLine());
             Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('Request data: ' . json_encode($request->all()));
+            Log::error('==========');
 
             if ($request->expectsJson() || $request->ajax()) {
-                Log::info('Returning JSON error response');
                 return response()->json([
                     'success' => false,
                     'message' => __('حدث خطأ أثناء إنشاء المنتج. يرجى المحاولة مرة أخرى.'),
@@ -140,10 +148,9 @@ class ProductController extends Controller implements HasMiddleware
                 ], 500);
             }
 
-            Log::info('Returning redirect error response');
             return redirect()->back()
                 ->withInput()
-                ->with('error', __('حدث خطأ أثناء إنشاء المنتج. يرجى المحاولة مرة أخرى.'));
+                ->with('error', __('حدث خطأ أثناء إنشاء المنتج: ') . $e->getMessage());
         }
     }
 
@@ -152,12 +159,13 @@ class ProductController extends Controller implements HasMiddleware
      */
     public function show(Product $product)
     {
-        $product->load(['categories', 'attributes']);
+        $product->load(['categories', 'attributes', 'children']);
 
         // جلب البيانات الحقيقية من قاعدة البيانات
         $maxQuantity = $product->max_quantity ?? 0;
         $minQuantity = $product->min_quantity ?? 0;
-        $capital = $product->cost ?? 0;
+        // استخدام original_price كرأس المال
+        $capital = $product->original_price ?? 0;
 
         // حساب كمية المبيعات من جدول الطلبات
         $salesQuantity = \Modules\Order\Models\OrderItem::where('product_id', $product->id)

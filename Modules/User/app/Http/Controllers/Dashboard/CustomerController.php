@@ -9,6 +9,8 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Modules\Wallet\Models\Wallet;
+use Modules\Wallet\Models\WalletTransaction;
 use Modules\User\Models\User;
 use Modules\User\Services\Dashboard\CustomerService;
 
@@ -183,7 +185,11 @@ class CustomerController extends Controller implements HasMiddleware
             }
 
             // Load relationships efficiently
-            $customer->load(['roles', 'group', 'walletForStore']);
+            $customer->load(['roles', 'group']);
+
+            // Load wallet for the current store
+            $wallet = $customer->wallets()->where('store_id', $store->id)->first();
+            $customer->wallet = $wallet;
 
             // Get customer orders from database
             $orders = collect();
@@ -220,11 +226,10 @@ class CustomerController extends Controller implements HasMiddleware
             $payments = collect();
 
             // Try to get payment transactions from Wallet module if it exists - OPTIMIZED
-            if (class_exists('\Modules\Wallet\Models\WalletTransaction')) {
+            if (class_exists('\Modules\Wallet\Models\WalletTransaction') && $wallet) {
                 try {
-                    $payments = \Modules\Wallet\Models\WalletTransaction::select('id', 'user_id', 'order_id', 'amount', 'status', 'created_at')
-                        ->where('user_id', $customer->id)
-                        ->where('type', 'payment')
+                    $payments = \Modules\Wallet\Models\WalletTransaction::select('id', 'wallet_id', 'order_id', 'type', 'amount', 'note', 'old_balance', 'new_balance', 'created_at')
+                        ->where('wallet_id', $wallet->id)
                         ->orderBy('created_at', 'desc')
                         ->limit(10)
                         ->get()
@@ -233,7 +238,10 @@ class CustomerController extends Controller implements HasMiddleware
                                 'id' => $payment->id,
                                 'order_id' => $payment->order_id ?? '#' . $payment->id,
                                 'amount' => $payment->amount ?? 0,
-                                'status' => $this->mapPaymentStatus($payment->status ?? 'completed'),
+                                'note' => $payment->note ?? '',
+                                'type' => $payment->type ?? 'deposit',
+                                'old_balance' => $payment->old_balance ?? 0,
+                                'new_balance' => $payment->new_balance ?? 0,
                                 'created_at' => $payment->created_at,
                             ];
                         })
@@ -623,6 +631,146 @@ class CustomerController extends Controller implements HasMiddleware
         ];
 
         return $statusMap[$status] ?? 'completed';
+    }
+
+    /**
+     * Add balance to customer wallet and handle debt payment
+     */
+    public function addBalance(Request $request, User $customer)
+    {
+        try {
+            Log::info('Add Balance Request', [
+                'customer_id' => $customer->id,
+                'request_data' => $request->all()
+            ]);
+
+            $request->validate([
+                'amount' => 'required|numeric|min:0.01',
+                'note' => 'nullable|string|max:500',
+            ]);
+
+            $amount = (float) $request->input('amount');
+            $note = $request->input('note') ?? __('إضافة رصيد');
+
+            if ($amount <= 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('المبلغ يجب أن يكون أكبر من zero')
+                ], 400);
+            }
+
+            $store = $this->getCurrentStore();
+            if (!$store || !$customer->stores->contains($store->id)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('Customer not found or access denied')
+                ], 403);
+            }
+
+            // Get or create wallet
+            $wallet = $customer->wallets()->where('store_id', $store->id)->first();
+
+            if (!$wallet) {
+                $wallet = Wallet::create([
+                    'user_id' => $customer->id,
+                    'store_id' => $store->id,
+                    'balance' => 0,
+                ]);
+            }
+
+            $oldBalance = $wallet->balance;
+            $oldDebt = $customer->debt_limit ?? 0;
+
+            // أولاً: إضافة الرصيد للـ wallet دائماً
+            $wallet->balance += $amount;
+            $wallet->save();
+
+            // تسجيل معاملة إضافة رصيد
+            WalletTransaction::create([
+                'wallet_id' => $wallet->id,
+                'type' => 'deposit',
+                'amount' => $amount,
+                'old_balance' => $oldBalance,
+                'new_balance' => $wallet->balance,
+                'note' => $note,
+            ]);
+
+            // ثانياً: خصم الدين من الرصيد (إذا كان هناك دين)
+            if ($oldDebt > 0) {
+                $balanceAfterDeposit = $wallet->balance;
+
+                if ($balanceAfterDeposit >= $oldDebt) {
+                    // الرصيد كافٍ لتسديد كل الدين
+                    $wallet->balance -= $oldDebt;
+                    $wallet->save();
+
+                    $customer->debt_limit = 0;
+
+                    // تسجيل معاملة خصم الدين
+                    WalletTransaction::create([
+                        'wallet_id' => $wallet->id,
+                        'type' => 'withdraw',
+                        'amount' => $oldDebt,
+                        'old_balance' => $balanceAfterDeposit,
+                        'new_balance' => $wallet->balance,
+                        'note' => __('تسديد دين') . ': ' . $oldDebt . ' $',
+                    ]);
+                } else {
+                    // الرصيد غير كافٍ لتسديد كل الدين
+                    $remainingDebt = $oldDebt - $balanceAfterDeposit;
+                    $wallet->balance = 0;
+                    $wallet->save();
+
+                    $customer->debt_limit = $remainingDebt;
+
+                    // تسجيل معاملة خصم جزء من الدين
+                    WalletTransaction::create([
+                        'wallet_id' => $wallet->id,
+                        'type' => 'withdraw',
+                        'amount' => $balanceAfterDeposit,
+                        'old_balance' => $balanceAfterDeposit,
+                        'new_balance' => 0,
+                        'note' => __('تسديد دين: ' . $balanceAfterDeposit . ' $ من ' . $oldDebt . ' $'),
+                    ]);
+                }
+
+                $customer->save();
+            }
+
+            $customer->refresh();
+
+            // إرجاع للصفحة السابقة مع رسالة success
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => __('تم إضافة الرصيد بنجاح'),
+                    'data' => [
+                        'balance' => $wallet->balance,
+                        'debt' => $customer->debt_limit,
+                    ]
+                ]);
+            }
+
+            return redirect()->back()
+                ->with('success', __('تم إضافة الرصيد بنجاح') . ': ' . $amount . ' $');
+
+        } catch (\Exception $e) {
+            Log::error('Error adding balance', [
+                'customer_id' => $customer->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('حدث خطأ أثناء إضافة الرصيد: ') . $e->getMessage()
+                ], 500);
+            }
+
+            return redirect()->back()
+                ->with('error', __('حدث خطأ أثناء إضافة الرصيد: ') . $e->getMessage());
+        }
     }
 
     /**

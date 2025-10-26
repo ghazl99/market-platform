@@ -897,7 +897,7 @@
                     <!-- Product Logo -->
                     <div class="product-logo">
                         <i class="fas fa-store"></i>
-                            </div>
+                    </div>
 
                     <!-- Three Dots Menu -->
                     <div class="product-menu">
@@ -906,19 +906,19 @@
                         </button>
                         <div class="menu-dropdown">
                             <a href="{{ route('dashboard.product.edit', $product) }}" class="menu-item">
-                            <i class="fas fa-edit"></i>
+                                <i class="fas fa-edit"></i>
                                 {{ __('تعديل') }}
-                        </a>
-                        <form action="{{ route('dashboard.product.destroy', $product) }}" method="POST"
+                            </a>
+                            <form action="{{ route('dashboard.product.destroy', $product) }}" method="POST"
                                 class="menu-item-form">
-                            @csrf
-                            @method('DELETE')
+                                @csrf
+                                @method('DELETE')
                                 <button type="submit" class="menu-item delete-item"
                                     onclick="return confirm('هل أنت متأكد من حذف هذا المنتج؟')">
-                                <i class="fas fa-trash"></i>
+                                    <i class="fas fa-trash"></i>
                                     {{ __('حذف') }}
-                            </button>
-                        </form>
+                                </button>
+                            </form>
                         </div>
                     </div>
 
@@ -940,7 +940,15 @@
 
                     <!-- Product Info -->
                     <div class="product-info">
-                        <h3 class="product-name">{{ $product->name }}</h3>
+                        <h3 class="product-name">
+                            {{ $product->name }}
+                            @if ($product->children()->count() > 0)
+                                <span
+                                    style="display: inline-block; margin-right: 0.5rem; background: #f59e0b; color: #000; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">
+                                    <i class="fas fa-layer-group"></i> {{ $product->children()->count() }}
+                                </span>
+                            @endif
+                        </h3>
                         <p class="product-name-english">{{ $product->name_en ?? $product->name }}</p>
                     </div>
                 </div>
@@ -1384,11 +1392,11 @@
                     <div class="notification-title">{{ __('Success') }}</div>
                     <div class="notification-message">${message}</div>
                     ${productId ? `
-                                            <div class="notification-details">
-                                                <i class="fas fa-info-circle"></i>
-                                                {{ __('Product') }} #${productId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
-                                            </div>
-                                            ` : ''}
+                                                <div class="notification-details">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    {{ __('Product') }} #${productId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
+                                                </div>
+                                                ` : ''}
                 </div>
                 <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
                 <div class="notification-progress"></div>

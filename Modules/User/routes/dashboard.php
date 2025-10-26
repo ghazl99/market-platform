@@ -17,6 +17,8 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::get('/customer/{customer}', [\Modules\User\Http\Controllers\Dashboard\CustomerController::class, 'show'])->name('customer.show');
         Route::get('/customer/{customer}/edit', [\Modules\User\Http\Controllers\Dashboard\CustomerController::class, 'edit'])->name('customer.edit');
         Route::put('/customer/{customer}', [\Modules\User\Http\Controllers\Dashboard\CustomerController::class, 'update'])->name('customer.update');
+        Route::post('/customer/{customer}/add-balance', [\Modules\User\Http\Controllers\Dashboard\CustomerController::class, 'addBalance'])
+            ->name('customer.addBalance');
         Route::delete('/customer/{customer}', [\Modules\User\Http\Controllers\Dashboard\CustomerController::class, 'destroy'])->name('customer.destroy');
 
 });

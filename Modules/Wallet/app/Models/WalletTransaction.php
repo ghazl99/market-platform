@@ -15,7 +15,7 @@ class WalletTransaction extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = ['wallet_id', 'order_id', 'paymentRequest_id', 'old_balance', 'new_balance', 'type', 'amount', 'description', 'note'];
+    protected $fillable = ['wallet_id', 'order_id', 'paymentRequest_id', 'old_balance', 'new_balance', 'type', 'amount', 'note'];
     /**
      * Get timezone from wallet->store, default to UTC
      */

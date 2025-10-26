@@ -116,9 +116,38 @@
             </div>
         </div>
 
+        @if (isset($parentProduct))
+            <div class="form-section"
+                style="background: #2d2d2d; border: 1px solid #404040; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+                <h3 class="section-title" style="color: #f59e0b;">
+                    <i class="fas fa-layer-group"></i>
+                    {{ __('Creating Sub-Product') }}
+                </h3>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1rem;">
+                    @if ($parentProduct->getFirstMedia('product_images'))
+                        <img src="{{ $parentProduct->getFirstMedia('product_images')->getUrl() }}"
+                            alt="{{ $parentProduct->name }}"
+                            style="width: 60px; height: 60px; border-radius: 8px; border: 2px solid #404040; object-fit: cover;">
+                    @endif
+                    <div>
+                        <p style="margin: 0; color: #ffffff; font-weight: 600;">
+                            {{ __('Parent Product') }}: {{ $parentProduct->getTranslation('name', app()->getLocale()) }}
+                        </p>
+                        <p style="margin: 0.25rem 0 0 0; color: #9ca3af; font-size: 0.9rem;">
+                            ID: {{ $parentProduct->id }} | ${{ number_format($parentProduct->price, 2) }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <form class="form-container" id="productForm" method="POST" action="{{ route('dashboard.product.store') }}"
             enctype="multipart/form-data">
             @csrf
+
+            @if (isset($parentProduct))
+                <input type="hidden" name="parent_id" value="{{ $parentProduct->id }}">
+            @endif
 
             <!-- Basic Information -->
             <div class="form-section">
@@ -155,46 +184,65 @@
                         <div class="form-help">{{ __('Number of pieces available in stock') }}</div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label required">{{ __('Category') }}</label>
-                        <select class="form-select @error('category') is-invalid @enderror" name="category" required>
-                            <option value="">{{ __('Choose Category') }}</option>
-                            @if (isset($categories) && $categories->count() > 0)
-                                @foreach ($categories as $category)
-                                    @if ($category->parent_id)
-                                        {{-- الأقسام الفرعية --}}
-                                        <option value="{{ $category->id }}"
-                                            {{ old('category') == $category->id ? 'selected' : '' }}>
-                                            &nbsp;&nbsp;&nbsp;└─
-                                            {{ $category->getTranslation('name', app()->getLocale()) }}
-                                        </option>
-                                    @else
-                                        {{-- الأقسام الرئيسية --}}
-                                        <option value="{{ $category->id }}"
-                                            {{ old('category') == $category->id ? 'selected' : '' }}>
-                                            📁 {{ $category->getTranslation('name', app()->getLocale()) }}
-                                        </option>
-                                        {{-- عرض الأقسام الفرعية تحت القسم الرئيسي --}}
-                                        @if ($category->children && $category->children->count() > 0)
-                                            @foreach ($category->children as $child)
-                                                <option value="{{ $child->id }}"
-                                                    {{ old('category') == $child->id ? 'selected' : '' }}>
-                                                    &nbsp;&nbsp;&nbsp;└─
-                                                    {{ $child->getTranslation('name', app()->getLocale()) }}
-                                                </option>
-                                            @endforeach
+                    @if (!isset($parentProduct))
+                        <div class="form-group">
+                            <label class="form-label required">{{ __('Category') }}</label>
+                            <select class="form-select @error('category') is-invalid @enderror" name="category" required>
+                                <option value="">{{ __('Choose Category') }}</option>
+                                @if (isset($categories) && $categories->count() > 0)
+                                    @foreach ($categories as $category)
+                                        @if ($category->parent_id)
+                                            {{-- الأقسام الفرعية --}}
+                                            <option value="{{ $category->id }}"
+                                                {{ old('category') == $category->id ? 'selected' : '' }}>
+                                                &nbsp;&nbsp;&nbsp;└─
+                                                {{ $category->getTranslation('name', app()->getLocale()) }}
+                                            </option>
+                                        @else
+                                            {{-- الأقسام الرئيسية --}}
+                                            <option value="{{ $category->id }}"
+                                                {{ old('category') == $category->id ? 'selected' : '' }}>
+                                                📁 {{ $category->getTranslation('name', app()->getLocale()) }}
+                                            </option>
+                                            {{-- عرض الأقسام الفرعية تحت القسم الرئيسي --}}
+                                            @if ($category->children && $category->children->count() > 0)
+                                                @foreach ($category->children as $child)
+                                                    <option value="{{ $child->id }}"
+                                                        {{ old('category') == $child->id ? 'selected' : '' }}>
+                                                        &nbsp;&nbsp;&nbsp;└─
+                                                        {{ $child->getTranslation('name', app()->getLocale()) }}
+                                                    </option>
+                                                @endforeach
+                                            @endif
                                         @endif
-                                    @endif
-                                @endforeach
-                            @else
-                                <option value="" disabled>{{ __('No categories available') }}</option>
-                            @endif
-                        </select>
-                        @error('category')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">{{ __('Select the appropriate category for your product') }}</div>
-                    </div>
+                                    @endforeach
+                                @else
+                                    <option value="" disabled>{{ __('No categories available') }}</option>
+                                @endif
+                            </select>
+                            @error('category')
+                                <div class="form-error">{{ $message }}</div>
+                            @enderror
+                            <div class="form-help">{{ __('Select the appropriate category for your product') }}</div>
+                        </div>
+                    @else
+                        {{-- إذا كان منتج فرعي، نسخ الفئة من المنتج الأب تلقائيًا --}}
+                        @php
+                            $parentCategoryId = $parentProduct->categories->first()->id ?? '';
+                            $parentCategoryName = $parentProduct->categories->first()
+                                ? $parentProduct->categories->first()->getTranslation('name', app()->getLocale())
+                                : __('No category');
+                        @endphp
+                        @if ($parentCategoryId)
+                            <input type="hidden" name="category" value="{{ $parentCategoryId }}">
+                        @endif
+                        <div class="form-group">
+                            <label class="form-label required">{{ __('Category') }}</label>
+                            <input type="text" class="form-input" value="{{ $parentCategoryName }}" readonly
+                                style="background: #1f2937; color: #6b7280;">
+                            <div class="form-help">{{ __('Category will be inherited from parent product') }}</div>
+                        </div>
+                    @endif
 
                     <div class="form-group">
                         <label class="form-label">{{ __('Discount') }}</label>
@@ -221,14 +269,20 @@
             <div class="form-section">
                 <h3 class="section-title">{{ __('Description and Details') }}</h3>
                 <div class="form-group full-width">
-                    <label class="form-label required">{{ __('Product Description') }}</label>
+                    <label
+                        class="form-label {{ !isset($parentProduct) ? 'required' : '' }}">{{ __('Product Description') }}</label>
                     <textarea class="form-input form-textarea @error('description') is-invalid @enderror" name="description"
-                        placeholder="{{ __('Enter detailed product description') }}" required>{{ old('description') }}</textarea>
+                        placeholder="{{ __('Enter detailed product description') }}" {{ !isset($parentProduct) ? 'required' : '' }}>{{ old('description') }}</textarea>
                     @error('description')
                         <div class="form-error">{{ $message }}</div>
                     @enderror
                     <div class="form-help">
-                        {{ __('Comprehensive product description helps customers understand it better') }}</div>
+                        @if (isset($parentProduct))
+                            {{ __('Description is optional for sub-products') }}
+                        @else
+                            {{ __('Comprehensive product description helps customers understand it better') }}
+                        @endif
+                    </div>
                 </div>
 
                 <div class="form-group full-width">
@@ -332,6 +386,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Form Actions -->
             <div class="form-actions">

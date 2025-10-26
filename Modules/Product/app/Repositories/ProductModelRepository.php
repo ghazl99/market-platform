@@ -16,8 +16,9 @@ class ProductModelRepository implements ProductRepository
             abort(404, 'Store not found');
         }
 
-        $query = Product::with(['categories', 'attributes', 'store'])
-            ->where('store_id', $store->id);
+        $query = Product::with(['categories', 'attributes', 'store', 'children'])
+            ->where('store_id', $store->id)
+            ->whereNull('parent_id'); // Only show main products, not sub-products
 
         // تطبيق فلتر الكلمة المفتاحية
         if ($keyword) {
@@ -62,14 +63,8 @@ class ProductModelRepository implements ProductRepository
     {
         try {
             // إنشاء المنتج
+            // ملاحظة: ربط الفئات يتم في الـ Service وليس هنا
             $product = Product::create($data);
-
-            // ربط الأقسام إذا كانت موجودة
-            if (isset($data['category']) && $data['category']) {
-                $product->categories()->sync([$data['category']]);
-            } elseif (isset($data['categories']) && is_array($data['categories'])) {
-                $product->categories()->sync($data['categories']);
-            }
 
             return $product;
         } catch (\Exception $e) {
@@ -81,7 +76,7 @@ class ProductModelRepository implements ProductRepository
 
     public function find(int $id)
     {
-        return Product::with(['categories', 'attributes'])->find($id);
+        return Product::with(['categories', 'attributes', 'children', 'parent'])->find($id);
     }
 
     public function update(int $id, array $data)
