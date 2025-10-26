@@ -26,6 +26,8 @@ class RegisterUserService
                 'email' => $data['email'],
                 'role' => $data['role'],
                 'password' => Hash::make($data['password']),
+                'group_id' => \App\Group::getDefaultGroup()?->id,
+
             ]);
 
             $store = current_store();
