@@ -22,17 +22,22 @@ class HomeController extends Controller
     {
         $host = $request->getHost();
 
-        $mainDomain = config('app.main_domain', 'market-platform.localhost');
+        $mainDomain = app()->environment('production')
+            ? config('app.main_domain', 'soqsyria.com')
+            : 'market-platform.localhost';
 
-        if ($this->homeService->isMainDomain($host, $mainDomain)) {
+        // ✅ التحقق الصحيح
+        if ($host === $mainDomain) {
             return view('core::app.home');
         }
 
-        $store = $this->homeService->getStoreByHost($host);
+        // في حالة المتجر الفرعي
+        $store = current_store();
 
         if (! $store) {
             abort(404, 'Store not found');
         }
+
         $categories = $this->categoryService->getAllcategories();
 
         return view('themes.' . $store->theme . '.home', compact('store', 'categories'));
