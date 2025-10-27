@@ -1,8 +1,25 @@
 @extends('themes.app')
 
 @section('title', __('Home'))
+
 @push('styles')
+    <!-- استيراد الخط -->
+    <link
+        href="https://fonts.googleapis.com/css2?family={{ urlencode(store_setting('font_family', 'Cairo')) }}:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- إعدادات الثيم -->
     <style>
+        :root {
+            --primary-color: {{ store_setting('primary_color', '#059669') }};
+            --gradient-primary: linear-gradient(135deg, {{ store_setting('primary_color', '#059669') }} 0%, {{ store_setting('primary_color', '#059669') }} 100%);
+        }
+
+        body {
+            font-family: '{{ store_setting('font_family', 'Cairo') }}', sans-serif !important;
+        }
+
+
         .category-img {
             width: 100%;
             height: 200px;
@@ -45,7 +62,9 @@
         }
     </style>
 @endpush
+
 @section('content')
+
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-background">
@@ -104,18 +123,7 @@
                     <div class="hero-image-container">
                         <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop"
                             alt="الخدمات الرقمية" class="hero-image">
-                        <div class="hero-card floating-card-1">
-                            <i class="fas fa-gamepad"></i>
-                            <span>{{ __('Game Top-Up') }}</span>
-                        </div>
-                        <div class="hero-card floating-card-2">
-                            <i class="fas fa-exchange-alt"></i>
-                            <span>{{ __('Transfers') }}</span>
-                        </div>
-                        <div class="hero-card floating-card-3">
-                            <i class="fas fa-comments"></i>
-                            <span>{{ __('Communication') }}</span>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -190,4 +198,5 @@
 
         </div>
     </section>
+
 @endsection

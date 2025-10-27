@@ -19,4 +19,9 @@ interface StoreRepository
     public function updateStatus(Store $store, string $status): bool;
 
     public function findStoreByDomain(string $domain): ?Store;
+
+    public function getSettings(Store $store): array;
+
+    public function updateSettings(Store $store, array $data): bool;
+
 }

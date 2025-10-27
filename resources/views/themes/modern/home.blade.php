@@ -2,33 +2,33 @@
 
 @section('title', __('Home'))
 @push('styles')
-   <link rel="stylesheet" href="{{ asset('assets/css/home/modern.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/home/modern.css') }}?v={{ time() }}">
+    <style>
+        .nav-item.active {
+            background: {{ store_setting('primary_color') }};
+        }
+    </style>
 @endpush
 @section('content')
     <!-- Main Content -->
     <!-- Slideshow -->
     <section class="slideshow">
-        <div class="slide active">
-            <img src="https://1click-pay1.com/images/1747605229.webp" alt="Slide 1">
-        </div>
-        <div class="slide">
-            <img src="https://1click-pay1.com/images/1747605237.webp" alt="Slide 2">
-        </div>
-        <div class="slide">
-            <img src="https://1click-pay1.com/images/1747605246.webp" alt="Slide 3">
-        </div>
-        <div class="slide">
-            <img src="https://1click-pay1.com/images/1747605254.webp" alt="Slide 4">
-        </div>
-        <div class="slide">
-            <img src="https://1click-pay1.com/images/1747605259.webp" alt="Slide 5">
-        </div>
+        @php
+            $banners = $store->getMedia('banner');
+            $storeSettings = $store->settings ?? [];
+            $primaryColor = $storeSettings['primary-color'] ?? '#059669';
+        @endphp
+
+        @foreach ($banners as $index => $banner)
+            <div class="slide {{ $index === 0 ? 'active' : '' }}">
+                <img src="{{ route('store.image', $banner->id) }}" alt="Slide {{ $index + 1 }}">
+            </div>
+        @endforeach
+
         <div class="slide-dots">
-            <span class="dot active" onclick="currentSlide(1)"></span>
-            <span class="dot" onclick="currentSlide(2)"></span>
-            <span class="dot" onclick="currentSlide(3)"></span>
-            <span class="dot" onclick="currentSlide(4)"></span>
-            <span class="dot" onclick="currentSlide(5)"></span>
+            @foreach ($banners as $index => $banner)
+                <span class="dot {{ $index === 0 ? 'active' : '' }}" onclick="currentSlide({{ $index + 1 }})"></span>
+            @endforeach
         </div>
     </section>
 
@@ -44,11 +44,12 @@
     <!-- Categories -->
     <section class="categories">
         <div class="category-grid">
-             @if ($categories->count() > 0)
+            @if ($categories->count() > 0)
                 @foreach ($categories as $category)
                     @php $media = $category->getFirstMedia('category_images'); @endphp
 
-                    <a href="{{ route('category.subCategories', $category->id) }}" class="category-item" style="text-decoration: none">
+                    <a href="{{ route('category.subCategories', $category->id) }}" class="category-item"
+                        style="text-decoration: none">
                         @if ($media)
                             <img src="{{ route('category.image', $media->id) }}" alt="{{ $category->name }}">
                         @endif

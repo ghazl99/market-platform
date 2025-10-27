@@ -78,7 +78,7 @@
                  </div>
                  <span class="menu-item-title">{{ __('Wallet') }}</span>
              </a>
-             
+
              <a href="{{ route('wallet.payment-requests.index') }}"
                  class="menu-item {{ request()->routeIs('wallet.payment-requests.*') ? 'active' : '' }}">
                  <div class="menu-item-icon">

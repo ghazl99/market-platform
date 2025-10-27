@@ -1,7 +1,7 @@
 <style>
     /* Modern Header Styles */
     .header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, {{ store_setting('primary_color') }} 0%, {{ store_setting('primary_color') }} 100%);
         color: white;
         position: fixed;
         top: 0;
@@ -850,13 +850,15 @@
                     </a>
 
                 </div>
-                 <a href="{{ route('auth.customer.login') }}" style="text-decoration: none" class="action-btn" title="{{ __('Login') }}">
+                <a href="{{ route('auth.customer.login') }}" style="text-decoration: none" class="action-btn"
+                    title="{{ __('Login') }}">
                     {{ __('Logout') }}
                 </a>
             @else
- <a href="{{ route('auth.customer.login') }}"  style="text-decoration: none" class="action-btn" title="{{ __('Login') }}">
-                         {{ __('Login') }}
-                    </a>
+                <a href="{{ route('auth.customer.login') }}" style="text-decoration: none" class="action-btn"
+                    title="{{ __('Login') }}">
+                    {{ __('Login') }}
+                </a>
             @endauth
             <!-- Mobile Menu Toggle -->
             <button class="menu-toggle" id="menuToggle">

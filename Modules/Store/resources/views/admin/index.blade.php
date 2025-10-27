@@ -283,8 +283,8 @@
                                         <td>{{ $store->created_at->format('Y-m-d H:i') }}</td>
                                         <td>
                                             <div class="table-actions">
-                                                <a href="{{ route('admin.stores.show',$store) }}" class="btn btn-sm btn-secondary"><i
-                                                        class="fas fa-eye"></i></a>
+                                                <a href="{{ route('admin.stores.show', $store) }}"
+                                                    class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i></a>
 
                                             </div>
                                         </td>

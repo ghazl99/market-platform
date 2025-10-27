@@ -2,55 +2,33 @@
 
 namespace Modules\Store\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Store\Models\Store;
+use App\Http\Controllers\Controller;
+use Modules\Store\Services\Admin\StoreService;
 
 class StoreSettingsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return view('store::index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('store::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        return view('store::show');
-    }
-
+    public function __construct(
+        protected StoreService $storeService
+    ) {}
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function editSettings(Store $store)
     {
-        return view('store::edit');
+        $settings = $this->storeService->getSettings($store);
+
+        return view('store::admin.settings', compact('store', 'settings'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
+    public function updateSettings(Request $request, Store $store)
+    {
+        $data = $request->all();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
+        $this->storeService->updateSettings($store, $data);
+
+        return redirect()->route('store.settings.edit', $store->id)
+            ->with('success', __('Settings updated successfully.'));
+    }
 }

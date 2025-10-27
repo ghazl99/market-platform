@@ -22,6 +22,7 @@ class Store extends Model implements HasMedia
     protected $fillable = [
         'name',
         'domain',
+        'description',
         'type',
         'status',
         'theme',
@@ -217,5 +218,10 @@ class Store extends Model implements HasMedia
 
         // Production main domain or subdomain
         return static::where('domain', $host);
+    }
+
+    public function settingsStore()
+    {
+        return $this->hasMany(\Modules\Store\Models\StoreSetting::class);
     }
 }

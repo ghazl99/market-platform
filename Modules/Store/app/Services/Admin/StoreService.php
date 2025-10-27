@@ -2,10 +2,11 @@
 
 namespace Modules\Store\Services\Admin;
 
+use Modules\Store\Models\Store;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 use Modules\Core\Traits\TranslatableTrait;
+use Illuminate\Validation\ValidationException;
 use Modules\Store\Repositories\Admin\StoreRepository;
 
 class StoreService
@@ -71,6 +72,7 @@ class StoreService
     public function update(array $data, $store)
     {
         DB::beginTransaction();
+        $data = $this->prepareUserData($data);
 
         // Update store
         $this->storeRepository->update($data, $store);
@@ -92,6 +94,38 @@ class StoreService
         return true;
     }
 
+    public function getSettings(Store $store): array
+    {
+        return $this->storeRepository->getSettings($store);
+    }
+
+    public function updateSettings(Store $store, array $data): bool
+    {
+        if (isset($data['logo']) && $data['logo']->isValid()) {
+            $this->uploadOrUpdateImageWithResize(
+                $store,
+                $data['logo'],
+                'logo',
+                'private_media',
+                true
+            );
+            unset($data['logo']);
+        }
+
+        if (isset($data['banners']) && is_array($data['banners'])) {
+            $this->uploadOrUpdateImageWithResize(
+                $store,
+                $data['banners'],
+                'banner',
+                'private_media',
+                true
+            );
+            unset($data['banners']);
+        }
+
+        // تحديث الإعدادات عبر الريبو
+        return $this->storeRepository->updateSettings($store, $data);
+    }
     /**
      * Prepare data for multilingual fields (name, description)
      */
@@ -108,7 +142,7 @@ class StoreService
                     try {
                         $translated[$lang] = $this->autoGoogleTranslator($lang, $data[$field]);
                     } catch (\Exception $e) {
-                        Log::error("Failed to translate [$field] to [$lang]: ".$e->getMessage());
+                        Log::error("Failed to translate [$field] to [$lang]: " . $e->getMessage());
                         $translated[$lang] = $data[$field]; // fallback to original
                     }
                 }

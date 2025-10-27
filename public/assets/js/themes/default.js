@@ -744,8 +744,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize any additional features
     initializeAdditionalFeatures();
 
-    // Initialize mobile-specific features
-    initializeMobileFeatures();
 
     // Auto-open sidebar on desktop
     setTimeout(() => {
@@ -758,23 +756,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
 });
 
-// Mobile-Specific Features
-function initializeMobileFeatures() {
-    // Add mobile touch optimizations
-    addMobileTouchOptimizations();
 
-    // Add mobile gesture support
-    addMobileGestures();
-
-    // Add mobile performance optimizations
-    addMobilePerformanceOptimizations();
-
-    // Add mobile UI enhancements
-    addMobileUIEnhancements();
-
-    // Add mobile accessibility features
-    addMobileAccessibility();
-}
 
 // Additional Features
 function initializeAdditionalFeatures() {

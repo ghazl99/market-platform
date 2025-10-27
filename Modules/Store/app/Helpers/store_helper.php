@@ -15,3 +15,17 @@ if (! function_exists('current_store')) {
         return $store;
     }
 }
+if (!function_exists('store_setting')) {
+    function store_setting($key, $default = null)
+    {
+        $storeId = current_store()?->id;
+
+        $settings = cache()->rememberForever("store_settings_{$storeId}", function () use ($storeId) {
+            return \Modules\Store\Models\StoreSetting::where('store_id', $storeId)
+                ->pluck('value', 'key')
+                ->toArray();
+        });
+
+        return $settings[$key] ?? $default;
+    }
+}

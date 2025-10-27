@@ -12,6 +12,22 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     @stack('styles')
+    <!-- استيراد الخط -->
+    <link
+        href="https://fonts.googleapis.com/css2?family={{ urlencode(store_setting('font_family', 'Cairo')) }}:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- إعدادات الثيم -->
+    <style>
+        :root {
+            --primary-color: {{ store_setting('primary_color', '#059669') }};
+            --gradient-primary: linear-gradient(135deg, {{ store_setting('primary_color', '#059669') }} 0%, {{ store_setting('primary_color', '#059669') }} 100%);
+        }
+
+        body {
+            font-family: '{{ store_setting('font_family', 'Cairo') }}', sans-serif !important;
+        }
+    </style>
 </head>
 
 <body class="modern-layout">
@@ -24,7 +40,7 @@
     </main>
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Store Scripts -->

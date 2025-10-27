@@ -10,3 +10,4 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/stores/{id}/status', [StoreController::class, 'updateStoreStatus'])->name('stores.status');
 
 });
+

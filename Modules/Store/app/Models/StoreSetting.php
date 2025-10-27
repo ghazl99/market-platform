@@ -26,7 +26,7 @@ class StoreSetting extends Model
     {
         return $this->belongsTo(Store::class);
     }
-    
+
     /**
      * Get the setting value.
      * If the value is a JSON array (translated), it returns the value for the specified locale.
@@ -35,13 +35,13 @@ class StoreSetting extends Model
      * @param string $locale
      * @return mixed
      */
-    public function getValue(string $locale = 'en')
-    {
-        if (is_array($this->value)) {
-            return $this->value[$locale] ?? null;
-        }
-        return $this->value; // plain value
-    }
+    // public function getValue(string $locale = 'en')
+    // {
+    //     if (is_array($this->value)) {
+    //         return $this->value[$locale] ?? null;
+    //     }
+    //     return $this->value; // plain value
+    // }
 
     /**
      * Set the setting value.
@@ -52,15 +52,15 @@ class StoreSetting extends Model
      * @param string $locale
      * @return void
      */
-    public function setValue($value, string $locale = 'en'): void
-    {
-        if (is_array($this->value) || is_array($value)) {
-            $current = $this->value ?? [];
-            // If $value is an array with locales, take the value for the given locale; otherwise take the raw value
-            $current[$locale] = is_array($value) ? $value[$locale] ?? null : $value;
-            $this->value = $current;
-        } else {
-            $this->value = $value; // plain value
-        }
-    }
+    // public function setValue($value, string $locale = 'en'): void
+    // {
+    //     if (is_array($this->value) || is_array($value)) {
+    //         $current = $this->value ?? [];
+    //         // If $value is an array with locales, take the value for the given locale; otherwise take the raw value
+    //         $current[$locale] = is_array($value) ? $value[$locale] ?? null : $value;
+    //         $this->value = $current;
+    //     } else {
+    //         $this->value = $value; // plain value
+    //     }
+    // }
 }
