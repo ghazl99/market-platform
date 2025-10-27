@@ -100,7 +100,7 @@
                     @if ($categories->count() > 0)
                         @foreach ($categories as $category)
                             @php $media = $category->getFirstMedia('category_images'); @endphp
-                            <a href="{{ route('category.subCategories', $category->id) }}" class="category-card">
+                            <a href="{{ route('category.subCategories', $category->id) }}" class="category-card" style="text-decoration: none">
                                 @if ($media)
                                     <div class="category-image">
 

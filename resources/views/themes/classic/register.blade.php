@@ -28,7 +28,7 @@
                 </a>
                 <div class="auth-nav-links">
                     <a href="{{ route('home') }}" class="nav-link">{{ __('Home') }}</a>
-                    <a href="{{ route('auth.login') }}" class="nav-link">{{ __('Login') }}</a>
+                    <a href="{{ route('auth.customer.login') }}" class="nav-link">{{ __('Login') }}</a>
                 </div>
                 <div class="language-switcher d-flex gap-2">
                     <a href="{{ LaravelLocalization::getLocalizedURL('ar') }}"

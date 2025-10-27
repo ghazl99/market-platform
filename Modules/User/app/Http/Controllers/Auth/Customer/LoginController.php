@@ -36,4 +36,11 @@ class LoginController extends Controller
 
         return redirect()->intended(route('home'));
     }
+    public function destroy()
+    {
+        $this->loginService->logout();
+
+
+        return redirect()->route('auth.customer.login');
+    }
 }
