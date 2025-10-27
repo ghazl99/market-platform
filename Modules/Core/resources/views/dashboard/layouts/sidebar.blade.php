@@ -152,10 +152,13 @@
 
         <div class="nav-section">
             <div class="nav-section-title">الإعدادات</div>
-            <a href="#" class="nav-item">
-                <i class="fas fa-cog"></i>
-                <span class="nav-item-text">عام</span>
-            </a>
+            @if (!empty($store))
+                <a href="{{ route('store.settings.edit', $store->id) }}"
+                    class="nav-item {{ isActive(['store/settings']) ? 'active' : '' }}">
+                    <i class="fas fa-cog"></i>
+                    <span class="nav-item-text">{{ __('Store Settings') }}</span>
+                </a>
+            @endif
             <a href="{{ LaravelLocalization::localizeURL('dashboard/permissions') }}"
                 class="nav-item {{ isActive(['dashboard/permissions']) ? 'active' : '' }}">
                 <i class="fas fa-shield-alt"></i>

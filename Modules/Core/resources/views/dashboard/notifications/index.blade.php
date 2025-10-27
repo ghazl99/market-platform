@@ -183,17 +183,6 @@
             cursor: pointer;
         }
 
-        .btn-read {
-            background: #3b82f6;
-            color: #f9fafb;
-            border-color: #3b82f6;
-        }
-
-        .btn-read:hover {
-            background: #2563eb;
-            color: #f9fafb;
-        }
-
         /* Ensure delete buttons are clickable */
         .btn-delete {
             background: #ef4444;
@@ -333,6 +322,30 @@
                         $message = $data['message'][$locale] ?? ($data['message']['en'] ?? '');
                         $url = $data['url'] ?? '#';
 
+                        // إصلاح الإشعارات القديمة التي تحتوي على "مستخدم غير معروف"
+                        if (isset($data['order_id']) && strpos($message, 'مستخدم غير معروف') !== false) {
+                            try {
+                                $order = \Modules\Order\Models\Order::with('user')->find($data['order_id']);
+                                if ($order && $order->user) {
+                                    $message = str_replace('مستخدم غير معروف', $order->user->name, $message);
+                                }
+                            } catch (\Exception $e) {
+                                // Ignore errors
+                            }
+                        }
+
+                        // إصلاح نصوص "عميل غير معروف" أيضاً
+                        if (isset($data['order_id']) && strpos($message, 'عميل غير معروف') !== false) {
+                            try {
+                                $order = \Modules\Order\Models\Order::with('user')->find($data['order_id']);
+                                if ($order && $order->user) {
+                                    $message = str_replace('عميل غير معروف', $order->user->name, $message);
+                                }
+                            } catch (\Exception $e) {
+                                // Ignore errors
+                            }
+                        }
+
                         // تحديد نوع الإشعار للأيقونة
                         $type = $data['type'] ?? 'default';
                         $iconClass = match ($type) {
@@ -362,14 +375,6 @@
                             </div>
 
                             <div class="notification-actions">
-                                <form action="{{ route('dashboard.notifications.read', $notification->id) }}" method="GET"
-                                    style="display: inline;">
-                                    <button type="submit" class="btn-notification btn-read">
-                                        <i class="fas fa-check"></i>
-                                        {{ __('تمييز كمقروء') }}
-                                    </button>
-                                </form>
-
                                 <button type="button" class="btn-notification btn-delete"
                                     data-notification-id="{{ $notification->id }}">
                                     <i class="fas fa-trash"></i>

@@ -16,6 +16,12 @@ class NotificationController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
+
+        // تمييز جميع الإشعارات كمقروءة تلقائياً عند فتح الصفحة
+        if ($user->unreadNotifications->isNotEmpty()) {
+            $user->unreadNotifications->markAsRead();
+        }
+
         $notifications = $user->notifications()->latest()->paginate(20);
 
         return view('core::dashboard.notifications.index', compact('notifications'));
@@ -34,8 +40,13 @@ class NotificationController extends Controller
             $notification->markAsRead();
         }
 
-        // إعادة التوجيه إلى الصفحة الأصلية المحفوظة في البيانات
-        $url = $notification->data['url'] ?? route('dashboard');
+        // إعادة التوجيه إلى الصفحة الأصلية المحفوظة في البيانات أو البقاء في صفحة الإشعارات
+        try {
+            $url = $notification->data['url'] ?? route('dashboard.notifications.index');
+        } catch (\Exception $e) {
+            // إذا فشل route، استخدم المسار الافتراضي
+            $url = route('dashboard.notifications.index');
+        }
 
         return redirect($url);
     }

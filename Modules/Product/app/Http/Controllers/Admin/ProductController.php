@@ -164,26 +164,34 @@ class ProductController extends Controller implements HasMiddleware
         // جلب البيانات الحقيقية من قاعدة البيانات
         $maxQuantity = $product->max_quantity ?? 0;
         $minQuantity = $product->min_quantity ?? 0;
-        // استخدام original_price كرأس المال
-        $capital = $product->original_price ?? 0;
 
-        // حساب كمية المبيعات من جدول الطلبات
+        // حساب كمية المبيعات من جدول الطلبات (الطلبات المكتملة فقط)
         $salesQuantity = \Modules\Order\Models\OrderItem::where('product_id', $product->id)
             ->whereHas('order', function($query) {
                 $query->where('status', 'completed');
             })
             ->sum('quantity');
 
-        // حساب البيانات المالية
-        $totalSales = \Modules\Order\Models\OrderItem::where('product_id', $product->id)
-            ->whereHas('order', function($query) {
-                $query->where('status', 'completed');
-            })
-            ->get()
-            ->sum(function($item) {
-                return $item->quantity * ($item->product->price ?? 0);
-            });
+        // حساب إجمالي المبيعات (الكمية × سعر المنتج الحالي)
+        $productPrice = $product->price ?? 0;
+        $totalSales = $salesQuantity * $productPrice;
 
+        // تحديد تكلفة الشراء: استخدام capital إذا كانت قيمة موجبة، وإلا استخدام original_price
+        // إذا كانت capital غير موجودة أو صفر، نستخدم original_price
+        $costPrice = null;
+
+        if (isset($product->capital) && $product->capital > 0) {
+            $costPrice = $product->capital;
+        } elseif (isset($product->original_price) && $product->original_price > 0) {
+            $costPrice = $product->original_price;
+        } else {
+            $costPrice = 0;
+        }
+
+        // رأس المال الإجمالي = تكلفة الشراء × الكمية المباعة
+        $capital = $salesQuantity * $costPrice;
+
+        // صافي الربح = إجمالي المبيعات - رأس المال
         $netProfit = $totalSales - $capital;
 
         // جلب بيانات الجدول (آخر 10 طلبات)

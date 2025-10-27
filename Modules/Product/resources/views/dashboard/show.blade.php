@@ -990,13 +990,22 @@
 
             <!-- Financial Summary Cards -->
             <div class="financial-summary-cards">
-                <div class="financial-card net-profit">
+                <div class="financial-card net-profit"
+                    style="{{ $netProfit < 0 ? 'border-left: 4px solid #ef4444;' : '' }}">
                     <div class="financial-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <div class="financial-content">
-                        <div class="financial-value">${{ number_format($netProfit, 2) }}</div>
-                        <div class="financial-label">{{ __('Net Profit') }}</div>
+                        <div class="financial-value" style="{{ $netProfit < 0 ? 'color: #ef4444;' : '' }}">
+                            ${{ number_format($netProfit, 2) }}</div>
+                        <div class="financial-label">
+                            {{ __('Net Profit') }}
+                            @if ($netProfit < 0)
+                                <span style="color: #ef4444; font-size: 0.8rem; display: block; margin-top: 0.25rem;">
+                                    ⚠️ {{ __('Purchase cost is higher than selling price') }}
+                                </span>
+                            @endif
+                        </div>
                     </div>
                 </div>
                 <div class="financial-card capital">
@@ -1065,7 +1074,8 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="price-cell">${{ number_format($orderItem->product->price ?? 0, 4) }}</td>
+                                <td class="price-cell">
+                                    ${{ number_format($orderItem->product->price ?? ($product->price ?? 0), 4) }}</td>
                                 <td><span class="status-badge">{{ __('Completed') }}</span></td>
                                 <td class="date-cell">{{ $orderItem->created_at->format('H:i:s Y-m-d') }}</td>
                             </tr>

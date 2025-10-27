@@ -22,11 +22,13 @@ class OrderObserver
         if (!$owner) {
             return; // لا يوجد مالك
         }
-        $order->load('items.product');
+        $order->load('items.product', 'user');
         // إرسال إشعار للمالك
         $owner->notify(new NewOrderNotification($order));
         $lang = App::getLocale(); // 'ar' أو 'en'
-        $customerName = Auth::user()?->name ?? 'عميل غير معروف';
+
+        // الحصول على اسم العميل من الطلب نفسه، وليس من المستخدم الحالي المسجل دخولاً
+        $customerName = $order->user?->name ?? 'عميل غير معروف';
         $productName = $order->items()->first()?->product?->name ?? 'منتج';
 
         $titles = [

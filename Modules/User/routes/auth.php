@@ -12,7 +12,7 @@ Route::middleware('guest')->group(function () {
 
     // ...existing code for guest (register/login)  to owner...
     Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register.get');
+        ->name('register');
 
     Route::post('register', [RegisteredUserController::class, 'store'])->name('register.post');
 
@@ -20,10 +20,6 @@ Route::middleware('guest')->group(function () {
         ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'login'])->name('login.post');
-
-    // Add auth.login for compatibility
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-        ->name('auth.login');
 
     // ...existing code for guest (register/login)  to customer...
     Route::get('register-customer', [RegisterController::class, 'create'])

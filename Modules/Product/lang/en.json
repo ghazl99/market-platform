@@ -391,5 +391,6 @@
     "No sub-products yet. Add sub-products to this product.": "No sub-products yet. Add sub-products to this product.",
     "Sub-product created successfully": "Sub-product created successfully",
     "Description is optional for sub-products": "Description is optional for sub-products",
-    "Unavailable": "Unavailable"
+    "Unavailable": "Unavailable",
+    "Purchase cost is higher than selling price": "Purchase cost is higher than selling price"
 }

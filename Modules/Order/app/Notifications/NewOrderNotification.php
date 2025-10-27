@@ -4,7 +4,6 @@ namespace Modules\Order\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Modules\Order\Models\Order;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -36,7 +35,8 @@ class NewOrderNotification extends Notification
      */
     public function toArray($notifiable): array
     {
-        $userName = Auth::user()?->name ?? 'مستخدم غير معروف';
+        // الحصول على اسم المستخدم من الطلب نفسه، وليس من المستخدم الحالي
+        $userName = $this->order->user?->name ?? 'مستخدم غير معروف';
         $productName = $this->order->items()->first()?->product?->name ?? 'منتج';
         return [
             'title' => [

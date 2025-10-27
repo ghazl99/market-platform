@@ -30,6 +30,19 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapAuthRoutes();
         $this->mapAdminRoutes();
         $this->mapDashboardRoutes();
+
+        // Add global login route for compatibility with Laravel's built-in auth middleware
+        $this->addGlobalLoginRoute();
+    }
+
+    /**
+     * Add global login route alias
+     */
+    protected function addGlobalLoginRoute(): void
+    {
+        Route::get('login', function() {
+            return redirect()->route('auth.login');
+        })->name('login');
     }
 
     /**

@@ -272,13 +272,26 @@ class CustomerController extends Controller implements HasMiddleware
                         // Ensure title is a string
                         $title = $data['title'] ?? 'إشعار';
                         if (is_array($title)) {
-                            $title = is_string($title['title'] ?? '') ? $title['title'] : 'إشعار';
+                            $title = $title['ar'] ?? $title['en'] ?? 'إشعار';
                         }
 
                         // Ensure message is a string
                         $message = $data['message'] ?? 'رسالة إشعار';
                         if (is_array($message)) {
-                            $message = is_string($message['message'] ?? '') ? $message['message'] : 'رسالة إشعار';
+                            // اختيار اللغة المناسبة
+                            $message = $message[app()->getLocale()] ?? $message['ar'] ?? $message['en'] ?? 'رسالة إشعار';
+                        }
+
+                        // إذا كانت الرسالة تحتوي على "مستخدم غير معروف" وthere's an order_id, try to fix it
+                        if (isset($data['order_id']) && strpos($message, 'مستخدم غير معروف') !== false) {
+                            try {
+                                $order = \Modules\Order\Models\Order::with('user')->find($data['order_id']);
+                                if ($order && $order->user) {
+                                    $message = str_replace('مستخدم غير معروف', $order->user->name, $message);
+                                }
+                            } catch (\Exception $e) {
+                                // Ignore errors
+                            }
                         }
 
                         return (object)[

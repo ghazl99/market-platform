@@ -425,5 +425,6 @@
     "No sub-products yet. Add sub-products to this product.": "لا توجد منتجات فرعية بعد. أضف منتجات فرعية لهذا المنتج.",
     "Sub-product created successfully": "تم إنشاء المنتج الفرعي بنجاح",
     "Description is optional for sub-products": "الوصف اختياري للمنتجات الفرعية",
-    "Unavailable": "غير متوفر"
+    "Unavailable": "غير متوفر",
+    "Purchase cost is higher than selling price": "تكلفة الشراء أعلى من سعر البيع"
 }

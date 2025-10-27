@@ -101,30 +101,61 @@ class StoreService
 
     public function updateSettings(Store $store, array $data): bool
     {
-        if (isset($data['logo']) && $data['logo']->isValid()) {
-            $this->uploadOrUpdateImageWithResize(
-                $store,
-                $data['logo'],
-                'logo',
-                'private_media',
-                true
-            );
-            unset($data['logo']);
-        }
+        DB::beginTransaction();
 
-        if (isset($data['banners']) && is_array($data['banners'])) {
-            $this->uploadOrUpdateImageWithResize(
-                $store,
-                $data['banners'],
-                'banner',
-                'private_media',
-                true
-            );
-            unset($data['banners']);
-        }
+        try {
+            // Handle logo upload
+            if (isset($data['logo']) && $data['logo']->isValid()) {
+                $this->uploadOrUpdateImageWithResize(
+                    $store,
+                    $data['logo'],
+                    'logo',
+                    'private_media',
+                    true
+                );
+                unset($data['logo']);
+            }
 
-        // تحديث الإعدادات عبر الريبو
-        return $this->storeRepository->updateSettings($store, $data);
+            // Handle banners upload (multiple files)
+            if (isset($data['banners']) && is_iterable($data['banners'])) {
+                foreach ($data['banners'] as $banner) {
+                    if ($banner->isValid()) {
+                        $this->uploadOrUpdateImageWithResize(
+                            $store,
+                            $banner,
+                            'banner',
+                            'private_media',
+                            true
+                        );
+                    }
+                }
+                unset($data['banners']);
+            }
+
+            // Filter out null and empty values but keep valid data
+            $cleanData = [];
+            foreach ($data as $key => $value) {
+                // Skip non-string values (like File objects which should be handled above)
+                if (!is_string($value) && !is_array($value) && !is_numeric($value) && !is_bool($value)) {
+                    continue;
+                }
+                // Keep the value if it's not just empty whitespace
+                if ($value !== null && $value !== '') {
+                    $cleanData[$key] = $value;
+                }
+            }
+
+            // تحديث الإعدادات عبر الريبو
+            $result = $this->storeRepository->updateSettings($store, $cleanData);
+
+            DB::commit();
+
+            return $result;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error updating store settings: ' . $e->getMessage());
+            throw $e;
+        }
     }
     /**
      * Prepare data for multilingual fields (name, description)

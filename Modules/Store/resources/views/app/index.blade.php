@@ -119,7 +119,7 @@
                                     <i class="fas fa-cog me-1"></i>
                                     {{ __('Settings') }}
                                 </a>
-                                
+
                                 <form action="{{ route('stores.destroy', $store) }}" method="POST" class="flex-fill"
                                     onsubmit="return confirm('{{ __('Are you sure you want to delete this store?') }}');">
                                     @csrf

@@ -112,4 +112,19 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Routes
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define custom routes for authentication.
+    |
+    */
+
+    'routes' => [
+        'login' => 'auth.login',
+        'register' => 'auth.register',
+        'logout' => 'auth.logout',
+    ],
+
 ];

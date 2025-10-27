@@ -39,11 +39,9 @@
                     <i class="fas fa-user me-1"></i> <span>{{ Auth::user()->name }}</span>
                 </a>
 
-                @role('owner')
-                    <a href="{{ route('stores.index') }}" class="btn btn-outline-secondary me-2 d-flex align-items-center">
-                        <i class="fas fa-store me-1"></i> {{ __('My Stores') }}
-                    </a>
-                @endrole
+                <a href="{{ route('stores.index') }}" class="btn btn-outline-secondary me-2 d-flex align-items-center">
+                    <i class="fas fa-store me-1"></i> {{ __('My Stores') }}
+                </a>
 
                 @role('admin')
                     <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary me-2 d-flex align-items-center">

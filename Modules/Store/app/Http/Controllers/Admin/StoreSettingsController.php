@@ -19,7 +19,7 @@ class StoreSettingsController extends Controller
     {
         $settings = $this->storeService->getSettings($store);
 
-        return view('store::admin.settings', compact('store', 'settings'));
+        return view('core::store.settings', compact('store', 'settings'));
     }
 
     public function updateSettings(Request $request, Store $store)
