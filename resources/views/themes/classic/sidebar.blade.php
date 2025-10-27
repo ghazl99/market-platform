@@ -1,8 +1,10 @@
+
 <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
     <!-- Sidebar Header -->
-    @auth
-        <div class="sidebar-header">
+
+    <div class="sidebar-header">
+        @auth
             <div class="profile-glass">
                 <div class="profile-badge">
                     <div class="badge-avatar">
@@ -24,8 +26,20 @@
                     </div>
                 </div>
             </div>
-        </div>
-    @endauth
+        @else
+            <div class="profile-glass guest-login">
+                <div class="profile-badge">
+                    <div class="badge-info text-center w-100">
+                        <div class="badge-name">{{ __('Welcome, Guest!') }}</div>
+                        <a href="{{ route('auth.customer.login') }}" style="text-decoration: none">
+                            <i class="fas fa-sign-in-alt me-1"></i> {{ __('Login') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endauth
+    </div>
+
     <!-- Navigation -->
     <nav class="sidebar-nav-pro">
         <a href="{{ Route('home') }}"
