@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Basic validation
-            const requiredFields = ['name', 'price', 'category', 'stock_quantity', 'description'];
+            const requiredFields = ['name', 'price', 'category', 'description'];
             let isValid = true;
 
             requiredFields.forEach(field => {

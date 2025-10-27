@@ -13,13 +13,25 @@
     <link rel="stylesheet" href="{{ asset('assets/css/notifications.css') }}">
 
     <style>
-        /* Dark Theme Product Edit Page - Same as Show Page */
+        /* Responsive Theme - Light by Default */
         body {
+            background: var(--light-bg, #f8fafc);
+            color: var(--text-primary, #1f2937);
+        }
+
+        .product-edit-container {
+            background: var(--light-bg, #f8fafc);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        /* Dark Theme Support */
+        [data-theme="dark"] body {
             background: #1a1a1a;
             color: #ffffff;
         }
 
-        .product-edit-container {
+        [data-theme="dark"] .product-edit-container {
             background: #1a1a1a;
             min-height: 100vh;
             padding: 2rem;
@@ -27,10 +39,15 @@
 
         /* Product Header Section */
         .product-header {
-            background: #2d2d2d;
+            background: var(--card-bg, #ffffff);
             border-radius: 16px;
             padding: 2rem;
             margin-bottom: 2rem;
+            border: 1px solid var(--border-color, #e5e7eb);
+        }
+
+        [data-theme="dark"] .product-header {
+            background: #2d2d2d;
             border: 1px solid #404040;
         }
 
@@ -67,6 +84,13 @@
             color: #ffffff;
         }
 
+        /* Light Theme Support */
+        [data-theme="light"] .product-status-badge.active,
+        :not([data-theme]) .product-status-badge.active {
+            background: #10b981;
+            color: #ffffff;
+        }
+
         .status-info.api {
             background: #f59e0b;
             color: #000000;
@@ -83,8 +107,12 @@
         .product-title {
             font-size: 2rem;
             font-weight: 700;
-            color: #ffffff;
+            color: var(--text-primary, #1f2937);
             margin: 0;
+        }
+
+        [data-theme="dark"] .product-title {
+            color: #ffffff;
         }
 
         .product-subtitle {
@@ -495,16 +523,6 @@
                     <div class="form-help">{{ __('Original price before discount (optional)') }}</div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label required">{{ __('Stock Quantity') }}</label>
-                    <input type="number" class="form-input @error('stock_quantity') is-invalid @enderror"
-                        name="stock_quantity" value="{{ old('stock_quantity', $product->stock_quantity) }}"
-                        placeholder="0" min="0" required>
-                    @error('stock_quantity')
-                        <div class="form-error">{{ $message }}</div>
-                    @enderror
-                    <div class="form-help">{{ __('Available quantity in stock') }}</div>
-                </div>
 
                 <div class="form-group">
                     <label class="form-label">{{ __('Minimum Quantity') }}</label>
@@ -600,8 +618,9 @@
                         <div class="form-error">{{ $message }}</div>
                     @enderror
                     <div class="image-preview" id="imagePreview">
-                        @if ($product->image_url)
-                            <img src="{{ $product->image_url }}" alt="Current Product Image" class="preview-image">
+                        @if ($product->getFirstMedia('product_images'))
+                            <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}"
+                                alt="Current Product Image" class="preview-image">
                             <div class="image-overlay">
                                 <span class="image-text">الصورة الحالية</span>
                             </div>

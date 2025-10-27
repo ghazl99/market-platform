@@ -11,6 +11,7 @@ use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Store\Models\Store;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Translatable\HasTranslations;
 
 class Product extends Model implements HasMedia
@@ -34,8 +35,6 @@ class Product extends Model implements HasMedia
         'is_active',
         'is_featured',
         'sku',
-        'stock_quantity',
-        'weight',
         'dimensions',
         'seo_title',
         'seo_description',
@@ -53,8 +52,6 @@ class Product extends Model implements HasMedia
         'price' => 'decimal:2',
         'original_price' => 'decimal:2',
         'capital' => 'decimal:2',
-        'stock_quantity' => 'integer',
-        'weight' => 'decimal:2',
         'views_count' => 'integer',
         'orders_count' => 'integer',
         'min_quantity' => 'integer',
@@ -68,6 +65,12 @@ class Product extends Model implements HasMedia
         return ProductFactory::new();
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('product_images')
+            ->singleFile();
+    }
+
     public function getImagePathAttribute()
     {
         $media = $this->getFirstMedia('product_images');
@@ -79,9 +82,18 @@ class Product extends Model implements HasMedia
         $media = $this->getFirstMedia('product_images');
         if ($media) {
             try {
-                return $media->getUrl();
+                $url = $media->getUrl();
+                // Ensure the URL is accessible via public storage
+                if (str_starts_with($url, '/storage/')) {
+                    return $url;
+                }
+                // If URL is relative, prepend storage path
+                if (!str_starts_with($url, 'http')) {
+                    return '/storage/' . ltrim($url, '/');
+                }
+                return $url;
             } catch (\Exception $e) {
-                // \Log::error('Error getting media URL: ' . $e->getMessage());
+                \Illuminate\Support\Facades\Log::error('Error getting media URL: ' . $e->getMessage());
                 return null;
             }
         }

@@ -34,8 +34,6 @@ class StoreProductRequest extends FormRequest
             'is_active' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
             'sku' => 'nullable|string|max:255|unique:products,sku',
-            'stock_quantity' => 'required|integer|min:0',
-            'weight' => 'nullable|string|max:100',
             'dimensions' => 'nullable|string|max:100',
             'seo_title' => 'nullable|string|max:255',
             'seo_description' => 'nullable|string|max:500',
@@ -67,7 +65,6 @@ class StoreProductRequest extends FormRequest
             'name.required' => __('The product name is required'),
             'description.required' => __('The product description is required'),
             'price.required' => __('The product price is required'),
-            'stock_quantity.required' => __('The available quantity is required'),
         ];
     }
 

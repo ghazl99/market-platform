@@ -4,13 +4,14 @@ namespace Modules\Product\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Modules\Core\Traits\ImageTrait;
 use Modules\Core\Traits\TranslatableTrait;
 use Modules\Product\Models\Product;
 use Modules\Product\Repositories\ProductRepository;
 
 class ProductService
 {
-    use \Modules\Core\Traits\ImageTrait, TranslatableTrait;
+    use ImageTrait, TranslatableTrait;
 
     public function __construct(
         protected ProductRepository $productRepository,
@@ -82,7 +83,6 @@ class ProductService
             $data['status'] = $data['status'] ?? 'active';
             $data['is_active'] = $data['is_active'] ?? true;
             $data['is_featured'] = $data['is_featured'] ?? false;
-            $data['stock_quantity'] = $data['stock_quantity'] ?? 0;
             $data['min_quantity'] = $data['min_quantity'] ?? 1;
             $data['max_quantity'] = $data['max_quantity'] ?? 10;
             $data['product_type'] = $data['product_type'] ?? 'transfer';
@@ -94,7 +94,7 @@ class ProductService
             $data = array_filter($data, function($key) {
                 $allowedFields = ['store_id', 'parent_id', 'name', 'description', 'price',
                                   'original_price', 'status', 'is_active', 'is_featured', 'sku',
-                                  'stock_quantity', 'weight', 'dimensions', 'seo_title', 'seo_description',
+                                  'dimensions', 'seo_title', 'seo_description',
                                   'min_quantity', 'max_quantity', 'product_type', 'notes',
                                   'views_count', 'orders_count', 'image', 'names', 'value', 'unit',
                                   'categories', 'category', 'category_id'];

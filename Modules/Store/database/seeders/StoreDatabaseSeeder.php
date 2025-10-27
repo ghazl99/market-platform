@@ -11,6 +11,8 @@ class StoreDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            ThemeSeeder::class,
+        ]);
     }
 }

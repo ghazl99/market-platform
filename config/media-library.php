@@ -59,7 +59,7 @@ return [
      *
      * This model is only used in Media Library Pro (https://medialibrary.pro)
      */
-    'temporary_upload_model' => Spatie\MediaLibraryPro\Models\TemporaryUpload::class,
+    // 'temporary_upload_model' => Spatie\MediaLibraryPro\Models\TemporaryUpload::class,
 
     /*
      * When enabled, Media Library Pro will only process temporary uploads that were uploaded
@@ -92,9 +92,8 @@ return [
      * Here you can specify which path generator should be used for the given class.
      */
     'custom_path_generators' => [
-        // Model::class => PathGenerator::class
-        // or
-        // 'model_morph_alias' => PathGenerator::class
+        \Modules\Category\Models\Category::class => \Modules\Category\Support\PathGenerators\CategoryPathGenerator::class,
+        \Modules\Product\Models\Product::class => \Modules\Product\Support\PathGenerators\ProductPathGenerator::class,
     ],
 
     /*
