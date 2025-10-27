@@ -287,189 +287,44 @@
         [data-theme="dark"] .banner-preview::-webkit-scrollbar-thumb {
             background: var(--border-color);
         }
-
-        /* Tabs Styles */
-        .tabs-container {
-            margin: 0;
-            padding: 0;
-        }
-
-        .tabs-header {
-            display: flex;
-            gap: 10px;
-            border-bottom: 2px solid var(--border-color);
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .tab-button {
-            padding: 12px 24px;
-            background: transparent;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-secondary);
-            transition: var(--transition-base);
-            font-size: 1rem;
-        }
-
-        .tab-button:hover {
-            color: var(--primary-color);
-        }
-
-        .tab-button.active {
-            color: var(--primary-color);
-            border-bottom-color: var(--primary-color);
-        }
-
-        [data-theme="dark"] .tab-button {
-            color: var(--text-secondary);
-        }
-
-        [data-theme="dark"] .tab-button.active {
-            color: var(--primary-color);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Theme Selection Cards */
-        .themes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .theme-card {
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
-            transition: var(--transition-base);
-            background: var(--card-bg);
-            position: relative;
-        }
-
-        .theme-card:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px var(--shadow-color);
-        }
-
-        .theme-card.selected {
-            border-color: var(--primary-color);
-            background: var(--gradient-primary);
-            color: #fff;
-        }
-
-        .theme-card.selected h4,
-        .theme-card.selected p {
-            color: #fff;
-        }
-
-        .theme-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            text-align: center;
-            color: var(--primary-color);
-        }
-
-        .theme-card.selected .theme-icon {
-            color: #fff;
-        }
-
-        .theme-card h4 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .theme-card p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin: 0;
-        }
-
-        .checkmark {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 30px;
-            height: 30px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .theme-card.selected .checkmark {
-            display: flex;
-        }
     </style>
 @endpush
 
 @section('content')
+    <div class="settings-wrapper mt-5">
+        <div class="container">
+            <h2>{{ __('Store Settings') }}</h2>
 
-    {{-- Tabs Header Outside Container --}}
-    <div class="tabs-container" style="max-width: 900px; margin: 0 auto;">
-        <div class="tabs-header">
-            <button type="button" class="tab-button active" onclick="switchTab('settings')">
-                <i class="fas fa-cog me-2"></i>{{ __('Settings') }}
-            </button>
-            <button type="button" class="tab-button" onclick="switchTab('themes')">
-                <i class="fas fa-palette me-2"></i>{{ __('Themes') }}
-            </button>
-        </div>
-    </div>
+            <form method="POST" action="{{ route('store.settings.update', $store->id) }}" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
 
-    {{-- Settings Tab Container --}}
-    <div id="settings-tab" class="tab-content active">
-        <div class="settings-wrapper mt-5">
-            <div class="container">
-                <h2>{{ __('Store Settings') }}</h2>
-
-                <form method="POST" action="{{ route('store.settings.update', $store->id) }}"
-                    enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-
-                    {{-- Social Links --}}
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="facebook">{{ __('Facebook Link') }}</label>
-                            <input type="text" id="facebook" name="facebook"
-                                value="{{ old('facebook', $settings['facebook'] ?? '') }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="instagram">{{ __('Instagram Link') }}</label>
-                            <input type="text" id="instagram" name="instagram"
-                                value="{{ old('instagram', $settings['instagram'] ?? '') }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="linkedin">{{ __('LinkedIn Link') }}</label>
-                            <input type="text" id="linkedin" name="linkedin"
-                                value="{{ old('linkedin', $settings['linkedin'] ?? '') }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="twitter">{{ __('X / Twitter Link') }}</label>
-                            <input type="text" id="twitter" name="twitter"
-                                value="{{ old('twitter', $settings['twitter'] ?? '') }}">
-                        </div>
+                {{-- Social Links --}}
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="facebook">{{ __('Facebook Link') }}</label>
+                        <input type="text" id="facebook" name="facebook"
+                            value="{{ old('facebook', $settings['facebook'] ?? '') }}">
                     </div>
+
+                    <div class="form-group">
+                        <label for="instagram">{{ __('Instagram Link') }}</label>
+                        <input type="text" id="instagram" name="instagram"
+                            value="{{ old('instagram', $settings['instagram'] ?? '') }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="linkedin">{{ __('LinkedIn Link') }}</label>
+                        <input type="text" id="linkedin" name="linkedin"
+                            value="{{ old('linkedin', $settings['linkedin'] ?? '') }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="twitter">{{ __('X / Twitter Link') }}</label>
+                        <input type="text" id="twitter" name="twitter"
+                            value="{{ old('twitter', $settings['twitter'] ?? '') }}">
+                    </div>
+                </div>
 
                 {{-- Font & Color Settings --}}
                 <div class="form-group full-width">
@@ -508,17 +363,17 @@
                             value="{{ old('success_color', $settings['success_color'] ?? '#3ce551') }}">
                     </div>
 
-                        <div class="form-group">
-                            <label for="warning_color">{{ __('Warning Color') }}</label>
-                            <input type="color" id="warning_color" name="warning_color"
-                                value="{{ old('warning_color', $settings['warning_color'] ?? '#ffd42d') }}">
-                        </div>
+                    <div class="form-group">
+                        <label for="warning_color">{{ __('Warning Color') }}</label>
+                        <input type="color" id="warning_color" name="warning_color"
+                            value="{{ old('warning_color', $settings['warning_color'] ?? '#ffd42d') }}">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="danger_color">{{ __('Danger Color') }}</label>
-                            <input type="color" id="danger_color" name="danger_color"
-                                value="{{ old('danger_color', $settings['danger_color'] ?? '#ef7575') }}">
-                        </div>
+                    <div class="form-group">
+                        <label for="danger_color">{{ __('Danger Color') }}</label>
+                        <input type="color" id="danger_color" name="danger_color"
+                            value="{{ old('danger_color', $settings['danger_color'] ?? '#ef7575') }}">
+                    </div>
 
                     <div class="form-group">
                         <label for="text_primary">{{ __('Text Primary') }}</label>
@@ -617,140 +472,49 @@
 
 
 
-                    {{-- Store Images Section --}}
-                    <h3 style="margin: 20px 0 15px 0; font-size: 1.1rem;">{{ __('Store Images') }}</h3>
+                {{-- Store Images Section --}}
+                <h3 style="margin: 20px 0 15px 0; font-size: 1.1rem;">{{ __('Store Images') }}</h3>
 
-                    <div class="file-input-grid">
-                        <div class="form-group">
-                            <label for="logo">{{ __('Store Logo') }}</label>
-                            <input type="file" id="logo" name="logo" accept="image/*">
-                            @if (!empty($settings['logo']))
-                                <img src="{{ asset('storage/' . $settings['logo']) }}" class="preview-img"
-                                    alt="Logo Preview">
+                <div class="file-input-grid">
+                    <div class="form-group">
+                        <label for="logo">{{ __('Store Logo') }}</label>
+                        <input type="file" id="logo" name="logo" accept="image/*">
+                        @if (!empty($settings['logo']))
+                            <img src="{{ asset('storage/' . $settings['logo']) }}" class="preview-img"
+                                alt="Logo Preview">
+                        @endif
+                    </div>
+
+                    <div class="form-group">
+                        <label for="banners">{{ __('Banner Images (Slideshow)') }}</label>
+                        <input type="file" id="banners" name="banners[]" accept="image/*" multiple>
+
+                        {{-- معرض الصور --}}
+                        <div class="banner-preview" id="banner-preview">
+                            @if (!empty($settings['banners']) && is_array($settings['banners']))
+                                @foreach ($settings['banners'] as $banner)
+                                    <img src="{{ asset('storage/' . $banner) }}" alt="Banner">
+                                @endforeach
                             @endif
                         </div>
-
-                        <div class="form-group">
-                            <label for="banners">{{ __('Banner Images (Slideshow)') }}</label>
-                            <input type="file" id="banners" name="banners[]" accept="image/*" multiple>
-
-                            {{-- معرض الصور --}}
-                            <div class="banner-preview" id="banner-preview">
-                                @if (!empty($settings['banners']) && is_array($settings['banners']))
-                                    @foreach ($settings['banners'] as $banner)
-                                        <img src="{{ asset('storage/' . $banner) }}" alt="Banner">
-                                    @endforeach
-                                @endif
-                            </div>
-                        </div>
                     </div>
+                </div>
 
-                    {{-- Submit --}}
-                    <div style="display:flex; gap:10px; margin-top:10px; justify-content:center;">
-                        <button type="submit" class="btn btn-primary">{{ __('Update Settings') }}</button>
-                        @php
-                            use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-                        @endphp
-                        <a href="{{ LaravelLocalization::localizeURL('dashboard') }}"
-                            class="btn btn-outline-secondary">{{ __('Back') }}</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    {{-- Themes Tab Container --}}
-    <div id="themes-tab" class="tab-content">
-        <div class="settings-wrapper mt-5">
-            <div class="container">
-                <h2>{{ __('Themes') }}</h2>
-                @php
-                    $themes = \Modules\Store\Models\Theme::all();
-                @endphp
-
-                <form method="POST" action="{{ route('store.theme.update', $store->id) }}">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="themes-grid">
-                        @foreach ($themes as $theme)
-                            @php
-                                $themeName = is_array($theme->name)
-                                    ? $theme->name[app()->getLocale()] ?? ($theme->name['en'] ?? 'Theme')
-                                    : $theme->name;
-                                $themeNameLower = strtolower($themeName);
-                            @endphp
-                            <div class="theme-card {{ $store->theme_id === $theme->id ? 'selected' : '' }}"
-                                onclick="selectTheme({{ $theme->id }})">
-                                <div class="checkmark"><i class="fas fa-check"></i></div>
-                                <div class="theme-icon">
-                                    @if ($themeNameLower === 'classic')
-                                        <i class="fas fa-paint-brush"></i>
-                                    @elseif ($themeNameLower === 'modern')
-                                        <i class="fas fa-rocket"></i>
-                                    @elseif ($themeNameLower === 'default')
-                                        <i class="fas fa-star"></i>
-                                    @else
-                                        <i class="fas fa-palette"></i>
-                                    @endif
-                                </div>
-                                <h4>{{ $themeName }}</h4>
-                                <p>{{ __('Choose this theme for your store') }}</p>
-                                <input type="radio" name="theme_id" value="{{ $theme->id }}"
-                                    {{ $store->theme_id === $theme->id ? 'checked' : '' }} style="display:none;">
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <div style="display:flex; gap:10px; margin-top:30px; justify-content:center;">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-2"></i>{{ __('Apply Theme') }}
-                        </button>
-                        <a href="{{ LaravelLocalization::localizeURL('dashboard') }}"
-                            class="btn btn-outline-secondary">{{ __('Back') }}</a>
-                    </div>
-                </form>
-            </div>
+                {{-- Submit --}}
+                <div style="display:flex; gap:10px; margin-top:10px; justify-content:center;">
+                    <button type="submit" class="btn btn-primary">{{ __('Update Settings') }}</button>
+                    @php
+                        use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+                    @endphp
+                    <a href="{{ LaravelLocalization::localizeURL('dashboard') }}"
+                        class="btn btn-outline-secondary">{{ __('Back') }}</a>
+                </div>
+            </form>
         </div>
     </div>
 @endsection
 @push('scripts')
     <script>
-        // Tabs Switching
-        function switchTab(tabName) {
-            // إخفاء جميع المحتويات
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-
-            // إزالة الحالة النشطة من جميع الأزرار
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-
-            // إظهار المحتوى المحدد
-            document.getElementById(tabName + '-tab').classList.add('active');
-
-            // إضافة الحالة النشطة للزر المحدد
-            event.target.classList.add('active');
-        }
-
-        // Theme Selection
-        function selectTheme(themeId) {
-            // إزالة الخيار السابق
-            document.querySelectorAll('.theme-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-
-            // إضافة الخيار الجديد
-            const selectedCard = event.currentTarget;
-            selectedCard.classList.add('selected');
-
-            // تحديد الـ radio button
-            selectedCard.querySelector('input[type="radio"]').checked = true;
-        }
-
-        // Banner Preview
         const bannersInput = document.getElementById('banners');
         const bannerPreview = document.getElementById('banner-preview');
 
