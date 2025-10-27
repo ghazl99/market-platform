@@ -11,17 +11,19 @@
                     @endif
                 </div>
                 <div class="user-details">
-                    <h6>{{ $user->name }}</h6>
+                    <h6><a href="{{ route('dashboard.customer.show', $user->id) }}"
+                            style="color: inherit; text-decoration: none;">{{ $user->name }}</a></h6>
                     <p>{{ __('ID') }}: #{{ $user->id }}</p>
                 </div>
             </div>
         </td>
         <td>{{ $user->email }}</td>
-        <td>{{ $user->phone ?? __('No phone') }}</td>
-        <td>
+        <td style="vertical-align: middle;">
             @if ($user->group)
-                <span class="group-badge">{{ $user->group->name }}</span>
-                <small class="text-muted">({{ $user->group->profit_percentage }}%)</small>
+                <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+                    <span class="group-badge">{{ $user->group->name }}</span>
+                    <small class="text-muted">({{ $user->group->profit_percentage }}%)</small>
+                </div>
             @else
                 <span class="text-muted">{{ __('No Group') }}</span>
             @endif
@@ -64,7 +66,7 @@
     </tr>
 @empty
     <tr>
-        <td colspan="7" class="text-center py-5">
+        <td colspan="8" class="text-center py-5">
             <i class="fas fa-users fa-3x text-muted mb-3"></i>
             <h5 class="text-muted">{{ __('No customers found') }}</h5>
             <p class="text-muted">{{ __('No customers match your search criteria') }}</p>

@@ -149,6 +149,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
             ->where('store_id', $storeId);
     }
 
+    public function wallets()
+    {
+        return $this->hasMany(\Modules\Wallet\Models\Wallet::class);
+    }
+
     public function toSearchableArray()
     {
         $array = [

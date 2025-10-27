@@ -416,5 +416,14 @@
     "Edit Product": "تعديل المنتج",
     "Cancel": "إلغاء",
     "Update Product": "تحديث المنتج",
-    "No orders found for this product": "لم يتم العثور على طلبات لهذا المنتج"
+    "No orders found for this product": "لم يتم العثور على طلبات لهذا المنتج",
+    "Sub-Products": "المنتجات الفرعية",
+    "Add Sub-Product": "إضافة منتج فرعي",
+    "Creating Sub-Product": "إنشاء منتج فرعي",
+    "Parent Product": "المنتج الأب",
+    "Category will be inherited from parent product": "سيتم أخذ الفئة من المنتج الأب",
+    "No sub-products yet. Add sub-products to this product.": "لا توجد منتجات فرعية بعد. أضف منتجات فرعية لهذا المنتج.",
+    "Sub-product created successfully": "تم إنشاء المنتج الفرعي بنجاح",
+    "Description is optional for sub-products": "الوصف اختياري للمنتجات الفرعية",
+    "Unavailable": "غير متوفر"
 }

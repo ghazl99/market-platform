@@ -86,11 +86,44 @@ class ProductService
             $data['min_quantity'] = $data['min_quantity'] ?? 1;
             $data['max_quantity'] = $data['max_quantity'] ?? 10;
             $data['product_type'] = $data['product_type'] ?? 'transfer';
-            $data['linking_type'] = $data['linking_type'] ?? 'automatic';
             $data['notes'] = $data['notes'] ?? null;
             $data['views_count'] = 0;
             $data['orders_count'] = 0;
 
+            // تنظيف البيانات - إزالة الحقول غير الضرورية والحقول غير الموجودة في قاعدة البيانات
+            $data = array_filter($data, function($key) {
+                $allowedFields = ['store_id', 'parent_id', 'name', 'description', 'price',
+                                  'original_price', 'status', 'is_active', 'is_featured', 'sku',
+                                  'stock_quantity', 'weight', 'dimensions', 'seo_title', 'seo_description',
+                                  'min_quantity', 'max_quantity', 'product_type', 'notes',
+                                  'views_count', 'orders_count', 'image', 'names', 'value', 'unit',
+                                  'categories', 'category', 'category_id'];
+                return in_array($key, $allowedFields);
+            }, ARRAY_FILTER_USE_KEY);
+
+            // إزالة الحقول غير الموجودة في قاعدة البيانات
+            unset($data['linking_type']); // هذا الحقل غير موجود في قاعدة البيانات
+
+            Log::info('Data after cleanup:', $data);
+
+            // التعامل مع description
+            if (!isset($data['description']) || $data['description'] === null) {
+                if (isset($data['parent_id']) && $data['parent_id']) {
+                    // منتج فرعي - جرب نسخ الوصف من الأب
+                    $parentProduct = Product::find($data['parent_id']);
+                    if ($parentProduct && $parentProduct->description) {
+                        $data['description'] = $parentProduct->description;
+                        Log::info('Copied description from parent product');
+                    } else {
+                        $data['description'] = ''; // empty string
+                    }
+                } else {
+                    // منتج رئيسي بدون وصف
+                    $data['description'] = '';
+                }
+            }
+
+            // تحويل description و name إلى multilang
             $textFields = ['name', 'description'];
             $translated = $this->prepareData(array_intersect_key($data, array_flip($textFields)));
 
@@ -100,6 +133,53 @@ class ProductService
             Log::info('Product creation data: ' . json_encode($data));
 
             $product = $this->productRepository->create($data);
+            Log::info('Product created with ID: ' . $product->id);
+
+            // ربط الفئات حسب نوع المنتج
+            $categoriesAssigned = false;
+
+            if (isset($data['parent_id']) && $data['parent_id']) {
+                // منتج فرعي: نسخ الفئات من المنتج الأب
+                Log::info('This is a sub-product, parent_id: ' . $data['parent_id']);
+                $parentProduct = Product::with('categories')->find($data['parent_id']);
+
+                if ($parentProduct) {
+                    Log::info('Parent product found: ' . $parentProduct->id);
+
+                    if ($parentProduct->categories()->exists()) {
+                        $parentCategories = $parentProduct->categories->pluck('id')->toArray();
+                        Log::info('Parent product categories: ' . json_encode($parentCategories));
+
+                        if (!empty($parentCategories)) {
+                            $product->categories()->sync($parentCategories);
+                            Log::info('Categories copied from parent to sub-product');
+                            $categoriesAssigned = true;
+                        }
+                    } else {
+                        Log::warning('Parent product has no categories! Sub-product will be created without categories.');
+                        $categoriesAssigned = true; // لا نحاول ربط فئات أخرى
+                    }
+                } else {
+                    Log::error('Parent product not found: ' . $data['parent_id']);
+                }
+            }
+
+            // ربط الفئة للمنتجات الرئيسية (إذا لم يتم ربطها بعد)
+            if (!$categoriesAssigned) {
+                if (isset($data['category']) && $data['category']) {
+                    $product->categories()->sync([$data['category']]);
+                    Log::info('Assigned category to main product: ' . $data['category']);
+                    $categoriesAssigned = true;
+                } elseif (isset($data['categories']) && is_array($data['categories']) && !empty($data['categories'])) {
+                    $product->categories()->sync($data['categories']);
+                    Log::info('Assigned categories to main product: ' . json_encode($data['categories']));
+                    $categoriesAssigned = true;
+                }
+            }
+
+            if (!$categoriesAssigned) {
+                Log::warning('No categories assigned to product: ' . $product->id);
+            }
 
             if (isset($data['image'])) {
                 Log::info('Uploading image for product: ' . $product->id);

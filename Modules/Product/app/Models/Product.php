@@ -22,14 +22,13 @@ class Product extends Model implements HasMedia
      */
     protected $fillable = [
         'store_id',
+        'parent_id',
         'name',
         'description',
         'original_price',
         'price',
-        'sale_price',
         'status',
         'product_type',
-        'linking_type',
         'notes',
         'is_active',
         'is_featured',
@@ -48,12 +47,10 @@ class Product extends Model implements HasMedia
     protected $casts = [
         'status' => 'string',
         'product_type' => 'string',
-        'linking_type' => 'string',
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
         'price' => 'decimal:2',
         'original_price' => 'decimal:2',
-        'sale_price' => 'decimal:2',
         'stock_quantity' => 'integer',
         'weight' => 'decimal:2',
         'views_count' => 'integer',
@@ -125,6 +122,26 @@ class Product extends Model implements HasMedia
             'attribute_products'
         )->withPivot('value')
             ->withTimestamps();
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Product::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Product::class, 'parent_id');
+    }
+
+    public function isSubProduct()
+    {
+        return !is_null($this->parent_id);
+    }
+
+    public function isParentProduct()
+    {
+        return $this->children()->exists();
     }
 
     public function toSearchableArray()

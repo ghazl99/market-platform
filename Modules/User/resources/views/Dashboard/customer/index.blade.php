@@ -371,8 +371,7 @@
                     <tr>
                         <th>{{ __('Customer') }}</th>
                         <th>{{ __('Email') }}</th>
-                        <th>{{ __('Phone') }}</th>
-                        <th>{{ __('Group') }}</th>
+                        <th>{{ __('المجموعة') }}</th>
                         <th>{{ __('Registration Date') }}</th>
                         <th>{{ __('Status') }}</th>
                         <th>{{ __('Last Activity') }}</th>
@@ -753,11 +752,23 @@
             font-weight: 500;
             display: inline-block;
             margin-bottom: 0.25rem;
+            vertical-align: middle;
         }
 
         .text-muted {
             color: #6b7280;
             font-size: 0.8rem;
+        }
+
+        /* Group column alignment fix */
+        .users-table td:nth-child(3) {
+            vertical-align: middle;
+        }
+
+        .users-table td:nth-child(3) .group-badge,
+        .users-table td:nth-child(3) .text-muted {
+            vertical-align: middle;
+            display: inline-block;
         }
 
         .action-buttons {
@@ -1048,7 +1059,7 @@
 
                 // Show loading state
                 usersTableWrapper.innerHTML =
-                    '<tr><td colspan="7" class="text-center py-5"><i class="fas fa-spinner fa-spin fa-2x"></i><br>جاري التحميل...</td></tr>';
+                    '<tr><td colspan="8" class="text-center py-5"><i class="fas fa-spinner fa-spin fa-2x"></i><br>جاري التحميل...</td></tr>';
 
                 const params = new URLSearchParams({
                     search: search,
@@ -1070,7 +1081,7 @@
                     .catch(err => {
                         console.error(err);
                         usersTableWrapper.innerHTML =
-                            '<tr><td colspan="7" class="text-center py-5 text-danger">حدث خطأ في التحميل</td></tr>';
+                            '<tr><td colspan="8" class="text-center py-5 text-danger">حدث خطأ في التحميل</td></tr>';
                     });
             }
 
@@ -1105,7 +1116,7 @@
             // Show loading state
             const tbody = document.getElementById('users-table-wrapper');
             tbody.innerHTML =
-                '<tr><td colspan="7" class="text-center py-5"><i class="fas fa-spinner fa-spin fa-2x"></i><br>جاري التحميل...</td></tr>';
+                '<tr><td colspan="8" class="text-center py-5"><i class="fas fa-spinner fa-spin fa-2x"></i><br>جاري التحميل...</td></tr>';
 
             const params = new URLSearchParams({
                 search: searchInput.value,
@@ -1126,7 +1137,7 @@
                 .catch(error => {
                     console.error('Error:', error);
                     tbody.innerHTML =
-                        '<tr><td colspan="7" class="text-center py-5 text-danger">حدث خطأ في التحميل</td></tr>';
+                        '<tr><td colspan="8" class="text-center py-5 text-danger">حدث خطأ في التحميل</td></tr>';
                 });
         }
 

@@ -780,6 +780,22 @@
             }
         }
     </style>
+
+    <style>
+        /* Animation for notifications */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Date range functionality
@@ -823,7 +839,7 @@
             // Tab functionality
             function showTab(tabName) {
                 // Hide all tabs
-                const tabs = ['overview', 'settings', 'prices', 'inventory'];
+                const tabs = ['overview', 'subproducts', 'settings', 'prices', 'inventory'];
                 tabs.forEach(tab => {
                     const tabElement = document.getElementById(tab + '-tab');
                     if (tabElement) {
@@ -853,8 +869,32 @@
             // Make showTab function globally available
             window.showTab = showTab;
 
-            // Initialize with overview tab active
-            showTab('overview');
+            // التحقق من الـ URL hash لفتح التاب المناسب
+            const urlHash = window.location.hash;
+            if (urlHash && urlHash === '#subproducts-tab') {
+                showTab('subproducts');
+                // الانتقال السلس إلى التاب
+                setTimeout(() => {
+                    document.querySelector('.product-tabs').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }, 100);
+            } else {
+                // Initialize with overview tab active
+                showTab('overview');
+            }
+
+            // الانتقال إلى التاب بعد إعادة التوجيه
+            @if (session('active_tab') === 'subproducts')
+                showTab('subproducts');
+                setTimeout(() => {
+                    document.querySelector('.product-tabs').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }, 100);
+            @endif
         });
     </script>
 @endpush
@@ -925,6 +965,7 @@
         <!-- Navigation Tabs -->
         <div class="product-tabs">
             <button class="tab-item active" onclick="showTab('overview')">{{ __('Product Overview') }}</button>
+            <button class="tab-item" onclick="showTab('subproducts')">{{ __('Sub-Products') }}</button>
             <button class="tab-item" onclick="showTab('settings')">{{ __('Product Settings') }}</button>
             <button class="tab-item" onclick="showTab('prices')">{{ __('Custom Prices') }}</button>
             <button class="tab-item" onclick="showTab('inventory')">{{ __('Inventory') }}</button>
@@ -1179,6 +1220,87 @@
             </div>
         </div>
 
+        <!-- Sub-Products Section -->
+        <div class="product-settings-section" id="subproducts-tab" style="display: none;">
+            <div class="settings-header">
+                <h2 class="settings-title">{{ __('Sub-Products') }}</h2>
+                <a href="{{ route('dashboard.product.create', ['parent_id' => $product->id]) }}"
+                    class="settings-save-btn" style="text-decoration: none;">
+                    <i class="fas fa-plus"></i>
+                    {{ __('Add Sub-Product') }}
+                </a>
+            </div>
+
+            <div class="settings-form">
+                @if ($product->children()->count() > 0)
+                    <div class="sales-table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>{{ __('Image') }}</th>
+                                    <th>{{ __('Name') }}</th>
+                                    <th>{{ __('Price') }}</th>
+                                    <th>{{ __('Status') }}</th>
+                                    <th>{{ __('Actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($product->children as $index => $child)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>
+                                            @if ($child->getFirstMedia('product_images'))
+                                                <img src="{{ $child->getFirstMedia('product_images')->getUrl() }}"
+                                                    alt="{{ $child->name }}" class="product-image-tiny">
+                                            @else
+                                                <div class="product-image-tiny"
+                                                    style="background: #3a3a3a; display: flex; align-items: center; justify-content: center;">
+                                                    <i class="fas fa-box-open"
+                                                        style="font-size: 0.8rem; color: #a0a0a0;"></i>
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td class="product-name-cell">
+                                            {{ $child->getTranslation('name', app()->getLocale()) }}
+                                        </td>
+                                        <td class="price-cell">${{ number_format($child->price, 2) }}</td>
+                                        <td>
+                                            @if ($child->is_active)
+                                                <span class="status-badge">{{ __('Available') }}</span>
+                                            @else
+                                                <span class="status-badge"
+                                                    style="background: #ef4444;">{{ __('Unavailable') }}</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 0.5rem;">
+                                                <a href="{{ route('dashboard.product.show', $child->id) }}"
+                                                    style="color: #f59e0b; text-decoration: none;">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{{ route('dashboard.product.edit', $child->id) }}"
+                                                    style="color: #3b82f6; text-decoration: none;">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <div class="prices-content" style="padding: 3rem;">
+                        <p class="prices-placeholder">
+                            <i class="fas fa-box-open"
+                                style="font-size: 3rem; margin-bottom: 1rem; display: block; color: #6b7280;"></i>
+                            {{ __('No sub-products yet. Add sub-products to this product.') }}
+                        </p>
+                    </div>
+                @endif
+            </div>
+        </div>
 
     </div>
 @endsection
@@ -1187,16 +1309,58 @@
     <script src="{{ asset('assets/js/notifications.js') }}"></script>
 
     <script>
-        // Handle success message from URL parameter
+        // Handle success message from session
         document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('success') === '1') {
+            // إظهار رسالة نجاح من الـ session
+            @if (session('success'))
+                // استخدام دالة showSuccess إذا كانت متوفرة
                 if (typeof showSuccess === 'function') {
-                    showSuccess('{{ __('Success') }}', '{{ __('Product updated successfully') }}');
+                    showSuccess('{{ __('Success') }}', '{{ session('success') }}');
+                } else {
+                    // إنشاء إشعار مخصص
+                    const notification = document.createElement('div');
+                    notification.className = 'success-notification';
+                    notification.innerHTML = `
+                        <div style="position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(16,185,129,0.3); z-index: 10000; display: flex; align-items: center; gap: 1rem; max-width: 400px; animation: slideInRight 0.4s ease;">
+                            <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
+                            <div>
+                                <strong style="display: block; margin-bottom: 0.25rem;">{{ __('Success') }}</strong>
+                                <span style="font-size: 0.9rem;">{{ session('success') }}</span>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(notification);
+
+                    // إخفاء الإشعار بعد 5 ثواني
+                    setTimeout(() => {
+                        notification.style.opacity = '0';
+                        notification.style.transform = 'translateX(120%)';
+                        setTimeout(() => notification.remove(), 300);
+                    }, 5000);
                 }
-                // Clean URL
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
+            @endif
+
+            // إظهار رسالة خطأ من الـ session
+            @if (session('error'))
+                const errorNotification = document.createElement('div');
+                errorNotification.className = 'error-notification';
+                errorNotification.innerHTML = `
+                    <div style="position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(239,68,68,0.3); z-index: 10000; display: flex; align-items: center; gap: 1rem; max-width: 400px; animation: slideInRight 0.4s ease;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <strong style="display: block; margin-bottom: 0.25rem;">{{ __('Error') }}</strong>
+                            <span style="font-size: 0.9rem;">{{ session('error') }}</span>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(errorNotification);
+
+                setTimeout(() => {
+                    errorNotification.style.opacity = '0';
+                    errorNotification.style.transform = 'translateX(120%)';
+                    setTimeout(() => errorNotification.remove(), 300);
+                }, 5000);
+            @endif
         });
 
         // Auto-hide notifications after 5 seconds
