@@ -59,17 +59,10 @@ class AuthenticatedSessionController extends Controller
 
         return redirect()->intended(route('home'));
     }
-    public function destroy(Request $request)
+    public function destroy()
     {
         $this->loginService->logout();
-        $host = $request->getHost();
-        $mainDomain = app()->environment('production')
-            ? config('app.main_domain', 'soqsyria.com')
-            : 'market-platform.localhost';
-        if ($this->homeService->isMainDomain($host, $mainDomain)) {
-            return redirect()->route('auth.login');
-        }
 
-        return redirect()->route('auth.customer.login');
+        return redirect()->route('auth.login');
     }
 }
