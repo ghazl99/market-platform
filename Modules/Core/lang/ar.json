@@ -273,6 +273,11 @@
     "Danger Color": "لون الخطر",
     "Secondary Text Color": "لون النص الثانوي",
     "Border Color": "لون الحدود",
-    "Shadow Color": "لون الظل"
+    "Shadow Color": "لون الظل",
+    "Settings": "الإعدادات",
+    "Themes": "الثيمات",
+    "Apply Theme": "تطبيق الثيم",
+    "Theme updated successfully.": "تم تحديث الثيم بنجاح.",
+    "Choose this theme for your store": "اختر هذا الثيم لمتجرك"
 }
 

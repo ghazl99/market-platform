@@ -27,6 +27,7 @@ class Store extends Model implements HasMedia
         'status',
         'theme_id',
         'settings',
+        'theme_id',
     ];
 
     public $translatable = ['name', 'description'];
@@ -227,5 +228,10 @@ class Store extends Model implements HasMedia
     public function settingsStore()
     {
         return $this->hasMany(\Modules\Store\Models\StoreSetting::class);
+    }
+
+    public function theme()
+    {
+        return $this->belongsTo(Theme::class);
     }
 }

@@ -132,7 +132,7 @@ class CategoryService
                     $category,
                     $data['image'],
                     'category_images',
-                    'private_media',
+                    'public',
                     false
                 );
             }
@@ -153,7 +153,7 @@ class CategoryService
                                 $subcategory,
                                 $data['subcategory_image'][$k],
                                 'subcategory_images',
-                                'private_media',
+                                'public',
                                 false
                             );
                         }
@@ -191,7 +191,7 @@ class CategoryService
                 $category,
                 $data['image'],
                 'category_images',
-                'private_media',
+                'public',
                 true
             );
         }

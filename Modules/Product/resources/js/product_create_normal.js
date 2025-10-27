@@ -20,49 +20,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Form validation
-    form.addEventListener('submit', function(e) {
-        // Get form data
-        const formData = new FormData(form);
-        const productData = Object.fromEntries(formData.entries());
+    // Form submission handler
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            console.log('Form submit event triggered');
 
-        // Basic validation
-        if (!productData.name || !productData.price || !productData.category || !productData.stock_quantity || !productData.description) {
-            e.preventDefault();
-            if (typeof showError === 'function') {
-                showError('خطأ في التحقق', 'يرجى ملء جميع الحقول المطلوبة');
-            } else {
-                alert('يرجى ملء جميع الحقول المطلوبة');
+            // Get form data for validation only (logging)
+            const formData = new FormData(form);
+            const productData = Object.fromEntries(formData.entries());
+
+            console.log('Form data:', productData);
+
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
+                submitBtn.disabled = true;
+
+                // Re-enable button after 30 seconds as fallback
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }, 30000);
             }
-            return;
-        }
 
-        // Show loading state
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
-        submitBtn.disabled = true;
-
-        // Let the form submit normally - Laravel will handle the response
-        // No need to prevent default or handle response here
-        console.log('Form submitted normally, Laravel will handle the response');
-    });
+            // Let the form submit normally - Laravel will handle validation
+            console.log('Allowing form to submit normally');
+        });
+    } else {
+        console.error('Form not found!');
+    }
 
     // Real-time validation
-    const requiredFields = form.querySelectorAll('input[required], textarea[required], select[required]');
-    requiredFields.forEach(field => {
-        field.addEventListener('blur', function() {
-            if (!this.value.trim()) {
-                this.style.borderColor = '#ef4444';
-            } else {
-                this.style.borderColor = '';
-            }
+    if (form) {
+        const requiredFields = form.querySelectorAll('input[required], textarea[required], select[required]');
+        requiredFields.forEach(field => {
+            field.addEventListener('blur', function() {
+                if (!this.value.trim()) {
+                    this.style.borderColor = '#ef4444';
+                } else {
+                    this.style.borderColor = '';
+                }
+            });
         });
-    });
+    }
 
     // Auto-generate SEO title from name
-    const nameInput = form.querySelector('input[name="name"]');
-    const seoTitleInput = form.querySelector('input[name="seo_title"]');
+    const nameInput = form ? form.querySelector('input[name="name"]') : null;
+    const seoTitleInput = form ? form.querySelector('input[name="seo_title"]') : null;
 
     if (nameInput && seoTitleInput) {
         nameInput.addEventListener('input', function() {
@@ -73,8 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Auto-generate SEO description from description
-    const descriptionInput = form.querySelector('textarea[name="description"]');
-    const seoDescriptionInput = form.querySelector('textarea[name="seo_description"]');
+    const descriptionInput = form ? form.querySelector('textarea[name="description"]') : null;
+    const seoDescriptionInput = form ? form.querySelector('textarea[name="seo_description"]') : null;
 
     if (descriptionInput && seoDescriptionInput) {
         descriptionInput.addEventListener('input', function() {

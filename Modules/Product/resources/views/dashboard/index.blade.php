@@ -924,9 +924,9 @@
 
                     <!-- Product Icon -->
                     <div class="product-icon">
-                        @if ($product->image_url)
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="product-image"
-                                loading="lazy"
+                        @if ($product->getFirstMedia('product_images'))
+                            <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}"
+                                alt="{{ $product->name }}" class="product-image" loading="lazy"
                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             <div class="product-image-placeholder" style="display: none;">
                                 <i class="fas fa-box-open"></i>
@@ -1392,11 +1392,11 @@
                     <div class="notification-title">{{ __('Success') }}</div>
                     <div class="notification-message">${message}</div>
                     ${productId ? `
-                                                <div class="notification-details">
-                                                    <i class="fas fa-info-circle"></i>
-                                                    {{ __('Product') }} #${productId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
-                                                </div>
-                                                ` : ''}
+                                                    <div class="notification-details">
+                                                        <i class="fas fa-info-circle"></i>
+                                                        {{ __('Product') }} #${productId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
+                                                    </div>
+                                                    ` : ''}
                 </div>
                 <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
                 <div class="notification-progress"></div>

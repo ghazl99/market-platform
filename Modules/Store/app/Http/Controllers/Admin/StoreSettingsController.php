@@ -17,6 +17,9 @@ class StoreSettingsController extends Controller
      */
     public function editSettings(Store $store)
     {
+        // Check authorization - only store owner or staff can access
+        $this->authorizeStoreAccess($store);
+
         $settings = $this->storeService->getSettings($store);
 
         return view('core::store.settings', compact('store', 'settings'));
@@ -24,11 +27,47 @@ class StoreSettingsController extends Controller
 
     public function updateSettings(Request $request, Store $store)
     {
+        // Check authorization - only store owner or staff can update
+        $this->authorizeStoreAccess($store);
+
         $data = $request->all();
 
         $this->storeService->updateSettings($store, $data);
 
         return redirect()->route('store.settings.edit', $store->id)
             ->with('success', __('Settings updated successfully.'));
+    }
+
+    public function updateTheme(Request $request, Store $store)
+    {
+        // Check authorization - only store owner or staff can update
+        $this->authorizeStoreAccess($store);
+
+        $request->validate([
+            'theme_id' => 'required|exists:themes,id',
+        ]);
+
+        $store->update([
+            'theme_id' => $request->theme_id,
+        ]);
+
+        return redirect()->route('store.settings.edit', $store->id)
+            ->with('success', __('Theme updated successfully.'));
+    }
+
+    /**
+     * Check if current user has access to this store
+     */
+    protected function authorizeStoreAccess(Store $store): void
+    {
+        $user = request()->user();
+
+        // Check if user is associated with the store (as owner or staff)
+        if ($store->users()->where('users.id', $user->id)->exists()) {
+            return;
+        }
+
+        // If not authorized, abort with 403
+        abort(403, 'You do not have access to this store.');
     }
 }

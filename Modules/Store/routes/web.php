@@ -9,6 +9,8 @@ Route::middleware(['auth'])->group(function () {
     // Store Settings Management
     Route::get('/store/settings/{store}/edit', [StoreSettingsController::class, 'editSettings'])->name('store.settings.edit');
     Route::put('/store/settings/{store}', [StoreSettingsController::class, 'updateSettings'])->name('store.settings.update');
+    // Store Theme Management
+    Route::put('/store/theme/{store}', [StoreSettingsController::class, 'updateTheme'])->name('store.theme.update');
 });
 
 Route::get('/store/image/{media}', [StoreController::class, 'showImage'])->name('store.image');

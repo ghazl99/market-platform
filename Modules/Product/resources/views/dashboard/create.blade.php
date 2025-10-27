@@ -13,12 +13,12 @@
     <link rel="stylesheet" href="{{ asset('assets/css/notifications.css') }}">
 
     <style>
-        /* تحسين مظهر قائمة الأقسام - تنسيق داكن */
+        /* تحسين مظهر قائمة الأقسام - تنسيق متجاوب */
         .form-select {
-            background-color: #374151 !important;
-            border: 1px solid #4b5563 !important;
-            color: #ffffff !important;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+            background-color: var(--input-bg, #ffffff) !important;
+            border: 1px solid var(--border-color, #e5e7eb) !important;
+            color: var(--text-primary, #1f2937) !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='var(--text-primary,%236b7280)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
             background-position: right 12px center !important;
             background-repeat: no-repeat !important;
             background-size: 16px !important;
@@ -26,16 +26,16 @@
         }
 
         .form-select:focus {
-            background-color: #374151 !important;
-            border-color: #3b82f6 !important;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233b82f6' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+            background-color: var(--input-bg, #ffffff) !important;
+            border-color: var(--primary-color, #059669) !important;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='var(--primary-color,%23059669)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
         }
 
         /* تنسيق خيارات القائمة المنسدلة */
         .form-select option {
-            background-color: #374151 !important;
-            color: #ffffff !important;
+            background-color: var(--card-bg, #ffffff) !important;
+            color: var(--text-primary, #1f2937) !important;
             padding: 8px 12px !important;
             font-size: 14px !important;
             line-height: 1.5 !important;
@@ -43,27 +43,28 @@
         }
 
         .form-select option[value=""] {
-            color: #9ca3af !important;
+            color: var(--text-secondary, #6b7280) !important;
             font-style: italic !important;
         }
 
         .form-select option:hover {
-            background-color: #4b5563 !important;
+            background-color: var(--primary-color, #059669) !important;
+            color: #ffffff !important;
         }
 
         .form-select option:checked {
-            background-color: #3b82f6 !important;
+            background-color: var(--primary-color, #059669) !important;
             color: #ffffff !important;
         }
 
         /* تنسيق الأقسام الرئيسية */
         .form-select option:not([value=""]) {
-            color: #ffffff !important;
+            color: var(--text-primary, #1f2937) !important;
         }
 
         /* تنسيق الأقسام الفرعية */
         .form-select option[style*="└─"] {
-            color: #d1d5db !important;
+            color: var(--text-secondary, #6b7280) !important;
             font-weight: 500 !important;
         }
 
@@ -173,16 +174,6 @@
                         <div class="form-help">{{ __('Price in Saudi Riyal') }}</div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label required">{{ __('Available Quantity') }}</label>
-                        <input type="number" class="form-input @error('stock_quantity') is-invalid @enderror"
-                            name="stock_quantity" value="{{ old('stock_quantity') }}" placeholder="0" min="0"
-                            required>
-                        @error('stock_quantity')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">{{ __('Number of pieces available in stock') }}</div>
-                    </div>
 
                     @if (!isset($parentProduct))
                         <div class="form-group">
@@ -244,24 +235,6 @@
                         </div>
                     @endif
 
-                    <div class="form-group">
-                        <label class="form-label">{{ __('Discount') }}</label>
-                        <input type="number" class="form-input @error('discount') is-invalid @enderror" name="discount"
-                            value="{{ old('discount') }}" placeholder="0" min="0" max="100">
-                        @error('discount')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">{{ __('Discount percentage from 0 to 100') }}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">{{ __('Weight (kg)') }}</label>
-                        <input type="number" class="form-input @error('weight') is-invalid @enderror" name="weight"
-                            value="{{ old('weight') }}" placeholder="0.0" step="0.1">
-                        @error('weight')
-                            <div class="form-error">{{ $message }}</div>
-                        @enderror
-                    </div>
                 </div>
             </div>
 
@@ -285,14 +258,6 @@
                     </div>
                 </div>
 
-                <div class="form-group full-width">
-                    <label class="form-label">{{ __('Technical Specifications') }}</label>
-                    <textarea class="form-input form-textarea @error('specifications') is-invalid @enderror" name="specifications"
-                        placeholder="{{ __('Enter product technical specifications') }}">{{ old('specifications') }}</textarea>
-                    @error('specifications')
-                        <div class="form-error">{{ $message }}</div>
-                    @enderror
-                </div>
             </div>
 
             <!-- Images -->
@@ -430,7 +395,7 @@
             }
         });
     </script>
-    <script src="{{ asset('modules/product/product_create_normal.js') }}"></script>
+    <script src="{{ asset('modules/product/product_create_simple_fix.js') }}"></script>
     <script>
         // Handle Laravel session messages
         @if (session('success'))
