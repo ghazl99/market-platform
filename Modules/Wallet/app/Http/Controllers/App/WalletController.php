@@ -27,10 +27,9 @@ class WalletController extends Controller
             'quick'     => $request->input('quick') ?: null,
             'type'      => $request->input('type') ?: null,
         ];
-        $theme = current_store()->theme;
 
         $transactions = $this->walletService->getTransactions($filters, 10);
-        return view("themes.$theme.wallet", compact('transactions'));
+        return view('themes.' . current_theme_name_en() . '.wallet', compact('transactions'));
     }
 
     public function deposit(array $data)

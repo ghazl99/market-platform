@@ -33,10 +33,9 @@ class PaymentMethodController extends Controller
     public function index()
     {
         $store = Store::currentFromUrl()->firstOrFail();
-        $theme = current_store()->theme;
 
         $paymentMethods = $this->paymentMethodService->getForCurrentStore($store);
-        return view("themes.$theme.add-balance", compact('paymentMethods'));
+        return view('themes.' . current_theme_name_en() . '.add-balance', compact('paymentMethods'));
     }
 
     /**
@@ -58,9 +57,8 @@ class PaymentMethodController extends Controller
      */
     public function show(PaymentMethod $paymentMethod)
     {
-        $theme = current_store()->theme;
 
-        return view("themes.$theme.payment-details", compact('paymentMethod'));
+        return view('themes.' . current_theme_name_en() . '.payment-details', compact('paymentMethod'));
     }
 
     public function convertCurrency(Request $request)

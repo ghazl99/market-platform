@@ -195,17 +195,18 @@
                     </div>
 
                     <div class="form-group full-width">
-                        <label for="theme">{{ __('Theme') }}</label>
-                        <select id="theme" name="theme" required>
+                        <label for="theme_id">{{ __('Theme') }}</label>
+                        <select id="theme_id" name="theme_id" required>
                             <option value="">{{ __('Select Theme') }}</option>
-                            <option value="default" {{ old('theme', $store->theme) == 'default' ? 'selected' : '' }}>
-                                {{ __('Default Theme') }}</option>
-                            <option value="modern" {{ old('theme', $store->theme) == 'modern' ? 'selected' : '' }}>
-                                {{ __('Modern Theme') }}</option>
-                            <option value="classic" {{ old('theme', $store->theme) == 'classic' ? 'selected' : '' }}>
-                                {{ __('Classic Theme') }}</option>
+                            @foreach ($themes as $theme)
+                                <option value="{{ $theme->id }}"
+                                    {{ old('theme', $store->theme_id) == $theme->id ? 'selected' : '' }}>
+                                    {{ $theme->getTranslation('name', app()->getLocale()) }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
+
 
                     <div class="form-group full-width">
                         <div class="row">
@@ -232,7 +233,8 @@
 
 
                     <div style="display:flex; gap:10px; margin-top:20px;">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i> {{ __('Save') }}</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i>
+                            {{ __('Save') }}</button>
                         <a href="{{ route('stores.show', $store) }}" class="btn btn-outline-secondary"><i
                                 class="fas fa-arrow-right me-2"></i> {{ __('Back') }}</a>
                     </div>

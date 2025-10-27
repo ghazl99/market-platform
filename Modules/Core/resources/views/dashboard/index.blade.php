@@ -127,10 +127,10 @@
                                 </a>
                             </div>
                             <div class="col-md-3">
-                                <a href="{{ route('home') }}"
+                                <a href="{{ route('admin.themes.index') }}"
                                     class="btn btn-secondary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center">
                                     <i class="fas fa-home fa-2x mb-2"></i>
-                                    <span>{{ __('View Website') }}</span>
+                                    <span>{{ __('View Themes') }}</span>
                                 </a>
                             </div>
                         </div>

@@ -216,20 +216,21 @@
 
             {{-- Theme --}}
             <div class="form-group">
-                <label for="theme">{{ __('Theme') }}</label>
-                <select id="theme" name="theme" required>
+                <label for="theme_id">{{ __('Theme') }}</label>
+                <select id="theme_id" name="theme_id" required>
                     <option value="">{{ __('Select Theme') }}</option>
-                    <option value="default" {{ old('theme') == 'default' ? 'selected' : '' }}>{{ __('Default Theme') }}
-                    </option>
-                    <option value="modern" {{ old('theme') == 'modern' ? 'selected' : '' }}>{{ __('Modern Theme') }}
-                    </option>
-                    <option value="classic" {{ old('theme') == 'classic' ? 'selected' : '' }}>{{ __('Classic Theme') }}
-                    </option>
+                    @foreach ($themes as $theme)
+                        <option value="{{ $theme->id }}"
+                            {{ old('theme', $store->theme_id ?? '') == $theme->id ? 'selected' : '' }}>
+                            {{ $theme->getTranslation('name', app()->getLocale()) }}
+                        </option>
+                    @endforeach
                 </select>
                 @error('theme')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+
 
             {{-- Timezone --}}
             <div class="form-group">

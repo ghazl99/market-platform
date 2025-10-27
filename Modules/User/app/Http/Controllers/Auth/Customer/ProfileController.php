@@ -24,14 +24,13 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $theme = current_store()->theme;
 
         // إذا تستخدم جدول user_sessions
         $activeSessionsCount = DB::table('sessions')
             ->where('user_id', Auth::user()->id)
             ->count();
 
-        return view("themes.$theme.security", compact('activeSessionsCount'));
+        return view('themes.' . current_theme_name_en() . '.security', compact('activeSessionsCount'));
     }
     public function activeSessions()
     {
@@ -57,8 +56,7 @@ class ProfileController extends Controller
                 return $session;
             });
 
-        $theme = current_store()->theme;
-        return view("themes.$theme.sessions", compact('sessions'));
+        return view('themes.' . current_theme_name_en() . '.sessions', compact('sessions'));
     }
 
     /**
@@ -66,9 +64,8 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
-        $theme = current_store()->theme;
 
-        return view("themes.$theme.profile");
+        return view('themes.' . current_theme_name_en() . '.profile');
     }
 
     /**

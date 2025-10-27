@@ -25,7 +25,7 @@ class Store extends Model implements HasMedia
         'description',
         'type',
         'status',
-        'theme',
+        'theme_id',
         'settings',
     ];
 
@@ -36,6 +36,10 @@ class Store extends Model implements HasMedia
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+    public function theme()
+{
+    return $this->belongsTo(Theme::class);
+}
     protected static function newFactory()
     {
         return StoreFactory::new();

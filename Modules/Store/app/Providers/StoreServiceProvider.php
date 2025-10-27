@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Modules\Store\Repositories\Admin\StoreRepository;
 use Modules\Store\Repositories\Admin\StoreRepositoryModel;
+use Modules\Store\Repositories\Admin\ThemeModelRepository;
+use Modules\Store\Repositories\Admin\ThemeRepository;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -29,7 +31,7 @@ class StoreServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
-        
+
     }
 
     /**
@@ -40,6 +42,7 @@ class StoreServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
         $this->app->bind(StoreRepository::class, StoreRepositoryModel::class);
+        $this->app->bind(ThemeRepository::class,ThemeModelRepository::class);
     }
 
     /**

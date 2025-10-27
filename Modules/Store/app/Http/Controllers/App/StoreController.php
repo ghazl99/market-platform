@@ -2,15 +2,16 @@
 
 namespace Modules\Store\Http\Controllers\App;
 
+use Modules\Store\Models\Store;
 use App\Http\Controllers\Controller;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controllers\Middleware;
+use Modules\Store\Services\Admin\StoreService;
+use Modules\Store\Services\Admin\ThemeService;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Modules\Store\Http\Requests\App\StoreCreateRequest;
 use Modules\Store\Http\Requests\App\StoreUpdateRequest;
-use Modules\Store\Models\Store;
-use Modules\Store\Services\Admin\StoreService;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class StoreController extends Controller implements HasMiddleware
 {
@@ -22,7 +23,9 @@ class StoreController extends Controller implements HasMiddleware
     }
 
     public function __construct(
-        protected StoreService $storeService
+        protected StoreService $storeService,
+        protected ThemeService $themeService
+
     ) {}
 
     public function showImage(Media $media)
@@ -51,7 +54,9 @@ class StoreController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        return view('store::app.create');
+        $themes = $this->themeService->getAllThemes();
+
+        return view('store::app.create',compact('themes'));
     }
 
     /**
@@ -83,8 +88,9 @@ class StoreController extends Controller implements HasMiddleware
     public function edit(Store $store)
     {
         $this->authorizeStoreAccess($store);
+        $themes = $this->themeService->getAllThemes();
 
-        return view('store::app.edit', compact('store'));
+        return view('store::app.edit', compact('store', 'themes'));
     }
 
     /**

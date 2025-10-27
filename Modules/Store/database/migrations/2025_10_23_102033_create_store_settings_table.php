@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('store_settings', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('store_id')->constrained()->onDelete('cascade');
+            $table->foreignId('store_id')->nullable()->constrained()->nullOnDelete('cascade');
+            $table->foreignId('theme_id')->nullable()->constrained()->nullOnDelete('cascade');
+
             $table->string('key');
             $table->string('value');
 

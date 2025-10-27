@@ -25,7 +25,7 @@ class StoreCreateRequest extends FormRequest
                 'unique:stores,domain',
             ],
 
-            'theme' => ['required', 'string', 'in:default,modern,classic'],
+            'theme_id' => ['required'],
 
             'type' => ['required', 'string', 'in:traditional,digital,educational'],
 

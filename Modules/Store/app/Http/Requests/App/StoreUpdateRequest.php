@@ -14,7 +14,7 @@ class StoreUpdateRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'theme' => 'required|string|in:default,modern,classic',
+            'theme_id' => 'required',
         ];
     }
 

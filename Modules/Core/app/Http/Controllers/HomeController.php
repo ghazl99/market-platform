@@ -40,6 +40,6 @@ class HomeController extends Controller
 
         $categories = $this->categoryService->getAllcategories();
 
-        return view('themes.' . $store->theme . '.home', compact('store', 'categories'));
+        return view('themes.' . current_theme_name_en() . '.home', compact('store', 'categories'));
     }
 }

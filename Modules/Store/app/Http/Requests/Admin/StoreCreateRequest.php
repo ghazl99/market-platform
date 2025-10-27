@@ -20,7 +20,7 @@ class StoreCreateRequest extends FormRequest
                 min:3|
                 max:50|
                 unique:stores,domain',
-            'theme' => 'required|string',
+            'theme_id' => 'required|string',
             'status' => 'required|string|in:active,pending,inactive',
             'type' => 'required|string|in:traditional,digital',
             'user_id' => 'required|exists:users,id',

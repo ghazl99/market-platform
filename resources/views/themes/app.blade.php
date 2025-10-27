@@ -8,7 +8,7 @@
 
     <!-- Stylesheets -->
     <link rel="stylesheet"
-        href="{{ asset('assets/css/themes/' . ($store->theme ?? 'default') . '.css') }}?v={{ time() }}">
+        href="{{ asset('assets/css/themes/' . (current_theme_name_en() ?? 'default') . '.css') }}?v={{ time() }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     @stack('styles')
@@ -31,8 +31,8 @@
 </head>
 
 <body class="modern-layout">
-    @includeIf('themes.' . $store->theme . '.nav')
-    @includeIf('themes.' . $store->theme . '.sidebar')
+    @includeIf('themes.' . current_theme_name_en() . '.nav')
+    @includeIf('themes.' . current_theme_name_en() . '.sidebar')
 
     <!-- Main Content -->
     <main class="main-content">
@@ -44,7 +44,7 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Store Scripts -->
-    <script src="{{ asset('assets/js/themes/' . ($store->theme ?? 'default') . '.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/js/themes/' . (current_theme_name_en() ?? 'default') . '.js') }}?v={{ time() }}"></script>
 
     <!-- Blade pushed scripts -->
     @stack('scripts')

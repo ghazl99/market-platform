@@ -68,10 +68,25 @@ class StoreRepositoryModel implements StoreRepository
             }
             StoreSetting::updateOrCreate(
                 ['store_id' => $store->id, 'key' => $key],
-                ['value' => $value]
+                ['value' => $value,'theme_id'=>$store->theme->id]
             );
         }
-        cache()->forget("store_settings_{$store->id}");
+
+        return true;
+    }
+
+    public function createSettings($theme,array $data): bool
+    {
+        foreach ($data as $key => $value) {
+            if (is_null($value) || $value === '') {
+                continue;
+            }
+
+            StoreSetting::Create(
+                ['store_id' => null, 'key' => $key,'value' => $value,'theme_id'=>$theme->id]
+            );
+        }
+
 
         return true;
     }

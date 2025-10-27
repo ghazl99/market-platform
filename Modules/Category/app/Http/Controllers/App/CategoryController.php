@@ -38,10 +38,9 @@ class CategoryController extends Controller
     {
         $query = $request->input('query');
         $products = $this->categoryService->getProducts($category, $query);
-        $theme = current_store()->theme;
 
         if ($request->ajax()) {
-            $html = view("themes.$theme._products", compact('products'))->render();
+            $html = view("themes.' . current_theme_name_en() . '._products", compact('products'))->render();
             $pagination = $products->hasPages() ? $products->links()->toHtml() : '';
 
             return response()->json([
@@ -51,7 +50,7 @@ class CategoryController extends Controller
             ]);
         }
 
-        return view("themes.$theme.products", compact('category', 'products'));
+        return view('themes.' . current_theme_name_en() . '.products', compact('category', 'products'));
     }
 
     public function getSubCategoryById($id)
@@ -59,6 +58,6 @@ class CategoryController extends Controller
         $category = $this->categoryService->getAllSubcategoriesById($id);
         $theme = current_store()->theme;
 
-        return view("themes.$theme.subCategoryById", compact('category'));
+        return view('themes.' . current_theme_name_en() . '.subCategoryById', compact('category'));
     }
 }

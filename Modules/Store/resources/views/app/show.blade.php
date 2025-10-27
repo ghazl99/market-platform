@@ -252,7 +252,7 @@
                         </div>
                         <div style="flex:1; min-width:200px;">
                             <strong>{{ __('Theme') }}</strong>
-                            <p>{{ ucfirst($store->theme) }}</p>
+                            <p>{{ $store->theme->name }}</p>
                         </div>
                         <div style="flex:1 1 100%;">
                             <strong>{{ __('Description') }}</strong>

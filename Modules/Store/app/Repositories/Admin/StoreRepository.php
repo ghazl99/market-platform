@@ -24,4 +24,5 @@ interface StoreRepository
 
     public function updateSettings(Store $store, array $data): bool;
 
+    public function createSettings($theme,array $data): bool;
 }

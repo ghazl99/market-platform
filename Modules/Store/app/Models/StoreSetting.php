@@ -15,6 +15,7 @@ class StoreSetting extends Model
      */
     protected $fillable = [
         'store_id',
+        'theme_id',
         'key',
         'value',
     ];

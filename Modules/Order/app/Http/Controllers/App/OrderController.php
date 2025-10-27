@@ -71,7 +71,7 @@ class OrderController extends Controller
         ];
         $theme = current_store()->theme;
 
-        return view("themes.$theme.orders", compact('orders', 'statusCounts'));
+        return view('themes.' . current_theme_name_en() . '.orders', compact('orders', 'statusCounts'));
     }
 
     /**
