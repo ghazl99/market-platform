@@ -48,12 +48,18 @@
     <nav class="sidebar-nav">
         <div class="nav-section">
             <div class="nav-section-title">{{ __('Dashboard') }}</div>
+            @php
+                $currentPath = trim(request()->path(), '/');
+                $isDashboardActive =
+                    $currentPath === 'dashboard' || $currentPath === 'ar/dashboard' || $currentPath === 'en/dashboard';
+            @endphp
             <a href="{{ LaravelLocalization::localizeURL('dashboard') }}"
-                class="nav-item {{ isActive(['dashboard']) ? 'active' : '' }}">
+                class="nav-item {{ $isDashboardActive ? 'active' : '' }}">
                 <i class="fas fa-home"></i>
                 <span class="nav-item-text">{{ __('Dashboard') }}</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="{{ route('dashboard.statistics') }}"
+                class="nav-item {{ isActive(['dashboard/statistics']) ? 'active' : '' }}">
                 <i class="fas fa-chart-line"></i>
                 <span class="nav-item-text">الإحصائيات</span>
             </a>

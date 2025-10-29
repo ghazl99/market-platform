@@ -422,6 +422,7 @@
     "Creating Sub-Product": "إنشاء منتج فرعي",
     "Parent Product": "المنتج الأب",
     "Category will be inherited from parent product": "سيتم أخذ الفئة من المنتج الأب",
+    "Category is set from the section you are adding from": "الفئة محددة من القسم الذي تضيف المنتج منه",
     "No sub-products yet. Add sub-products to this product.": "لا توجد منتجات فرعية بعد. أضف منتجات فرعية لهذا المنتج.",
     "Sub-product created successfully": "تم إنشاء المنتج الفرعي بنجاح",
     "Description is optional for sub-products": "الوصف اختياري للمنتجات الفرعية",

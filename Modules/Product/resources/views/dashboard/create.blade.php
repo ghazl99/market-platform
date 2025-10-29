@@ -102,6 +102,87 @@
             display: block !important;
             visibility: visible !important;
         }
+
+        /* أنماط الوضع الداكن للقوائم المنسدلة - Maximum Priority */
+        [data-theme="dark"] .form-select,
+        [data-theme="dark"] body .form-select,
+        html[data-theme="dark"] .form-select,
+        html[data-theme="dark"] body .form-select {
+            background-color: #2d2d2d !important;
+            border: 1px solid #404040 !important;
+            color: #ffffff !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+        }
+
+        [data-theme="dark"] .form-select:focus,
+        [data-theme="dark"] body .form-select:focus,
+        html[data-theme="dark"] .form-select:focus,
+        html[data-theme="dark"] body .form-select:focus {
+            background-color: #2d2d2d !important;
+            border-color: #059669 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2) !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23059669' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+        }
+
+        /* أنماط خيارات القائمة المنسدلة في الوضع الداكن */
+        [data-theme="dark"] .form-select option,
+        [data-theme="dark"] body .form-select option,
+        html[data-theme="dark"] .form-select option,
+        html[data-theme="dark"] body .form-select option {
+            background-color: #2d2d2d !important;
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] .form-select option[value=""],
+        [data-theme="dark"] body .form-select option[value=""],
+        html[data-theme="dark"] .form-select option[value=""],
+        html[data-theme="dark"] body .form-select option[value=""] {
+            background-color: #2d2d2d !important;
+            color: #9ca3af !important;
+        }
+
+        [data-theme="dark"] .form-select option:hover,
+        [data-theme="dark"] body .form-select option:hover,
+        html[data-theme="dark"] .form-select option:hover,
+        html[data-theme="dark"] body .form-select option:hover {
+            background-color: #059669 !important;
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] .form-select option:checked,
+        [data-theme="dark"] body .form-select option:checked,
+        html[data-theme="dark"] .form-select option:checked,
+        html[data-theme="dark"] body .form-select option:checked {
+            background-color: #059669 !important;
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] .form-select option:not([value=""]),
+        [data-theme="dark"] body .form-select option:not([value=""]),
+        html[data-theme="dark"] .form-select option:not([value=""]),
+        html[data-theme="dark"] body .form-select option:not([value=""]) {
+            background-color: #2d2d2d !important;
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] .form-select option[style*="└─"],
+        [data-theme="dark"] body .form-select option[style*="└─"],
+        html[data-theme="dark"] .form-select option[style*="└─"],
+        html[data-theme="dark"] body .form-select option[style*="└─"] {
+            background-color: #2d2d2d !important;
+            color: #d1d5db !important;
+        }
+
+        /* RTL Support للوضع الداكن */
+        [dir="rtl"] [data-theme="dark"] .form-select,
+        [dir="rtl"] html[data-theme="dark"] .form-select,
+        [dir="rtl"] [data-theme="dark"] body .form-select,
+        [dir="rtl"] html[data-theme="dark"] body .form-select {
+            background-position: left 12px center !important;
+            padding-right: 1rem !important;
+            padding-left: 40px !important;
+        }
     </style>
 @endpush
 
@@ -175,7 +256,35 @@
                     </div>
 
 
-                    @if (!isset($parentProduct))
+                    @if (isset($selectedCategory) && !isset($parentProduct))
+                        {{-- إذا كان هناك قسم محدد من صفحة المنتجات الخاصة بقسم --}}
+                        <input type="hidden" name="category" value="{{ $selectedCategory->id }}">
+                        <div class="form-group">
+                            <label class="form-label required">{{ __('Category') }}</label>
+                            <input type="text" class="form-input"
+                                value="{{ $selectedCategory->getTranslation('name', app()->getLocale()) }}" readonly
+                                style="background: var(--input-bg, #374151); color: var(--text-secondary, #9ca3af); cursor: not-allowed;">
+                            <div class="form-help">{{ __('Category is set from the section you are adding from') }}</div>
+                        </div>
+                    @elseif (isset($parentProduct))
+                        {{-- إذا كان منتج فرعي، نسخ الفئة من المنتج الأب تلقائيًا --}}
+                        @php
+                            $parentCategoryId = $parentProduct->categories->first()->id ?? '';
+                            $parentCategoryName = $parentProduct->categories->first()
+                                ? $parentProduct->categories->first()->getTranslation('name', app()->getLocale())
+                                : __('No category');
+                        @endphp
+                        @if ($parentCategoryId)
+                            <input type="hidden" name="category" value="{{ $parentCategoryId }}">
+                        @endif
+                        <div class="form-group">
+                            <label class="form-label required">{{ __('Category') }}</label>
+                            <input type="text" class="form-input" value="{{ $parentCategoryName }}" readonly
+                                style="background: var(--input-bg, #374151); color: var(--text-secondary, #9ca3af); cursor: not-allowed;">
+                            <div class="form-help">{{ __('Category will be inherited from parent product') }}</div>
+                        </div>
+                    @else
+                        {{-- الحالة العادية: عرض قائمة الفئات للاختيار --}}
                         <div class="form-group">
                             <label class="form-label required">{{ __('Category') }}</label>
                             <select class="form-select @error('category') is-invalid @enderror" name="category" required>
@@ -215,23 +324,6 @@
                                 <div class="form-error">{{ $message }}</div>
                             @enderror
                             <div class="form-help">{{ __('Select the appropriate category for your product') }}</div>
-                        </div>
-                    @else
-                        {{-- إذا كان منتج فرعي، نسخ الفئة من المنتج الأب تلقائيًا --}}
-                        @php
-                            $parentCategoryId = $parentProduct->categories->first()->id ?? '';
-                            $parentCategoryName = $parentProduct->categories->first()
-                                ? $parentProduct->categories->first()->getTranslation('name', app()->getLocale())
-                                : __('No category');
-                        @endphp
-                        @if ($parentCategoryId)
-                            <input type="hidden" name="category" value="{{ $parentCategoryId }}">
-                        @endif
-                        <div class="form-group">
-                            <label class="form-label required">{{ __('Category') }}</label>
-                            <input type="text" class="form-input" value="{{ $parentCategoryName }}" readonly
-                                style="background: #1f2937; color: #6b7280;">
-                            <div class="form-help">{{ __('Category will be inherited from parent product') }}</div>
                         </div>
                     @endif
 

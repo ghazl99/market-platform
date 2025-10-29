@@ -2,7 +2,7 @@
 @section('title', __('My Notifications'))
 @push('styles')
     <style>
-         :root {
+        :root {
             --primary-color: #7C3AED;
             /* Purple 600 */
             --primary-dark: #5B21B6;
@@ -24,6 +24,7 @@
             --border-light: #EDE9FE;
             --gradient-primary: linear-gradient(135deg, #8B5CF6, #7C3AED);
         }
+
         /* Notifications Page Specific Styles */
         .notifications-section {
             padding: 2rem 0;
@@ -83,28 +84,30 @@
         }
 
         .notification-item {
-    display: flex;
-    align-items: center;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    background: var(--bg-secondary);
-    border-radius: 16px;
-    border: 2px solid var(--border-color);
-    transition: all 0.3s ease;
-    position: relative;
-}
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+        }
 
-/* الإشعار غير المقروء */
-.notification-item.unread {
-    border-left: 4px solid var(--primary-color);
-    background: rgba(59, 130, 246, 0.08); /* خلفية زرقاء خفيفة */
-}
+        /* الإشعار غير المقروء */
+        .notification-item.unread {
+            border-left: 4px solid var(--primary-color);
+            background: rgba(59, 130, 246, 0.08);
+            /* خلفية زرقاء خفيفة */
+        }
 
-/* الإشعار المقروء */
-.notification-item:not(.unread) {
-    background: rgba(255, 255, 255, 0.6); /* 🔹 خلفية فاتحة جدًا */
-    opacity: 0.85;
-}
+        /* الإشعار المقروء */
+        .notification-item:not(.unread) {
+            background: rgba(255, 255, 255, 0.6);
+            /* 🔹 خلفية فاتحة جدًا */
+            opacity: 0.85;
+        }
 
 
         .notification-info {
@@ -175,7 +178,8 @@
                             ? $notification->data
                             : json_decode($notification->data, true);
                     @endphp
-                    <a href="{{ route('notification.read', $notification->id) }}" style="text-decoration: none" class="notification-item {{ $notification->read_at ? '' : 'unread' }}">
+                    <a href="{{ route('notification.read', $notification->id) }}" style="text-decoration: none"
+                        class="notification-item {{ $notification->read_at ? '' : 'unread' }}">
                         <div class="notification-info">
                             <h4 class="notification-title">{{ $data['title'][$locale] ?? $data['title']['en'] }}</h4>
                             <p class="notification-message">{{ $data['message'][$locale] ?? $data['message']['en'] }}</p>

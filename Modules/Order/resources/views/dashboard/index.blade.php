@@ -340,6 +340,9 @@
             /* Orders Page Specific Styles */
             .orders-container {
                 padding: 2rem;
+                background: var(--bg-secondary);
+                min-height: 100vh;
+                transition: background-color 0.3s ease;
             }
 
             .page-header {
@@ -354,8 +357,9 @@
             .page-title {
                 font-size: 2rem;
                 font-weight: 700;
-                color: #ffffff;
+                color: var(--text-primary);
                 margin: 0;
+                transition: color 0.3s ease;
             }
 
             .page-actions {
@@ -365,9 +369,9 @@
             }
 
             .export-btn {
-                background: #2d2d2d;
-                color: #cccccc;
-                border: 1px solid #404040;
+                background: var(--bg-primary);
+                color: var(--text-secondary);
+                border: 1px solid var(--border-color);
                 padding: 0.75rem 1.5rem;
                 border-radius: 8px;
                 font-size: 0.9rem;
@@ -394,11 +398,11 @@
             }
 
             .stat-card {
-                background: #2d2d2d;
+                background: var(--bg-primary);
                 border-radius: 12px;
                 padding: 1.5rem;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-                border: 1px solid #404040;
+                box-shadow: var(--shadow-md);
+                border: 1px solid var(--border-color);
                 text-align: center;
                 transition: all 0.3s ease;
             }
@@ -439,23 +443,26 @@
             .stat-number {
                 font-size: 2rem;
                 font-weight: 700;
-                color: #ffffff;
+                color: var(--text-primary);
                 margin: 0 0 0.5rem 0;
+                transition: color 0.3s ease;
             }
 
             .stat-label {
                 font-size: 0.9rem;
-                color: #cccccc;
+                color: var(--text-secondary);
                 margin: 0;
+                transition: color 0.3s ease;
             }
 
             .search-filter-bar {
-                background: #2d2d2d;
+                background: var(--bg-primary);
                 border-radius: 16px;
                 padding: 1.5rem;
                 margin-bottom: 2rem;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-                border: 1px solid #404040;
+                box-shadow: var(--shadow-md);
+                border: 1px solid var(--border-color);
+                transition: all 0.3s ease;
             }
 
             .search-filter-content {
@@ -473,10 +480,10 @@
                 width: 100%;
                 padding: 0.75rem 1rem;
                 padding-right: 3rem;
-                border: 1px solid #404040;
+                border: 1px solid var(--border-color);
                 border-radius: 8px;
-                background: #1a1a1a;
-                color: #ffffff;
+                background: var(--bg-secondary);
+                color: var(--text-primary);
                 font-size: 0.9rem;
                 transition: all 0.3s ease;
             }
@@ -497,10 +504,10 @@
 
             .filter-select {
                 padding: 0.75rem 1rem;
-                border: 1px solid #404040;
+                border: 1px solid var(--border-color);
                 border-radius: 8px;
-                background: #1a1a1a;
-                color: #ffffff;
+                background: var(--bg-secondary);
+                color: var(--text-primary);
                 font-size: 0.9rem;
                 cursor: pointer;
                 transition: all 0.3s ease;
@@ -533,12 +540,13 @@
             }
 
             .orders-table-container {
-                background: #2d2d2d;
+                background: var(--bg-primary);
                 border-radius: 16px;
                 padding: 1.5rem;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-                border: 1px solid #404040;
+                box-shadow: var(--shadow-md);
+                border: 1px solid var(--border-color);
                 overflow-x: auto;
+                transition: all 0.3s ease;
             }
 
             .orders-table {
@@ -548,28 +556,189 @@
             }
 
             .orders-table th {
-                background: #1a1a1a;
+                background: var(--bg-secondary);
                 padding: 1rem;
                 font-weight: 600;
                 text-align: right;
-                border-bottom: 1px solid #404040;
-                color: #ffffff;
+                border-bottom: 1px solid var(--border-color);
+                color: var(--text-primary);
                 font-size: 0.9rem;
+                transition: all 0.3s ease;
             }
 
             .orders-table td {
                 padding: 1rem;
-                border-bottom: 1px solid #333333;
-                color: #cccccc;
+                border-bottom: 1px solid var(--border-color);
+                color: var(--text-secondary);
                 font-size: 0.9rem;
+                transition: all 0.3s ease;
             }
 
             .orders-table tr:hover {
-                background: #1a1a1a;
+                background: var(--bg-secondary);
             }
 
             .orders-table tr:nth-child(even) {
-                background: rgba(0, 0, 0, 0.1);
+                background: rgba(0, 0, 0, 0.05);
+            }
+
+            /* Light Mode Styles */
+            [data-theme="light"] .orders-container {
+                background: #ffffff;
+            }
+
+            [data-theme="light"] .stat-card {
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            }
+
+            [data-theme="light"] .stat-card:hover {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+
+            [data-theme="light"] .search-filter-bar {
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            }
+
+            [data-theme="light"] .search-box input {
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
+                color: #111827;
+            }
+
+            [data-theme="light"] .filter-select {
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
+                color: #111827;
+            }
+
+            [data-theme="light"] .orders-table-container {
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            }
+
+            [data-theme="light"] .orders-table th {
+                background: #f9fafb;
+                border-bottom: 1px solid #e5e7eb;
+                color: #111827;
+            }
+
+            [data-theme="light"] .orders-table td {
+                border-bottom: 1px solid #e5e7eb;
+                color: #374151;
+            }
+
+            [data-theme="light"] .orders-table tr:hover {
+                background: #f9fafb;
+            }
+
+            [data-theme="light"] .orders-table tr:nth-child(even) {
+                background: #f9fafb;
+            }
+
+            [data-theme="light"] .export-btn {
+                background: #ffffff;
+                color: #374151;
+                border: 1px solid #e5e7eb;
+            }
+
+            [data-theme="light"] .export-btn:hover {
+                background: #059669;
+                color: #ffffff;
+            }
+
+            [data-theme="light"] .pagination-btn {
+                background: #ffffff;
+                color: #374151;
+                border: 1px solid #e5e7eb;
+            }
+
+            [data-theme="light"] .delete-modal-content {
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            }
+
+            [data-theme="light"] .delete-modal-header {
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            /* Dark Mode Styles */
+            [data-theme="dark"] .orders-container {
+                background: #111827;
+            }
+
+            [data-theme="dark"] .stat-card {
+                background: #1f2937;
+                border: 1px solid #374151;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            }
+
+            [data-theme="dark"] .stat-card:hover {
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            }
+
+            [data-theme="dark"] .search-filter-bar {
+                background: #1f2937;
+                border: 1px solid #374151;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            }
+
+            [data-theme="dark"] .search-box input {
+                background: #1f2937;
+                border: 1px solid #374151;
+                color: #f9fafb;
+            }
+
+            [data-theme="dark"] .filter-select {
+                background: #1f2937;
+                border: 1px solid #374151;
+                color: #f9fafb;
+            }
+
+            [data-theme="dark"] .orders-table-container {
+                background: #1f2937;
+                border: 1px solid #374151;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            }
+
+            [data-theme="dark"] .orders-table th {
+                background: #111827;
+                border-bottom: 1px solid #374151;
+                color: #f9fafb;
+            }
+
+            [data-theme="dark"] .orders-table td {
+                border-bottom: 1px solid #374151;
+                color: #d1d5db;
+            }
+
+            [data-theme="dark"] .orders-table tr:hover {
+                background: #111827;
+            }
+
+            [data-theme="dark"] .orders-table tr:nth-child(even) {
+                background: rgba(0, 0, 0, 0.2);
+            }
+
+            [data-theme="dark"] .export-btn {
+                background: #1f2937;
+                color: #d1d5db;
+                border: 1px solid #374151;
+            }
+
+            [data-theme="dark"] .delete-modal-content {
+                background: #1f2937;
+                border: 1px solid #374151;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            }
+
+            [data-theme="dark"] .delete-modal-header {
+                border-bottom: 1px solid #374151;
             }
 
             .order-id {
@@ -600,13 +769,15 @@
                 margin: 0;
                 font-size: 0.9rem;
                 font-weight: 600;
-                color: #ffffff;
+                color: var(--text-primary);
+                transition: color 0.3s ease;
             }
 
             .customer-details p {
                 margin: 0;
                 font-size: 0.8rem;
-                color: #cccccc;
+                color: var(--text-secondary);
+                transition: color 0.3s ease;
             }
 
             .status-badge {
@@ -638,7 +809,8 @@
 
             .order-amount {
                 font-weight: 600;
-                color: #ffffff;
+                color: var(--text-primary);
+                transition: color 0.3s ease;
             }
 
             .action-buttons {
@@ -672,15 +844,27 @@
             }
 
             .action-btn.edit {
-                background: #2d2d2d;
-                color: #cccccc;
-                border: 1px solid #404040;
+                background: var(--bg-primary);
+                color: var(--text-secondary);
+                border: 1px solid var(--border-color);
             }
 
             .action-btn.edit:hover {
                 background: #059669;
                 color: white;
                 border-color: #059669;
+            }
+
+            [data-theme="light"] .action-btn.edit {
+                background: #ffffff;
+                color: #374151;
+                border: 1px solid #e5e7eb;
+            }
+
+            [data-theme="dark"] .action-btn.edit {
+                background: #1f2937;
+                color: #d1d5db;
+                border: 1px solid #374151;
             }
 
             .action-btn.delete {
@@ -704,9 +888,9 @@
 
             .pagination-btn {
                 padding: 0.5rem 1rem;
-                border: 1px solid #404040;
-                background: #2d2d2d;
-                color: #cccccc;
+                border: 1px solid var(--border-color);
+                background: var(--bg-primary);
+                color: var(--text-secondary);
                 border-radius: 8px;
                 cursor: pointer;
                 transition: all 0.3s ease;
@@ -759,15 +943,16 @@
             }
 
             .delete-modal-content {
-                background: #2d2d2d;
+                background: var(--bg-primary);
                 border-radius: 16px;
                 padding: 0;
                 max-width: 500px;
                 width: 90%;
                 position: relative;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-                border: 1px solid #404040;
+                box-shadow: var(--shadow-xl);
+                border: 1px solid var(--border-color);
                 animation: modalSlideIn 0.3s ease-out;
+                transition: all 0.3s ease;
             }
 
             @keyframes modalSlideIn {
@@ -784,17 +969,19 @@
 
             .delete-modal-header {
                 padding: 1.5rem 2rem 1rem;
-                border-bottom: 1px solid #404040;
+                border-bottom: 1px solid var(--border-color);
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                transition: border-color 0.3s ease;
             }
 
             .delete-modal-header h3 {
-                color: #ffffff;
+                color: var(--text-primary);
                 margin: 0;
                 font-size: 1.25rem;
                 font-weight: 600;
+                transition: color 0.3s ease;
             }
 
             .delete-modal-close {
@@ -833,16 +1020,18 @@
             }
 
             .delete-message {
-                color: #ffffff;
+                color: var(--text-primary);
                 font-size: 1.1rem;
                 margin-bottom: 1rem;
                 line-height: 1.5;
+                transition: color 0.3s ease;
             }
 
             .delete-warning {
-                color: #888888;
+                color: var(--text-light);
                 font-size: 0.9rem;
                 margin-bottom: 0;
+                transition: color 0.3s ease;
             }
 
             .delete-modal-footer {

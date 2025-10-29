@@ -161,7 +161,8 @@
                             class="notification-item {{ $notification->read_at ? '' : 'unread' }}">
                             <div class="notification-info">
                                 <h4 class="notification-title">{{ $data['title'][$locale] ?? $data['title']['en'] }}</h4>
-                                <p class="notification-message">{{ $data['message'][$locale] ?? $data['message']['en'] }}</p>
+                                <p class="notification-message">{{ $data['message'][$locale] ?? $data['message']['en'] }}
+                                </p>
                                 <span class="notification-time">{{ $notification->created_at->diffForHumans() }}</span>
                             </div>
                         </a>

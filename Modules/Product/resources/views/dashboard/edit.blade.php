@@ -366,6 +366,87 @@
             -moz-appearance: none;
             appearance: none;
         }
+
+        /* أنماط الوضع الداكن للقوائم المنسدلة - Maximum Priority */
+        [data-theme="dark"] select.form-input,
+        [data-theme="dark"] body select.form-input,
+        html[data-theme="dark"] select.form-input,
+        html[data-theme="dark"] body select.form-input {
+            background-color: #2d2d2d !important;
+            border: 1px solid #404040 !important;
+            color: #ffffff !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+        }
+
+        [data-theme="dark"] select.form-input:focus,
+        [data-theme="dark"] body select.form-input:focus,
+        html[data-theme="dark"] select.form-input:focus,
+        html[data-theme="dark"] body select.form-input:focus {
+            background-color: #2d2d2d !important;
+            border-color: #059669 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2) !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23059669' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+        }
+
+        /* أنماط خيارات القائمة المنسدلة في الوضع الداكن */
+        [data-theme="dark"] select.form-input option,
+        [data-theme="dark"] body select.form-input option,
+        html[data-theme="dark"] select.form-input option,
+        html[data-theme="dark"] body select.form-input option {
+            background-color: #2d2d2d !important;
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] select.form-input option[value=""],
+        [data-theme="dark"] body select.form-input option[value=""],
+        html[data-theme="dark"] select.form-input option[value=""],
+        html[data-theme="dark"] body select.form-input option[value=""] {
+            background-color: #2d2d2d !important;
+            color: #9ca3af !important;
+        }
+
+        [data-theme="dark"] select.form-input option:hover,
+        [data-theme="dark"] body select.form-input option:hover,
+        html[data-theme="dark"] select.form-input option:hover,
+        html[data-theme="dark"] body select.form-input option:hover {
+            background-color: #059669 !important;
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] select.form-input option:checked,
+        [data-theme="dark"] body select.form-input option:checked,
+        html[data-theme="dark"] select.form-input option:checked,
+        html[data-theme="dark"] body select.form-input option:checked {
+            background-color: #059669 !important;
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] select.form-input option:not([value=""]),
+        [data-theme="dark"] body select.form-input option:not([value=""]),
+        html[data-theme="dark"] select.form-input option:not([value=""]),
+        html[data-theme="dark"] body select.form-input option:not([value=""]) {
+            background-color: #2d2d2d !important;
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] select.form-input option[style*="└─"],
+        [data-theme="dark"] body select.form-input option[style*="└─"],
+        html[data-theme="dark"] select.form-input option[style*="└─"],
+        html[data-theme="dark"] body select.form-input option[style*="└─"] {
+            background-color: #2d2d2d !important;
+            color: #d1d5db !important;
+        }
+
+        /* RTL Support للوضع الداكن */
+        [dir="rtl"] [data-theme="dark"] select.form-input,
+        [dir="rtl"] html[data-theme="dark"] select.form-input,
+        [dir="rtl"] [data-theme="dark"] body select.form-input,
+        [dir="rtl"] html[data-theme="dark"] body select.form-input {
+            background-position: left 12px center !important;
+            padding-right: 1rem !important;
+            padding-left: 40px !important;
+        }
     </style>
 @endpush
 

@@ -134,6 +134,80 @@
             font-size: 0.9rem;
             margin-top: 0.25rem;
         }
+
+        /* Light Mode Styles - Maximum Priority */
+        html[data-theme="light"] body,
+        html[data-theme="light"] body .create-group-container {
+            background: #ffffff !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .create-group-title,
+        html[data-theme="light"] body .create-group-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .create-group-subtitle,
+        html[data-theme="light"] body .create-group-subtitle {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .form-container,
+        html[data-theme="light"] body .form-container {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .form-label,
+        html[data-theme="light"] body .form-label {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-input,
+        html[data-theme="light"] body .form-input {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-input:focus,
+        html[data-theme="light"] body .form-input:focus {
+            background: #ffffff !important;
+            border-color: #f59e0b !important;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1) !important;
+        }
+
+        html[data-theme="light"] .form-input::placeholder,
+        html[data-theme="light"] body .form-input::placeholder {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="light"] .form-help,
+        html[data-theme="light"] body .form-help {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .error-message,
+        html[data-theme="light"] body .error-message {
+            color: #ef4444 !important;
+        }
+
+        html[data-theme="light"] .success-message,
+        html[data-theme="light"] body .success-message {
+            color: #10b981 !important;
+        }
+
+        html[data-theme="light"] .btn-secondary,
+        html[data-theme="light"] body .btn-secondary {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .btn-secondary:hover,
+        html[data-theme="light"] body .btn-secondary:hover {
+            background: #e5e7eb !important;
+        }
     </style>
 @endpush
 
@@ -190,4 +264,16 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/notifications.js') }}"></script>
+    <script>
+        // Ensure theme is applied
+        document.addEventListener('DOMContentLoaded', function() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                // Force reflow to apply styles
+                document.body.offsetHeight;
+                // Re-apply theme to ensure styles are loaded
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        });
+    </script>
 @endpush

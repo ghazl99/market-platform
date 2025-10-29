@@ -11,6 +11,7 @@ use Modules\Core\Http\Controllers\NotificationController;
 // Dashboard Notifications
 Route::middleware(['web', 'auth', 'ensure-store-access', 'check.store.status', 'check-permission'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/statistics', [DashboardController::class, 'statistics'])->name('dashboard.statistics');
 
     Route::get('/dashboard/notifications', [NotificationController::class, 'index'])->name('dashboard.notifications');
     Route::get('/dashboard/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('dashboard.notifications.read');

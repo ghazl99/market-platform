@@ -1,6 +1,9 @@
 /* Products Page Specific Styles */
 .products-container {
     padding: 2rem;
+    background: #111827;
+    min-height: 100vh;
+    transition: background-color 0.3s ease;
 }
 
 .page-header {
@@ -15,8 +18,9 @@
 .page-title {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: #ffffff;
     margin: 0;
+    transition: color 0.3s ease;
 }
 
 .page-actions {
@@ -26,12 +30,13 @@
 }
 
 .search-filter-bar {
-    background: var(--bg-primary);
+    background: #1e293b;
     border-radius: 16px;
     padding: 1.5rem;
     margin-bottom: 2rem;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #334155;
+    transition: all 0.3s ease;
 }
 
 .search-filter-content {
@@ -760,4 +765,132 @@
     .product-actions {
         flex-direction: column;
     }
+}
+
+/* Light Mode Styles - Maximum Specificity */
+html[data-theme="light"] .products-container,
+html[data-theme="light"] body .products-container {
+    background: #ffffff !important;
+}
+
+html[data-theme="light"] .page-title,
+html[data-theme="light"] body .page-title {
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .search-filter-bar,
+html[data-theme="light"] body .search-filter-bar {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+html[data-theme="light"] .search-box input,
+html[data-theme="light"] body .search-box input {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .filter-select,
+html[data-theme="light"] body .filter-select {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .product-card,
+html[data-theme="light"] body .product-card {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+html[data-theme="light"] .product-card:hover,
+html[data-theme="light"] body .product-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+html[data-theme="light"] .product-name,
+html[data-theme="light"] body .product-name {
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .product-description,
+html[data-theme="light"] body .product-description {
+    color: #374151 !important;
+}
+
+html[data-theme="light"] .action-btn.edit,
+html[data-theme="light"] body .action-btn.edit {
+    background: #f3f4f6 !important;
+    color: #374151 !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+html[data-theme="light"] .action-btn.edit:hover,
+html[data-theme="light"] body .action-btn.edit:hover {
+    background: #059669 !important;
+    color: #ffffff !important;
+    border-color: #059669 !important;
+}
+
+html[data-theme="light"] .pagination-btn,
+html[data-theme="light"] body .pagination-btn {
+    background: #ffffff !important;
+    color: #374151 !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+html[data-theme="light"] .empty-state,
+html[data-theme="light"] body .empty-state {
+    color: #6b7280 !important;
+}
+
+html[data-theme="light"] .empty-state h3,
+html[data-theme="light"] body .empty-state h3 {
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .product-show-container,
+html[data-theme="light"] body .product-show-container {
+    background: #ffffff !important;
+}
+
+html[data-theme="light"] .product-details,
+html[data-theme="light"] body .product-details {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+html[data-theme="light"] .detail-section,
+html[data-theme="light"] body .detail-section {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+html[data-theme="light"] .detail-section h3,
+html[data-theme="light"] body .detail-section h3 {
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .product-name,
+html[data-theme="light"] body .product-name {
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .product-description,
+html[data-theme="light"] body .product-description {
+    color: #374151 !important;
+}
+
+html[data-theme="light"] .info-item label,
+html[data-theme="light"] body .info-item label {
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .info-item span,
+html[data-theme="light"] body .info-item span {
+    color: #6b7280 !important;
 }

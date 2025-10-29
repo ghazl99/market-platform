@@ -147,12 +147,12 @@
                         ])
                     </tbody>
                 </table>
-        </div>
+            </div>
 
             <div class="pagination-container" id="users-pagination">
-            @if ($users->hasPages())
-                {{ $users->links() }}
-            @endif
+                @if ($users->hasPages())
+                    {{ $users->links() }}
+                @endif
             </div>
         </div>
     </div>
@@ -762,11 +762,169 @@
                 flex-direction: column;
             }
         }
+
+        /* Light Mode Styles - Maximum Priority */
+        html[data-theme="light"] .staff-container,
+        html[data-theme="light"] body .staff-container {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .page-title,
+        html[data-theme="light"] body .page-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .page-header,
+        html[data-theme="light"] body .page-header {
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .stat-card,
+        html[data-theme="light"] body .stat-card {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .stat-card:hover,
+        html[data-theme="light"] body .stat-card:hover {
+            background: #f9fafb !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        html[data-theme="light"] .stat-number,
+        html[data-theme="light"] body .stat-number {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .stat-label,
+        html[data-theme="light"] body .stat-label {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .staff-table-container,
+        html[data-theme="light"] body .staff-table-container {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .table-header,
+        html[data-theme="light"] body .table-header {
+            background: #f9fafb !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .table-header h3,
+        html[data-theme="light"] body .table-header h3 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .search-input,
+        html[data-theme="light"] body .search-input {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .search-input:focus,
+        html[data-theme="light"] body .search-input:focus {
+            background: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .staff-table th,
+        html[data-theme="light"] body .staff-table th {
+            background: #f9fafb !important;
+            color: #111827 !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .staff-table td,
+        html[data-theme="light"] body .staff-table td {
+            background: #ffffff !important;
+            color: #374151 !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .staff-table tbody tr:hover,
+        html[data-theme="light"] body .staff-table tbody tr:hover {
+            background: #f9fafb !important;
+        }
+
+        html[data-theme="light"] .staff-name,
+        html[data-theme="light"] body .staff-name {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .email-text,
+        html[data-theme="light"] body .email-text {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .date-text,
+        html[data-theme="light"] body .date-text {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .pagination-container,
+        html[data-theme="light"] body .pagination-container {
+            background: #ffffff !important;
+            border-top: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .notification,
+        html[data-theme="light"] body .notification {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .notification-title,
+        html[data-theme="light"] body .notification-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .notification-message,
+        html[data-theme="light"] body .notification-message {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .pagination .page-link,
+        html[data-theme="light"] body .pagination .page-link {
+            color: #374151 !important;
+            background-color: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .pagination .page-link:hover,
+        html[data-theme="light"] body .pagination .page-link:hover {
+            background-color: #f9fafb !important;
+            border-color: #d1d5db !important;
+        }
+
+        html[data-theme="light"] .pagination .page-item.active .page-link,
+        html[data-theme="light"] body .pagination .page-item.active .page-link {
+            background-color: #059669 !important;
+            border-color: #059669 !important;
+            color: #ffffff !important;
+        }
     </style>
 @endpush
 
 @push('scripts')
     <script>
+        // Ensure theme is applied
+        document.addEventListener('DOMContentLoaded', function() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                // Force reflow to apply styles
+                document.body.offsetHeight;
+                // Re-apply theme to ensure styles are loaded
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        });
+
         // Professional Notification System
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {

@@ -965,6 +965,351 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--dark-text-muted);
         }
+
+        /* Light Mode Styles - Maximum Priority */
+        html[data-theme="light"] body,
+        html[data-theme="light"] .main-content,
+        html[data-theme="light"] .customer-detail-container,
+        html[data-theme="light"] body .customer-detail-container {
+            background: #ffffff !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .customer-header,
+        html[data-theme="light"] body .customer-header {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .customer-name,
+        html[data-theme="light"] body .customer-name {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .customer-email,
+        html[data-theme="light"] body .customer-email {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .account-info,
+        html[data-theme="light"] body .account-info {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .account-info-header,
+        html[data-theme="light"] body .account-info-header {
+            background: #ef4444 !important;
+        }
+
+        html[data-theme="light"] .account-detail-item,
+        html[data-theme="light"] body .account-detail-item {
+            background: #f9fafb !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .detail-label,
+        html[data-theme="light"] body .detail-label {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .detail-value,
+        html[data-theme="light"] body .detail-value {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .tabs-section,
+        html[data-theme="light"] body .tabs-section {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .tabs-header,
+        html[data-theme="light"] body .tabs-header {
+            background: #f9fafb !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .tab-button,
+        html[data-theme="light"] body .tab-button {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .tab-button.active,
+        html[data-theme="light"] body .tab-button.active {
+            color: #111827 !important;
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .tab-content,
+        html[data-theme="light"] body .tab-content {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .wallet-transactions,
+        html[data-theme="light"] body .wallet-transactions {
+            background: #ffffff !important;
+            border: none !important;
+        }
+
+        html[data-theme="light"] .wallet-transactions h3,
+        html[data-theme="light"] body .wallet-transactions h3 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .transaction-item,
+        html[data-theme="light"] body .transaction-item {
+            background: #f9fafb !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .transaction-item:hover,
+        html[data-theme="light"] body .transaction-item:hover {
+            background: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        html[data-theme="light"] .transaction-name,
+        html[data-theme="light"] body .transaction-name {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .transaction-description,
+        html[data-theme="light"] body .transaction-description {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .transaction-time,
+        html[data-theme="light"] body .transaction-time {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="light"] .primary-amount,
+        html[data-theme="light"] body .primary-amount {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .secondary-amount,
+        html[data-theme="light"] body .secondary-amount {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .empty-state,
+        html[data-theme="light"] body .empty-state {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="light"] .empty-state i,
+        html[data-theme="light"] body .empty-state i {
+            color: #d1d5db !important;
+        }
+
+        html[data-theme="light"] .empty-state p,
+        html[data-theme="light"] body .empty-state p {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .kyc-section,
+        html[data-theme="light"] body .kyc-section {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .kyc-status,
+        html[data-theme="light"] body .kyc-status {
+            background: #f9fafb !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .kyc-status h3,
+        html[data-theme="light"] body .kyc-status h3 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .status-label,
+        html[data-theme="light"] body .status-label {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .kyc-table,
+        html[data-theme="light"] body .kyc-table {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .data-table th,
+        html[data-theme="light"] body .data-table th {
+            background: #f9fafb !important;
+            color: #111827 !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .data-table td,
+        html[data-theme="light"] body .data-table td {
+            color: #374151 !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .orders-table,
+        html[data-theme="light"] body .orders-table {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .orders-table th,
+        html[data-theme="light"] body .orders-table th {
+            background: #f9fafb !important;
+            color: #111827 !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .orders-table td,
+        html[data-theme="light"] body .orders-table td {
+            color: #374151 !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .orders-table tr:hover,
+        html[data-theme="light"] body .orders-table tr:hover {
+            background: #f9fafb !important;
+        }
+
+        html[data-theme="light"] .product-name,
+        html[data-theme="light"] body .product-name {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .payment-section,
+        html[data-theme="light"] body .payment-section {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .payment-history h3,
+        html[data-theme="light"] body .payment-history h3 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .payment-table,
+        html[data-theme="light"] body .payment-table {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .amount-paid,
+        html[data-theme="light"] body .amount-paid {
+            color: #10b981 !important;
+        }
+
+        html[data-theme="light"] .settings-section,
+        html[data-theme="light"] body .settings-section {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .settings-card,
+        html[data-theme="light"] body .settings-card {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .settings-card h3,
+        html[data-theme="light"] body .settings-card h3 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-group label,
+        html[data-theme="light"] body .form-group label {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-input,
+        html[data-theme="light"] body .form-input {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-input:focus,
+        html[data-theme="light"] body .form-input:focus {
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .notifications-section,
+        html[data-theme="light"] body .notifications-section {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .notification-item,
+        html[data-theme="light"] body .notification-item {
+            background: #f9fafb !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .notification-text,
+        html[data-theme="light"] body .notification-text {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .notification-type,
+        html[data-theme="light"] body .notification-type {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .notification-time,
+        html[data-theme="light"] body .notification-time {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="light"] .copy-btn,
+        html[data-theme="light"] body .copy-btn {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .copy-btn:hover,
+        html[data-theme="light"] body .copy-btn:hover {
+            background: #f3f4f6 !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .sub-tabs-header,
+        html[data-theme="light"] body .sub-tabs-header {
+            background: #ffffff !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .sub-tab-button,
+        html[data-theme="light"] body .sub-tab-button {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .sub-tab-button.active,
+        html[data-theme="light"] body .sub-tab-button.active {
+            color: #111827 !important;
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] #addBalanceModal>div,
+        html[data-theme="light"] body #addBalanceModal>div {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] #addBalanceModal h2,
+        html[data-theme="light"] body #addBalanceModal h2 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] #addBalanceModal input,
+        html[data-theme="light"] #addBalanceModal textarea,
+        html[data-theme="light"] body #addBalanceModal input,
+        html[data-theme="light"] body #addBalanceModal textarea {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] #addBalanceModal label,
+        html[data-theme="light"] body #addBalanceModal label {
+            color: #111827 !important;
+        }
     </style>
 @endpush
 
@@ -1412,6 +1757,17 @@
 
         @push('scripts')
             <script>
+                // Ensure theme is applied
+                document.addEventListener('DOMContentLoaded', function() {
+                    const theme = document.documentElement.getAttribute('data-theme');
+                    if (theme === 'light') {
+                        // Force reflow to apply styles
+                        document.body.offsetHeight;
+                        // Re-apply theme to ensure styles are loaded
+                        document.documentElement.setAttribute('data-theme', 'light');
+                    }
+                });
+
                 // Handle session messages - حل جذري
                 document.addEventListener('DOMContentLoaded', function() {
                     @if (session('success'))

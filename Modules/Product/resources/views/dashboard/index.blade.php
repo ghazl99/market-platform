@@ -857,7 +857,8 @@
                         {{ __('All Products') }}
                     </a>
                 @endif
-                <a href="{{ route('dashboard.product.create') }}" class="add-product-btn">
+                <a href="{{ route('dashboard.product.create', $selectedCategory ? ['category_id' => $selectedCategory->id] : []) }}"
+                    class="add-product-btn">
                     <i class="fas fa-plus"></i>
                     {{ __('Add New Product') }}
                 </a>
@@ -957,7 +958,8 @@
                     <i class="fas fa-box-open"></i>
                     <h3>{{ __('No products found') }}</h3>
                     <p>{{ __('Create your first product') }}</p>
-                    <a href="{{ route('dashboard.product.create') }}" class="add-product-btn">
+                    <a href="{{ route('dashboard.product.create', $selectedCategory ? ['category_id' => $selectedCategory->id] : []) }}"
+                        class="add-product-btn">
                         <i class="fas fa-plus"></i>
                         {{ __('Add New Product') }}
                     </a>
@@ -1392,11 +1394,11 @@
                     <div class="notification-title">{{ __('Success') }}</div>
                     <div class="notification-message">${message}</div>
                     ${productId ? `
-                                                    <div class="notification-details">
-                                                        <i class="fas fa-info-circle"></i>
-                                                        {{ __('Product') }} #${productId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
-                                                    </div>
-                                                    ` : ''}
+                                                        <div class="notification-details">
+                                                            <i class="fas fa-info-circle"></i>
+                                                            {{ __('Product') }} #${productId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
+                                                        </div>
+                                                        ` : ''}
                 </div>
                 <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
                 <div class="notification-progress"></div>

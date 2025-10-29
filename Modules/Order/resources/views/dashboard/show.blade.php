@@ -153,7 +153,7 @@
 
             <!-- Order Summary -->
             <div class="order-summary">
-                <h4 style="margin-bottom: 1.5rem; color: #ffffff;">{{ __('Order Summary') }}</h4>
+                <h4 class="summary-title">{{ __('Order Summary') }}</h4>
 
                 <div class="summary-row">
                     <span class="summary-label">{{ __('Total') }}</span>
@@ -199,8 +199,8 @@
                     <p class="warning-text">{{ __('This action cannot be undone.') }}</p>
                 </div>
                 <form id="cancelOrderForm">
-            @csrf
-            @method('PUT')
+                    @csrf
+                    @method('PUT')
                     <div class="form-group">
                         <label for="cancel_reason" class="form-label">{{ __('Cancellation Reason') }}</label>
                         <textarea name="cancel_reason" id="cancel_reason" class="form-textarea" rows="3"
@@ -392,6 +392,13 @@
             background: #1a1a1a;
             border-radius: 12px;
             padding: 1.5rem;
+        }
+
+        .summary-title {
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 600;
         }
 
         .summary-row {
@@ -716,12 +723,263 @@
                 max-width: 300px;
             }
         }
+
+        /* Light Mode Styles - Maximum Priority */
+        html[data-theme="light"] .order-detail-container,
+        html[data-theme="light"] body .order-detail-container {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .page-title,
+        html[data-theme="light"] body .page-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .back-btn,
+        html[data-theme="light"] body .back-btn {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .back-btn:hover,
+        html[data-theme="light"] body .back-btn:hover {
+            background: #059669 !important;
+            color: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .order-details-card,
+        html[data-theme="light"] body .order-details-card {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .card-header,
+        html[data-theme="light"] body .card-header {
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .card-title,
+        html[data-theme="light"] body .card-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .info-label,
+        html[data-theme="light"] body .info-label {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .info-value,
+        html[data-theme="light"] body .info-value {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .customer-info,
+        html[data-theme="light"] body .customer-info {
+            background: #f9fafb !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .customer-details h6,
+        html[data-theme="light"] body .customer-details h6 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .customer-details p,
+        html[data-theme="light"] body .customer-details p {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .order-summary,
+        html[data-theme="light"] body .order-summary {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .order-summary h4,
+        html[data-theme="light"] .summary-title,
+        html[data-theme="light"] body .order-summary h4,
+        html[data-theme="light"] body .summary-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .summary-row,
+        html[data-theme="light"] body .summary-row {
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .summary-label,
+        html[data-theme="light"] body .summary-label {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .summary-value,
+        html[data-theme="light"] body .summary-value {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .action-btn.secondary,
+        html[data-theme="light"] body .action-btn.secondary {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+            border: 2px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .action-btn.secondary:hover,
+        html[data-theme="light"] body .action-btn.secondary:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+            color: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .action-btn.danger,
+        html[data-theme="light"] body .action-btn.danger {
+            background: rgba(239, 68, 68, 0.1) !important;
+            color: #ef4444 !important;
+            border: 2px solid rgba(239, 68, 68, 0.3) !important;
+        }
+
+        html[data-theme="light"] .action-btn.danger:hover,
+        html[data-theme="light"] body .action-btn.danger:hover {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+            color: #ffffff !important;
+            border-color: #ef4444 !important;
+        }
+
+        html[data-theme="light"] .modal-container,
+        html[data-theme="light"] body .modal-container {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .modal-header,
+        html[data-theme="light"] body .modal-header {
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .modal-title,
+        html[data-theme="light"] body .modal-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .modal-close,
+        html[data-theme="light"] body .modal-close {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .modal-close:hover,
+        html[data-theme="light"] body .modal-close:hover {
+            background: #f3f4f6 !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .cancel-warning,
+        html[data-theme="light"] body .cancel-warning {
+            background: rgba(239, 68, 68, 0.1) !important;
+            border: 1px solid rgba(239, 68, 68, 0.3) !important;
+        }
+
+        html[data-theme="light"] .cancel-warning p,
+        html[data-theme="light"] body .cancel-warning p {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .cancel-warning .order-info,
+        html[data-theme="light"] body .cancel-warning .order-info {
+            color: #059669 !important;
+        }
+
+        html[data-theme="light"] .cancel-warning .warning-text,
+        html[data-theme="light"] body .cancel-warning .warning-text {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .form-label,
+        html[data-theme="light"] body .form-label {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-textarea,
+        html[data-theme="light"] body .form-textarea {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-textarea:focus,
+        html[data-theme="light"] body .form-textarea:focus {
+            background: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .form-textarea::placeholder,
+        html[data-theme="light"] body .form-textarea::placeholder {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="light"] .modal-footer,
+        html[data-theme="light"] body .modal-footer {
+            border-top: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .btn-secondary,
+        html[data-theme="light"] body .btn-secondary {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .btn-secondary:hover,
+        html[data-theme="light"] body .btn-secondary:hover {
+            background: #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .notification,
+        html[data-theme="light"] body .notification {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .notification-title,
+        html[data-theme="light"] body .notification-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .notification-message,
+        html[data-theme="light"] body .notification-message {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .notification-close,
+        html[data-theme="light"] body .notification-close {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="light"] .notification-close:hover,
+        html[data-theme="light"] body .notification-close:hover {
+            color: #374151 !important;
+        }
     </style>
 @endsection
 
 @push('scripts')
     <script src="{{ asset('assets/js/notifications.js') }}"></script>
     <script>
+        // Ensure theme is applied
+        document.addEventListener('DOMContentLoaded', function() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                // Force reflow to apply styles
+                document.body.offsetHeight;
+                // Re-apply theme to ensure styles are loaded
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        });
+
         // Show and auto-hide notifications
         document.addEventListener('DOMContentLoaded', function() {
             const notifications = document.querySelectorAll('.notification');

@@ -1,6 +1,9 @@
 /* Categories Page Specific Styles */
 .categories-container {
     padding: 2rem;
+    background: var(--bg-secondary);
+    min-height: 100vh;
+    transition: background-color 0.3s ease;
 }
 
 /* Breadcrumb Navigation */
@@ -201,8 +204,9 @@
 .stat-number {
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--text-primary);
     display: block;
+    transition: color 0.3s ease;
 }
 
 .stat-label {
@@ -277,9 +281,9 @@
 }
 
 .back-btn {
-    background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
-    color: #ffffff;
-    border: 2px solid #4b5563;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
     padding: 0.75rem 1.5rem;
     border-radius: 12px;
     font-size: 0.9rem;
@@ -290,7 +294,7 @@
     align-items: center;
     gap: 0.5rem;
     text-decoration: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
     position: relative;
     overflow: hidden;
 }
@@ -329,7 +333,8 @@
 .subcategories-section {
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid var(--border-light);
+    border-top: 1px solid var(--border-color);
+    transition: border-color 0.3s ease;
 }
 
 .subcategories-title {
@@ -421,51 +426,88 @@
     }
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    .categories-container {
-        background: #1f2937 !important;
-    }
+/* Light Mode Styles */
+[data-theme="light"] .categories-container {
+    background: #ffffff;
+}
 
-    .page-header {
-        background: #2d2d2d !important;
-        color: #f9fafb !important;
-    }
+[data-theme="light"] .category-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
 
-    .page-title {
-        color: #f9fafb !important;
-    }
+[data-theme="light"] .category-name {
+    color: #111827;
+}
 
-    .category-card {
-        background: #2d2d2d !important;
-        border-color: #404040 !important;
-    }
+[data-theme="light"] .category-description {
+    color: #374151;
+}
 
-    .category-name {
-        color: #f9fafb !important;
-    }
+[data-theme="light"] .stat-number {
+    color: #111827;
+}
 
-    .category-description {
-        color: #d1d5db !important;
-    }
+[data-theme="light"] .subcategories-title {
+    color: #111827;
+}
 
-    .subcategories-title {
-        color: #f9fafb !important;
-    }
+[data-theme="light"] .subcategory-tag {
+    background: #f9fafb;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
 
-    .subcategory-tag {
-        background: #2d2d2d !important;
-        color: #d1d5db !important;
-        border-color: #404040 !important;
-    }
+[data-theme="light"] .back-btn {
+    background: #f3f4f6;
+    color: #374151;
+    border: 2px solid #e5e7eb;
+}
 
-    .empty-state {
-        background: #2d2d2d !important;
-    }
+[data-theme="light"] .back-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: #ffffff;
+    border-color: #059669;
+}
 
-    .empty-state h3 {
-        color: #f9fafb !important;
-    }
+/* Dark Mode Styles */
+[data-theme="dark"] .categories-container {
+    background: #111827;
+}
+
+[data-theme="dark"] .category-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .category-name {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .category-description {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .stat-number {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .subcategories-title {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .subcategory-tag {
+    background: #475569;
+    color: #ffffff;
+    border: 1px solid #64748b;
+}
+
+[data-theme="dark"] .back-btn {
+    background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+    color: #ffffff;
+    border: 2px solid #4b5563;
 }
 
 /* Add Subcategory Button */
@@ -557,10 +599,26 @@
     border-top: 1px solid var(--border-color);
 }
 
+/* Light theme for modal */
+[data-theme="light"] .modal-content {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .modal-header {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .modal-footer {
+    border-top: 1px solid #e5e7eb;
+}
+
 /* Dark theme for modal */
 [data-theme="dark"] .modal-content {
     background: #2d2d2d;
     border: 1px solid #404040;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="dark"] .modal-header {
@@ -614,6 +672,22 @@
     min-height: 80px;
 }
 
+/* Light theme for modal forms */
+[data-theme="light"] .modal .form-input,
+[data-theme="light"] .modal .form-select,
+[data-theme="light"] .modal .form-textarea {
+    background: #ffffff;
+    border-color: #e5e7eb;
+    color: #111827;
+}
+
+[data-theme="light"] .modal .form-input:focus,
+[data-theme="light"] .modal .form-select:focus,
+[data-theme="light"] .modal .form-textarea:focus {
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
 /* Dark theme for modal forms */
 [data-theme="dark"] .modal .form-input,
 [data-theme="dark"] .modal .form-select,
@@ -636,9 +710,10 @@
     gap: 0.5rem;
     margin-bottom: 1.5rem;
     padding: 0.5rem;
-    background: #2d2d2d !important;
-    border-radius: 8px !important;
-    border: 1px solid #404040 !important;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
 }
 
 .language-tab {
@@ -647,7 +722,7 @@
     border: none;
     border-radius: 6px;
     background: transparent;
-    color: #cccccc;
+    color: var(--text-secondary);
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
@@ -659,14 +734,42 @@
 }
 
 .language-tab:hover {
-    background: #2d2d2d;
-    color: #ffffff;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
 }
 
 .language-tab.active {
     background: #059669;
     color: #ffffff;
     box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
+}
+
+[data-theme="light"] .language-tabs {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+}
+
+[data-theme="light"] .language-tab {
+    color: #6b7280;
+}
+
+[data-theme="light"] .language-tab:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+[data-theme="dark"] .language-tabs {
+    background: #2d2d2d;
+    border: 1px solid #404040;
+}
+
+[data-theme="dark"] .language-tab {
+    color: #cccccc;
+}
+
+[data-theme="dark"] .language-tab:hover {
+    background: #404040;
+    color: #ffffff;
 }
 
 .language-tab i {

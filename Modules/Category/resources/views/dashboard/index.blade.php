@@ -131,9 +131,12 @@
                             @php
                                 $media = $category->getFirstMedia('category_images');
                             @endphp
-                            @if ($media)
-                                <img src="{{ route('category.image', $media->id) }}" alt="{{ $category->name }}"
-                                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                            @if ($media && $media->getUrl())
+                                <img src="{{ $media->getUrl() }}"
+                                    alt="{{ $category->getTranslation('name', app()->getLocale()) }}"
+                                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;"
+                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <i class="fas fa-tag" style="display: none;"></i>
                             @else
                                 <i class="fas fa-tag"></i>
                             @endif
@@ -297,6 +300,17 @@
             animation: smartIndicatorPulse 2s ease-in-out infinite;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .smart-indicator {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+        }
+
+        [data-theme="dark"] .smart-indicator {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .smart-indicator::before {
@@ -324,9 +338,18 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: #ffffff;
+            color: var(--text-primary);
             font-size: 0.875rem;
             font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        [data-theme="light"] .indicator-item {
+            color: #111827;
+        }
+
+        [data-theme="dark"] .indicator-item {
+            color: #ffffff;
         }
 
         .indicator-icon {
@@ -366,7 +389,7 @@
 
         /* تحسين مظهر الأزرار بناءً على النوع */
         .action-btn {
-            color: #ffffff !important;
+            transition: all 0.3s ease;
         }
 
         .action-btn.view {
@@ -415,13 +438,33 @@
             background: rgba(59, 130, 246, 0.05);
             border-radius: 8px;
             border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .subcategories-section {
+            background: rgba(59, 130, 246, 0.03);
+            border: 1px solid rgba(59, 130, 246, 0.08);
+        }
+
+        [data-theme="dark"] .subcategories-section {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.1);
         }
 
         .subcategories-title {
-            color: #ffffff;
+            color: var(--text-primary);
             font-size: 0.875rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        [data-theme="light"] .subcategories-title {
+            color: #111827;
+        }
+
+        [data-theme="dark"] .subcategories-title {
+            color: #ffffff;
         }
 
         .subcategories-list {
@@ -431,12 +474,25 @@
         }
 
         .subcategory-tag {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 500;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .subcategory-tag {
+            background: #f9fafb;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+
+        [data-theme="dark"] .subcategory-tag {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
@@ -495,15 +551,28 @@
         }
 
         .delete-modal-content {
-            background: #2d2d2d;
+            background: var(--bg-primary);
             border-radius: 16px;
             padding: 0;
             max-width: 500px;
             width: 90%;
             position: relative;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 1px solid #404040;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
             animation: modalSlideIn 0.3s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .delete-modal-content {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] .delete-modal-content {
+            background: #2d2d2d;
+            border: 1px solid #404040;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         @keyframes modalSlideIn {
@@ -520,23 +589,41 @@
 
         .delete-modal-header {
             padding: 1.5rem 2rem 1rem;
-            border-bottom: 1px solid #404040;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: border-color 0.3s ease;
         }
 
         .delete-modal-header h3 {
-            color: #ffffff;
+            color: var(--text-primary);
             margin: 0;
             font-size: 1.25rem;
             font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        [data-theme="light"] .delete-modal-header {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        [data-theme="light"] .delete-modal-header h3 {
+            color: #111827;
+        }
+
+        [data-theme="dark"] .delete-modal-header {
+            border-bottom: 1px solid #404040;
+        }
+
+        [data-theme="dark"] .delete-modal-header h3 {
+            color: #ffffff;
         }
 
         .delete-modal-close {
             background: none;
             border: none;
-            color: #888888;
+            color: var(--text-light);
             font-size: 1.5rem;
             cursor: pointer;
             padding: 0;
@@ -550,6 +637,24 @@
         }
 
         .delete-modal-close:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .delete-modal-close {
+            color: #6b7280;
+        }
+
+        [data-theme="light"] .delete-modal-close:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        [data-theme="dark"] .delete-modal-close {
+            color: #888888;
+        }
+
+        [data-theme="dark"] .delete-modal-close:hover {
             background: #404040;
             color: #ffffff;
         }
@@ -569,16 +674,34 @@
         }
 
         .delete-message {
-            color: #ffffff;
+            color: var(--text-primary);
             font-size: 1.1rem;
             margin-bottom: 1rem;
             line-height: 1.5;
+            transition: color 0.3s ease;
         }
 
         .delete-warning {
-            color: #888888;
+            color: var(--text-light);
             font-size: 0.9rem;
             margin-bottom: 0;
+            transition: color 0.3s ease;
+        }
+
+        [data-theme="light"] .delete-message {
+            color: #111827;
+        }
+
+        [data-theme="light"] .delete-warning {
+            color: #6b7280;
+        }
+
+        [data-theme="dark"] .delete-message {
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .delete-warning {
+            color: #888888;
         }
 
         .delete-modal-footer {
@@ -645,236 +768,8 @@
             }
         }
     </style>
-@endsection
 
-@push('scripts')
-    <script src="{{ asset('assets/js/notifications.js') }}"></script>
-    <script src="{{ asset('modules/category/js/categories.js') }}"></script>
-    <script>
-        // Show and auto-hide notifications
-        document.addEventListener('DOMContentLoaded', function() {
-            const notifications = document.querySelectorAll('.notification');
-            notifications.forEach(notification => {
-                // Show notification with animation
-                setTimeout(() => {
-                    notification.classList.add('show');
-                }, 100);
-
-                // Auto-hide after 5 seconds
-                setTimeout(() => {
-                    notification.classList.add('hide');
-                    setTimeout(() => {
-                        notification.remove();
-                    }, 400);
-                }, 5000);
-
-                // Progress bar animation
-                const progressBar = notification.querySelector('.notification-progress');
-                if (progressBar) {
-                    progressBar.style.width = '100%';
-                    progressBar.style.transition = 'width 5s linear';
-                }
-            });
-        });
-
-        // Handle delete confirmation with custom modal
-        let currentDeleteForm = null;
-        let currentDeleteBtn = null;
-
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const categoryCard = this.closest('.category-card');
-                const nameEl = categoryCard ? categoryCard.querySelector('.category-name') : null;
-                const categoryName = nameEl ? nameEl.textContent : '';
-                const confirmed = confirm(
-                    `{{ __('Are you sure you want to delete the section') }} ${categoryName}?`);
-                if (!confirmed) {
-                    e.preventDefault();
-                }
-            });
-        });
-
-        // Handle modal close
-        document.querySelector('.delete-modal-close').addEventListener('click', function() {
-            document.getElementById('deleteModal').style.display = 'none';
-            currentDeleteForm = null;
-            currentDeleteBtn = null;
-        });
-
-        // Handle modal cancel
-        document.querySelector('.delete-modal-cancel').addEventListener('click', function() {
-            document.getElementById('deleteModal').style.display = 'none';
-            currentDeleteForm = null;
-            currentDeleteBtn = null;
-        });
-
-        // Handle modal overlay click
-        document.querySelector('.delete-modal-overlay').addEventListener('click', function() {
-            document.getElementById('deleteModal').style.display = 'none';
-            currentDeleteForm = null;
-            currentDeleteBtn = null;
-        });
-
-        // Handle delete confirmation
-        document.querySelector('.delete-modal-confirm').addEventListener('click', function() {
-            if (currentDeleteForm && currentDeleteBtn) {
-                const originalText = currentDeleteBtn.innerHTML;
-
-                // Show loading state
-                currentDeleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ __('Deleting...') }}';
-                currentDeleteBtn.disabled = true;
-
-                // Hide modal
-                document.getElementById('deleteModal').style.display = 'none';
-
-                // Send AJAX delete request
-                fetch(currentDeleteForm.action, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'X-HTTP-Method-Override': 'DELETE'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Show success notification
-                            showSuccessNotification(data.message, null, 'deleted');
-
-                            // Remove the card from grid
-                            const card = currentDeleteBtn.closest('.category-card');
-                            if (card) {
-                                card.style.transition = 'all 0.3s ease';
-                                card.style.opacity = '0';
-                                card.style.transform = 'scale(0.8)';
-                                setTimeout(() => {
-                                    card.remove();
-                                }, 300);
-                            }
-                        } else {
-                            showErrorNotification(data.message);
-                            // Restore button state
-                            currentDeleteBtn.innerHTML = originalText;
-                            currentDeleteBtn.disabled = false;
-                        }
-                    })
-                    .catch(error => {
-                        showErrorNotification('{{ __('An error occurred while deleting the category') }}');
-                        // Restore button state
-                        currentDeleteBtn.innerHTML = originalText;
-                        currentDeleteBtn.disabled = false;
-                    });
-            }
-        });
-
-        // Professional Success Notification
-        function showSuccessNotification(message, categoryId = null, action = 'deleted') {
-            const notification = document.createElement('div');
-            notification.className = 'notification success professional-notification';
-            notification.innerHTML = `
-                <div class="notification-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Success') }}</div>
-                    <div class="notification-message">${message}</div>
-                    ${categoryId ? `
-                                                                                                                                                                    <div class="notification-details">
-                                                                                                                                                                        <i class="fas fa-info-circle"></i>
-                                                                                                                                                                        {{ __('Category') }} #${categoryId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
-                                                                                                                                                                    </div>
-                                                                                                                                                                    ` : ''}
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            `;
-
-            document.querySelector('.notification-container').appendChild(notification);
-
-            // Show notification with animation
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-
-            // Auto-hide after 6 seconds
-            setTimeout(() => {
-                notification.classList.add('hide');
-                setTimeout(() => {
-                    notification.remove();
-                }, 400);
-            }, 6000);
-
-            // Progress bar animation
-            const progressBar = notification.querySelector('.notification-progress');
-            if (progressBar) {
-                progressBar.style.width = '100%';
-                progressBar.style.transition = 'width 6s linear';
-            }
-        }
-
-        // Professional Error Notification
-        function showErrorNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'notification error professional-notification';
-            notification.innerHTML = `
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Error') }}</div>
-                    <div class="notification-message">${message}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            `;
-
-            document.querySelector('.notification-container').appendChild(notification);
-
-            // Show notification with animation
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                notification.classList.add('hide');
-                setTimeout(() => {
-                    notification.remove();
-                }, 400);
-            }, 5000);
-
-            // Progress bar animation
-            const progressBar = notification.querySelector('.notification-progress');
-            if (progressBar) {
-                progressBar.style.width = '100%';
-                progressBar.style.transition = 'width 5s linear';
-            }
-        }
-
-        // Auto-hide notifications after 6 seconds
-        document.addEventListener('DOMContentLoaded', function() {
-            const notifications = document.querySelectorAll('.professional-notification');
-            notifications.forEach(notification => {
-                // Progress bar animation
-                const progressBar = notification.querySelector('.notification-progress');
-                if (progressBar) {
-                    progressBar.style.width = '100%';
-                    progressBar.style.transition = 'width 6s linear';
-                }
-
-                // Auto-hide after 6 seconds
-                setTimeout(() => {
-                    notification.classList.add('hide');
-                    setTimeout(() => {
-                        notification.remove();
-                    }, 400);
-                }, 6000);
-            });
-        });
-    </script>
-
+    <!-- Professional Notification Styles -->
     <style>
         /* Professional Notification Styles */
         .notification-container {
@@ -1069,5 +964,356 @@
                 padding: 15px !important;
             }
         }
+
+        /* Force Light Mode Styles - Maximum Priority */
+        html[data-theme="light"] .categories-container,
+        html[data-theme="light"] body .categories-container,
+        body html[data-theme="light"] .categories-container {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .category-card,
+        html[data-theme="light"] body .category-card,
+        body html[data-theme="light"] .category-card {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .category-card:hover,
+        html[data-theme="light"] body .category-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        html[data-theme="light"] .category-name,
+        html[data-theme="light"] body .category-name {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .category-description,
+        html[data-theme="light"] body .category-description {
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .stat-number,
+        html[data-theme="light"] body .stat-number {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .stat-label,
+        html[data-theme="light"] body .stat-label {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .category-actions,
+        html[data-theme="light"] body .category-actions {
+            border-top: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .subcategories-section,
+        html[data-theme="light"] body .subcategories-section {
+            border-top: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .subcategories-title,
+        html[data-theme="light"] body .subcategories-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .subcategory-tag,
+        html[data-theme="light"] body .subcategory-tag {
+            background: #f9fafb !important;
+            color: #374151 !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .action-btn.edit,
+        html[data-theme="light"] body .action-btn.edit {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .action-btn.edit:hover,
+        html[data-theme="light"] body .action-btn.edit:hover {
+            background: #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .breadcrumb-nav,
+        html[data-theme="light"] body .breadcrumb-nav {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .breadcrumb-current,
+        html[data-theme="light"] body .breadcrumb-current {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .page-title,
+        html[data-theme="light"] body .page-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .empty-state,
+        html[data-theme="light"] body .empty-state {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .empty-state i,
+        html[data-theme="light"] body .empty-state i {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="light"] .empty-state h3,
+        html[data-theme="light"] body .empty-state h3 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .empty-state p,
+        html[data-theme="light"] body .empty-state p {
+            color: #374151 !important;
+        }
     </style>
+@endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/js/notifications.js') }}"></script>
+    <script src="{{ asset('modules/category/js/categories.js') }}"></script>
+    <script>
+        // Force apply light theme styles if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                // Force reflow to apply styles
+                document.body.offsetHeight;
+                // Re-apply theme to ensure styles are loaded
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        });
+        // Show and auto-hide notifications
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifications = document.querySelectorAll('.notification');
+            notifications.forEach(notification => {
+                // Show notification with animation
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 100);
+
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    notification.classList.add('hide');
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 400);
+                }, 5000);
+
+                // Progress bar animation
+                const progressBar = notification.querySelector('.notification-progress');
+                if (progressBar) {
+                    progressBar.style.width = '100%';
+                    progressBar.style.transition = 'width 5s linear';
+                }
+            });
+        });
+
+        // Handle delete confirmation with custom modal
+        let currentDeleteForm = null;
+        let currentDeleteBtn = null;
+
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const categoryCard = this.closest('.category-card');
+                const nameEl = categoryCard ? categoryCard.querySelector('.category-name') : null;
+                const categoryName = nameEl ? nameEl.textContent : '';
+                const confirmed = confirm(
+                    `{{ __('Are you sure you want to delete the section') }} ${categoryName}?`);
+                if (!confirmed) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Handle modal close
+        document.querySelector('.delete-modal-close').addEventListener('click', function() {
+            document.getElementById('deleteModal').style.display = 'none';
+            currentDeleteForm = null;
+            currentDeleteBtn = null;
+        });
+
+        // Handle modal cancel
+        document.querySelector('.delete-modal-cancel').addEventListener('click', function() {
+            document.getElementById('deleteModal').style.display = 'none';
+            currentDeleteForm = null;
+            currentDeleteBtn = null;
+        });
+
+        // Handle modal overlay click
+        document.querySelector('.delete-modal-overlay').addEventListener('click', function() {
+            document.getElementById('deleteModal').style.display = 'none';
+            currentDeleteForm = null;
+            currentDeleteBtn = null;
+        });
+
+        // Handle delete confirmation
+        document.querySelector('.delete-modal-confirm').addEventListener('click', function() {
+            if (currentDeleteForm && currentDeleteBtn) {
+                const originalText = currentDeleteBtn.innerHTML;
+
+                // Show loading state
+                currentDeleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ __('Deleting...') }}';
+                currentDeleteBtn.disabled = true;
+
+                // Hide modal
+                document.getElementById('deleteModal').style.display = 'none';
+
+                // Send AJAX delete request
+                fetch(currentDeleteForm.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-HTTP-Method-Override': 'DELETE'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Show success notification
+                            showSuccessNotification(data.message, null, 'deleted');
+
+                            // Remove the card from grid
+                            const card = currentDeleteBtn.closest('.category-card');
+                            if (card) {
+                                card.style.transition = 'all 0.3s ease';
+                                card.style.opacity = '0';
+                                card.style.transform = 'scale(0.8)';
+                                setTimeout(() => {
+                                    card.remove();
+                                }, 300);
+                            }
+                        } else {
+                            showErrorNotification(data.message);
+                            // Restore button state
+                            currentDeleteBtn.innerHTML = originalText;
+                            currentDeleteBtn.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        showErrorNotification('{{ __('An error occurred while deleting the category') }}');
+                        // Restore button state
+                        currentDeleteBtn.innerHTML = originalText;
+                        currentDeleteBtn.disabled = false;
+                    });
+            }
+        });
+
+        // Professional Success Notification
+        function showSuccessNotification(message, categoryId = null, action = 'deleted') {
+            const notification = document.createElement('div');
+            notification.className = 'notification success professional-notification';
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">{{ __('Success') }}</div>
+                    <div class="notification-message">${message}</div>
+                    ${categoryId ? `
+                                                                                                                                                                                        <div class="notification-details">
+                                                                                                                                                                                            <i class="fas fa-info-circle"></i>
+                                                                                                                                                                                            {{ __('Category') }} #${categoryId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
+                                                                                                                                                                                        </div>
+                                                                                                                                                                                        ` : ''}
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+                <div class="notification-progress"></div>
+            `;
+
+            document.querySelector('.notification-container').appendChild(notification);
+
+            // Show notification with animation
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            // Auto-hide after 6 seconds
+            setTimeout(() => {
+                notification.classList.add('hide');
+                setTimeout(() => {
+                    notification.remove();
+                }, 400);
+            }, 6000);
+
+            // Progress bar animation
+            const progressBar = notification.querySelector('.notification-progress');
+            if (progressBar) {
+                progressBar.style.width = '100%';
+                progressBar.style.transition = 'width 6s linear';
+            }
+        }
+
+        // Professional Error Notification
+        function showErrorNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification error professional-notification';
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">{{ __('Error') }}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+                <div class="notification-progress"></div>
+            `;
+
+            document.querySelector('.notification-container').appendChild(notification);
+
+            // Show notification with animation
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('hide');
+                setTimeout(() => {
+                    notification.remove();
+                }, 400);
+            }, 5000);
+
+            // Progress bar animation
+            const progressBar = notification.querySelector('.notification-progress');
+            if (progressBar) {
+                progressBar.style.width = '100%';
+                progressBar.style.transition = 'width 5s linear';
+            }
+        }
+
+        // Auto-hide notifications after 6 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifications = document.querySelectorAll('.professional-notification');
+            notifications.forEach(notification => {
+                // Progress bar animation
+                const progressBar = notification.querySelector('.notification-progress');
+                if (progressBar) {
+                    progressBar.style.width = '100%';
+                    progressBar.style.transition = 'width 6s linear';
+                }
+
+                // Auto-hide after 6 seconds
+                setTimeout(() => {
+                    notification.classList.add('hide');
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 400);
+                }, 6000);
+            });
+        });
+    </script>
 @endpush

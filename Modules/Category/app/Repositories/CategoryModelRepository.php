@@ -26,6 +26,7 @@ class CategoryModelRepository implements CategoryRepository
         return Category::where('store_id', $store->id)
             ->whereNull('parent_id')
             ->with('children')
+            ->with('media')
             ->get();
     }
 

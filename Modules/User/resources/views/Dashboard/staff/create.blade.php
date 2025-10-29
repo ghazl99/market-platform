@@ -601,11 +601,106 @@
                 padding: 1rem;
             }
         }
+
+        /* Light Mode Styles - Maximum Priority */
+        html[data-theme="light"] .staff-container,
+        html[data-theme="light"] body .staff-container {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .page-title,
+        html[data-theme="light"] body .page-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .page-header,
+        html[data-theme="light"] body .page-header {
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .staff-form-container,
+        html[data-theme="light"] body .staff-form-container {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .form-header,
+        html[data-theme="light"] body .form-header {
+            background: #f9fafb !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .form-header h3,
+        html[data-theme="light"] body .form-header h3 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-header p,
+        html[data-theme="light"] body .form-header p {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .form-label,
+        html[data-theme="light"] body .form-label {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-control,
+        html[data-theme="light"] body .form-control {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-control:focus,
+        html[data-theme="light"] body .form-control:focus {
+            background: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .form-text,
+        html[data-theme="light"] body .form-text {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .form-actions,
+        html[data-theme="light"] body .form-actions {
+            border-top: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .notification,
+        html[data-theme="light"] body .notification {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .notification-title,
+        html[data-theme="light"] body .notification-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .notification-message,
+        html[data-theme="light"] body .notification-message {
+            color: #6b7280 !important;
+        }
     </style>
 @endpush
 
 @push('scripts')
     <script>
+        // Ensure theme is applied
+        document.addEventListener('DOMContentLoaded', function() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                // Force reflow to apply styles
+                document.body.offsetHeight;
+                // Re-apply theme to ensure styles are loaded
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        });
+
         // Professional Notification System
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {

@@ -12,18 +12,21 @@
 
         .original-amount {
             font-weight: bold;
-            color: #1f2937;
+            color: #ffffff;
+            transition: color 0.3s ease;
         }
 
         .usd-amount {
             font-size: 0.9em;
-            color: #6b7280;
+            color: #cbd5e1;
+            transition: color 0.3s ease;
         }
 
         .exchange-rate {
             font-size: 0.8em;
             color: #9ca3af;
             font-style: italic;
+            transition: color 0.3s ease;
         }
 
         .user-info {
@@ -34,17 +37,20 @@
 
         .user-name {
             font-weight: 600;
-            color: #1f2937;
+            color: #ffffff;
+            transition: color 0.3s ease;
         }
 
         .user-email {
             font-size: 0.9em;
-            color: #6b7280;
+            color: #cbd5e1;
+            transition: color 0.3s ease;
         }
 
         .payment-method {
             font-weight: 500;
-            color: #374151;
+            color: #cbd5e1;
+            transition: color 0.3s ease;
         }
     </style>
 @endpush
@@ -446,8 +452,9 @@
         /* Payment Requests Styles - Dark Theme */
         .payment-container {
             padding: 2rem;
-            background: #1f2937;
+            background: #111827;
             min-height: 100vh;
+            transition: background-color 0.3s ease;
         }
 
         .page-header {
@@ -456,7 +463,8 @@
             align-items: center;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
-            border-bottom: 2px solid #374151;
+            border-bottom: 2px solid #334155;
+            transition: border-color 0.3s ease;
         }
 
         .page-title {
@@ -464,6 +472,7 @@
             font-weight: 700;
             color: #ffffff;
             margin: 0;
+            transition: color 0.3s ease;
         }
 
         .page-actions {
@@ -479,18 +488,18 @@
         }
 
         .stat-card {
-            background: #1a1a1a;
+            background: #1e293b;
             border-radius: 16px;
             padding: 1.5rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            border: 1px solid #4b5563;
+            border: 1px solid #334155;
             transition: all 0.3s ease;
         }
 
         .stat-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
-            background: #2d2d2d;
+            background: #334155;
         }
 
         .stat-icon {
@@ -537,11 +546,12 @@
         }
 
         .payment-table-container {
-            background: #374151;
+            background: #1e293b;
             border-radius: 16px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            border: 1px solid #4b5563;
+            border: 1px solid #334155;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .table-header {
@@ -549,8 +559,9 @@
             justify-content: space-between;
             align-items: center;
             padding: 1.5rem;
-            border-bottom: 1px solid #4b5563;
-            background: #4b5563;
+            border-bottom: 1px solid #334155;
+            background: #1f2937;
+            transition: all 0.3s ease;
         }
 
         .table-header h3 {
@@ -558,6 +569,7 @@
             font-weight: 600;
             color: #ffffff;
             margin: 0;
+            transition: color 0.3s ease;
         }
 
         .table-actions {
@@ -567,11 +579,11 @@
 
         .search-input {
             padding: 0.75rem 1rem;
-            border: 1px solid #6b7280;
+            border: 1px solid #475569;
             border-radius: 8px;
             font-size: 0.9rem;
             min-width: 250px;
-            background: #1f2937;
+            background: #334155;
             color: #ffffff;
             transition: all 0.3s ease;
         }
@@ -580,6 +592,7 @@
             outline: none;
             border-color: #059669;
             box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+            background: #475569;
         }
 
         .search-input::placeholder {
@@ -596,28 +609,30 @@
         }
 
         .payment-table th {
-            background: #4b5563;
+            background: #1f2937;
             padding: 1rem;
             text-align: right;
             font-weight: 600;
             color: #ffffff;
-            border-bottom: 1px solid #6b7280;
+            border-bottom: 1px solid #334155;
+            transition: all 0.3s ease;
         }
 
         .payment-table td {
             padding: 1rem;
-            border-bottom: 1px solid #4b5563;
+            border-bottom: 1px solid #334155;
             vertical-align: middle;
             color: #ffffff;
-            background: #1a1a1a;
+            background: #1e293b;
+            transition: all 0.3s ease;
         }
 
         .payment-table tbody tr {
-            background: #1a1a1a;
+            background: #1e293b;
         }
 
         .payment-table tbody tr:hover {
-            background: #2d2d2d;
+            background: #334155;
         }
 
         .action-buttons {
@@ -779,8 +794,9 @@
             padding: 1.5rem;
             display: flex;
             justify-content: center;
-            border-top: 1px solid #4b5563;
-            background: #4b5563;
+            border-top: 1px solid #334155;
+            background: #1f2937;
+            transition: all 0.3s ease;
         }
 
         /* Modal Styles */
@@ -797,15 +813,16 @@
         }
 
         .modal-content {
-            background: #374151;
+            background: #1e293b;
             margin: 5% auto;
             padding: 0;
             border-radius: 16px;
             width: 90%;
             max-width: 500px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-            border: 1px solid #4b5563;
+            border: 1px solid #334155;
             animation: modalSlideIn 0.3s ease-out;
+            transition: all 0.3s ease;
         }
 
         @keyframes modalSlideIn {
@@ -822,10 +839,11 @@
 
         .modal-header {
             padding: 1.5rem;
-            border-bottom: 1px solid #4b5563;
+            border-bottom: 1px solid #334155;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: border-color 0.3s ease;
         }
 
         .modal-header h3 {
@@ -833,6 +851,7 @@
             color: #ffffff;
             font-size: 1.25rem;
             font-weight: 600;
+            transition: color 0.3s ease;
         }
 
         .modal-close {
@@ -857,10 +876,11 @@
 
         .modal-footer {
             padding: 1.5rem;
-            border-top: 1px solid #4b5563;
+            border-top: 1px solid #334155;
             display: flex;
             gap: 1rem;
             justify-content: flex-end;
+            transition: border-color 0.3s ease;
         }
 
         .form-group {
@@ -883,10 +903,10 @@
         .form-control {
             width: 100%;
             padding: 0.75rem 1rem;
-            border: 1px solid #6b7280;
+            border: 1px solid #475569;
             border-radius: 8px;
             font-size: 0.9rem;
-            background: #1f2937;
+            background: #334155;
             color: #ffffff;
             transition: all 0.3s ease;
         }
@@ -895,6 +915,7 @@
             outline: none;
             border-color: #059669;
             box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+            background: #475569;
         }
 
         .form-control::placeholder {
@@ -929,6 +950,27 @@
 
         .btn-primary:hover {
             background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+        }
+
+        /* Pagination Styles for Light Mode */
+        html[data-theme="light"] .pagination .page-link,
+        html[data-theme="light"] body .pagination .page-link {
+            color: #374151 !important;
+            background-color: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .pagination .page-link:hover,
+        html[data-theme="light"] body .pagination .page-link:hover {
+            background-color: #f9fafb !important;
+            border-color: #d1d5db !important;
+        }
+
+        html[data-theme="light"] .pagination .page-item.active .page-link,
+        html[data-theme="light"] body .pagination .page-item.active .page-link {
+            background-color: #059669 !important;
+            border-color: #059669 !important;
+            color: #ffffff !important;
         }
 
         /* Responsive Design */
@@ -967,6 +1009,215 @@
                 margin: 10% auto;
             }
         }
+
+        /* Light Mode Styles - Maximum Priority */
+        html[data-theme="light"] .payment-container,
+        html[data-theme="light"] body .payment-container {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .page-title,
+        html[data-theme="light"] body .page-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .page-header,
+        html[data-theme="light"] body .page-header {
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .stat-card,
+        html[data-theme="light"] body .stat-card {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .stat-card:hover,
+        html[data-theme="light"] body .stat-card:hover {
+            background: #f9fafb !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        html[data-theme="light"] .stat-number,
+        html[data-theme="light"] body .stat-number {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .stat-label,
+        html[data-theme="light"] body .stat-label {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .payment-table-container,
+        html[data-theme="light"] body .payment-table-container {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .table-header,
+        html[data-theme="light"] body .table-header {
+            background: #f9fafb !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .table-header h3,
+        html[data-theme="light"] body .table-header h3 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .search-input,
+        html[data-theme="light"] body .search-input {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .search-input:focus,
+        html[data-theme="light"] body .search-input:focus {
+            background: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .payment-table th,
+        html[data-theme="light"] body .payment-table th {
+            background: #f9fafb !important;
+            color: #111827 !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .payment-table td,
+        html[data-theme="light"] body .payment-table td {
+            background: #ffffff !important;
+            color: #374151 !important;
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .payment-table tbody tr,
+        html[data-theme="light"] body .payment-table tbody tr {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .payment-table tbody tr:hover,
+        html[data-theme="light"] body .payment-table tbody tr:hover {
+            background: #f9fafb !important;
+        }
+
+        html[data-theme="light"] .original-amount,
+        html[data-theme="light"] body .original-amount {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .usd-amount,
+        html[data-theme="light"] body .usd-amount {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .user-name,
+        html[data-theme="light"] body .user-name {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .user-email,
+        html[data-theme="light"] body .user-email {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .payment-method,
+        html[data-theme="light"] body .payment-method {
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .date-text,
+        html[data-theme="light"] body .date-text {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .pagination-container,
+        html[data-theme="light"] body .pagination-container {
+            background: #ffffff !important;
+            border-top: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .modal-content,
+        html[data-theme="light"] body .modal-content {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .modal-header,
+        html[data-theme="light"] body .modal-header {
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .modal-header h3,
+        html[data-theme="light"] body .modal-header h3 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .modal-footer,
+        html[data-theme="light"] body .modal-footer {
+            border-top: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .form-label,
+        html[data-theme="light"] body .form-label {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-control,
+        html[data-theme="light"] body .form-control {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-control:focus,
+        html[data-theme="light"] body .form-control:focus {
+            background: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .btn-secondary,
+        html[data-theme="light"] body .btn-secondary {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .btn-secondary:hover,
+        html[data-theme="light"] body .btn-secondary:hover {
+            background: #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .notification,
+        html[data-theme="light"] body .notification {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .notification-title,
+        html[data-theme="light"] body .notification-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .notification-message,
+        html[data-theme="light"] body .notification-message {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .notification-close,
+        html[data-theme="light"] body .notification-close {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="light"] .notification-close:hover,
+        html[data-theme="light"] body .notification-close:hover {
+            background: rgba(0, 0, 0, 0.05) !important;
+            color: #374151 !important;
+        }
     </style>
 @endpush
 
@@ -974,6 +1225,15 @@
     <script>
         // Professional Notification System
         document.addEventListener('DOMContentLoaded', function() {
+            // Ensure theme is applied
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                // Force reflow to apply styles
+                document.body.offsetHeight;
+                // Re-apply theme to ensure styles are loaded
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+
             setTimeout(() => {
                 const notifications = document.querySelectorAll('.professional-notification');
                 notifications.forEach(notification => {

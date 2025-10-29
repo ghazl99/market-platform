@@ -486,10 +486,147 @@
                 max-width: 300px;
             }
         }
+
+        /* Light Mode Styles - Maximum Priority */
+        html[data-theme="light"] .order-edit-container,
+        html[data-theme="light"] body .order-edit-container {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .page-title,
+        html[data-theme="light"] body .page-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .back-btn,
+        html[data-theme="light"] body .back-btn {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .back-btn:hover,
+        html[data-theme="light"] body .back-btn:hover {
+            background: #059669 !important;
+            color: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .form-card,
+        html[data-theme="light"] body .form-card {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .card-header,
+        html[data-theme="light"] body .card-header {
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .card-title,
+        html[data-theme="light"] body .card-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-label,
+        html[data-theme="light"] body .form-label {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-input,
+        html[data-theme="light"] .form-select,
+        html[data-theme="light"] body .form-input,
+        html[data-theme="light"] body .form-select {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-input:focus,
+        html[data-theme="light"] .form-select:focus,
+        html[data-theme="light"] body .form-input:focus,
+        html[data-theme="light"] body .form-select:focus {
+            background: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .form-input[readonly],
+        html[data-theme="light"] body .form-input[readonly] {
+            background: #f9fafb !important;
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .form-select {
+            background: #ffffff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23111827' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") no-repeat right 0.5rem center !important;
+            background-size: 1.5em 1.5em !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+        }
+
+        [dir="rtl"] html[data-theme="light"] .form-select,
+        [dir="rtl"] html[data-theme="light"] body .form-select {
+            background-position: left 0.5rem center !important;
+            padding-right: 1rem !important;
+            padding-left: 2.5rem !important;
+        }
+
+        html[data-theme="light"] .action-btn.secondary,
+        html[data-theme="light"] body .action-btn.secondary {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+            border: 2px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .action-btn.secondary:hover,
+        html[data-theme="light"] body .action-btn.secondary:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+            color: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .notification,
+        html[data-theme="light"] body .notification {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .notification-title,
+        html[data-theme="light"] body .notification-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .notification-message,
+        html[data-theme="light"] body .notification-message {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .notification-close,
+        html[data-theme="light"] body .notification-close {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="light"] .notification-close:hover,
+        html[data-theme="light"] body .notification-close:hover {
+            color: #374151 !important;
+        }
     </style>
 @endsection
 @push('scripts')
     <script>
+        // Ensure theme is applied
+        document.addEventListener('DOMContentLoaded', function() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                // Force reflow to apply styles
+                document.body.offsetHeight;
+                // Re-apply theme to ensure styles are loaded
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        });
+
         // Show and auto-hide notifications
         document.addEventListener('DOMContentLoaded', function() {
             const notifications = document.querySelectorAll('.notification');

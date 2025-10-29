@@ -85,7 +85,13 @@ class ProductController extends Controller implements HasMiddleware
             $parentProduct = Product::with('categories')->find($request->parent_id);
         }
 
-        return view('product::dashboard.create', compact('attributes', 'categories', 'parentProduct'));
+        // Get selected category if category_id is provided
+        $selectedCategory = null;
+        if ($request->has('category_id')) {
+            $selectedCategory = $this->categoryService->getCategoryById($request->category_id);
+        }
+
+        return view('product::dashboard.create', compact('attributes', 'categories', 'parentProduct', 'selectedCategory'));
     }
 
     /**
@@ -117,6 +123,14 @@ class ProductController extends Controller implements HasMiddleware
                     ->to(route('dashboard.product.show', $data['parent_id']) . '#subproducts-tab')
                     ->with('success', __('Sub-product created successfully'))
                     ->with('active_tab', 'subproducts');
+            }
+
+            // إذا تم إضافة المنتج من صفحة قسم معين، البقاء في نفس الصفحة
+            if (isset($data['category']) && $data['category']) {
+                $categoryId = $data['category'];
+                Log::info('Redirecting to category products page: ' . $categoryId);
+                return redirect()->route('dashboard.product.category', $categoryId)
+                    ->with('success', __('تم إنشاء المنتج بنجاح'));
             }
 
             Log::info('Redirecting to products index');

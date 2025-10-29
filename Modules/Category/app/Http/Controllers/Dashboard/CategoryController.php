@@ -35,7 +35,7 @@ class CategoryController extends Controller implements HasMiddleware
     {
         if ($parent) {
             // عرض الأقسام الفرعية
-            $categories = $parent->children()->with('children')->get();
+            $categories = $parent->children()->with('children')->with('media')->get();
             $parentCategory = $parent;
         } else {
             // عرض الأقسام الرئيسية مع العلاقات

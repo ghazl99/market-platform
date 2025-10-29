@@ -216,6 +216,106 @@
                 justify-content: center;
             }
         }
+
+        /* Light Mode Styles - Maximum Priority */
+        html[data-theme="light"] body,
+        html[data-theme="light"] body .groups-container {
+            background: #ffffff !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .groups-title,
+        html[data-theme="light"] body .groups-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .group-card,
+        html[data-theme="light"] body .group-card {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .group-card:hover,
+        html[data-theme="light"] body .group-card:hover {
+            background: #f9fafb !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+            border-color: #f59e0b !important;
+        }
+
+        html[data-theme="light"] .group-card.default,
+        html[data-theme="light"] body .group-card.default {
+            border-color: #10b981 !important;
+        }
+
+        html[data-theme="light"] .group-name,
+        html[data-theme="light"] body .group-name {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .users-count,
+        html[data-theme="light"] body .users-count {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .action-btn,
+        html[data-theme="light"] body .action-btn {
+            background: #f3f4f6 !important;
+            border: 1px solid #e5e7eb !important;
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .action-btn:hover,
+        html[data-theme="light"] body .action-btn:hover {
+            background: #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .action-btn.edit:hover,
+        html[data-theme="light"] body .action-btn.edit:hover {
+            background: #3b82f6 !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+
+        html[data-theme="light"] .action-btn.delete:hover,
+        html[data-theme="light"] body .action-btn.delete:hover {
+            background: #ef4444 !important;
+            border-color: #ef4444 !important;
+            color: #ffffff !important;
+        }
+
+        html[data-theme="light"] .add-group-card,
+        html[data-theme="light"] body .add-group-card {
+            background: #ffffff !important;
+            border: 2px dashed #d1d5db !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .add-group-card:hover,
+        html[data-theme="light"] body .add-group-card:hover {
+            border-color: #f59e0b !important;
+            background: #f9fafb !important;
+        }
+
+        html[data-theme="light"] .add-group-subtitle,
+        html[data-theme="light"] body .add-group-subtitle {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .no-groups,
+        html[data-theme="light"] body .no-groups {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .no-groups h3,
+        html[data-theme="light"] body .no-groups h3 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .no-groups i,
+        html[data-theme="light"] body .no-groups i {
+            color: #d1d5db !important;
+        }
     </style>
 @endpush
 
@@ -281,4 +381,16 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/notifications.js') }}"></script>
+    <script>
+        // Ensure theme is applied
+        document.addEventListener('DOMContentLoaded', function() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                // Force reflow to apply styles
+                document.body.offsetHeight;
+                // Re-apply theme to ensure styles are loaded
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        });
+    </script>
 @endpush
