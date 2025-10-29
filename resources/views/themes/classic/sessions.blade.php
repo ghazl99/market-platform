@@ -65,37 +65,40 @@
 @endpush
 
 @section('content')
-    <div class="sessions-section">
-        <div class="orders-container">
-            <h2 class="orders-title">{{ __('Active Sessions') }}</h2>
-            <div class="sessions-list">
-                @forelse($sessions as $session)
-                    <div class="session-item">
-                        <div class="session-info">
+    <main class="main-content-adjust">
 
+        <div class="sessions-section">
+            <div class="orders-container">
+                <h2 class="orders-title">{{ __('Active Sessions') }}</h2>
+                <div class="sessions-list">
+                    @forelse($sessions as $session)
+                        <div class="session-item">
                             <div class="session-info">
-                                <strong>{{ $session->os }} - {{ $session->browser }}</strong>
-                                <small>({{ $session->location }})</small>
-                            </div>
 
-                            {{-- <div class="session-ip">{{ $session->ip_address }}</div> --}}
-                            <div class="session-last">
-                                {{$session->last_activity}}</div>
+                                <div class="session-info">
+                                    <strong>{{ $session->os }} - {{ $session->browser }}</strong>
+                                    <small>({{ $session->location }})</small>
+                                </div>
+
+                                {{-- <div class="session-ip">{{ $session->ip_address }}</div> --}}
+                                <div class="session-last">
+                                    {{ $session->last_activity }}</div>
+                            </div>
+                            <form action="{{ route('auth.sessions.destroy', $session->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="logout-btn">{{ __('Logout') }}</button>
+                            </form>
                         </div>
-                        <form action="{{ route('auth.sessions.destroy', $session->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="logout-btn">{{ __('Logout') }}</button>
-                        </form>
-                    </div>
-                @empty
-                    <div class="empty-state">
-                        <i class="fas fa-user-clock"></i>
-                        <h3>{{ __('No active sessions') }}</h3>
-                        <p>{{ __('You are not logged in on any other devices.') }}</p>
-                    </div>
-                @endforelse
+                    @empty
+                        <div class="empty-state">
+                            <i class="fas fa-user-clock"></i>
+                            <h3>{{ __('No active sessions') }}</h3>
+                            <p>{{ __('You are not logged in on any other devices.') }}</p>
+                        </div>
+                    @endforelse
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 @endsection

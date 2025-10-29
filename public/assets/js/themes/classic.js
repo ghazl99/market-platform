@@ -160,7 +160,7 @@ if (filterBtns.length > 0) {
 
 // Product Card Hover Effects
 productCards.forEach(card => {
-    card.addEventListener('mouseenter', function () {
+    card.addEventListener('mouseenter', function() {
         this.style.transition = 'all 0.3s ease';
     });
 });
@@ -370,7 +370,7 @@ scrollToTopBtn.addEventListener('mouseleave', () => {
 });
 
 // Global Dark Mode Toggle Function
-window.toggleDarkMode = function () {
+window.toggleDarkMode = function() {
     console.log('toggleDarkMode called');
     const darkModeBtn = document.getElementById('darkModeToggle');
 
@@ -430,7 +430,7 @@ function logout() {
 }
 
 // ==================== LANGUAGE TOGGLE ====================
-window.toggleLanguage = function () {
+window.toggleLanguage = function() {
     const html = document.getElementById('html');
     const currentLang = html.getAttribute('lang');
 
@@ -591,5 +591,41 @@ function resetAutoSlide() {
 window.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing slider');
     initSlider();
+    initViewToggle();
 });
+
+// ==================== VIEW TOGGLE ====================
+function initViewToggle() {
+    const viewButtons = document.querySelectorAll('.view-btn');
+    const productsGrid = document.querySelector('.products-grid');
+
+    if (!viewButtons.length || !productsGrid) return;
+
+    // Get saved view preference or default to grid
+    const savedView = localStorage.getItem('productView') || 'grid';
+    applyView(savedView);
+
+    viewButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const view = btn.getAttribute('data-view');
+            applyView(view);
+            localStorage.setItem('productView', view);
+
+            // Update active state
+            viewButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    });
+}
+
+function applyView(view) {
+    const productsGrid = document.querySelector('.products-grid');
+    if (!productsGrid) return;
+
+    if (view === 'grid') {
+        productsGrid.className = 'products-grid';
+    } else if (view === 'list') {
+        productsGrid.className = 'products-grid list-view';
+    }
+}
 

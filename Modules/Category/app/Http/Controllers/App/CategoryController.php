@@ -56,7 +56,6 @@ class CategoryController extends Controller
     public function getSubCategoryById($id)
     {
         $category = $this->categoryService->getAllSubcategoriesById($id);
-        $theme = current_store()->theme;
 
         return view('themes.' . current_theme_name_en() . '.subCategoryById', compact('category'));
     }

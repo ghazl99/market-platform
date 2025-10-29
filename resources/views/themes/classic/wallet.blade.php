@@ -1,7 +1,11 @@
 @extends('themes.app')
 @section('title', __('Wallet'))
 @push('styles')
+       
+
+    <!-- إعدادات الثيم -->
     <style>
+
         .quick-date-btn.active {
             background-color: #007bff;
             color: #fff;
@@ -64,7 +68,7 @@
             font-weight: 800;
             color: #111827;
             margin: 0;
-            background:  var(--primary-color);
+            background: var(--primary-color);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -72,7 +76,7 @@
 
         /* Balance Card */
         .balance-card {
-            background:  var(--primary-color);
+            background: var(--primary-color);
             border-radius: 20px;
             padding: 2.5rem;
             margin-bottom: 2rem;
@@ -160,8 +164,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background:  var(--primary-color)
-            border-radius: 24px 24px 0 0;
+            background: var(--primary-color) border-radius: 24px 24px 0 0;
         }
 
         .stats-header {
@@ -182,7 +185,7 @@
         }
 
         .stats-title i {
-            color:  var(--primary-color);
+            color: var(--primary-color);
             font-size: 1.5rem;
         }
 
@@ -207,9 +210,9 @@
         }
 
         .scroll-btn:hover {
-            background:  var(--primary-color);
+            background: var(--primary-color);
             color: white;
-            border-color:  var(--primary-color);
+            border-color: var(--primary-color);
             transform: scale(1.1);
         }
 
@@ -384,7 +387,7 @@
 
         .progress-bar {
             height: 100%;
-            background:var(--primary-color);
+            background: var(--primary-color);
             border-radius: 2px;
             transition: width 0.3s ease;
             width: 0%;
@@ -410,7 +413,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background:  var(--primary-color);
+            background: var(--primary-color);
             border-radius: 24px 24px 0 0;
         }
 
@@ -1048,152 +1051,155 @@
     </style>
 @endpush
 @section('content')
-    <section class="wallet-section">
-        <div class="wallet-container">
-            <!-- Page Header -->
-            <div class="wallet-header">
-                <h2 class="wallet-title">{{ __('Wallet') }}</h2>
-            </div>
+    <main class="main-content-adjust">
 
-            <!-- Balance Card -->
-            <div class="balance-card">
-                <div class="balance-content">
-                    <div class="balance-info">
-                        <h2>{{ __('Current Balance') }}</h2>
-                        <p class="balance-amount">
-                            {{ number_format(Auth::user()->walletForStore()->first()?->balance ?? 0, 2) }} $</p>
-                    </div>
-                    <div class="balance-actions">
-                        <a class="balance-btn" href="{{ Route('payment-method.index') }}" style="text-decoration: none">
-                            <i class="fas fa-plus"></i>
-                            {{ __('Add Balance') }}
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Date Filter Section -->
-            <div class="date-filter-section">
-                <div class="filter-header">
-                    <h3 class="filter-title">
-                        <i class="fas fa-calendar-alt"></i>
-                        {{ __('Filter by Date') }}
-                    </h3>
-                    <div class="filter-subtitle">{{ __('Choose date range to view transactions') }}</div>
+        <section class="wallet-section">
+            <div class="wallet-container">
+                <!-- Page Header -->
+                <div class="wallet-header">
+                    <h2 class="wallet-title">{{ __('Wallet') }}</h2>
                 </div>
 
-                <form id="filterForm" method="GET">
-                    <div class="date-filters">
-                        <div class="date-input-group">
-                            <label class="date-label">
-                                <i class="fas fa-calendar-plus"></i> {{ __('From Date') }}
-                            </label>
-                            <div class="date-input-wrapper">
-                                <input type="date" class="date-input" id="fromDate" name="date_from">
-                                <i class="fas fa-calendar-check date-icon"></i>
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <div class="balance-content">
+                        <div class="balance-info">
+                            <h2>{{ __('Current Balance') }}</h2>
+                            <p class="balance-amount">
+                                {{ number_format(Auth::user()->walletForStore()->first()?->balance ?? 0, 2) }} $</p>
+                        </div>
+                        <div class="balance-actions">
+                            <a class="balance-btn" href="{{ Route('payment-method.index') }}" style="text-decoration: none">
+                                <i class="fas fa-plus"></i>
+                                {{ __('Add Balance') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Date Filter Section -->
+                <div class="date-filter-section">
+                    <div class="filter-header">
+                        <h3 class="filter-title">
+                            <i class="fas fa-calendar-alt"></i>
+                            {{ __('Filter by Date') }}
+                        </h3>
+                        <div class="filter-subtitle">{{ __('Choose date range to view transactions') }}</div>
+                    </div>
+
+                    <form id="filterForm" method="GET">
+                        <div class="date-filters">
+                            <div class="date-input-group">
+                                <label class="date-label">
+                                    <i class="fas fa-calendar-plus"></i> {{ __('From Date') }}
+                                </label>
+                                <div class="date-input-wrapper">
+                                    <input type="date" class="date-input" id="fromDate" name="date_from">
+                                    <i class="fas fa-calendar-check date-icon"></i>
+                                </div>
+                            </div>
+
+                            <div class="date-separator">
+                                <i class="fas fa-arrow-left"></i>
+                            </div>
+
+                            <div class="date-input-group">
+                                <label class="date-label">
+                                    <i class="fas fa-calendar-minus"></i> {{ __('To Date') }}
+                                </label>
+                                <div class="date-input-wrapper">
+                                    <input type="date" class="date-input" id="toDate" name="date_to">
+                                    <i class="fas fa-calendar-check date-icon"></i>
+                                </div>
+                            </div>
+
+                            <div class="filter-actions">
+                                <button type="submit" class="search-btn primary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <button type="button" class="clear-btn secondary" onclick="clearDateFilter()">
+                                    <i class="fas fa-times"></i> {{ __('Clear') }}
+                                </button>
                             </div>
                         </div>
 
-                        <div class="date-separator">
-                            <i class="fas fa-arrow-left"></i>
+                        <div class="quick-date-buttons">
+                            <button type="button" class="quick-date-btn" onclick="setQuickDate('today')">
+                                <i class="fas fa-calendar-day"></i> {{ __('Today') }}
+                            </button>
+                            <button type="button" class="quick-date-btn" onclick="setQuickDate('week')">
+                                <i class="fas fa-calendar-week"></i> {{ __('This Week') }}
+                            </button>
+                            <button type="button" class="quick-date-btn" onclick="setQuickDate('month')">
+                                <i class="fas fa-calendar"></i> {{ __('This Month') }}
+                            </button>
+                            <button type="button" class="quick-date-btn" onclick="setQuickDate('year')">
+                                <i class="fas fa-calendar-alt"></i> {{ __('This Year') }}
+                            </button>
                         </div>
+                    </form>
+                </div>
 
-                        <div class="date-input-group">
-                            <label class="date-label">
-                                <i class="fas fa-calendar-minus"></i> {{ __('To Date') }}
-                            </label>
-                            <div class="date-input-wrapper">
-                                <input type="date" class="date-input" id="toDate" name="date_to">
-                                <i class="fas fa-calendar-check date-icon"></i>
+                <div class="transactions-list" id="transactionsList">
+                    @forelse($transactions as $transaction)
+                        <div class="transaction-item" data-type="{{ $transaction->type }}">
+                            <div class="transaction-avatar">
+                                <button class="avatar-btn {{ $transaction->type == 'refunds' ? 'success' : 'error' }}">
+                                    <i
+                                        class="fas {{ $transaction->type == 'refunds' ? 'fa-arrow-down' : 'fa-arrow-up' }}"></i>
+                                </button>
                             </div>
-                        </div>
+                            <div class="transaction-content">
+                                <h5 class="transaction-title">
+                                    @if ($transaction->order)
+                                        {{ $transaction->order->items->first()?->product->name ?? __('Order Item') }}
+                                    @elseif($transaction->paymentRequest)
+                                        {{ __('Add Balance') }} ({{ number_format($transaction->amount, 2) }} $)
+                                    @endif
+                                </h5>
 
-                        <div class="filter-actions">
-                            <button type="submit" class="search-btn primary">
-                                <i class="fas fa-search"></i>
-                            </button>
-                            <button type="button" class="clear-btn secondary" onclick="clearDateFilter()">
-                                <i class="fas fa-times"></i> {{ __('Clear') }}
-                            </button>
-                        </div>
-                    </div>
+                                @php
+                                    $date = $transaction->created_at_in_store_timezone;
+                                    $formatted = $date?->format('Y-m-d h:i A');
+                                    if ($formatted && app()->getLocale() == 'ar') {
+                                        $formatted = str_replace(['AM', 'PM'], ['صباحًا', 'مساءً'], $formatted);
+                                    }
+                                @endphp
 
-                    <div class="quick-date-buttons">
-                        <button type="button" class="quick-date-btn" onclick="setQuickDate('today')">
-                            <i class="fas fa-calendar-day"></i> {{ __('Today') }}
-                        </button>
-                        <button type="button" class="quick-date-btn" onclick="setQuickDate('week')">
-                            <i class="fas fa-calendar-week"></i> {{ __('This Week') }}
-                        </button>
-                        <button type="button" class="quick-date-btn" onclick="setQuickDate('month')">
-                            <i class="fas fa-calendar"></i> {{ __('This Month') }}
-                        </button>
-                        <button type="button" class="quick-date-btn" onclick="setQuickDate('year')">
-                            <i class="fas fa-calendar-alt"></i> {{ __('This Year') }}
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="transactions-list" id="transactionsList">
-                @forelse($transactions as $transaction)
-                    <div class="transaction-item" data-type="{{ $transaction->type }}">
-                        <div class="transaction-avatar">
-                            <button class="avatar-btn {{ $transaction->type == 'refunds' ? 'success' : 'error' }}">
-                                <i class="fas {{ $transaction->type == 'refunds' ? 'fa-arrow-down' : 'fa-arrow-up' }}"></i>
-                            </button>
-                        </div>
-                        <div class="transaction-content">
-                            <h5 class="transaction-title">
-                                @if ($transaction->order)
-                                    {{ $transaction->order->items->first()?->product->name ?? __('Order Item') }}
-                                @elseif($transaction->paymentRequest)
-                                    {{ __('Add Balance') }} ({{ number_format($transaction->amount, 2) }} $)
+                                @if ($formatted)
+                                    <small class="transaction-date">{{ $formatted }}</small>
                                 @endif
-                            </h5>
+                            </div>
 
-                            @php
-                                $date = $transaction->created_at_in_store_timezone;
-                                $formatted = $date?->format('Y-m-d h:i A');
-                                if ($formatted && app()->getLocale() == 'ar') {
-                                    $formatted = str_replace(['AM', 'PM'], ['صباحًا', 'مساءً'], $formatted);
-                                }
-                            @endphp
-
-                            @if ($formatted)
-                                <small class="transaction-date">{{ $formatted }}</small>
-                            @endif
-                        </div>
-
-                        <div class="transaction-action">
-                            <h4
-                                class="transaction-amount
+                            <div class="transaction-action">
+                                <h4
+                                    class="transaction-amount
                                 {{ $transaction->type == 'deposit' ? 'positive' : '' }}">
-                                {{ $transaction->type == 'deposit' ? '+' : '-' }}{{ number_format($transaction->amount, 2) }}
-                                $
-                            </h4>
-                            <small class="transaction-balance">
-                                <s class="old-balance">{{ number_format($transaction->old_balance, 2) }}</s>
-                                - <span class="new-balance">{{ number_format($transaction->new_balance, 2) }}</span>
-                            </small>
+                                    {{ $transaction->type == 'deposit' ? '+' : '-' }}{{ number_format($transaction->amount, 2) }}
+                                    $
+                                </h4>
+                                <small class="transaction-balance">
+                                    <s class="old-balance">{{ number_format($transaction->old_balance, 2) }}</s>
+                                    - <span class="new-balance">{{ number_format($transaction->new_balance, 2) }}</span>
+                                </small>
+                            </div>
+
                         </div>
+                    @empty
+                        <div class="empty-state">
+                            <i class="fas fa-wallet"></i>
+                            <h3>{{ __('No Transactions Found') }}</h3>
+                            <p>{{ __('No transactions found for the selected period.') }}</p>
+                        </div>
+                    @endforelse
 
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $transactions->links() }}
                     </div>
-                @empty
-                    <div class="empty-state">
-                        <i class="fas fa-wallet"></i>
-                        <h3>{{ __('No Transactions Found') }}</h3>
-                        <p>{{ __('No transactions found for the selected period.') }}</p>
-                    </div>
-                @endforelse
-
-                <div class="d-flex justify-content-center mt-4">
-                    {{ $transactions->links() }}
                 </div>
             </div>
-        </div>
-    </section>
-
+        </section>
+    </main>
 @endsection
 @push('scripts')
     <script>

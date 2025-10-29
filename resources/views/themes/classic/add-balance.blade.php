@@ -1,7 +1,85 @@
 @extends('themes.app')
 @section('title', __('Balance'))
 @push('styles')
+       <link
+        href="https://fonts.googleapis.com/css2?family={{ urlencode(store_setting('font_family', 'Cairo')) }}:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- إعدادات الثيم -->
     <style>
+        /* Light Mode */
+        :root {
+            --primary-color: {{ store_setting('primary_color', '#ff6f1e') }};
+            --primary-color-rgb: {{ store_setting('primary_color_rgb', '255, 111, 30') }};
+            --secondary-color: {{ store_setting('secondary_color', '#ff8533') }};
+            --success-color: {{ store_setting('success_color', '#3ce551') }};
+            --warning-color: {{ store_setting('warning_color', '#ffd42d') }};
+            --danger-color: {{ store_setting('danger_color', '#ef7575') }};
+            --light-bg: {{ store_setting('light_bg', '#fcfcfc') }};
+            --dark-bg: {{ store_setting('dark_bg', '#252f4a') }};
+            --text-primary: {{ store_setting('text_primary', '#252f4a') }};
+            --text-secondary: {{ store_setting('text_secondary', '#66718e') }};
+            --border-color: {{ store_setting('border_color', '#F1F1F4') }};
+            --card-bg: {{ store_setting('card_bg', '#ffffff') }};
+            --input-bg: {{ store_setting('input_bg', '#f9f9f9') }};
+            --header-bg: {{ store_setting('header_bg', '#ffffff') }};
+            --footer-bg: {{ store_setting('footer_bg', '#252f4a') }};
+            --footer-text: {{ store_setting('footer_text', '#ffffff') }};
+            --footer-link: {{ store_setting('footer_link', 'rgba(255,255,255,0.8)') }};
+            --shadow-color: {{ store_setting('shadow_color', 'rgba(0,0,0,0.1)') }};
+            --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --gradient-primary: linear-gradient(135deg,
+                    {{ store_setting('primary_color', '#ff6f1e') }} 0%,
+                    {{ store_setting('secondary_color', '#ff8533') }} 100%);
+
+            /* Legacy support */
+            --primary-dark: {{ store_setting('primary_dark', '#d05d10') }};
+            --primary-light: {{ store_setting('primary_light', '#ff9847') }};
+            --accent-color: {{ store_setting('accent_color', '#ff6f1e') }};
+            --text-dark: var(--text-primary);
+            --text-light: var(--text-secondary);
+            --bg-light: var(--light-bg);
+            --bg-secondary: var(--input-bg);
+            --white: var(--card-bg);
+            --transition: var(--transition-base);
+            --shadow-md: 0 4px 6px -1px var(--shadow-color);
+            --shadow-lg: 0 10px 15px -3px var(--shadow-color);
+            --shadow-xl: 0 20px 25px -5px var(--shadow-color);
+            --shadow-sm: 0 1px 2px 0 var(--shadow-color);
+        }
+
+        /* Dark Mode */
+        [data-theme="dark"],
+        body.dark-mode {
+            --primary-color: {{ store_setting('primary_color_dark', '#ff8533') }};
+            --primary-color-rgb: {{ store_setting('primary_color_rgb_dark', '255, 133, 51') }};
+            --secondary-color: {{ store_setting('secondary_color_dark', '#ff9847') }};
+            --text-primary: {{ store_setting('text_primary_dark', '#f8f9fa') }};
+            --text-secondary: {{ store_setting('text_secondary_dark', '#adb5bd') }};
+            --light-bg: {{ store_setting('light_bg_dark', '#301c0f') }};
+            --dark-bg: {{ store_setting('dark_bg_dark', '#1e0f08') }};
+            --border-color: {{ store_setting('border_color_dark', '#3d2513') }};
+            --card-bg: {{ store_setting('card_bg_dark', '#301c0f') }};
+            --input-bg: {{ store_setting('input_bg_dark', '#3d2513') }};
+            --header-bg: {{ store_setting('header_bg_dark', '#301c0f') }};
+            --footer-bg: {{ store_setting('footer_bg_dark', '#1e0f08') }};
+            --footer-text: {{ store_setting('footer_text_dark', '#f8f9fa') }};
+            --footer-link: {{ store_setting('footer_link_dark', 'rgba(255, 133, 51, 0.8)') }};
+            --shadow-color: {{ store_setting('shadow_color_dark', 'rgba(0,0,0,0.7)') }};
+
+            /* Legacy support */
+            --text-dark: var(--text-primary);
+            --text-light: var(--text-secondary);
+            --bg-light: var(--light-bg);
+            --bg-secondary: var(--card-bg);
+            --white: var(--card-bg);
+            --accent-color: var(--primary-color);
+        }
+
+
+        body {
+            font-family: '{{ store_setting('font_family', 'Cairo') }}', sans-serif !important;
+        }
         /* Add Balance Page Styles */
         .add-balance-container {
             max-width: 1000px;
@@ -286,79 +364,83 @@
     </style>
 @endpush
 @section('content')
-    <div class="add-balance-container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1 class="page-title">{{ __('Add Balance') }}</h1>
-            <p class="page-subtitle">{{ __('Choose the appropriate payment method to add balance to your wallet') }}</p>
-        </div>
+    <main class="main-content-adjust">
 
-        <!-- Current Balance -->
-        <div class="current-balance">
-            <div class="balance-label">{{ __('Current Balance') }}</div>
-            <div class="balance-amount">
-                {{ number_format(Auth::user()->walletForStore()->first()?->balance ?? 0, 2) }}
-            </div>
-            <div class="balance-currency">{{ __('USD') }}</div>
-        </div>
-
-        <!-- Tabs System -->
-        <div class="tabs-container">
-            <div class="tabs-header">
-                <button class="tab-button active" data-tab="manual">
-                    <i class="fas fa-hand-holding-usd"></i>
-                    {{ __('Manual Payment') }}
-                </button>
-                <button class="tab-button" data-tab="electronic">
-                    <i class="fas fa-credit-card"></i>
-                    {{ __('Electronic Payment') }}
-                </button>
+        <div class="add-balance-container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">{{ __('Add Balance') }}</h1>
+                <p class="page-subtitle">{{ __('Choose the appropriate payment method to add balance to your wallet') }}</p>
             </div>
 
-            <!-- Manual Payment Tab -->
-            <div class="tab-content active" id="manualTab">
-                <h3 class="tab-title">
-                    <i class="fas fa-file-invoice"></i>
-                    {{ __('Manual Payment Methods') }}
-                </h3>
-                <p class="tab-description">
-                    {{ __('Choose the appropriate manual payment method. The request will be sent to the administrator for review and approval.') }}
-                </p>
-                <div class="payment-methods-grid">
-                    @foreach ($paymentMethods as $method)
-                        <a href="{{ Route('payment-method.show', $method) }}" class="payment-method-card"
-                            data-gateway="{{ $method->gateway }}">
-                            @php $media = $method->getFirstMedia('payment_method_images'); @endphp
+            <!-- Current Balance -->
+            <div class="current-balance">
+                <div class="balance-label">{{ __('Current Balance') }}</div>
+                <div class="balance-amount">
+                    {{ number_format(Auth::user()->walletForStore()->first()?->balance ?? 0, 2) }}
+                </div>
+                <div class="balance-currency">{{ __('USD') }}</div>
+            </div>
 
-                            @if ($method->getFirstMediaUrl('image'))
-                                <img class="payment-method-image" src="{{ route('payment.methode.image', $media->id) }}"
-                                    alt="{{ $method->getTranslation('name', app()->getLocale()) }}">
-                            @else
-                                <img class="payment-method-image" src="{{ asset('assets/img/payment.png') }}"
-                                    alt="{{ $method->name }}">
-                            @endif
+            <!-- Tabs System -->
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-button active" data-tab="manual">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        {{ __('Manual Payment') }}
+                    </button>
+                    <button class="tab-button" data-tab="electronic">
+                        <i class="fas fa-credit-card"></i>
+                        {{ __('Electronic Payment') }}
+                    </button>
+                </div>
 
-                            <div class="payment-method-name">
-                                {{ $method->getTranslation('name', app()->getLocale()) }}
-                            </div>
-                        </a>
-                    @endforeach
+                <!-- Manual Payment Tab -->
+                <div class="tab-content active" id="manualTab">
+                    <h3 class="tab-title">
+                        <i class="fas fa-file-invoice"></i>
+                        {{ __('Manual Payment Methods') }}
+                    </h3>
+                    <p class="tab-description">
+                        {{ __('Choose the appropriate manual payment method. The request will be sent to the administrator for review and approval.') }}
+                    </p>
+                    <div class="payment-methods-grid">
+                        @foreach ($paymentMethods as $method)
+                            <a href="{{ Route('payment-method.show', $method) }}" class="payment-method-card"
+                                data-gateway="{{ $method->gateway }}">
+                                @php $media = $method->getFirstMedia('payment_method_images'); @endphp
+
+                                @if ($method->getFirstMediaUrl('image'))
+                                    <img class="payment-method-image"
+                                        src="{{ route('payment.methode.image', $media->id) }}"
+                                        alt="{{ $method->getTranslation('name', app()->getLocale()) }}">
+                                @else
+                                    <img class="payment-method-image" src="{{ asset('assets/img/payment.png') }}"
+                                        alt="{{ $method->name }}">
+                                @endif
+
+                                <div class="payment-method-name">
+                                    {{ $method->getTranslation('name', app()->getLocale()) }}
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Electronic Payment Tab -->
+                <div class="tab-content" id="electronicTab">
+                    <h3 class="tab-title">
+                        <i class="fas fa-shield-alt"></i>
+                        {{ __('Electronic Payment Gateways') }}
+                    </h3>
+                    <p class="tab-description">
+                        {{ __('Choose the appropriate electronic payment gateway. You will be redirected for immediate payment.') }}
+                    </p>
+                    <div class="payment-methods-grid">
+                        <!-- يمكنك إضافة بوابات الدفع الإلكترونية هنا -->
+                    </div>
                 </div>
             </div>
-
-            <!-- Electronic Payment Tab -->
-            <div class="tab-content" id="electronicTab">
-                <h3 class="tab-title">
-                    <i class="fas fa-shield-alt"></i>
-                    {{ __('Electronic Payment Gateways') }}
-                </h3>
-                <p class="tab-description">
-                    {{ __('Choose the appropriate electronic payment gateway. You will be redirected for immediate payment.') }}
-                </p>
-                <div class="payment-methods-grid">
-                    <!-- يمكنك إضافة بوابات الدفع الإلكترونية هنا -->
-                </div>
-            </div>
         </div>
-    </div>
+    </main>
 @endsection
