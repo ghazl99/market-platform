@@ -15,4 +15,8 @@ interface ProductRepository
     public function update(int $id, array $data);
 
     public function delete(Product $product): bool;
+
+    public function getTopOrderedProductsByStore($storeId, $limit = 10);
+    
+    public function getTopViewedProductsByStore($storeId, $limit = 10);
 }

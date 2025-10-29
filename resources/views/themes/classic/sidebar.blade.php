@@ -127,7 +127,7 @@
             </a>
 
             <div class="nav-divider"></div>
-            <form method="POST" action="{{ route('auth.logout') }}">
+            <form method="POST" action="{{ route('auth.customer.logout') }}">
                 @csrf
                 <button class="logout-btn-pro" type="submit">
                     <div class="logout-icon-box">

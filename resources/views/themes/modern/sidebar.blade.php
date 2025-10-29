@@ -78,7 +78,7 @@
                  <i class="fas fa-phone"></i>
                  <span>اتصل بنا</span>
              </a>
-             {{-- <form method="POST" action="{{ route('auth.logout') }}">
+             {{-- <form method="POST" action="{{ route('auth.customer.logout') }}">
                      @csrf
                      <button type="submit" class="menu-item logout-item ">
                          <div class="menu-item-icon">

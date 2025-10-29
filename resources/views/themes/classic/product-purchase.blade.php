@@ -5,10 +5,11 @@
     <link rel="stylesheet" href="{{ asset('assets/css/product-purchase.css') }}?v={{ time() }}">
 @endpush
 @section('content')
-    <div class="container my-5">
+    <main class="main-content-adjust">
         <!-- Product Purchase Section -->
         <section class="product-purchase-section">
             <div class="product-purchase-container">
+                
                 <div class="product-card" id="product-requesr-main" product-request-id="7" product-request-apiid="7"
                     product-request-skipping="2" product-request-pricesource="Level">
                     <div class="card-content">
@@ -152,7 +153,7 @@
                     </div>
                 </div>
         </section>
-    </div>
+    </main>
 @endsection
 @push('scripts')
     <script>

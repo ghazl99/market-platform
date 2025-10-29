@@ -46,10 +46,18 @@
         <div class="category-grid">
             @if ($categories->count() > 0)
                 @foreach ($categories as $category)
-                    @php $media = $category->getFirstMedia('category_images'); @endphp
+                    @php
+                        $media = $category->getFirstMedia('category_images');
+                        $hasProducts = $category->products()->exists();
 
-                    <a href="{{ route('category.subCategories', $category->id) }}" class="category-item"
-                        style="text-decoration: none">
+                        // تحديد الرابط المناسب
+                        if ($hasProducts) {
+                            $url = route('category.show', $category->id);
+                        } else {
+                            $url = route('category.subCategories', $category->id);
+                        }
+                    @endphp
+                    <a href="{{ $url }}" class="category-item" style="text-decoration: none">
                         @if ($media)
                             <img src="{{ route('category.image', $media->id) }}" alt="{{ $category->name }}">
                         @endif

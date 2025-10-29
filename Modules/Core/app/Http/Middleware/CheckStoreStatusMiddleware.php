@@ -13,15 +13,7 @@ class CheckStoreStatusMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $host = $request->getHost();
-
-        $store = Store::where('domain', $host)->first();
-
-        if (! $store) {
-            $storeDomain = explode('.', $host)[0];
-            $store = Store::where('domain', $storeDomain)->first();
-        }
-
+       $store = current_store();
 
         // الحالة غير نشط → ممنوع الدخول
         if ($store->status === 'inactive') {

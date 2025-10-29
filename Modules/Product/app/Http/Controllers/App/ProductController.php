@@ -57,9 +57,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $product->increment('views_count');
         $product->load(['categories', 'attributes', 'store']);
-        $theme = current_store()->theme;
 
-        return view("themes.$theme.product-purchase", compact('product'));
+        return view('themes.' . current_theme_name_en() . '.product-purchase', compact('product'));
     }
 }

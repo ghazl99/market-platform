@@ -7,49 +7,53 @@
 @endpush
 
 @section('content')
-    <div class="profile-container">
-        <!-- Profile Main Content -->
-        <div class="profile-main">
-            <!-- Personal Information Section -->
-            <h2 class="section-title">
-                <i class="fas fa-user"></i>{{ __('Personal Information') }}
-            </h2>
+    <main class="main-content-adjust">
 
-            <form method="POST" action="{{ route('auth.profile.update', Auth::user()->id) }}" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
+        <div class="profile-container">
+            <!-- Profile Main Content -->
+            <div class="profile-main">
+                <!-- Personal Information Section -->
+                <h2 class="section-title">
+                    <i class="fas fa-user"></i>{{ __('Personal Information') }}
+                </h2>
 
-                <div class="profile-avatar">
-                    <div class="avatar-upload">
-                        <img src="{{ Auth::user()->profilePhotoUrl ?? 'https://via.placeholder.com/120' }}"
-                            alt="{{ Auth::user()->name }}" class="avatar-image" id="avatarImage">
-                        <input type="file" id="avatarInput" name="profile_photo" accept="image/*" hidden>
-                        <button type="button" class="avatar-upload-btn"
-                            onclick="document.getElementById('avatarInput').click()">
-                            <i class="fas fa-camera"></i> {{ __('Change Image') }}
-                        </button>
+                <form method="POST" action="{{ route('auth.profile.update', Auth::user()->id) }}"
+                    enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="profile-avatar">
+                        <div class="avatar-upload">
+                            <img src="{{ Auth::user()->profilePhotoUrl ?? 'https://via.placeholder.com/120' }}"
+                                alt="{{ Auth::user()->name }}" class="avatar-image" id="avatarImage">
+                            <input type="file" id="avatarInput" name="profile_photo" accept="image/*" hidden>
+                            <button type="button" class="avatar-upload-btn"
+                                onclick="document.getElementById('avatarInput').click()">
+                                <i class="fas fa-camera"></i> {{ __('Change Image') }}
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="form-label">{{ __('Name') }}</label>
-                    <input type="text" class="form-input" id="name" name="name"
-                        value="{{ old('city', Auth::user()->name) }}">
-                </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ __('Name') }}</label>
+                        <input type="text" class="form-input" id="name" name="name"
+                            value="{{ old('city', Auth::user()->name) }}">
+                    </div>
 
-                <div class="form-group">
-                    <label class="form-label">{{ __('Email') }}</label>
-                    <input type="email" class="form-input" id="email" name="email"
-                        value="{{ old('email', Auth::user()->email) }}">
-                </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ __('Email') }}</label>
+                        <input type="email" class="form-input" id="email" name="email"
+                            value="{{ old('email', Auth::user()->email) }}">
+                    </div>
 
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i>
-                    {{ __('Save') }}
-                </button>
-            </form>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        {{ __('Save') }}
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
+    </main>
 @endsection
 @push('scripts')
     <script>
