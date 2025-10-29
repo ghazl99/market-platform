@@ -22,14 +22,10 @@ class EnsureCustomerOfStoreMiddleware
             return redirect()->route('auth.customer.login');
         }
 
-        // تحقق أن المستخدم عميل ومرتبط بالمتجر
-        $host = $request->getHost();
-        $storeDomain = explode('.', $host)[0];
-        $store = Store::where('domain', $storeDomain)->first();
-        if (! $store) {
-            $storeDomain = explode('.', $host)[0];
-            $store = Store::where('domain', $storeDomain)->first();
-        }
+
+            // الحالة: دومين مخصص (مثل start-c.com)
+            $store = current_store();
+
         if (! $user->hasRole('customer') || ! $user->stores()->where('store_id', $store->id)->exists()) {
             Auth::logout();
 

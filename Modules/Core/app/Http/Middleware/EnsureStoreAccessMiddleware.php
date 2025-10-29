@@ -20,20 +20,8 @@ class EnsureStoreAccessMiddleware
             return redirect()->route('auth.customer.login');
         }
 
-        // استخرج اسم المتجر من الساب دومين
 
-        $host = $request->getHost(); // مثال: start-c.com أو store.market-platform.localhost
-        $mainDomain = config('app.main_domain'); // ضع هنا القيمة مثل 'market-platform.localhost'
-
-        // تحديد ما إذا كان host هو دومين مخصص أو ساب دومين
-        if (str_contains($host, $mainDomain)) {
-            // الحالة: ساب دومين → extract prefix
-            $storeDomain = str_replace('.' . $mainDomain, '', $host);
-            $store = Store::where('domain', $storeDomain)->first();
-        } else {
-            // الحالة: دومين مخصص (مثل start-c.com)
-            $store = Store::where('domain', $host)->first();
-        }
+        $store = current_store();
         // تحقق من علاقة المستخدم بالمتجر
         $relation = $store->users()
             ->where('user_id', $user->id)

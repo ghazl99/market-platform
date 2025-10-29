@@ -32,7 +32,6 @@ class UserServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
-        User::observe(\Modules\User\Observers\UserObserver::class);
     }
 
     /**

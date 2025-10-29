@@ -323,4 +323,14 @@ class ProductService
             throw $e;
         }
     }
+
+    public function getTopOrderedProducts($storeId, $limit = 10)
+    {
+        return $this->productRepository->getTopOrderedProductsByStore($storeId, $limit);
+    }
+
+    public function getTopViewedProducts($storeId, $limit = 10)
+    {
+        return $this->productRepository->getTopViewedProductsByStore($storeId, $limit);
+    }
 }

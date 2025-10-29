@@ -24,13 +24,13 @@ class ProductModelRepository implements ProductRepository
         if ($keyword) {
             $query->where(function ($q) use ($keyword) {
                 $q->where('name', 'like', "%{$keyword}%")
-                  ->orWhere('description', 'like', "%{$keyword}%")
-                  ->orWhereHas('categories', function ($catQuery) use ($keyword) {
-                      $catQuery->where('name', 'like', "%{$keyword}%");
-                  })
-                  ->orWhereHas('attributes', function ($attrQuery) use ($keyword) {
-                      $attrQuery->where('name', 'like', "%{$keyword}%");
-                  });
+                    ->orWhere('description', 'like', "%{$keyword}%")
+                    ->orWhereHas('categories', function ($catQuery) use ($keyword) {
+                        $catQuery->where('name', 'like', "%{$keyword}%");
+                    })
+                    ->orWhereHas('attributes', function ($attrQuery) use ($keyword) {
+                        $attrQuery->where('name', 'like', "%{$keyword}%");
+                    });
             });
         }
 
@@ -100,5 +100,23 @@ class ProductModelRepository implements ProductRepository
     public function delete(Product $product): bool
     {
         return $product->delete();
+    }
+
+    public function getTopOrderedProductsByStore($storeId, $limit = 10)
+    {
+        return Product::where('store_id', $storeId)
+            ->where('status', true)
+            ->orderByDesc('orders_count')
+            ->limit($limit)
+            ->get();
+    }
+
+    public function getTopViewedProductsByStore($storeId, $limit = 10)
+    {
+        return Product::where('store_id', $storeId)
+            ->where('status', true)
+            ->orderByDesc('views_count')
+            ->limit($limit)
+            ->get();
     }
 }

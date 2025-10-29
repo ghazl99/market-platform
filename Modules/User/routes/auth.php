@@ -33,6 +33,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+
+         Route::post('customer-logout', [LoginController::class, 'destroy'])
+        ->name('customer.logout');
 });
 Route::middleware(['customer.auth', 'ensure-store-access', 'check.store.status'])->group(function () {
     Route::resource('profile', ProfileController::class)->names('profile');
