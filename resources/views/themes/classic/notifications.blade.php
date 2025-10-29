@@ -61,28 +61,30 @@
         }
 
         .notification-item {
-    display: flex;
-    align-items: center;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    background: var(--bg-secondary);
-    border-radius: 16px;
-    border: 2px solid var(--border-color);
-    transition: all 0.3s ease;
-    position: relative;
-}
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+        }
 
-/* الإشعار غير المقروء */
-.notification-item.unread {
-    border-left: 4px solid var(--primary-color);
-    background: rgba(59, 130, 246, 0.08); /* خلفية زرقاء خفيفة */
-}
+        /* الإشعار غير المقروء */
+        .notification-item.unread {
+            border-left: 4px solid var(--primary-color);
+            background: rgba(59, 130, 246, 0.08);
+            /* خلفية زرقاء خفيفة */
+        }
 
-/* الإشعار المقروء */
-.notification-item:not(.unread) {
-    background: rgba(255, 255, 255, 0.6); /* 🔹 خلفية فاتحة جدًا */
-    opacity: 0.85;
-}
+        /* الإشعار المقروء */
+        .notification-item:not(.unread) {
+            background: rgba(255, 255, 255, 0.6);
+            /* 🔹 خلفية فاتحة جدًا */
+            opacity: 0.85;
+        }
 
 
         .notification-info {
@@ -135,39 +137,43 @@
     </style>
 @endpush
 @section('content')
-    <div class="notifications-section">
-        <div class="notifications-container">
-            <!-- Page Header -->
-            <div class="notifications-header">
-                <h2 class="notifications-title">{{ __('My Notifications') }}</h2>
-            </div>
+    <main class="main-content-adjust">
 
-            <!-- Notifications List -->
-            <div class="notifications-list">
-                @php
-                    $locale = app()->getLocale(); // 'ar' أو 'en'
-                @endphp
-                @forelse(auth()->user()->notifications as $notification)
+        <div class="notifications-section">
+            <div class="notifications-container">
+                <!-- Page Header -->
+                <div class="notifications-header">
+                    <h2 class="notifications-title">{{ __('My Notifications') }}</h2>
+                </div>
+
+                <!-- Notifications List -->
+                <div class="notifications-list">
                     @php
-                        $data = is_array($notification->data)
-                            ? $notification->data
-                            : json_decode($notification->data, true);
+                        $locale = app()->getLocale(); // 'ar' أو 'en'
                     @endphp
-                    <a href="{{ route('notification.read', $notification->id) }}" style="text-decoration: none" class="notification-item {{ $notification->read_at ? '' : 'unread' }}">
-                        <div class="notification-info">
-                            <h4 class="notification-title">{{ $data['title'][$locale] ?? $data['title']['en'] }}</h4>
-                            <p class="notification-message">{{ $data['message'][$locale] ?? $data['message']['en'] }}</p>
-                            <span class="notification-time">{{ $notification->created_at->diffForHumans() }}</span>
+                    @forelse(auth()->user()->notifications as $notification)
+                        @php
+                            $data = is_array($notification->data)
+                                ? $notification->data
+                                : json_decode($notification->data, true);
+                        @endphp
+                        <a href="{{ route('notification.read', $notification->id) }}" style="text-decoration: none"
+                            class="notification-item {{ $notification->read_at ? '' : 'unread' }}">
+                            <div class="notification-info">
+                                <h4 class="notification-title">{{ $data['title'][$locale] ?? $data['title']['en'] }}</h4>
+                                <p class="notification-message">{{ $data['message'][$locale] ?? $data['message']['en'] }}</p>
+                                <span class="notification-time">{{ $notification->created_at->diffForHumans() }}</span>
+                            </div>
+                        </a>
+                    @empty
+                        <div class="empty-state">
+                            <i class="fas fa-bell"></i>
+                            <h3>{{ __('No notifications') }}</h3>
+                            <p>{{ __('You have no notifications at the moment.') }}</p>
                         </div>
-                    </a>
-                @empty
-                    <div class="empty-state">
-                        <i class="fas fa-bell"></i>
-                        <h3>{{ __('No notifications') }}</h3>
-                        <p>{{ __('You have no notifications at the moment.') }}</p>
-                    </div>
-                @endforelse
+                    @endforelse
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 @endsection
