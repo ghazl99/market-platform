@@ -17,8 +17,7 @@ class LoginController extends Controller
      */
     public function create()
     {
-        $theme = current_store()->theme;
-        return view("themes.$theme.login");
+        return view('themes.' . current_theme_name_en() . '.login');
     }
 
     /**

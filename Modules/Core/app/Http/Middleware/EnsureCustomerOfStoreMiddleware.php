@@ -19,18 +19,21 @@ class EnsureCustomerOfStoreMiddleware
 
         // إذا ما مسجل دخول → رجع على صفحة تسجيل الدخول
         if (! $user) {
-            return redirect()->route('customer.login');
+            return redirect()->route('auth.customer.login');
         }
 
         // تحقق أن المستخدم عميل ومرتبط بالمتجر
         $host = $request->getHost();
         $storeDomain = explode('.', $host)[0];
         $store = Store::where('domain', $storeDomain)->first();
-
+        if (! $store) {
+            $storeDomain = explode('.', $host)[0];
+            $store = Store::where('domain', $storeDomain)->first();
+        }
         if (! $user->hasRole('customer') || ! $user->stores()->where('store_id', $store->id)->exists()) {
             Auth::logout();
 
-            return redirect()->route('customer.login')
+            return redirect()->route('auth.customer.login')
                 ->with('error', __('You must login as a customer in this store.'));
         }
 

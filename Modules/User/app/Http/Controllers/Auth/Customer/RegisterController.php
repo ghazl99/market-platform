@@ -17,8 +17,7 @@ class RegisterController extends Controller
      */
     public function create()
     {
-        $theme = current_store()->theme;
-        return view("themes.$theme.register");
+        return view('themes.' . current_theme_name_en() . '.register');
     }
 
     /**
@@ -28,7 +27,7 @@ class RegisterController extends Controller
     {
         $host = $request->getHost();
         // Call the service to register the user
-        $this->userService->register($request->validated(), $host);
+        $this->userService->registerCustomer($request->validated(), $host);
 
         // Redirect to home after successful registration
         return redirect()->route('home');

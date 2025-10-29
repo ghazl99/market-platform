@@ -6,3 +6,4 @@ use Modules\User\Http\Controllers\Admin\UserController;
 // User Management
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::patch('/users/{id}/admin', [UserController::class, 'toggleAdminStatus'])->name('users.admin');
+Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');

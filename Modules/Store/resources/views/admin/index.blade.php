@@ -279,7 +279,7 @@
                                                 {{ $store->status }}
                                             </span>
                                         </td>
-                                        <td><span class="badge badge-info">{{ $store->theme->getTranslation('name', 'en') }}</span></td>
+                                        <td><span class="badge badge-info"> {{ $store->theme?->name }}</span></td>
                                         <td>{{ $store->created_at->format('Y-m-d H:i') }}</td>
                                         <td>
                                             <div class="table-actions">

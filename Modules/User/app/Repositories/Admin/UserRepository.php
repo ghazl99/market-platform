@@ -12,7 +12,7 @@ interface UserRepository
 
     public function update($id, array $data);
 
-    public function delete($id);
+    public function delete($user);
 
     public function toggleAdminStatus($id, bool $isAdmin);
 }

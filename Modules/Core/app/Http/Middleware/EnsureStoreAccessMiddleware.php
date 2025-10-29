@@ -17,21 +17,23 @@ class EnsureStoreAccessMiddleware
         $user = $request->user();
 
         if (! $user) {
-            abort(403, 'يجب تسجيل الدخول للوصول.');
+            return redirect()->route('auth.customer.login');
         }
 
         // استخرج اسم المتجر من الساب دومين
-        $host = $request->getHost();
-        // my-toyes.market-platform.localhost → my-toyes
-        $storeDomain = explode('.', $host)[0];
 
-        // ابحث عن المتجر
-        $store = Store::where('domain', $storeDomain)->first();
+        $host = $request->getHost(); // مثال: start-c.com أو store.market-platform.localhost
+        $mainDomain = config('app.main_domain'); // ضع هنا القيمة مثل 'market-platform.localhost'
 
-        if (! $store) {
-            abort(404, 'المتجر غير موجود.');
+        // تحديد ما إذا كان host هو دومين مخصص أو ساب دومين
+        if (str_contains($host, $mainDomain)) {
+            // الحالة: ساب دومين → extract prefix
+            $storeDomain = str_replace('.' . $mainDomain, '', $host);
+            $store = Store::where('domain', $storeDomain)->first();
+        } else {
+            // الحالة: دومين مخصص (مثل start-c.com)
+            $store = Store::where('domain', $host)->first();
         }
-
         // تحقق من علاقة المستخدم بالمتجر
         $relation = $store->users()
             ->where('user_id', $user->id)

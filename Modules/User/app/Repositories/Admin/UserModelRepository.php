@@ -62,10 +62,8 @@ class UserModelRepository implements UserRepository
         return $user;
     }
 
-    public function delete($id)
+    public function delete($user)
     {
-        $user = $this->find($id);
-
         return $user->delete();
     }
 

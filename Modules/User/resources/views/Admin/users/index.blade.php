@@ -1,157 +1,7 @@
 @extends('core::layouts.app')
 
 @section('title', __('User Management - Dashboard'))
-
-@section('content')
-    <div class="users-container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1 class="page-title">{{ __('User Management') }}</h1>
-            <div class="page-actions">
-                <a href="{{ route('admin.dashboard') }}" class="add-user-btn">
-                    <i class="fas fa-arrow-right"></i>
-                    {{ __('Back to Dashboard') }}
-                </a>
-            </div>
-        </div>
-
-        <!-- Users Statistics -->
-        <div class="users-stats">
-            <div class="stat-card">
-                <div class="stat-icon total">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="stat-number">{{ $users->count() }}</div>
-                <div class="stat-label">{{ __('Total Users') }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon active">
-                    <i class="fas fa-user-check"></i>
-                </div>
-                <div class="stat-number">{{ $users->where('email_verified_at', '!=', null)->count() }}</div>
-                <div class="stat-label">{{ __('Active') }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon new">
-                    <i class="fas fa-user-plus"></i>
-                </div>
-                <div class="stat-number">{{ $users->where('created_at', '>=', now()->subMonth())->count() }}</div>
-                <div class="stat-label">{{ __('New This Month') }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon premium">
-                    <i class="fas fa-crown"></i>
-                </div>
-                <div class="stat-number">{{ $users->whereHas('roles', fn($q) => $q->where('name', 'owner'))->count() }}
-                </div>
-                <div class="stat-label">{{ __('Store Owners') }}</div>
-            </div>
-        </div>
-
-        <!-- Search and Filter Bar -->
-        <div class="search-filter-bar">
-            <div class="search-filter-content">
-                <div class="search-box">
-                    <input type="text" placeholder="{{ __('Search users...') }}" id="searchInput">
-                    <i class="fas fa-search"></i>
-                </div>
-                <select class="filter-select" id="statusFilter">
-                    <option value="">{{ __('All Statuses') }}</option>
-                    <option value="active">{{ __('Active') }}</option>
-                    <option value="inactive">{{ __('Inactive') }}</option>
-                    <option value="pending">{{ __('Pending') }}</option>
-                </select>
-                <select class="filter-select" id="roleFilter">
-                    <option value="">{{ __('All Roles') }}</option>
-                    <option value="owner">{{ __('Store Owner') }}</option>
-                    <option value="staff">{{ __('Staff') }}</option>
-                    <option value="customer">{{ __('Customer') }}</option>
-                </select>
-                <button class="filter-btn" onclick="applyFilters()">
-                    <i class="fas fa-filter"></i>
-                    {{ __('Apply') }}
-                </button>
-            </div>
-        </div>
-
-        <!-- Users Table -->
-        <div class="users-table-container">
-            <table class="users-table">
-                <thead>
-                    <tr>
-                        <th>{{ __('User') }}</th>
-                        <th>{{ __('Email') }}</th>
-                        <th>{{ __('Phone') }}</th>
-                        <th>{{ __('Registration Date') }}</th>
-                        <th>{{ __('Status') }}</th>
-                        <th>{{ __('Role') }}</th>
-                        <th>{{ __('Actions') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($users as $user)
-                        <tr>
-                            <td>
-                                <div class="user-info">
-                                    <div class="user-avatar">{{ substr($user->name, 0, 1) }}</div>
-                                    <div class="user-details">
-                                        <h6>{{ $user->name }}</h6>
-                                        <p>{{ __('ID') }}: #{{ $user->id }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->phone ?? __('No phone') }}</td>
-                            <td>{{ $user->created_at->format('Y-m-d') }}</td>
-                            <td>
-                                @if ($user->email_verified_at)
-                                    <span class="status-badge active">{{ __('Active') }}</span>
-                                @else
-                                    <span class="status-badge pending">{{ __('Pending') }}</span>
-                                @endif
-                            </td>
-                            <td>
-                                <span class="role-badge">{{ $user->getRoleNames()->first() ?? __('Customer') }}</span>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-btn view" onclick="viewUser({{ $user->id }})">
-                                        <i class="fas fa-eye"></i>
-                                        {{ __('View') }}
-                                    </button>
-                                    <button class="action-btn edit" onclick="editUser({{ $user->id }})">
-                                        <i class="fas fa-edit"></i>
-                                        {{ __('Edit') }}
-                                    </button>
-                                    <button class="action-btn delete"
-                                        onclick="deleteUser({{ $user->id }}, '{{ $user->name }}')">
-                                        <i class="fas fa-trash"></i>
-                                        {{ __('Delete') }}
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="text-center py-5">
-                                <i class="fas fa-users fa-3x text-muted mb-3"></i>
-                                <h5 class="text-muted">{{ __('No users yet') }}</h5>
-                                <p class="text-muted">{{ __('No users registered yet') }}</p>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Admin Toggle Form -->
-    <form id="adminForm" method="POST" style="display: none;">
-        @csrf
-        @method('PATCH')
-        <input type="hidden" name="is_admin" id="adminInput">
-    </form>
-
+@push('styles')
     <style>
         /* Users Page Specific Styles */
         .users-container {
@@ -548,121 +398,159 @@
             }
         }
     </style>
+@endpush
+@section('content')
+    <div class="users-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">{{ __('User Management') }}</h1>
+            <div class="page-actions">
+                <a href="{{ route('admin.dashboard') }}" class="add-user-btn">
+                    <i class="fas fa-arrow-right"></i>
+                    {{ __('Back to Dashboard') }}
+                </a>
+            </div>
+        </div>
 
-    <script>
-        // Users page specific JavaScript
-        document.addEventListener('DOMContentLoaded', function() {
-            // Search functionality
-            const searchInput = document.getElementById('searchInput');
-            const usersTable = document.querySelector('.users-table tbody');
+        <!-- Users Statistics -->
+        <div class="users-stats">
+    <div class="stat-card">
+        <div class="stat-icon total">
+            <i class="fas fa-users"></i>
+        </div>
+        <div >{{ $users->count() }}</div>
+        <div class="stat-label">{{ __('Total Users') }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon active">
+            <i class="fas fa-user-check"></i>
+        </div>
+        <div >
+            {{ $users->whereNotNull('email_verified_at')->count() }}
+        </div>
+        <div class="stat-label">{{ __('Active') }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon new">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        <div >
+            {{ $users->filter(fn($u) => $u->created_at >= now()->subMonth())->count() }}
+        </div>
+        <div class="stat-label">{{ __('New This Month') }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon premium">
+            <i class="fas fa-crown"></i>
+        </div>
+        <div >
+            {{ $users->filter(fn($u) => optional($u->roles)->contains('name', 'owner'))->count() }}
+        </div>
+        <div class="stat-label">{{ __('Store Owners') }}</div>
+    </div>
+</div>
 
-            if (searchInput) {
-                searchInput.addEventListener('input', function(e) {
-                    const query = e.target.value.toLowerCase();
-                    filterUsers(query);
-                });
-            }
 
-            // Filter functionality
-            const filterBtn = document.querySelector('.filter-btn');
-            if (filterBtn) {
-                filterBtn.addEventListener('click', function() {
-                    applyFilters();
-                });
-            }
-        });
+        <!-- Search and Filter Bar -->
+        <div class="search-filter-bar">
+            <div class="search-filter-content">
+                <div class="search-box">
+                    <input type="text" placeholder="{{ __('Search users...') }}" id="searchInput">
+                    <i class="fas fa-search"></i>
+                </div>
+                <select class="filter-select" id="statusFilter">
+                    <option value="">{{ __('All Statuses') }}</option>
+                    <option value="active">{{ __('Active') }}</option>
+                    <option value="inactive">{{ __('Inactive') }}</option>
+                    <option value="pending">{{ __('Pending') }}</option>
+                </select>
+                <select class="filter-select" id="roleFilter">
+                    <option value="">{{ __('All Roles') }}</option>
+                    <option value="owner">{{ __('Store Owner') }}</option>
+                    <option value="staff">{{ __('Staff') }}</option>
+                    <option value="customer">{{ __('Customer') }}</option>
+                </select>
+                <button class="filter-btn" onclick="applyFilters()">
+                    <i class="fas fa-filter"></i>
+                    {{ __('Apply') }}
+                </button>
+            </div>
+        </div>
 
-        function filterUsers(query) {
-            const rows = document.querySelectorAll('.users-table tbody tr');
-            rows.forEach(row => {
-                const name = row.querySelector('.user-details h6').textContent.toLowerCase();
-                const email = row.cells[1].textContent.toLowerCase();
+        <!-- Users Table -->
+        <div class="users-table-container">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>{{ __('User') }}</th>
+                        <th>{{ __('Email') }}</th>
+                        <th>{{ __('Phone') }}</th>
+                        <th>{{ __('Registration Date') }}</th>
+                        <th>{{ __('Status') }}</th>
+                        <th>{{ __('Role') }}</th>
+                        <th>{{ __('Actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($users as $user)
+                        <tr>
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-avatar">{{ substr($user->name, 0, 1) }}</div>
+                                    <div class="user-details">
+                                        <h6>{{ $user->name }}</h6>
+                                        <p>{{ __('ID') }}: #{{ $user->id }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->phone ?? __('No phone') }}</td>
+                            <td>{{ $user->created_at->format('Y-m-d') }}</td>
+                            <td>
+                                @if ($user->email_verified_at)
+                                    <span class="status-badge active">{{ __('Active') }}</span>
+                                @else
+                                    <span class="status-badge pending">{{ __('Pending') }}</span>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="role-badge">{{ $user->getRoleNames()->first() ?? __('Customer') }}</span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn view" onclick="viewUser({{ $user->id }})">
+                                        <i class="fas fa-eye"></i>
+                                        {{ __('View') }}
+                                    </button>
+                                    <button class="action-btn edit" onclick="editUser({{ $user->id }})">
+                                        <i class="fas fa-edit"></i>
+                                        {{ __('Edit') }}
+                                    </button>
+                                    <!-- Form للحذف بدون JS -->
+                                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST"
+                                        style="display:inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="action-btn delete">
+                                            <i class="fas fa-trash"></i> {{ __('Delete') }}
+                                        </button>
+                                    </form>
 
-                if (name.includes(query) || email.includes(query)) {
-                    row.style.display = 'table-row';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">{{ __('No users yet') }}</h5>
+                                <p class="text-muted">{{ __('No users registered yet') }}</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-        function applyFilters() {
-            const searchInput = document.getElementById('searchInput').value;
-            const statusFilter = document.getElementById('statusFilter').value;
-            const roleFilter = document.getElementById('roleFilter').value;
-
-            // Show loading state
-            const tbody = document.querySelector('.users-table tbody');
-            tbody.innerHTML =
-                '<tr><td colspan="7" class="text-center py-5"><i class="fas fa-spinner fa-spin fa-2x"></i><br>جاري التحميل...</td></tr>';
-
-            // Make AJAX request
-            fetch('{{ route('users.index') }}', {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Content-Type': 'application/json',
-                    },
-                    body: new URLSearchParams({
-                        search: searchInput,
-                        status: statusFilter,
-                        role: roleFilter
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    tbody.innerHTML = data.html;
-                    // Update statistics if needed
-                    updateStatistics(data.count);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    tbody.innerHTML =
-                        '<tr><td colspan="7" class="text-center py-5 text-danger">حدث خطأ في التحميل</td></tr>';
-                });
-        }
-
-        function updateStatistics(count) {
-            // Update stat numbers if needed
-            const totalStat = document.querySelector('.stat-icon.total').parentElement.querySelector('.stat-number');
-            if (totalStat) {
-                totalStat.textContent = count;
-            }
-        }
-
-        function viewUser(userId) {
-            console.log('Viewing user:', userId);
-            // Implement view functionality
-            alert('{{ __('View') }}: ' + userId);
-        }
-
-        function editUser(userId) {
-            console.log('Editing user:', userId);
-            // Implement edit functionality
-            alert('{{ __('Edit') }}: ' + userId);
-        }
-
-        function deleteUser(userId, userName) {
-            if (confirm(`{{ __('Are you sure you want to delete user') }} "${userName}"؟`)) {
-                console.log('Deleting user:', userId);
-                // Implement delete functionality
-            }
-        }
-
-        function makeAdmin(userId) {
-            if (confirm('{{ __('Promote to admin') }}؟')) {
-                document.getElementById('adminInput').value = '1';
-                document.getElementById('adminForm').action = `/admin/users/${userId}/admin`;
-                document.getElementById('adminForm').submit();
-            }
-        }
-
-        function removeAdmin(userId) {
-            if (confirm('{{ __('Remove admin rights') }}؟')) {
-                document.getElementById('adminInput').value = '0';
-                document.getElementById('adminForm').action = `/admin/users/${userId}/admin`;
-                document.getElementById('adminForm').submit();
-            }
-        }
-    </script>
 @endsection

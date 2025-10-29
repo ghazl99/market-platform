@@ -19,13 +19,7 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
-        $host = $request->getHost();
-
-        $store = $this->homeService->getStoreByHost($host);
-
-        if (! $store) {
-            abort(404, 'Store not found');
-        }
+        $store = current_store();
 
         return view('core::store.dashboard', compact('store'));
     }

@@ -97,7 +97,7 @@
                                         <b> {{ __('Visit Dashboard') }}</b>
                                     </a>
                                 </li>
-                                <li><i class="fas fa-check"></i> {{ __('Theme') }}: {{ $store->theme->name }}</li>
+                                <li><i class="fas fa-check"></i> {{ __('Theme') }}: {{ $store->theme?->name }}</li>
                                 <li><i class="fas fa-check"></i> {{ __('Created At') }}: {{ $formatted }}</li>
                                 <li><i class="fas fa-check"></i> {{ __('Sales Reports') }}</li>
                             </ul>

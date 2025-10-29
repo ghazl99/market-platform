@@ -61,4 +61,15 @@ class UserController extends Controller implements HasMiddleware
 
     //     return back()->with('success', "تم تحديث صلاحيات المستخدم إلى: {$statusText}");
     // }
+
+    public function destroy($id)
+    {
+        $result = $this->userService->deleteUser($id);
+
+        if ($result['success']) {
+            return redirect()->back()->with('success', $result['message']);
+        }
+
+        return redirect()->back()->with('error', $result['message']);
+    }
 }

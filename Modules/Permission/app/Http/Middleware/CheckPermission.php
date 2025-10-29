@@ -23,7 +23,7 @@ class CheckPermission
 
             // توليد الصلاحية إذا غير موجودة
             $permission = Permission::firstOrCreate(['name' => $controllerAndMethod]);
-
+            
             // إذا المستخدم owner → منح الصلاحية تلقائياً
             if ($user->hasRole('owner') && ! $user->hasPermissionTo($permission->name)) {
                 $user->givePermissionTo($permission->name);
