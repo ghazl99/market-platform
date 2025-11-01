@@ -93,8 +93,8 @@
             style.textContent = `
                 @media (max-width: 768px) {
                     * {
-                        animation-duration: 0.3s !important;
-                        transition-duration: 0.3s !important;
+                        animation-duration: 10s !important;
+                        transition-duration: 2s !important;
                     }
                 }
             `;
