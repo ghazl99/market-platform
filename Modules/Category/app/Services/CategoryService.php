@@ -18,58 +18,101 @@ class CategoryService
 
     /**
      * Prepare data for multilingual fields (name, description)
+     * Translate given fields to all supported languages automatically.
+     * Prepares data for multilingual fields (name, description, etc.)
+     *
+     * @param  array  $data  Data array containing fields to translate
+     * @param  array|null  $fields  Fields to translate, if null will translate all string fields
+     * @return array Data with translated fields
      */
-    private function prepareUserData(array $data): array
+    private function prepareUserData(array $data, ?array $fields = null): array
     {
         $locale = app()->getLocale();
-        $fields = ['name', 'description'];
 
-        // ترجمة الحقول الرئيسية
+        // إذا لم يتم تحديد الحقول، استخدم الحقول الافتراضية
+        if ($fields === null) {
+            $fields = ['name', 'description']; // الحقول الافتراضية للترجمة
+        }
+
         foreach ($fields as $field) {
             if (isset($data[$field])) {
-                $translated = [$locale => $data[$field]];
-
-                // ترجمة إلى اللغة الأخرى المدعومة فقط
-                $otherLang = $locale === 'ar' ? 'en' : 'ar';
-                try {
-                    $translated[$otherLang] = $this->autoGoogleTranslator($otherLang, $data[$field]);
-                } catch (\Exception $e) {
-                    Log::warning("Translation failed for [$field] to [$otherLang]: ".$e->getMessage());
-                    // استخدام النص الأصلي كبديل
-                    $translated[$otherLang] = $data[$field];
-                } catch (\Throwable $e) {
-                    Log::warning("Translation failed for [$field] to [$otherLang]: ".$e->getMessage());
-                    // استخدام النص الأصلي كبديل
-                    $translated[$otherLang] = $data[$field];
+                // إذا كان الحقل array بالفعل (multi-language)، استخرج النسخة الحالية
+                if (is_array($data[$field])) {
+                    $original = $data[$field][$locale] ?? reset($data[$field]);
+                } else {
+                    $original = $data[$field];
                 }
 
+                // ضمان أن يكون string
+                if (!is_string($original)) {
+                    $original = (string)($original ?? '');
+                }
+
+                // إذا كان النص فارغاً، تخطاه
+                if (empty(trim($original))) {
+                    continue;
+                }
+
+                // حفظ النص الأصلي باللغة الحالية
+                $translated = [$locale => $original];
+
+                // ترجمة إلى جميع اللغات الأخرى
+                foreach ($this->otherLangs() as $lang) {
+                    try {
+                        // استخدام Google Translate للترجمة التلقائية
+                        $translated[$lang] = $this->autoGoogleTranslator($lang, $original);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to translate [$field] to [$lang]: " . $e->getMessage());
+                        // في حالة فشل الترجمة، استخدم النص الأصلي كبديل
+                        $translated[$lang] = $original;
+                    }
+                }
+
+                // استبدال الحقل بنسخة متعددة اللغات
                 $data[$field] = $translated;
             }
         }
 
         // ترجمة الأصناف الفرعية إذا وجدت
         if (isset($data['subcategory_name']) && is_array($data['subcategory_name'])) {
-            $translatedsubcategory_name = [];
+            $translatedSubcategories = [];
             foreach ($data['subcategory_name'] as $subcategory) {
-                $subTranslated = [$locale => $subcategory];
+                if (empty($subcategory)) {
+                    continue;
+                }
 
-                // ترجمة إلى اللغة الأخرى المدعومة فقط
-                $otherLang = $locale === 'ar' ? 'en' : 'ar';
-                try {
-                    $subTranslated[$otherLang] = $this->autoGoogleTranslator($otherLang, $subcategory);
-                } catch (\Exception $e) {
-                    Log::warning("Translation failed for [subcategory] to [$otherLang]: ".$e->getMessage());
-                    // استخدام النص الأصلي كبديل
-                    $subTranslated[$otherLang] = $subcategory;
-                } catch (\Throwable $e) {
-                    Log::warning("Translation failed for [subcategory] to [$otherLang]: ".$e->getMessage());
-                    // استخدام النص الأصلي كبديل
-                    $subTranslated[$otherLang] = $subcategory;
+                // إذا كان الحقل array بالفعل (multi-language)، استخرج النسخة الحالية
+                if (is_array($subcategory)) {
+                    $original = $subcategory[$locale] ?? reset($subcategory);
+                } else {
+                    $original = $subcategory;
+                }
+
+                // ضمان أن يكون string
+                if (!is_string($original)) {
+                    $original = (string)($original ?? '');
+                }
+
+                // إذا كان النص فارغاً، تخطاه
+                if (empty(trim($original))) {
+                    continue;
+                }
+
+                $subTranslated = [$locale => $original];
+
+                // ترجمة إلى جميع اللغات الأخرى
+                foreach ($this->otherLangs() as $lang) {
+                    try {
+                        $subTranslated[$lang] = $this->autoGoogleTranslator($lang, $original);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to translate [subcategory] to [$lang]: " . $e->getMessage());
+                        $subTranslated[$lang] = $original;
+                    }
                 }
 
                 $translatedSubcategories[] = $subTranslated;
             }
-            $data['subcategory_name'] = $translatedsubcategory_name;
+            $data['subcategory_name'] = $translatedSubcategories;
         }
 
         return $data;
@@ -110,8 +153,16 @@ class CategoryService
         DB::beginTransaction();
 
         try {
-            // إلغاء الترجمة التلقائية أثناء الإنشاء لتسريع الأداء
-            // $data = $this->prepareUserData($data);
+            // تحويل name و description إلى multilang
+            $textFields = ['name', 'description'];
+            // إعداد البيانات للترجمة - تمرير البيانات الكاملة لمعالجة subcategory_name أيضًا
+            $dataForTranslation = array_intersect_key($data, array_flip($textFields));
+            if (isset($data['subcategory_name'])) {
+                $dataForTranslation['subcategory_name'] = $data['subcategory_name'];
+            }
+            $translated = $this->prepareUserData($dataForTranslation);
+
+            $data = array_merge($data, $translated);
 
             // Ensure optional keys exist to avoid undefined index
             $data = array_merge([

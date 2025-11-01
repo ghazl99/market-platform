@@ -4,18 +4,29 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Translatable\HasTranslations;
 
 class Group extends Model
 {
+    use HasTranslations;
+
     protected $fillable = [
         'name',
         'profit_percentage',
         'is_default',
     ];
 
+    /**
+     * The attributes that should be translatable.
+     *
+     * @var array
+     */
+    public $translatable = ['name'];
+
     protected $casts = [
         'profit_percentage' => 'decimal:2',
         'is_default' => 'boolean',
+        'name' => 'array',
     ];
 
     /**

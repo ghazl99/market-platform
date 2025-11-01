@@ -26,37 +26,56 @@ class ProductService
 
     /**
      * Translate given fields to all supported languages automatically.
+     * Prepares data for multilingual fields (name, description, etc.)
      *
+     * @param  array  $data  Data array containing fields to translate
      * @param  array|null  $fields  Fields to translate, if null will translate all string fields
+     * @return array Data with translated fields
      */
     private function prepareData(array $data, ?array $fields = null): array
     {
         $locale = app()->getLocale();
-        $fieldsToTranslate = $fields ?? array_keys($data);
 
-        foreach ($fieldsToTranslate as $field) {
+        // إذا لم يتم تحديد الحقول، استخدم الحقول الافتراضية
+        if ($fields === null) {
+            $fields = ['name', 'description']; // الحقول الافتراضية للترجمة
+        }
+
+        foreach ($fields as $field) {
             if (isset($data[$field])) {
-
-                // إذا كان array (multi-language) استخرج النسخة الحالية
-                $original = is_array($data[$field]) ? ($data[$field][$locale] ?? reset($data[$field])) : $data[$field];
+                // إذا كان الحقل array بالفعل (multi-language)، استخرج النسخة الحالية
+                if (is_array($data[$field])) {
+                    $original = $data[$field][$locale] ?? reset($data[$field]);
+                } else {
+                    $original = $data[$field];
+                }
 
                 // ضمان أن يكون string
-                $original = $original ?? '';
+                if (!is_string($original)) {
+                    $original = (string)($original ?? '');
+                }
 
+                // إذا كان النص فارغاً، تخطاه
+                if (empty(trim($original))) {
+                    continue;
+                }
+
+                // حفظ النص الأصلي باللغة الحالية
                 $translated = [$locale => $original];
 
-                // استخدم النص الأصلي لجميع اللغات مؤقتاً لتجنب مشاكل الترجمة
+                // ترجمة إلى جميع اللغات الأخرى
                 foreach ($this->otherLangs() as $lang) {
                     try {
-                        // تجنب استخدام Google Translate مؤقتاً
-                        $translated[$lang] = $original; // استخدام النص الأصلي
-                        // $translated[$lang] = $this->autoGoogleTranslator($lang, $original);
+                        // استخدام Google Translate للترجمة التلقائية
+                        $translated[$lang] = $this->autoGoogleTranslator($lang, $original);
                     } catch (\Exception $e) {
-                        Log::error("Failed to translate [$field] to [$lang]: ".$e->getMessage());
-                        $translated[$lang] = $original; // fallback
+                        Log::error("Failed to translate [$field] to [$lang]: " . $e->getMessage());
+                        // في حالة فشل الترجمة، استخدم النص الأصلي كبديل
+                        $translated[$lang] = $original;
                     }
                 }
 
+                // استبدال الحقل بنسخة متعددة اللغات
                 $data[$field] = $translated;
             }
         }

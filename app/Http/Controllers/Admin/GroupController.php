@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Group;
+use App\Services\GroupService;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,9 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class GroupController extends Controller
 {
+    public function __construct(
+        protected GroupService $groupService
+    ) {}
     /**
      * Display a listing of the resource.
      */
@@ -39,14 +43,20 @@ class GroupController extends Controller
             'profit_percentage' => 'required|numeric|min:0|max:100',
         ]);
 
-        Group::create([
-            'name' => $request->name,
-            'profit_percentage' => $request->profit_percentage,
-            'is_default' => false,
-        ]);
+        try {
+            $this->groupService->create([
+                'name' => $request->name,
+                'profit_percentage' => $request->profit_percentage,
+                'is_default' => false,
+            ]);
 
-        return redirect()->to(LaravelLocalization::localizeURL(route('admin.groups.index')))
-            ->with('success', __('Group created successfully'));
+            return redirect()->to(LaravelLocalization::localizeURL(route('admin.groups.index')))
+                ->with('success', __('Group created successfully'));
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', __('Failed to create group. Please try again.'));
+        }
     }
 
     /**
@@ -77,13 +87,19 @@ class GroupController extends Controller
             'profit_percentage' => 'required|numeric|min:0|max:100',
         ]);
 
-        $group->update([
-            'name' => $request->name,
-            'profit_percentage' => $request->profit_percentage,
-        ]);
+        try {
+            $this->groupService->update($group, [
+                'name' => $request->name,
+                'profit_percentage' => $request->profit_percentage,
+            ]);
 
-        return redirect()->to(LaravelLocalization::localizeURL(route('admin.groups.index')))
-            ->with('success', __('Group updated successfully'));
+            return redirect()->to(LaravelLocalization::localizeURL(route('admin.groups.index')))
+                ->with('success', __('Group updated successfully'));
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', __('Failed to update group. Please try again.'));
+        }
     }
 
     /**
@@ -91,21 +107,21 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        // Check if this is the default group
-        if ($group->is_default) {
+        try {
+            $this->groupService->delete($group);
+
+            return redirect()->to(LaravelLocalization::localizeURL(route('admin.groups.index')))
+                ->with('success', __('Group deleted successfully'));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            
+            if (str_contains($message, 'Cannot delete the default group')) {
+                return redirect()->back()
+                    ->with('error', __('Cannot delete the default group'));
+            }
+
             return redirect()->back()
-                ->with('error', __('Cannot delete the default group'));
+                ->with('error', __('Failed to delete group. Please try again.'));
         }
-
-        // Move users to default group before deleting
-        $defaultGroup = Group::getDefaultGroup();
-        if ($defaultGroup) {
-            $group->users()->update(['group_id' => $defaultGroup->id]);
-        }
-
-        $group->delete();
-
-        return redirect()->to(LaravelLocalization::localizeURL(route('admin.groups.index')))
-            ->with('success', __('Group deleted successfully'));
     }
 }

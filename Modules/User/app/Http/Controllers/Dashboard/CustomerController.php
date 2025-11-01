@@ -117,8 +117,8 @@ class CustomerController extends Controller implements HasMiddleware
                 }
             }
 
-            // إنشاء المستخدم
-            $user = User::create([
+            // تحضير البيانات مع الترجمة
+            $customerData = [
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
@@ -128,7 +128,36 @@ class CustomerController extends Controller implements HasMiddleware
                 'email_verified_at' => $request->status === 'active' ? now() : null,
                 'debt_limit' => $request->debt_limit !== null && $request->debt_limit !== '' ? (float) $request->debt_limit : 0,
                 'group_id' => $request->group_id ?? \App\Group::getDefaultGroup()?->id,
-            ]);
+            ];
+
+            // إضافة الحقول الاختيارية إذا كانت موجودة
+            if ($request->filled('address')) {
+                $customerData['address'] = $request->address;
+            }
+            if ($request->filled('city')) {
+                $customerData['city'] = $request->city;
+            }
+            if ($request->filled('birth_date')) {
+                $customerData['birth_date'] = $request->birth_date;
+            }
+            if ($request->filled('postal_code')) {
+                $customerData['postal_code'] = $request->postal_code;
+            }
+            if ($request->filled('country')) {
+                $customerData['country'] = $request->country;
+            }
+            if ($request->filled('language')) {
+                $customerData['language'] = $request->language;
+            }
+            if ($request->filled('timezone')) {
+                $customerData['timezone'] = $request->timezone;
+            }
+
+            // تطبيق الترجمة على الحقول المترجمة
+            $customerData = $this->customerService->createCustomer($customerData);
+
+            // إنشاء المستخدم
+            $user = User::create($customerData);
 
             Log::info('User created successfully:', ['user_id' => $user->id]);
 
@@ -506,6 +535,9 @@ class CustomerController extends Controller implements HasMiddleware
             if ($request->filled('password')) {
                 $updateData['password'] = bcrypt($request->password);
             }
+
+            // تطبيق الترجمة على الحقول المترجمة
+            $updateData = $this->customerService->updateCustomer($updateData);
 
             // Update the customer
             $customer->update($updateData);

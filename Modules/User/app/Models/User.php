@@ -70,8 +70,19 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
             'birth_date' => 'date',
             'password' => 'hashed',
             'debt_limit' => 'decimal:2',
+            'name' => 'array',
+            'address' => 'array',
+            'city' => 'array',
         ];
     }
+
+    /**
+     * The attributes that should be translatable.
+     *
+     * @var array
+     */
+    public $translatable = ['name', 'address', 'city'];
+
     protected static function newFactory()
     {
         return OwnerFactory::new();
