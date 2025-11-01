@@ -60,7 +60,7 @@ class OrderService
                     LogTransaction::class,
                 ])
                 ->thenReturn();
-                
+
         });
     }
 }

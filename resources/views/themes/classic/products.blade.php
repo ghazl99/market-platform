@@ -4,6 +4,67 @@
 
 @push('styles')
     <style>
+        /* === Pagination Styling === */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 30px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            display: inline-block;
+        }
+
+        .pagination a,
+        .pagination span {
+            display: inline-block;
+            min-width: 40px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: #444;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            background-color: #fff;
+        }
+
+        .pagination a:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        .pagination .active span {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        .pagination .disabled span {
+            color: #ccc;
+            background-color: #f8f8f8;
+            border-color: #eee;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 576px) {
+
+            .pagination a,
+            .pagination span {
+                min-width: 32px;
+                padding: 6px 10px;
+                font-size: 13px;
+            }
+        }
+    </style>
+    <style>
         /* Light Mode Styles for Products Page - Maximum Priority */
         html[data-theme="light"] body,
         html[data-theme="light"] .main-content-adjust,

@@ -157,8 +157,9 @@
         <section class="categories" id="categories">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">تسوق حسب الفئة</h2>
-                    <p class="section-subtitle">استكشف مجموعتنا الواسعة من المنتجات</p>
+                    <h2 class="section-title">{{ __('Shop by Category') }}</h2>
+                    <p class="section-subtitle">{{ __('Explore our wide range of products') }}</p>
+
                 </div>
 
                 <div class="categories-grid">
@@ -201,31 +202,28 @@
                 <div class="featured-header">
                     <h2 class="featured-title">
                         <span class="title-line"></span>
-                        <span class="title-text">منتجات مميزة</span>
+                        <span class="title-text">{{ __('Featured Products') }}</span>
                         <span class="title-line"></span>
                     </h2>
-                    <p class="featured-description">اكتشف أفضل منتجاتنا المختارة بعناية</p>
+                    <p class="featured-description">{{ __('Discover our carefully selected best products') }}</p>
                 </div>
 
                 <div class="featured-grid">
                     @forelse ($topViewed as $product)
-                        <div class="featured-product">
+                        <a href="{{ route('product.show', $product->id) }}"  class="featured-product" style="text-decoration: none">
                             <div class="featured-image">
                                 @php $media = $product->getFirstMedia('product_images'); @endphp
 
                                 @if ($media)
                                     <img src="{{ route('product.image', $media->id) }}" alt="{{ $product->name }}">
-                                @else
-                                    <img src="{{ asset('assets/images/placeholder.png') }}" alt="No Image">
                                 @endif
                             </div>
                             <h3 class="featured-name">
-                                {{ $product->name['ar'] ?? $product->name['en'] }}
+                                {{ $product->name }}
                             </h3>
-                            <p class="featured-price">{{ number_format($product->price, 2) }} {{ __('ريال') }}</p>
-                        </div>
+                        </a>
                     @empty
-                        <p class="text-center w-full">لا توجد منتجات مميزة حالياً</p>
+                        <p class="text-center w-full">{{ __('No featured products currently available') }}</p>
                     @endforelse
                 </div>
             </div>

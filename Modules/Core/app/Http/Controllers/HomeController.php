@@ -41,8 +41,9 @@ class HomeController extends Controller
         }
 
         $categories = $this->categoryService->getAllcategories();
-        $topOrdered = $this->productService->getTopOrderedProducts($store->id, 8);
-        $topViewed = $this->productService->getTopViewedProducts($store->id, 8);
+        $topOrdered = $this->productService->getTopOrderedProducts($store->id, 10);
+        $topViewed = $this->productService->getTopViewedProducts($store->id, 10);
+
         return view('themes.' . current_theme_name_en() . '.home', compact('store', 'categories', 'topOrdered', 'topViewed'));
     }
 }

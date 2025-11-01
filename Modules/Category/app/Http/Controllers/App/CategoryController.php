@@ -40,7 +40,7 @@ class CategoryController extends Controller
         $products = $this->categoryService->getProducts($category, $query);
 
         if ($request->ajax()) {
-            $html = view("themes.' . current_theme_name_en() . '._products", compact('products'))->render();
+            $html = view('themes.' . current_theme_name_en() . '._products', compact('products'))->render();
             $pagination = $products->hasPages() ? $products->links()->toHtml() : '';
 
             return response()->json([
@@ -52,6 +52,7 @@ class CategoryController extends Controller
 
         return view('themes.' . current_theme_name_en() . '.products', compact('category', 'products'));
     }
+
 
     public function getSubCategoryById($id)
     {

@@ -206,5 +206,10 @@
     "Choose Group": "اختر المجموعة",
     "Select user group for profit calculation": "اختر مجموعة المستخدم لحساب نسبة الربح",
     "No Group": "لا توجد مجموعة",
-    "This is the default group. You can modify its settings.": "هذه المجموعة الافتراضية. يمكنك تعديل إعداداتها."
+    "This is the default group. You can modify its settings.": "هذه المجموعة الافتراضية. يمكنك تعديل إعداداتها.",
+    "Featured Products": "منتجات مميزة",
+    "Discover our carefully selected best products": "اكتشف أفضل منتجاتنا المختارة بعناية",
+    "No featured products currently available": "لا توجد منتجات مميزة حالياً",
+     "Shop by Category": "تسوق حسب الفئة",
+    "Explore our wide range of products": "استكشف مجموعتنا الواسعة من المنتجات"
 }

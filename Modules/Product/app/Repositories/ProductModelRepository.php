@@ -105,7 +105,7 @@ class ProductModelRepository implements ProductRepository
     public function getTopOrderedProductsByStore($storeId, $limit = 10)
     {
         return Product::where('store_id', $storeId)
-            ->where('status', true)
+            ->where('status', 'active')
             ->orderByDesc('orders_count')
             ->limit($limit)
             ->get();
@@ -114,7 +114,7 @@ class ProductModelRepository implements ProductRepository
     public function getTopViewedProductsByStore($storeId, $limit = 10)
     {
         return Product::where('store_id', $storeId)
-            ->where('status', true)
+            ->where('status', 'active')
             ->orderByDesc('views_count')
             ->limit($limit)
             ->get();
