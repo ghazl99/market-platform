@@ -35,6 +35,70 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     @stack('styles')
+
+    <!-- Apply theme immediately to prevent flash of wrong theme -->
+    <script>
+        (function() {
+            // Get saved theme from localStorage (check both keys for compatibility)
+            const savedTheme = localStorage.getItem('dashboard-theme') || 
+                              localStorage.getItem('theme') || 
+                              'light';
+            const html = document.documentElement;
+            
+            // Apply theme immediately before page renders (synchronously)
+            html.setAttribute('data-theme', savedTheme);
+            
+            // Apply to body when it's available (use DOMContentLoaded as fallback)
+            if (document.body) {
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            } else {
+                // Body not ready yet, wait for it
+                document.addEventListener('DOMContentLoaded', function() {
+                    if (savedTheme === 'dark') {
+                        document.body.classList.add('dark-mode');
+                    } else {
+                        document.body.classList.remove('dark-mode');
+                    }
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash - Apply theme-based styles immediately -->
+    <style id="critical-theme-styles">
+        /* These styles prevent flash of wrong theme */
+        html[data-theme="dark"] body,
+        html[data-theme="dark"] .dashboard-container,
+        html[data-theme="dark"] .dashboard-main {
+            background: #1a1a1a !important;
+            color: #ffffff !important;
+        }
+        
+        html[data-theme="light"] body,
+        html[data-theme="light"] .dashboard-container,
+        html[data-theme="light"] .dashboard-main {
+            background: #ffffff !important;
+            color: #111827 !important;
+        }
+        
+        /* Dark mode product cards */
+        html[data-theme="dark"] .product-card {
+            background: #1f2937 !important;
+            border-color: #374151 !important;
+            color: #ffffff !important;
+        }
+        
+        /* Light mode product cards */
+        html[data-theme="light"] .product-card {
+            background: #ffffff !important;
+            border-color: #e5e7eb !important;
+            color: #111827 !important;
+        }
+    </style>
 </head>
 
 <body class="loaded">

@@ -463,6 +463,130 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Light Mode Styles */
+        html[data-theme="light"] .payment-methods-container {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .page-header {
+            border-bottom: 2px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .page-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .payment-method-card {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .payment-method-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        html[data-theme="light"] .payment-method-icon {
+            background: #f9fafb !important;
+            border: 2px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .payment-method-name {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .empty-state {
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .empty-state i {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="light"] .empty-state h3 {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .delete-modal-content {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .delete-modal-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .delete-modal-message {
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .delete-modal-btn-cancel {
+            background: #ffffff !important;
+            color: #374151 !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        /* Dark Mode Styles */
+        html[data-theme="dark"] .payment-methods-container {
+            background: #1a1a1a !important;
+        }
+
+        html[data-theme="dark"] .page-header {
+            border-bottom: 2px solid #374151 !important;
+        }
+
+        html[data-theme="dark"] .page-title {
+            color: #ffffff !important;
+        }
+
+        html[data-theme="dark"] .payment-method-card {
+            background: #1f2937 !important;
+            border: 1px solid #374151 !important;
+        }
+
+        html[data-theme="dark"] .payment-method-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        html[data-theme="dark"] .payment-method-icon {
+            background: #111827 !important;
+            border: 2px solid #374151 !important;
+        }
+
+        html[data-theme="dark"] .payment-method-name {
+            color: #ffffff !important;
+        }
+
+        html[data-theme="dark"] .empty-state {
+            color: #d1d5db !important;
+        }
+
+        html[data-theme="dark"] .empty-state i {
+            color: #888888 !important;
+        }
+
+        html[data-theme="dark"] .empty-state h3 {
+            color: #ffffff !important;
+        }
+
+        html[data-theme="dark"] .delete-modal-content {
+            background: #1f2937 !important;
+            border: 1px solid #374151 !important;
+        }
+
+        html[data-theme="dark"] .delete-modal-title {
+            color: #ffffff !important;
+        }
+
+        html[data-theme="dark"] .delete-modal-message {
+            color: #d1d5db !important;
+        }
+
+        html[data-theme="dark"] .delete-modal-btn-cancel {
+            background: #1f2937 !important;
+            color: #d1d5db !important;
+            border: 1px solid #374151 !important;
+        }
     </style>
 @endpush
 

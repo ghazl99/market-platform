@@ -168,11 +168,11 @@
             <a href="{{ LaravelLocalization::localizeURL('dashboard/permissions') }}"
                 class="nav-item {{ isActive(['dashboard/permissions']) ? 'active' : '' }}">
                 <i class="fas fa-shield-alt"></i>
-                <span class="nav-item-text">الصلاحيات</span>
+                <span class="nav-item-text">{{ __('Permissions') }}</span>
             </a>
             <a href="#" class="nav-item">
                 <i class="fas fa-lock"></i>
-                <span class="nav-item-text">الأمان</span>
+                <span class="nav-item-text">{{ __('Security') }}</span>
             </a>
 
             <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">

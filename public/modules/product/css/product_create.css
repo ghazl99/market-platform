@@ -201,6 +201,8 @@
     width: 100%;
     box-sizing: border-box;
     font-family: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
     background-position: right 0.5rem center;
@@ -557,4 +559,219 @@
     .form-actions {
         background: #4b5563;
     }
+}
+
+/* Light Mode Styles - Maximum Priority */
+html[data-theme="light"] .product-create-container,
+html[data-theme="light"] body .product-create-container {
+    background: #ffffff !important;
+}
+
+html[data-theme="light"] .page-header,
+html[data-theme="light"] body .page-header {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+html[data-theme="light"] .page-title,
+html[data-theme="light"] body .page-title {
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .form-container,
+html[data-theme="light"] body .form-container,
+html[data-theme="light"] .form-section,
+html[data-theme="light"] body .form-section {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .section-title,
+html[data-theme="light"] body .section-title,
+html[data-theme="light"] .form-section .section-title,
+html[data-theme="light"] body .form-section .section-title {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border-bottom-color: #059669 !important;
+}
+
+html[data-theme="light"] .form-label,
+html[data-theme="light"] body .form-label {
+    color: #374151 !important;
+}
+
+html[data-theme="light"] .form-input,
+html[data-theme="light"] body .form-input,
+html[data-theme="light"] input.form-input,
+html[data-theme="light"] body input.form-input {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-color: #e5e7eb !important;
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .form-input:focus,
+html[data-theme="light"] body .form-input:focus,
+html[data-theme="light"] input.form-input:focus,
+html[data-theme="light"] body input.form-input:focus {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-color: #059669 !important;
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .form-input[readonly],
+html[data-theme="light"] body .form-input[readonly] {
+    background: #f3f4f6 !important;
+    border-color: #e5e7eb !important;
+    color: #6b7280 !important;
+}
+
+html[data-theme="light"] .form-textarea,
+html[data-theme="light"] body .form-textarea,
+html[data-theme="light"] textarea.form-input,
+html[data-theme="light"] body textarea.form-input {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-color: #e5e7eb !important;
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .form-textarea:focus,
+html[data-theme="light"] body .form-textarea:focus,
+html[data-theme="light"] textarea.form-input:focus,
+html[data-theme="light"] body textarea.form-input:focus {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-color: #059669 !important;
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .form-select,
+html[data-theme="light"] body .form-select,
+html[data-theme="light"] select.form-select,
+html[data-theme="light"] body select.form-select {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-color: #e5e7eb !important;
+    color: #111827 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23111827' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+    background-position: right 0.5rem center !important;
+    background-repeat: no-repeat !important;
+    background-size: 1.5em 1.5em !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+
+html[data-theme="light"] .form-select:focus,
+html[data-theme="light"] body .form-select:focus,
+html[data-theme="light"] select.form-select:focus,
+html[data-theme="light"] body select.form-select:focus {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-color: #059669 !important;
+    color: #111827 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23059669' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+    background-position: right 0.5rem center !important;
+    background-repeat: no-repeat !important;
+    background-size: 1.5em 1.5em !important;
+}
+
+html[data-theme="light"] .form-select option,
+html[data-theme="light"] body .form-select option {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #111827 !important;
+}
+
+html[data-theme="light"] .file-upload,
+html[data-theme="light"] .file-upload-area,
+html[data-theme="light"] .file-upload-label,
+html[data-theme="light"] body .file-upload,
+html[data-theme="light"] body .file-upload-area,
+html[data-theme="light"] body .file-upload-label {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-color: #e5e7eb !important;
+    color: #6b7280 !important;
+}
+
+html[data-theme="light"] .file-upload:hover,
+html[data-theme="light"] .file-upload-area:hover,
+html[data-theme="light"] .file-upload-label:hover,
+html[data-theme="light"] body .file-upload:hover,
+html[data-theme="light"] body .file-upload-area:hover,
+html[data-theme="light"] body .file-upload-label:hover {
+    background: #f9fafb !important;
+    background-color: #f9fafb !important;
+    border-color: #059669 !important;
+}
+
+html[data-theme="light"] .file-upload-icon,
+html[data-theme="light"] .file-upload-text,
+html[data-theme="light"] .file-upload-hint,
+html[data-theme="light"] body .file-upload-icon,
+html[data-theme="light"] body .file-upload-text,
+html[data-theme="light"] body .file-upload-hint {
+    color: #6b7280 !important;
+}
+
+html[data-theme="light"] .form-actions,
+html[data-theme="light"] body .form-actions,
+html[data-theme="light"] .product-create-container .form-actions {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-top: 1px solid #e5e7eb !important;
+    border-top-color: #e5e7eb !important;
+    color: #111827 !important;
+}
+
+/* Ensure buttons inside form-actions keep their colors and text visibility */
+html[data-theme="light"] .form-actions .btn-primary,
+html[data-theme="light"] .form-actions .btn.btn-primary,
+html[data-theme="light"] body .form-actions .btn-primary,
+html[data-theme="light"] body .form-actions .btn.btn-primary {
+    background: #059669 !important;
+    background-color: #059669 !important;
+    color: #ffffff !important;
+    border-color: #059669 !important;
+}
+
+html[data-theme="light"] .form-actions .btn-secondary,
+html[data-theme="light"] .form-actions .btn.btn-secondary,
+html[data-theme="light"] body .form-actions .btn-secondary,
+html[data-theme="light"] body .form-actions .btn.btn-secondary {
+    background: #f3f4f6 !important;
+    background-color: #f3f4f6 !important;
+    color: #374151 !important;
+    border-color: #e5e7eb !important;
+}
+
+html[data-theme="light"] .form-actions .btn-primary:hover,
+html[data-theme="light"] .form-actions .btn.btn-primary:hover,
+html[data-theme="light"] body .form-actions .btn-primary:hover,
+html[data-theme="light"] body .form-actions .btn.btn-primary:hover {
+    background: #047857 !important;
+    background-color: #047857 !important;
+    border-color: #047857 !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="light"] .form-actions .btn-secondary:hover,
+html[data-theme="light"] .form-actions .btn.btn-secondary:hover,
+html[data-theme="light"] body .form-actions .btn-secondary:hover,
+html[data-theme="light"] body .form-actions .btn.btn-secondary:hover {
+    background: #e5e7eb !important;
+    background-color: #e5e7eb !important;
+    border-color: #d1d5db !important;
+    color: #374151 !important;
+}
+
+html[data-theme="light"] .form-help,
+html[data-theme="light"] body .form-help {
+    color: #6b7280 !important;
 }

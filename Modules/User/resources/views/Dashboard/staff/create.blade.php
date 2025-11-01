@@ -155,8 +155,16 @@
                         <i class="fas fa-image"></i>
                         {{ __('الصورة الشخصية') }}
                     </label>
-                    <input type="file" class="form-control @error('profile_photo') is-invalid @enderror"
-                        id="profile_photo" name="profile_photo" accept="image/*">
+                    <div class="file-upload">
+                        <input type="file" class="file-upload-input @error('profile_photo') is-invalid @enderror"
+                            id="profile_photo" name="profile_photo" accept="image/*">
+                        <label for="profile_photo" class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                            <span class="file-upload-text">{{ __('Drag image here or click to select') }}</span>
+                            <span class="file-upload-hint">{{ __('You can upload image (JPG, PNG, GIF, WEBP)') }}</span>
+                        </label>
+                    </div>
+                    <div class="image-preview" id="imagePreview"></div>
                     <small class="form-text">{{ __('اختياري - يمكن رفع صورة شخصية للموظف') }}</small>
                     @error('profile_photo')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -497,8 +505,8 @@
             border: 1px solid #6b7280;
             border-radius: 8px;
             font-size: 0.9rem;
-            background: #1f2937;
-            color: #ffffff;
+            background: #1f2937 !important;
+            color: #ffffff !important;
             transition: all 0.3s ease;
         }
 
@@ -506,10 +514,33 @@
             outline: none;
             border-color: #059669;
             box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+            background: #1f2937 !important;
+            color: #ffffff !important;
         }
 
         .form-control::placeholder {
-            color: #9ca3af;
+            color: #9ca3af !important;
+        }
+
+        /* Dark Mode Styles - Force apply for all input types */
+        html[data-theme="dark"] .form-control,
+        html[data-theme="dark"] input.form-control,
+        html[data-theme="dark"] input[type="email"].form-control,
+        html[data-theme="dark"] input[type="password"].form-control,
+        html[data-theme="dark"] input[type="text"].form-control {
+            background: #1f2937 !important;
+            color: #ffffff !important;
+            border-color: #6b7280 !important;
+        }
+
+        html[data-theme="dark"] .form-control:focus,
+        html[data-theme="dark"] input.form-control:focus,
+        html[data-theme="dark"] input[type="email"].form-control:focus,
+        html[data-theme="dark"] input[type="password"].form-control:focus,
+        html[data-theme="dark"] input[type="text"].form-control:focus {
+            background: #1f2937 !important;
+            color: #ffffff !important;
+            border-color: #059669 !important;
         }
 
         .form-text {
@@ -522,6 +553,117 @@
             color: #ef4444;
             font-size: 0.8rem;
             margin-top: 0.25rem;
+        }
+
+        /* File Upload Styles */
+        .file-upload {
+            position: relative;
+            display: block;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .file-upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+            border: 2px dashed #6b7280;
+            border-radius: 12px;
+            background: #1f2937;
+            color: #d1d5db;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 200px;
+            text-align: center;
+            position: relative;
+        }
+
+        .file-upload-label:hover {
+            border-color: #059669;
+            background: rgba(5, 150, 105, 0.1);
+            color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+        }
+
+        .file-upload-label.dragover {
+            border-color: #059669;
+            background: rgba(5, 150, 105, 0.15);
+            color: #059669;
+        }
+
+        .file-upload-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: inherit;
+        }
+
+        .file-upload-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: inherit;
+        }
+
+        .file-upload-hint {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            opacity: 0.7;
+            color: inherit;
+        }
+
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #1f2937;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .preview-remove {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .preview-remove:hover {
+            background: #ef4444;
+            transform: scale(1.1);
         }
 
         .form-actions {
@@ -685,6 +827,59 @@
         html[data-theme="light"] body .notification-message {
             color: #6b7280 !important;
         }
+
+        /* Light Mode File Upload */
+        html[data-theme="light"] .file-upload-label,
+        html[data-theme="light"] body .file-upload-label {
+            background: #ffffff !important;
+            border-color: #e5e7eb !important;
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .file-upload-label:hover,
+        html[data-theme="light"] body .file-upload-label:hover {
+            background: #f9fafb !important;
+            border-color: #059669 !important;
+            color: #059669 !important;
+        }
+
+        html[data-theme="light"] .file-upload-icon,
+        html[data-theme="light"] .file-upload-text,
+        html[data-theme="light"] .file-upload-hint,
+        html[data-theme="light"] body .file-upload-icon,
+        html[data-theme="light"] body .file-upload-text,
+        html[data-theme="light"] body .file-upload-hint {
+            color: inherit !important;
+        }
+
+        html[data-theme="light"] .file-upload-label.dragover,
+        html[data-theme="light"] body .file-upload-label.dragover {
+            background: rgba(5, 150, 105, 0.05) !important;
+            border-color: #059669 !important;
+            color: #059669 !important;
+        }
+
+        /* Dark Mode File Upload */
+        html[data-theme="dark"] .file-upload-label,
+        html[data-theme="dark"] body .file-upload-label {
+            background: #1f2937 !important;
+            border-color: #6b7280 !important;
+            color: #d1d5db !important;
+        }
+
+        html[data-theme="dark"] .file-upload-label:hover,
+        html[data-theme="dark"] body .file-upload-label:hover {
+            background: rgba(5, 150, 105, 0.1) !important;
+            border-color: #059669 !important;
+            color: #059669 !important;
+        }
+
+        html[data-theme="dark"] .file-upload-label.dragover,
+        html[data-theme="dark"] body .file-upload-label.dragover {
+            background: rgba(5, 150, 105, 0.15) !important;
+            border-color: #059669 !important;
+            color: #059669 !important;
+        }
     </style>
 @endpush
 
@@ -727,6 +922,84 @@
                     }
                 });
             }, 100);
+
+            // Image upload preview with drag & drop support
+            const imageInput = document.getElementById('profile_photo');
+            const imagePreview = document.getElementById('imagePreview');
+
+            if (imageInput && imagePreview) {
+                const fileUploadLabel = document.querySelector('.file-upload-label');
+
+                // Handle file input change
+                imageInput.addEventListener('change', function(e) {
+                    handleFileSelect(e.target.files[0]);
+                });
+
+                // Drag and drop support
+                if (fileUploadLabel) {
+                    // Prevent default drag behaviors
+                    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                        fileUploadLabel.addEventListener(eventName, preventDefaults, false);
+                        document.body.addEventListener(eventName, preventDefaults, false);
+                    });
+
+                    // Highlight drop area when item is dragged over it
+                    ['dragenter', 'dragover'].forEach(eventName => {
+                        fileUploadLabel.addEventListener(eventName, highlight, false);
+                    });
+
+                    ['dragleave', 'drop'].forEach(eventName => {
+                        fileUploadLabel.addEventListener(eventName, unhighlight, false);
+                    });
+
+                    // Handle dropped files
+                    fileUploadLabel.addEventListener('drop', handleDrop, false);
+
+                    function preventDefaults(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+
+                    function highlight() {
+                        fileUploadLabel.classList.add('dragover');
+                    }
+
+                    function unhighlight() {
+                        fileUploadLabel.classList.remove('dragover');
+                    }
+
+                    function handleDrop(e) {
+                        const dt = e.dataTransfer;
+                        const files = dt.files;
+                        if (files.length > 0) {
+                            imageInput.files = files;
+                            handleFileSelect(files[0]);
+                        }
+                    }
+                }
+
+                function handleFileSelect(file) {
+                    if (file && file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            imagePreview.innerHTML = `
+                                <div class="preview-item">
+                                    <img src="${e.target.result}" alt="Preview" class="preview-image">
+                                    <button type="button" class="preview-remove" onclick="removePreview()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            `;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+
+                window.removePreview = function() {
+                    imageInput.value = '';
+                    imagePreview.innerHTML = '';
+                };
+            }
         });
     </script>
 @endpush

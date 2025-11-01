@@ -13,6 +13,13 @@
     <link rel="stylesheet" href="{{ asset('assets/css/notifications.css') }}">
 
     <style>
+        /* Force remove any duplicate background images first for selects */
+        select.form-select,
+        .form-select,
+        select.form-input {
+            background-image: none !important;
+        }
+
         /* Responsive Theme - Light by Default */
         body {
             background: var(--light-bg, #f8fafc);
@@ -131,34 +138,6 @@
             margin-bottom: 2rem;
         }
 
-        /* Navigation Tabs */
-        .product-tabs {
-            display: flex;
-            gap: 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #404040;
-        }
-
-        .tab-item {
-            padding: 1rem 2rem;
-            background: transparent;
-            border: none;
-            color: #a0a0a0;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .tab-item.active {
-            color: #ffffff;
-            border-bottom-color: #f59e0b;
-        }
-
-        .tab-item:hover {
-            color: #ffffff;
-        }
 
         /* Form Container */
         .form-container {
@@ -289,16 +268,7 @@
         }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
-            .product-tabs {
-                flex-wrap: wrap;
-            }
-
-            .tab-item {
-                padding: 0.75rem 1rem;
-                font-size: 0.9rem;
-            }
-        }
+        @media (max-width: 768px) {}
     </style>
 
     <style>
@@ -556,14 +526,6 @@
         </div>
     </div>
 
-    <!-- Navigation Tabs -->
-    <div class="product-tabs">
-        <button class="tab-item">{{ __('Product Overview') }}</button>
-        <button class="tab-item active">{{ __('Product Settings') }}</button>
-        <button class="tab-item">{{ __('Custom Prices') }}</button>
-        <button class="tab-item">{{ __('Inventory') }}</button>
-    </div>
-
     <form class="form-container" id="productForm" method="POST"
         action="{{ route('dashboard.product.update', $product->id) }}" enctype="multipart/form-data">
         @csrf
@@ -689,26 +651,30 @@
 
         <!-- Image -->
         <div class="form-section">
-            <h3 class="section-title">صورة المنتج</h3>
-            <div class="form-group">
-                <label class="form-label">رفع صورة</label>
-                <div class="image-upload-container">
-                    <input type="file" class="form-input @error('image') is-invalid @enderror" id="productImages"
-                        name="image" accept="image/*">
-                    @error('image')
-                        <div class="form-error">{{ $message }}</div>
-                    @enderror
-                    <div class="image-preview" id="imagePreview">
-                        @if ($product->getFirstMedia('product_images'))
-                            <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}"
-                                alt="Current Product Image" class="preview-image">
-                            <div class="image-overlay">
-                                <span class="image-text">الصورة الحالية</span>
-                            </div>
-                        @endif
-                    </div>
+            <h3 class="section-title">{{ __('Product Images') }}</h3>
+            <div class="form-group full-width">
+                <label class="form-label">{{ __('Product Images') }}</label>
+                <div class="file-upload">
+                    <input type="file" class="file-upload-input" id="productImages" name="image" accept="image/*">
+                    <label for="productImages" class="file-upload-label">
+                        <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                        <span class="file-upload-text">{{ __('Drag image here or click to select') }}</span>
+                        <span class="file-upload-hint">{{ __('You can upload image (JPG, PNG, GIF, WEBP)') }}</span>
+                    </label>
                 </div>
-                <div class="form-help">ارفع صورة عالية الجودة للمنتج (JPG, PNG, GIF)</div>
+                @error('image')
+                    <div class="form-error">{{ $message }}</div>
+                @enderror
+                <div class="image-preview" id="imagePreview">
+                    @if ($product->getFirstMedia('product_images'))
+                        <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}" alt="Current Product Image"
+                            class="preview-image">
+                        <div class="image-overlay">
+                            <span class="image-text">{{ __('Current Image') }}</span>
+                        </div>
+                    @endif
+                </div>
+                <div class="form-help">{{ __('Upload a high-quality product image') }}</div>
             </div>
         </div>
 
@@ -797,7 +763,7 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/notifications.js') }}"></script>
-    <script src="{{ asset('modules/product/js/product_create.js') }}"></script>
+    {{-- Do NOT load product_create.js here - it prevents natural form submission --}}
 
     <script>
         // Product edit page specific JavaScript
@@ -808,92 +774,110 @@
             const imageInput = document.getElementById('productImages');
             const imagePreview = document.getElementById('imagePreview');
 
-            // Image upload preview
+            // Image upload preview with drag & drop support
             if (imageInput && imagePreview) {
+                const fileUploadLabel = document.querySelector('.file-upload-label');
+
+                // Handle file input change
                 imageInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
+                    handleFileSelect(e.target.files[0]);
+                });
+
+                // Drag and drop support
+                if (fileUploadLabel) {
+                    // Prevent default drag behaviors
+                    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                        fileUploadLabel.addEventListener(eventName, preventDefaults, false);
+                    });
+
+                    function preventDefaults(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+
+                    // Highlight drop area when item is dragged over it
+                    ['dragenter', 'dragover'].forEach(eventName => {
+                        fileUploadLabel.addEventListener(eventName, () => {
+                            fileUploadLabel.classList.add('dragover');
+                        }, false);
+                    });
+
+                    ['dragleave', 'drop'].forEach(eventName => {
+                        fileUploadLabel.addEventListener(eventName, () => {
+                            fileUploadLabel.classList.remove('dragover');
+                        }, false);
+                    });
+
+                    // Handle dropped files
+                    fileUploadLabel.addEventListener('drop', function(e) {
+                        const dt = e.dataTransfer;
+                        const files = dt.files;
+                        if (files.length > 0) {
+                            imageInput.files = files;
+                            handleFileSelect(files[0]);
+                        }
+                    }, false);
+                }
+
+                function handleFileSelect(file) {
                     if (file && file.type.startsWith('image/')) {
                         const reader = new FileReader();
                         reader.onload = function(e) {
                             imagePreview.innerHTML = `
-                                <img src="${e.target.result}" class="preview-image" alt="Product Preview">
-                                <div class="image-overlay">
-                                    <span class="image-text">معاينة الصورة الجديدة</span>
+                                <div class="preview-item">
+                                    <img src="${e.target.result}" class="preview-image" alt="Product Preview">
                                 </div>
                             `;
+                            imagePreview.style.display = 'grid';
                         };
                         reader.readAsDataURL(file);
                     } else {
-                        imagePreview.innerHTML = ''; // Clear preview if no file or not an image
+                        // If no file selected or invalid, show current image if exists
+                        @if ($product->getFirstMedia('product_images'))
+                            imagePreview.innerHTML = `
+                                <div class="preview-item">
+                                    <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}" class="preview-image" alt="Current Product Image">
+                                </div>
+                            `;
+                            imagePreview.style.display = 'grid';
+                        @else
+                            imagePreview.innerHTML = '';
+                            imagePreview.style.display = 'none';
+                        @endif
                     }
-                });
+                }
+
+                // Initialize preview with current image
+                @if ($product->getFirstMedia('product_images'))
+                    imagePreview.innerHTML = `
+                        <div class="preview-item">
+                            <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}" class="preview-image" alt="Current Product Image">
+                        </div>
+                    `;
+                    imagePreview.style.display = 'grid';
+                @endif
             }
 
-            // Form submission handling
+            // Form submission handling - Add loading state (without preventing default)
             form.addEventListener('submit', function(e) {
-                console.log('Form submit event triggered');
+                console.log('🔄 Form submitting...');
 
-                // Show loading state
                 const submitBtn = form.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ __('Updating...') }}';
-                submitBtn.disabled = true;
+                if (submitBtn) {
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ __('Updating...') }}';
+                    submitBtn.disabled = true;
 
-                // Allow form to submit naturally to Laravel
-                // Don't prevent default - let Laravel handle the form submission
-                console.log('Form submitted, Laravel will handle validation and redirect');
-                console.log('Form action:', form.action);
-                console.log('Form method:', form.method);
+                    // Fallback: re-enable after 30s
+                    setTimeout(() => {
+                        if (submitBtn.disabled) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalText;
+                            console.warn('⚠️ Button re-enabled due to timeout');
+                        }
+                    }, 30000);
+                }
             });
-
-            // Handle update button click
-            const updateBtn = document.getElementById('updateBtn');
-            if (updateBtn) {
-                updateBtn.addEventListener('click', function(e) {
-                    e.preventDefault(); // Prevent default form submission
-
-                    // Show loading state
-                    const originalText = this.innerHTML;
-                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ __('Updating...') }}';
-                    this.disabled = true;
-
-                    // Submit the form via AJAX
-                    const formData = new FormData(form);
-
-                    fetch(form.action, {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                    .getAttribute('content'),
-                                'X-HTTP-Method-Override': 'PUT'
-                            }
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                // Show success notification
-                                showSuccessNotification('{{ __('Product updated successfully') }}',
-                                    'update');
-
-                                // Redirect to products index after a short delay
-                                setTimeout(() => {
-                                    window.location.href =
-                                        '{{ route('dashboard.product.index') }}';
-                                }, 1500);
-                            } else {
-                                throw new Error('Update failed');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            // Restore button state
-                            this.innerHTML = originalText;
-                            this.disabled = false;
-                            showErrorNotification(
-                                '{{ __('An error occurred while updating the product') }}');
-                        });
-                });
-            }
 
             // Real-time validation
             const requiredFields = form.querySelectorAll('input[required], textarea[required], select[required]');
@@ -953,6 +937,9 @@
                     }, 400);
                 }, 6000);
             });
+
+            console.log('✅ Product Edit Page Loaded');
+            console.log('✅ All handlers attached successfully');
         });
 
         // Notification functions
@@ -1227,5 +1214,414 @@
                 padding: 15px;
             }
         }
+
+        /* ============================================
+                                                   Light Mode Styles - Maximum Priority
+                                                   ============================================ */
+
+        /* Container and Main Elements */
+        html[data-theme="light"] body,
+        html[data-theme="light"] .product-edit-container,
+        html[data-theme="light"] body .product-edit-container {
+            background: #ffffff !important;
+            color: #111827 !important;
+        }
+
+        /* Page Header */
+        html[data-theme="light"] .page-header,
+        html[data-theme="light"] body .page-header {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        html[data-theme="light"] .page-title,
+        html[data-theme="light"] body .page-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .back-btn,
+        html[data-theme="light"] body .back-btn {
+            background: #f3f4f6 !important;
+            border: 1px solid #e5e7eb !important;
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .back-btn:hover,
+        html[data-theme="light"] body .back-btn:hover {
+            background: #059669 !important;
+            color: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        /* Product Header */
+        html[data-theme="light"] .product-header,
+        html[data-theme="light"] body .product-header {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .product-title,
+        html[data-theme="light"] body .product-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .product-subtitle,
+        html[data-theme="light"] body .product-subtitle {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .product-image-small,
+        html[data-theme="light"] body .product-image-small {
+            border-color: #e5e7eb !important;
+        }
+
+        /* Form Container and Sections */
+        html[data-theme="light"] .form-container,
+        html[data-theme="light"] .form-section,
+        html[data-theme="light"] body .form-container,
+        html[data-theme="light"] body .form-section {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .section-title,
+        html[data-theme="light"] body .section-title {
+            color: #111827 !important;
+            border-bottom-color: #059669 !important;
+        }
+
+        /* Form Groups */
+        html[data-theme="light"] .form-group,
+        html[data-theme="light"] body .form-group {
+            background: transparent !important;
+        }
+
+        /* Form Labels */
+        html[data-theme="light"] .form-label,
+        html[data-theme="light"] body .form-label {
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .form-label.required::after,
+        html[data-theme="light"] body .form-label.required::after {
+            color: #ef4444 !important;
+        }
+
+        /* Form Inputs */
+        html[data-theme="light"] .form-input,
+        html[data-theme="light"] body .form-input {
+            background: #f9fafb !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-input:focus,
+        html[data-theme="light"] body .form-input:focus {
+            background: #ffffff !important;
+            border-color: #059669 !important;
+            color: #111827 !important;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+        }
+
+        html[data-theme="light"] .form-input::placeholder,
+        html[data-theme="light"] body .form-input::placeholder {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="light"] .form-input[readonly],
+        html[data-theme="light"] body .form-input[readonly] {
+            background: #f3f4f6 !important;
+            border-color: #e5e7eb !important;
+            color: #6b7280 !important;
+            cursor: not-allowed !important;
+        }
+
+        /* Form Textarea */
+        html[data-theme="light"] .form-textarea,
+        html[data-theme="light"] body .form-textarea {
+            background: #f9fafb !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .form-textarea:focus,
+        html[data-theme="light"] body .form-textarea:focus {
+            background: #ffffff !important;
+            border-color: #059669 !important;
+            color: #111827 !important;
+        }
+
+        /* Form Select (Light Mode) - Single Arrow Only */
+        html[data-theme="light"] .form-select,
+        html[data-theme="light"] select.form-input,
+        html[data-theme="light"] body .form-select,
+        html[data-theme="light"] body select.form-input {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23111827' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+            background-position: right 0.5rem center !important;
+            background-repeat: no-repeat !important;
+            background-size: 1.5em 1.5em !important;
+        }
+
+        html[data-theme="light"] .form-select:focus,
+        html[data-theme="light"] select.form-input:focus,
+        html[data-theme="light"] body .form-select:focus,
+        html[data-theme="light"] body select.form-input:focus {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            border-color: #059669 !important;
+            color: #111827 !important;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23059669' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+            background-position: right 0.5rem center !important;
+            background-repeat: no-repeat !important;
+            background-size: 1.5em 1.5em !important;
+        }
+
+        html[data-theme="light"] .form-select option,
+        html[data-theme="light"] select.form-input option,
+        html[data-theme="light"] body .form-select option,
+        html[data-theme="light"] body select.form-input option {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            color: #111827 !important;
+        }
+
+        /* Form Help Text */
+        html[data-theme="light"] .form-help,
+        html[data-theme="light"] body .form-help {
+            color: #6b7280 !important;
+        }
+
+        /* Form Error Messages */
+        html[data-theme="light"] .form-error,
+        html[data-theme="light"] body .form-error {
+            color: #ef4444 !important;
+            background: #fef2f2 !important;
+            border-color: #fecaca !important;
+        }
+
+        /* File Upload Area - Force White */
+        html[data-theme="light"] .file-upload,
+        html[data-theme="light"] .file-upload-area,
+        html[data-theme="light"] .file-upload-label,
+        html[data-theme="light"] body .file-upload,
+        html[data-theme="light"] body .file-upload-area,
+        html[data-theme="light"] body .file-upload-label {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            border: 2px dashed #e5e7eb !important;
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .file-upload:hover,
+        html[data-theme="light"] .file-upload-area:hover,
+        html[data-theme="light"] .file-upload-label:hover,
+        html[data-theme="light"] body .file-upload:hover,
+        html[data-theme="light"] body .file-upload-area:hover,
+        html[data-theme="light"] body .file-upload-label:hover {
+            background: #f9fafb !important;
+            background-color: #f9fafb !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .file-upload-icon,
+        html[data-theme="light"] .file-upload-text,
+        html[data-theme="light"] .file-upload-hint,
+        html[data-theme="light"] body .file-upload-icon,
+        html[data-theme="light"] body .file-upload-text,
+        html[data-theme="light"] body .file-upload-hint {
+            color: #6b7280 !important;
+        }
+
+        /* Buttons */
+        html[data-theme="light"] .btn-primary,
+        html[data-theme="light"] .btn-submit,
+        html[data-theme="light"] body .btn-primary,
+        html[data-theme="light"] body .btn-submit {
+            background: #059669 !important;
+            color: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .btn-primary:hover,
+        html[data-theme="light"] .btn-submit:hover,
+        html[data-theme="light"] body .btn-primary:hover,
+        html[data-theme="light"] body .btn-submit:hover {
+            background: #047857 !important;
+            border-color: #047857 !important;
+        }
+
+        html[data-theme="light"] .btn-secondary,
+        html[data-theme="light"] body .btn-secondary {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+            border-color: #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .btn-secondary:hover,
+        html[data-theme="light"] body .btn-secondary:hover {
+            background: #e5e7eb !important;
+            border-color: #d1d5db !important;
+        }
+
+        /* Product Warning */
+        html[data-theme="light"] .product-warning,
+        html[data-theme="light"] body .product-warning {
+            background: #fef3c7 !important;
+            border-color: #fbbf24 !important;
+            color: #92400e !important;
+        }
+
+        /* Form Actions Container - Force White */
+        html[data-theme="light"] .form-actions,
+        html[data-theme="light"] body .form-actions,
+        html[data-theme="light"] .product-edit-container .form-actions {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            border-top: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        /* Ensure buttons inside form-actions keep their colors */
+        html[data-theme="light"] .form-actions .btn-primary,
+        html[data-theme="light"] .form-actions .btn.btn-primary,
+        html[data-theme="light"] .form-actions button.btn-primary,
+        html[data-theme="light"] body .form-actions .btn-primary,
+        html[data-theme="light"] body .form-actions .btn.btn-primary,
+        html[data-theme="light"] body .form-actions button.btn-primary {
+            background: #059669 !important;
+            background-color: #059669 !important;
+            color: #ffffff !important;
+            border-color: #059669 !important;
+        }
+
+        html[data-theme="light"] .form-actions .btn-secondary,
+        html[data-theme="light"] .form-actions .btn.btn-secondary,
+        html[data-theme="light"] .form-actions button.btn-secondary,
+        html[data-theme="light"] body .form-actions .btn-secondary,
+        html[data-theme="light"] body .form-actions .btn.btn-secondary,
+        html[data-theme="light"] body .form-actions button.btn-secondary {
+            background: #f3f4f6 !important;
+            background-color: #f3f4f6 !important;
+            color: #374151 !important;
+            border-color: #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .form-actions .btn-primary:hover,
+        html[data-theme="light"] .form-actions .btn.btn-primary:hover,
+        html[data-theme="light"] .form-actions button.btn-primary:hover,
+        html[data-theme="light"] body .form-actions .btn-primary:hover,
+        html[data-theme="light"] body .form-actions .btn.btn-primary:hover,
+        html[data-theme="light"] body .form-actions button.btn-primary:hover {
+            background: #047857 !important;
+            background-color: #047857 !important;
+            border-color: #047857 !important;
+            color: #ffffff !important;
+        }
+
+        html[data-theme="light"] .form-actions .btn-secondary:hover,
+        html[data-theme="light"] .form-actions .btn.btn-secondary:hover,
+        html[data-theme="light"] .form-actions button.btn-secondary:hover,
+        html[data-theme="light"] body .form-actions .btn-secondary:hover,
+        html[data-theme="light"] body .form-actions .btn.btn-secondary:hover,
+        html[data-theme="light"] body .form-actions button.btn-secondary:hover {
+            background: #e5e7eb !important;
+            background-color: #e5e7eb !important;
+            border-color: #d1d5db !important;
+            color: #374151 !important;
+        }
+
+        /* RTL Support for Light Mode */
+        [dir="rtl"] html[data-theme="light"] .form-select,
+        [dir="rtl"] html[data-theme="light"] select.form-input,
+        [dir="rtl"] html[data-theme="light"] body .form-select,
+        [dir="rtl"] html[data-theme="light"] body select.form-input {
+            background-position: left 0.5rem center !important;
+            padding-right: 1rem !important;
+            padding-left: 2.5rem !important;
+        }
     </style>
+@endpush
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                document.body.offsetHeight;
+                document.documentElement.setAttribute('data-theme', 'light');
+
+                // Force apply light theme to all inputs and containers
+                const inputs = document.querySelectorAll(
+                    '.form-input, .form-select, select.form-input, .form-textarea');
+                inputs.forEach(input => {
+                    if (input.classList.contains('form-select') || input.tagName === 'SELECT') {
+                        // For selects, ensure single arrow and white background
+                        input.style.cssText +=
+                            'background: #ffffff !important; background-color: #ffffff !important; border-color: #e5e7eb !important; color: #111827 !important; background-image: url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%23111827\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'m6 8 4 4 4-4\'/%3e%3c/svg%3e") !important; background-position: right 0.5rem center !important; background-repeat: no-repeat !important; background-size: 1.5em 1.5em !important; -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;';
+                    } else if (input.readOnly) {
+                        input.style.cssText +=
+                            'background: #f3f4f6 !important; background-color: #f3f4f6 !important; border-color: #e5e7eb !important; color: #6b7280 !important;';
+                    } else {
+                        input.style.cssText +=
+                            'background: #ffffff !important; background-color: #ffffff !important; border-color: #e5e7eb !important; color: #111827 !important;';
+                    }
+                });
+
+                // Force white background for form containers
+                const containers = document.querySelectorAll('.form-container, .form-section');
+                containers.forEach(container => {
+                    container.style.cssText +=
+                        'background: #ffffff !important; background-color: #ffffff !important;';
+                });
+
+                // Force white for section titles
+                const titles = document.querySelectorAll('.section-title');
+                titles.forEach(title => {
+                    title.style.cssText +=
+                        'background: #ffffff !important; background-color: #ffffff !important; color: #111827 !important;';
+                });
+
+                // Force white for file upload area
+                const fileUploads = document.querySelectorAll(
+                    '.file-upload, .file-upload-area, .file-upload-label');
+                fileUploads.forEach(upload => {
+                    upload.style.cssText +=
+                        'background: #ffffff !important; background-color: #ffffff !important; border-color: #e5e7eb !important;';
+                });
+
+                // Force white for form actions container
+                const formActions = document.querySelectorAll('.form-actions');
+                formActions.forEach(action => {
+                    action.style.cssText +=
+                        'background: #ffffff !important; background-color: #ffffff !important; border-top-color: #e5e7eb !important;';
+                });
+
+                // Ensure buttons keep their colors and text is visible
+                const primaryButtons = document.querySelectorAll(
+                    '.form-actions .btn-primary, .form-actions .btn.btn-primary, .form-actions button.btn-primary'
+                );
+                primaryButtons.forEach(btn => {
+                    btn.style.cssText +=
+                        'background: #059669 !important; background-color: #059669 !important; color: #ffffff !important; border-color: #059669 !important;';
+                });
+
+                const secondaryButtons = document.querySelectorAll(
+                    '.form-actions .btn-secondary, .form-actions .btn.btn-secondary, .form-actions button.btn-secondary'
+                );
+                secondaryButtons.forEach(btn => {
+                    btn.style.cssText +=
+                        'background: #f3f4f6 !important; background-color: #f3f4f6 !important; color: #374151 !important; border-color: #e5e7eb !important;';
+                });
+
+            }
+        });
+    </script>
 @endpush

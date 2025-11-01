@@ -947,10 +947,7 @@
         });
 
         function cancelForm() {
-            if (confirm(
-                    '{{ __('Are you sure you want to cancel adding the customer? All entered data will be lost.') }}')) {
-                window.location.href = '{{ route('dashboard.customer.index') }}';
-            }
+            window.location.href = '{{ route('dashboard.customer.index') }}';
         }
 
 

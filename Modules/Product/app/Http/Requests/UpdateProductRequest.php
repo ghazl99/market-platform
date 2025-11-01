@@ -24,8 +24,8 @@ class UpdateProductRequest extends FormRequest
             'max_quantity' => 'nullable|integer|min:1|gte:min_quantity',
             'seo_title' => 'nullable|string|max:255',
             'seo_description' => 'nullable|string|max:500',
-            'product_type' => 'required|string|in:transfer,code',
-            'linking_type' => 'required|string|in:automatic,manual',
+            'product_type' => 'nullable|string|in:transfer,code',
+            'linking_type' => 'nullable|string|in:automatic,manual',
             'notes' => 'nullable|string|max:1000',
             'is_active' => 'nullable|boolean',
         ];

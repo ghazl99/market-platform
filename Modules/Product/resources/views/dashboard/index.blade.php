@@ -749,6 +749,357 @@
                 font-size: 0.7rem;
             }
         }
+
+        /* Dark Mode Styles - Ensure product cards are dark */
+        html[data-theme="dark"] .product-card,
+        html[data-theme="dark"] body .product-card,
+        [data-theme="dark"] .product-card,
+        [data-theme="dark"] body .product-card {
+            background: #1f2937 !important;
+            background-color: #1f2937 !important;
+            border-color: #374151 !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        html[data-theme="dark"] .product-card:hover,
+        html[data-theme="dark"] body .product-card:hover,
+        [data-theme="dark"] .product-card:hover,
+        [data-theme="dark"] body .product-card:hover {
+            background: #1f2937 !important;
+            background-color: #1f2937 !important;
+            border-color: #4b5563 !important;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        /* Light Mode Styles - Maximum Priority */
+        html[data-theme="light"] .products-container,
+        html[data-theme="light"] body .products-container {
+            background: #ffffff !important;
+        }
+
+        html[data-theme="light"] .product-card,
+        html[data-theme="light"] body .product-card {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            border-color: #e5e7eb !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .product-card:hover,
+        html[data-theme="light"] body .product-card:hover {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+            border-color: #d1d5db !important;
+        }
+
+        /* Light Mode - Product Name */
+        html[data-theme="light"] .product-name,
+        html[data-theme="light"] body .product-name {
+            color: #111827 !important;
+        }
+
+        /* Light Mode - Product Name English */
+        html[data-theme="light"] .product-name-english,
+        html[data-theme="light"] body .product-name-english {
+            color: #6b7280 !important;
+        }
+
+        /* Light Mode - Product Image Placeholder */
+        html[data-theme="light"] .product-image-placeholder,
+        html[data-theme="light"] body .product-image-placeholder {
+            background: #f9fafb !important;
+            border: 1px solid #e5e7eb !important;
+            border-radius: 8px !important;
+        }
+
+        html[data-theme="light"] .product-image-placeholder i,
+        html[data-theme="light"] body .product-image-placeholder i {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .product-card:hover .product-image-placeholder i,
+        html[data-theme="light"] body .product-card:hover .product-image-placeholder i {
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .product-card:hover .product-image-placeholder,
+        html[data-theme="light"] body .product-card:hover .product-image-placeholder {
+            background: #f3f4f6 !important;
+            border-color: #d1d5db !important;
+        }
+
+        /* Light Mode - Product Logo Icon */
+        html[data-theme="light"] .product-logo,
+        html[data-theme="light"] body .product-logo,
+        html[data-theme="light"] .product-logo i,
+        html[data-theme="light"] body .product-logo i {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .product-card:hover .product-logo,
+        html[data-theme="light"] body .product-card:hover .product-logo,
+        html[data-theme="light"] .product-card:hover .product-logo i,
+        html[data-theme="light"] body .product-card:hover .product-logo i {
+            color: #374151 !important;
+        }
+
+        /* Light Mode - Menu Toggle Icon */
+        html[data-theme="light"] .menu-toggle,
+        html[data-theme="light"] body .menu-toggle {
+            background: rgba(243, 244, 246, 0.8) !important;
+            border-color: #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .menu-toggle i,
+        html[data-theme="light"] body .menu-toggle i {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .menu-toggle:hover,
+        html[data-theme="light"] body .menu-toggle:hover {
+            background: rgba(229, 231, 235, 0.9) !important;
+            border-color: #d1d5db !important;
+        }
+
+        html[data-theme="light"] .menu-toggle:hover i,
+        html[data-theme="light"] body .menu-toggle:hover i {
+            color: #374151 !important;
+        }
+
+        /* Light Mode - Menu Dropdown */
+        html[data-theme="light"] .menu-dropdown,
+        html[data-theme="light"] body .menu-dropdown {
+            background: #ffffff !important;
+            border-color: #e5e7eb !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        html[data-theme="light"] .menu-item,
+        html[data-theme="light"] body .menu-item {
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .menu-item:hover,
+        html[data-theme="light"] body .menu-item:hover {
+            background: #f3f4f6 !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .menu-item.delete-item,
+        html[data-theme="light"] body .menu-item.delete-item {
+            color: #dc2626 !important;
+        }
+
+        html[data-theme="light"] .menu-item.delete-item:hover,
+        html[data-theme="light"] body .menu-item.delete-item:hover {
+            background: #ef4444 !important;
+            color: #ffffff !important;
+        }
+
+        /* Light Mode - Product Icon Container */
+        html[data-theme="light"] .product-icon,
+        html[data-theme="light"] body .product-icon {
+            background: transparent !important;
+        }
+
+        /* Light Mode - Breadcrumb */
+        html[data-theme="light"] .breadcrumb-nav,
+        html[data-theme="light"] body .breadcrumb-nav {
+            background: #f9fafb !important;
+            border-color: #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .breadcrumb-link,
+        html[data-theme="light"] body .breadcrumb-link {
+            color: #059669 !important;
+        }
+
+        html[data-theme="light"] .breadcrumb-link:hover,
+        html[data-theme="light"] body .breadcrumb-link:hover {
+            background: rgba(5, 150, 105, 0.1) !important;
+            color: #047857 !important;
+        }
+
+        html[data-theme="light"] .breadcrumb-current,
+        html[data-theme="light"] body .breadcrumb-current {
+            background: rgba(5, 150, 105, 0.1) !important;
+            border-color: rgba(5, 150, 105, 0.2) !important;
+            color: #047857 !important;
+        }
+
+        html[data-theme="light"] .breadcrumb-separator,
+        html[data-theme="light"] body .breadcrumb-separator {
+            color: #9ca3af !important;
+        }
+
+        /* Light Mode - Page Title */
+        html[data-theme="light"] .page-title,
+        html[data-theme="light"] body .page-title {
+            color: #111827 !important;
+        }
+
+        /* Light Mode - Search Filter Bar */
+        html[data-theme="light"] .search-filter-bar,
+        html[data-theme="light"] body .search-filter-bar {
+            background: #ffffff !important;
+            border-color: #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .search-box input,
+        html[data-theme="light"] body .search-box input {
+            background: #ffffff !important;
+            border-color: #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .search-box i,
+        html[data-theme="light"] body .search-box i {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .filter-select,
+        html[data-theme="light"] body .filter-select {
+            background: #ffffff !important;
+            border-color: #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .filter-btn,
+        html[data-theme="light"] body .filter-btn {
+            background: linear-gradient(135deg, #059669, #047857) !important;
+            color: #ffffff !important;
+        }
+
+        html[data-theme="light"] .filter-btn:hover,
+        html[data-theme="light"] body .filter-btn:hover {
+            background: linear-gradient(135deg, #047857, #065f46) !important;
+        }
+
+        /* Light Mode - Add Product Button */
+        html[data-theme="light"] .add-product-btn,
+        html[data-theme="light"] body .add-product-btn {
+            background: linear-gradient(135deg, #059669, #047857) !important;
+            color: #ffffff !important;
+        }
+
+        html[data-theme="light"] .add-product-btn:hover,
+        html[data-theme="light"] body .add-product-btn:hover {
+            background: linear-gradient(135deg, #047857, #065f46) !important;
+        }
+
+        /* Light Mode - Back Button */
+        html[data-theme="light"] .back-btn,
+        html[data-theme="light"] body .back-btn {
+            background: #6b7280 !important;
+            color: #ffffff !important;
+        }
+
+        html[data-theme="light"] .back-btn:hover,
+        html[data-theme="light"] body .back-btn:hover {
+            background: #4b5563 !important;
+        }
+
+        /* Dark Mode - Additional styles to ensure cards stay dark */
+        html[data-theme="dark"] .product-card *,
+        html[data-theme="dark"] body .product-card *,
+        [data-theme="dark"] .product-card *,
+        [data-theme="dark"] body .product-card * {
+            color: inherit !important;
+        }
+
+        html[data-theme="dark"] .product-name,
+        html[data-theme="dark"] body .product-name,
+        [data-theme="dark"] .product-name,
+        [data-theme="dark"] body .product-name {
+            color: #ffffff !important;
+        }
+
+        html[data-theme="dark"] .product-name-english,
+        html[data-theme="dark"] body .product-name-english,
+        [data-theme="dark"] .product-name-english,
+        [data-theme="dark"] body .product-name-english {
+            color: #d1d5db !important;
+        }
+
+        html[data-theme="dark"] .product-image-placeholder,
+        html[data-theme="dark"] body .product-image-placeholder,
+        [data-theme="dark"] .product-image-placeholder,
+        [data-theme="dark"] body .product-image-placeholder {
+            background: transparent !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        html[data-theme="dark"] .product-image-placeholder i,
+        html[data-theme="dark"] body .product-image-placeholder i,
+        [data-theme="dark"] .product-image-placeholder i,
+        [data-theme="dark"] body .product-image-placeholder i {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="dark"] .product-logo,
+        html[data-theme="dark"] body .product-logo,
+        html[data-theme="dark"] .product-logo i,
+        html[data-theme="dark"] body .product-logo i,
+        [data-theme="dark"] .product-logo,
+        [data-theme="dark"] body .product-logo,
+        [data-theme="dark"] .product-logo i,
+        [data-theme="dark"] body .product-logo i {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="dark"] .menu-toggle,
+        html[data-theme="dark"] body .menu-toggle,
+        [data-theme="dark"] .menu-toggle,
+        [data-theme="dark"] body .menu-toggle {
+            background: rgba(55, 65, 81, 0.5) !important;
+            border-color: rgba(156, 163, 175, 0.3) !important;
+        }
+
+        html[data-theme="dark"] .menu-toggle i,
+        html[data-theme="dark"] body .menu-toggle i,
+        [data-theme="dark"] .menu-toggle i,
+        [data-theme="dark"] body .menu-toggle i {
+            color: #9ca3af !important;
+        }
+
+        html[data-theme="dark"] .menu-dropdown,
+        html[data-theme="dark"] body .menu-dropdown,
+        [data-theme="dark"] .menu-dropdown,
+        [data-theme="dark"] body .menu-dropdown {
+            background: #1f2937 !important;
+            border-color: #374151 !important;
+        }
+
+        html[data-theme="dark"] .menu-item,
+        html[data-theme="dark"] body .menu-item,
+        [data-theme="dark"] .menu-item,
+        [data-theme="dark"] body .menu-item {
+            color: #e5e7eb !important;
+        }
+
+        html[data-theme="dark"] .menu-item:hover,
+        html[data-theme="dark"] body .menu-item:hover,
+        [data-theme="dark"] .menu-item:hover,
+        [data-theme="dark"] body .menu-item:hover {
+            background: #374151 !important;
+            color: #ffffff !important;
+        }
+
+        html[data-theme="dark"] .menu-item.delete-item,
+        html[data-theme="dark"] body .menu-item.delete-item,
+        [data-theme="dark"] .menu-item.delete-item,
+        [data-theme="dark"] body .menu-item.delete-item {
+            color: #ef4444 !important;
+        }
+
+        html[data-theme="dark"] .menu-item.delete-item:hover,
+        html[data-theme="dark"] body .menu-item.delete-item:hover,
+        [data-theme="dark"] .menu-item.delete-item:hover,
+        [data-theme="dark"] body .menu-item.delete-item:hover {
+            background: #ef4444 !important;
+            color: #ffffff !important;
+        }
     </style>
 @endpush
 
@@ -1187,8 +1538,148 @@
     <script src="{{ asset('modules/product/js/products.js') }}"></script>
 
     <script>
+        // Force apply theme styles for products (both light and dark)
+        function applyThemeForProducts() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            
+            // Force reflow
+            document.body.offsetHeight;
+
+            // Apply to all product cards
+            const productCards = document.querySelectorAll('.product-card');
+            
+            if (theme === 'light') {
+                // Light Mode
+                productCards.forEach(card => {
+                    card.style.cssText +=
+                        'background: #ffffff !important; background-color: #ffffff !important; border-color: #e5e7eb !important; color: #111827 !important;';
+                });
+
+                // Apply to product names
+                const productNames = document.querySelectorAll('.product-name');
+                productNames.forEach(name => {
+                    name.style.cssText += 'color: #111827 !important;';
+                });
+
+                // Apply to product name english
+                const productNamesEnglish = document.querySelectorAll('.product-name-english');
+                productNamesEnglish.forEach(name => {
+                    name.style.cssText += 'color: #6b7280 !important;';
+                });
+
+                // Apply to placeholder icons and containers
+                const placeholders = document.querySelectorAll('.product-image-placeholder');
+                placeholders.forEach(placeholder => {
+                    placeholder.style.cssText += 'background: #f9fafb !important; border: 1px solid #e5e7eb !important; border-radius: 8px !important;';
+                    const icon = placeholder.querySelector('i');
+                    if (icon) {
+                        icon.style.cssText += 'color: #6b7280 !important;';
+                    }
+                });
+
+                // Apply to product logo icons
+                const productLogos = document.querySelectorAll('.product-logo i');
+                productLogos.forEach(icon => {
+                    icon.style.cssText += 'color: #6b7280 !important;';
+                });
+
+                // Apply to menu toggle icons
+                const menuToggles = document.querySelectorAll('.menu-toggle i');
+                menuToggles.forEach(icon => {
+                    icon.style.cssText += 'color: #6b7280 !important;';
+                });
+            } else {
+                // Dark Mode
+                productCards.forEach(card => {
+                    card.style.cssText +=
+                        'background: #1f2937 !important; background-color: #1f2937 !important; border-color: #374151 !important; color: #ffffff !important;';
+                });
+
+                // Apply to product names
+                const productNames = document.querySelectorAll('.product-name');
+                productNames.forEach(name => {
+                    name.style.cssText += 'color: #ffffff !important;';
+                });
+
+                // Apply to product name english
+                const productNamesEnglish = document.querySelectorAll('.product-name-english');
+                productNamesEnglish.forEach(name => {
+                    name.style.cssText += 'color: #d1d5db !important;';
+                });
+
+                // Apply to placeholder icons and containers
+                const placeholders = document.querySelectorAll('.product-image-placeholder');
+                placeholders.forEach(placeholder => {
+                    placeholder.style.cssText += 'background: transparent !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 8px !important;';
+                    const icon = placeholder.querySelector('i');
+                    if (icon) {
+                        icon.style.cssText += 'color: #9ca3af !important;';
+                    }
+                });
+
+                // Apply to product logo icons
+                const productLogos = document.querySelectorAll('.product-logo i');
+                productLogos.forEach(icon => {
+                    icon.style.cssText += 'color: #9ca3af !important;';
+                });
+
+                // Apply to menu toggle icons
+                const menuToggles = document.querySelectorAll('.menu-toggle i');
+                menuToggles.forEach(icon => {
+                    icon.style.cssText += 'color: #9ca3af !important;';
+                });
+            }
+        }
+
+        // Apply theme immediately on script load (before DOM is ready)
+        // This prevents flash of wrong theme
+        (function() {
+            const theme = document.documentElement.getAttribute('data-theme') || 
+                         localStorage.getItem('dashboard-theme') || 
+                         localStorage.getItem('theme') || 
+                         'light';
+            
+            // Apply theme to HTML if not already set
+            if (!document.documentElement.getAttribute('data-theme')) {
+                document.documentElement.setAttribute('data-theme', theme);
+            }
+            
+            // Try to apply styles immediately if DOM is ready
+            if (document.readyState === 'loading') {
+                // DOM is still loading, wait for it
+                document.addEventListener('DOMContentLoaded', function() {
+                    applyThemeForProducts();
+                });
+            } else {
+                // DOM is already ready, apply immediately
+                applyThemeForProducts();
+            }
+        })();
+
         // Handle success message from URL parameter
         document.addEventListener('DOMContentLoaded', function() {
+            // Apply theme styles on load (both light and dark) - redundant but ensures sync
+            applyThemeForProducts();
+
+            // Watch for theme changes
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                        setTimeout(applyThemeForProducts, 10);
+                    }
+                });
+            });
+
+            observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-theme']
+            });
+
+            // Also listen for custom themechange event (faster than MutationObserver)
+            window.addEventListener('themechange', function(e) {
+                setTimeout(applyThemeForProducts, 10);
+            });
+
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('success') === '1') {
                 if (typeof showSuccess === 'function') {

@@ -216,27 +216,34 @@ function updateActivityFeed() {
 
 // Theme management
 function initializeTheme() {
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('dashboard-theme');
-    if (savedTheme) {
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        updateThemeIcon(savedTheme);
-    } else {
-        // Check system preference
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const defaultTheme = prefersDark ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', defaultTheme);
-        updateThemeIcon(defaultTheme);
-    }
+    // Check for saved theme preference (already applied in head script, but sync here)
+    const savedTheme = localStorage.getItem('dashboard-theme') || 
+                      localStorage.getItem('theme') || 
+                      'light';
+    
+    // Ensure theme is applied (redundant but ensures sync)
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
 }
 
 // Toggle theme
 function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
     document.documentElement.setAttribute('data-theme', newTheme);
+    
+    // Save to both keys for compatibility
     localStorage.setItem('dashboard-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Update body class for backward compatibility
+    if (newTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+    
     updateThemeIcon(newTheme);
 
     // Add transition effect
@@ -244,6 +251,9 @@ function toggleTheme() {
     setTimeout(() => {
         document.body.style.transition = '';
     }, 300);
+    
+    // Trigger custom event for other scripts
+    window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: newTheme } }));
 }
 
 // Update theme icon
