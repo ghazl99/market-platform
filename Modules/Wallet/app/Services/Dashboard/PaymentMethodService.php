@@ -211,7 +211,6 @@ class PaymentMethodService
                 'ar' => $this->getArabicCurrencies($currencies),
                 'en' => $currencies
             ];
-            $createData['currency'] = $currencies[0];
 
             // إنشاء طريقة الدفع
             $paymentMethod = PaymentMethod::create($createData);
@@ -382,7 +381,6 @@ class PaymentMethodService
                         'ar' => $this->getArabicCurrencies($currencies),
                         'en' => $currencies
                     ];
-                    $updateData['currency'] = $currencies[0];
                 }
             }
 

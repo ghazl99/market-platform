@@ -25,7 +25,6 @@ class PaymentMethod extends Model implements HasMedia
         'gateway',
         'image',
         'currencies',
-        'currency',
         'recipient_name',
         'account_number',
         'bank_name',
