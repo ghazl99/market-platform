@@ -380,7 +380,7 @@
                     </tr>
                 </thead>
                 <tbody id="users-table-wrapper">
-                    @include('user::dashboard.customer.dataTables', [
+                    @include('user::Dashboard.customer.dataTables', [
                         'users' => $users,
                         'store' => $store,
                     ])

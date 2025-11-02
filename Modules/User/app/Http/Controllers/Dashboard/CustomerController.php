@@ -42,7 +42,7 @@ class CustomerController extends Controller implements HasMiddleware
             abort(404, 'Store not found');
         }
         if ($request->ajax()) {
-            $html = view('user::dashboard.customer.dataTables', compact('users', 'store'))->render();
+            $html = view('user::Dashboard.customer.dataTables', compact('users', 'store'))->render();
             $pagination = $users->hasPages() ? $users->links()->toHtml() : '';
 
             return response()->json([
@@ -52,7 +52,7 @@ class CustomerController extends Controller implements HasMiddleware
             ]);
         }
 
-        return view('user::dashboard.customer.index', compact('users', 'store'));
+        return view('user::Dashboard.customer.index', compact('users', 'store'));
     }
 
     /**
@@ -60,7 +60,7 @@ class CustomerController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        return view('user::dashboard.customer.create');
+        return view('user::Dashboard.customer.create');
     }
 
     /**
@@ -405,7 +405,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'notifications_count' => $notifications->count()
             ]);
 
-            return view('user::dashboard.customer.show', compact('customer', 'orders', 'payments', 'notifications'));
+            return view('user::Dashboard.customer.show', compact('customer', 'orders', 'payments', 'notifications'));
 
         } catch (\Exception $e) {
             Log::error('Error loading customer show page', [
@@ -450,7 +450,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'customer_data' => $customer->toArray()
             ]);
 
-            return view('user::dashboard.customer.edit', compact('customer'));
+            return view('user::Dashboard.customer.edit', compact('customer'));
 
         } catch (\Exception $e) {
             Log::error('Error loading customer edit form', [
