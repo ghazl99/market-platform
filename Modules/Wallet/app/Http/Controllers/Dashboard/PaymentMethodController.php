@@ -94,7 +94,7 @@ class PaymentMethodController extends Controller
 
             $paymentMethod = $this->paymentMethodService->create($data, $store);
 
-            return redirect()->route('dashboard.dashboard.payment-methods.index')
+            return redirect()->route('dashboard.payment-methods.index')
                 ->with('success', __('Payment method created successfully'));
         } catch (\Exception $e) {
             Log::error('Payment Method Creation Error: ' . $e->getMessage(), [
@@ -214,7 +214,7 @@ class PaymentMethodController extends Controller
 
             $this->paymentMethodService->update($paymentMethod, $data);
 
-            return redirect()->route('dashboard.dashboard.payment-methods.index')
+            return redirect()->route('dashboard.payment-methods.index')
                 ->with('success', __('Payment method updated successfully'));
         } catch (\Exception $e) {
             return redirect()->back()
@@ -231,7 +231,7 @@ class PaymentMethodController extends Controller
         try {
             $this->paymentMethodService->delete($paymentMethod);
 
-            return redirect()->route('dashboard.dashboard.payment-methods.index')
+            return redirect()->route('dashboard.payment-methods.index')
                 ->with('success', __('Payment method deleted successfully'));
         } catch (\Exception $e) {
             return redirect()->back()

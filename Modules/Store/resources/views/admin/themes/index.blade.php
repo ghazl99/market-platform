@@ -1,4 +1,4 @@
-@extends('core::dashboard.layouts.app')
+@extends('core::layouts.app')
 
 @section('title', 'الثيمات - لوحة التحكم')
 
@@ -68,7 +68,7 @@
             <tr>
                 <th>#</th>
                 <th>الاسم </th>
-          
+
                 {{-- <th>الإجراءات</th> --}}
             </tr>
         </thead>
