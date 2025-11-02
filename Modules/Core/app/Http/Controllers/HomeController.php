@@ -28,6 +28,11 @@ class HomeController extends Controller
             ? config('app.main_domain', 'soqsyria.com')
             : 'market-platform.localhost';
 
+        if (auth()->check() && auth()->user()->hasAnyRole(['owner', 'admin'])) {
+            auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
         // ✅ التحقق الصحيح
         if ($host === $mainDomain) {
             return view('core::app.home');

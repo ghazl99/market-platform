@@ -2,23 +2,33 @@
 
 namespace Modules\Core\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Modules\Core\Services\Admin\HomeService;
-use Modules\Store\Models\Store;
 use Modules\User\Models\User;
 use Modules\Order\Models\Order;
-use Modules\Product\Models\Product;
-use Modules\Category\Models\Category;
-use Modules\Wallet\Models\WalletTransaction;
-use Modules\Wallet\Models\PaymentRequest;
+use Modules\Store\Models\Store;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Modules\Order\Models\OrderItem;
-use Carbon\Carbon;
+use Modules\Product\Models\Product;
+use App\Http\Controllers\Controller;
+use Modules\Category\Models\Category;
+use Modules\Wallet\Models\PaymentRequest;
+use Modules\Core\Services\Admin\HomeService;
+use Modules\Wallet\Models\WalletTransaction;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class DashboardController extends Controller
+class DashboardController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('role:admin', only: ['dashboadAdmin']),
+            new Middleware('role:owner', only: ['index']),
+
+        ];
+    }
     public function __construct(
         protected HomeService $homeService
     ) {}
