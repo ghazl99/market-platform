@@ -1449,7 +1449,7 @@
                                         <div class="transaction-name">{{ $payment->note ?? 'معاملة' }}</div>
                                         <div class="transaction-description">
                                             {{ isset($payment->type) && $payment->type === 'deposit' ? 'إيداع' : 'سحب' }}
-                                            @if ($payment->note)
+                                            @if (isset($payment->note) && !empty($payment->note))
                                                 - {{ $payment->note }}
                                             @endif
                                         </div>
@@ -2106,4 +2106,4 @@
     `;
                 document.head.appendChild(style);
             </script>
-        @endpush
+@endpush

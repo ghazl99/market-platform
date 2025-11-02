@@ -1,4 +1,4 @@
-@extends('core::dashboard.layouts.app')
+@extends('core::layouts.app')
 
 @section('title', 'إنشاء متجر جديد - لوحة التحكم')
 @push('styles')
