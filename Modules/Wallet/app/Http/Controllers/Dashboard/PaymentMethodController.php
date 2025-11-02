@@ -32,6 +32,14 @@ class PaymentMethodController extends Controller
      */
     public function create()
     {
+        // التحقق من وجود المتجر (للتأكد من أن middleware يعمل)
+        try {
+            $store = request()->attributes->get('store') ?? Store::currentFromUrl()->firstOrFail();
+        } catch (\Exception $e) {
+            Log::error('Payment Method Create - Store not found: ' . $e->getMessage());
+            abort(404, __('Store not found. Please make sure you are accessing from the correct URL.'));
+        }
+
         return view('wallet::dashboard.payment-methods.create');
     }
 

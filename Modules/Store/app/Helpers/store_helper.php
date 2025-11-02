@@ -7,10 +7,28 @@ use Modules\Store\Models\StoreSetting;
 if (! function_exists('current_store')) {
     function current_store()
     {
+        // محاولة الحصول على المتجر من request attributes أولاً (من middleware)
+        $request = request();
+        if ($request && $request->attributes->has('store')) {
+            $store = $request->attributes->get('store');
+            if ($store instanceof Store) {
+                return $store;
+            }
+        }
+
+        // محاولة الحصول من URL
         $store = Store::currentFromUrl()->first();
 
         if (! $store) {
-            abort(404, 'Store not found'); // تجنب Server Error واظهار خطأ واضح
+            $host = request()->getHost();
+            $env = app()->environment();
+
+            // رسالة خطأ واضحة حسب البيئة
+            if ($env === 'local') {
+                abort(404, "Store not found. Host: {$host}. Please make sure:\n1. You are accessing from the correct subdomain (e.g., yourstore.market-platform.localhost)\n2. The store domain is correctly set in the database\n3. You are logged in with a user that has access to a store.");
+            } else {
+                abort(404, 'Store not found'); // تجنب Server Error واظهار خطأ واضح
+            }
         }
 
         return $store;

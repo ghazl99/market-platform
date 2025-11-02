@@ -210,14 +210,47 @@ class Store extends Model implements HasMedia
     public static function currentFromUrl()
     {
         $host = request()->getHost();
+        $request = request();
 
         // إزالة www إذا موجود
         $host = preg_replace('/^www\./', '', $host);
 
-        // Localhost subdomain support
+        // Localhost subdomain support (market-platform.localhost)
         if (str_contains($host, 'market-platform.localhost')) {
             $subdomain = str_replace('.market-platform.localhost', '', $host);
-            return static::where('domain', $subdomain);
+            if (!empty($subdomain)) {
+                return static::where('domain', $subdomain);
+            }
+        }
+
+        // Support for 127.0.0.1 and localhost with subdomain in path or query
+        if (in_array($host, ['127.0.0.1', 'localhost', '::1']) || str_starts_with($host, '127.0.0.1:') || str_starts_with($host, 'localhost:')) {
+            // Try to get store from query parameter
+            $storeId = $request->query('store_id');
+            if ($storeId) {
+                return static::where('id', $storeId);
+            }
+
+            // Try to get store from session
+            $storeId = session('current_store_id');
+            if ($storeId) {
+                return static::where('id', $storeId);
+            }
+
+            // Try to get from URL path (e.g., /ar/dashboard -> get from auth user's store)
+            $user = auth()->user();
+            if ($user) {
+                // Try to get store from user's stores relationship
+                $userStore = $user->stores()->where('is_active', true)->first();
+                if ($userStore) {
+                    return static::where('id', $userStore->id);
+                }
+            }
+
+            // Try to get first active store as fallback (for development)
+            if (app()->environment('local')) {
+                return static::where('is_active', true);
+            }
         }
 
         // Production main domain or subdomain

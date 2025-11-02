@@ -28,7 +28,8 @@ class PaymentRequestController extends Controller implements HasMiddleware
      */
     public function index(Request $request)
     {
-        $store = Store::currentFromUrl()->firstOrFail();
+        // الحصول على المتجر من middleware أو من URL
+        $store = $request->attributes->get('store') ?? Store::currentFromUrl()->firstOrFail();
         $search = $request->get('search');
 
         $query = PaymentRequest::with(['wallet.user', 'wallet.store', 'approvedBy'])
