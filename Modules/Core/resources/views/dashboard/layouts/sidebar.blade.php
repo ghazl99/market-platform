@@ -109,12 +109,12 @@
                 <i class="fas fa-credit-card"></i>
                 <span class="nav-item-text">المدفوعات</span>
             </a>
-            <a href="{{ route('dashboard.dashboard.payment-methods.index') }}"
+            <a href="{{ route('dashboard.payment-methods.index') }}"
                 class="nav-item {{ isActive(['dashboard/dashboard/payment-methods']) ? 'active' : '' }}">
                 <i class="fas fa-credit-card"></i>
                 <span class="nav-item-text">طرق الدفع</span>
             </a>
-            <a href="{{ route('dashboard.dashboard.payment-requests.index') }}"
+            <a href="{{ route('dashboard.payment-requests.index') }}"
                 class="nav-item {{ isActive(['dashboard/dashboard/payment-requests']) ? 'active' : '' }}">
                 <i class="fas fa-money-bill-wave"></i>
                 <span class="nav-item-text">طلبات الدفع</span>

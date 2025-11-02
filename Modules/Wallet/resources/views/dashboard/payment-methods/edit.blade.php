@@ -391,14 +391,14 @@
         <!-- Form Header -->
         <div class="form-header">
             <h1 class="form-title">{{ __('Edit Payment Method') }}</h1>
-            <a href="{{ route('dashboard.dashboard.payment-methods.index') }}" class="close-button">
+            <a href="{{ route('dashboard.payment-methods.index') }}" class="close-button">
                 <i class="fas fa-times"></i>
             </a>
         </div>
 
         <!-- Form Content -->
         <div class="form-content">
-            <form action="{{ route('dashboard.dashboard.payment-methods.update', $paymentMethod) }}" method="POST"
+            <form action="{{ route('dashboard.payment-methods.update', $paymentMethod) }}" method="POST"
                 enctype="multipart/form-data">
                 @csrf
                 @method('PUT')

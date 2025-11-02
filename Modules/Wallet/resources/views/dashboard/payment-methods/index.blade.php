@@ -665,7 +665,7 @@
         <!-- Page Header -->
         <div class="page-header">
             <h1 class="page-title">{{ __('Payment Methods') }}</h1>
-            <a href="{{ route('dashboard.dashboard.payment-methods.create') }}" class="add-button">
+            <a href="{{ route('dashboard.payment-methods.create') }}" class="add-button">
                 <i class="fas fa-plus"></i>
                 {{ __('Add Payment Method') }}
             </a>
@@ -687,7 +687,7 @@
                         </div>
 
                         <!-- Edit Link -->
-                        <a href="{{ route('dashboard.dashboard.payment-methods.edit', $method) }}"
+                        <a href="{{ route('dashboard.payment-methods.edit', $method) }}"
                             style="text-decoration: none; color: inherit; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                             <div class="payment-method-icon">
                                 @if ($method->getFirstMediaUrl('payment_method_images'))
@@ -714,7 +714,7 @@
                 <h3>{{ __('No Payment Methods') }}</h3>
                 <p>{{ __('You haven\'t added any payment methods yet. Add your first payment method to start accepting payments.') }}
                 </p>
-                <a href="{{ route('dashboard.dashboard.payment-methods.create') }}" class="add-button">
+                <a href="{{ route('dashboard.payment-methods.create') }}" class="add-button">
                     <i class="fas fa-plus"></i>
                     {{ __('Add Payment Method') }}
                 </a>
@@ -762,7 +762,7 @@
                 // Create a form to submit DELETE request
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '{{ route('dashboard.dashboard.payment-methods.destroy', ':id') }}'.replace(':id',
+                form.action = '{{ route('dashboard.payment-methods.destroy', ':id') }}'.replace(':id',
                     currentPaymentMethodId);
 
                 // Add CSRF token
