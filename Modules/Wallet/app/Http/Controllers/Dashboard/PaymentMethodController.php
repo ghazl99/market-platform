@@ -20,7 +20,8 @@ class PaymentMethodController extends Controller
      */
     public function index()
     {
-        $store = Store::currentFromUrl()->firstOrFail();
+        // الحصول على المتجر من middleware أو من URL
+        $store = request()->attributes->get('store') ?? Store::currentFromUrl()->firstOrFail();
         $paymentMethods = $this->paymentMethodService->getForStore($store);
 
         return view('wallet::dashboard.payment-methods.index', compact('paymentMethods'));
@@ -40,7 +41,8 @@ class PaymentMethodController extends Controller
     public function store(Request $request)
     {
         try {
-            $store = Store::currentFromUrl()->firstOrFail();
+            // الحصول على المتجر من middleware أو من URL
+            $store = $request->attributes->get('store') ?? Store::currentFromUrl()->firstOrFail();
 
             // Normalize currencies input to an array
             $currencies = $request->input('currencies', []);

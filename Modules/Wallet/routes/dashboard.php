@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Wallet\Http\Controllers\Dashboard\PaymentRequestController;
 use Modules\Wallet\Http\Controllers\Dashboard\PaymentMethodController;
 
-Route::group(['prefix' => 'dashboard', 'middleware' => ['web', 'auth']], function () {
+Route::group(['prefix' => 'dashboard', 'middleware' => ['web', 'auth', 'ensure-store-access', 'check.store.status', 'check-permission']], function () {
     Route::get('payment-requests', [PaymentRequestController::class, 'index'])
         ->name('dashboard.payment-requests.index');
 
