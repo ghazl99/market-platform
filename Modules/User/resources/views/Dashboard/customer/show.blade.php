@@ -2106,4 +2106,4 @@
     `;
                 document.head.appendChild(style);
             </script>
-        @endpush
+@endpush
