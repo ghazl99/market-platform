@@ -441,7 +441,16 @@
                                             $currentCurrencies = array_filter($currentCurrencies); // إزالة القيم الفارغة
                                         } else {
                                             // إذا لم تكن هناك عملات محفوظة، استخدم العملة الافتراضية
-                                            $currentCurrencies = [$paymentMethod->currency ?? 'USD'];
+                                            // محاولة الحصول على أول عملة من currencies أو استخدام USD كـ default
+                                            $defaultCurrency = 'USD';
+                                            if (isset($paymentMethod->currencies) && is_array($paymentMethod->currencies)) {
+                                                if (isset($paymentMethod->currencies['en']) && is_array($paymentMethod->currencies['en']) && !empty($paymentMethod->currencies['en'])) {
+                                                    $defaultCurrency = $paymentMethod->currencies['en'][0];
+                                                } elseif (isset($paymentMethod->currencies['ar']) && is_array($paymentMethod->currencies['ar']) && !empty($paymentMethod->currencies['ar'])) {
+                                                    $defaultCurrency = $paymentMethod->currencies['ar'][0];
+                                                }
+                                            }
+                                            $currentCurrencies = [$defaultCurrency];
                                         }
                                     } else {
                                         // استخدام البيانات القديمة
