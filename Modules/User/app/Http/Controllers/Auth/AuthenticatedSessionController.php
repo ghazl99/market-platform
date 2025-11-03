@@ -56,8 +56,21 @@ class AuthenticatedSessionController extends Controller
                 $result['field'] => $result['message'],
             ])->withInput();
         }
+        $host = $request->getHost();
 
-        return redirect()->intended(route('home'));
+        $mainDomain = app()->environment('production')
+            ? config('app.main_domain', 'soqsyria.com')
+            : 'market-platform.localhost';
+        if ($host !== $mainDomain && (Auth::user()->hasRole('admin'))) {
+            return redirect()->intended(route('admin.dashboard'));
+        }
+        elseif ($host !== $mainDomain && Auth::user()->hasRole('owner')) {
+            return redirect()->intended(route('dashboard'));
+        } elseif (Auth::user()->hasRole('owner')) {
+            return redirect()->intended( route('stores.index'));
+        } else {
+            return redirect()->intended(route('home'));
+        }
     }
     public function destroy()
     {
