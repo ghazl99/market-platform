@@ -1,4 +1,4 @@
-@extends('core::layouts.app')
+@extends('core::store.layouts.app')
 
 @section('title', __('E-Commerce Platform') . ' - ' . __('The Best Solution for E-Commerce'))
 
@@ -445,6 +445,6 @@
             </div>
         </div>
     </section>
-    @include('core::layouts.footer')
+    @include('core::store.layouts.footer')
 
 @endsection

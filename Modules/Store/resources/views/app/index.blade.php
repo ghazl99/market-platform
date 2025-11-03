@@ -1,4 +1,4 @@
-@extends('core::layouts.app')
+@extends('core::store.layouts.app')
 
 @section('title', __('My Stores') . ' - ' . config('app.name'))
 @push('styles')
@@ -114,11 +114,11 @@
                                     {{ __('Edit') }}
                                 </a>
 
-                                <a href="{{ route('store.settings.edit', $store->id) }}"
+                                {{-- <a href="{{ route('store.settings.edit', $store->id) }}"
                                     class="btn btn-outline-warning btn-sm flex-fill">
                                     <i class="fas fa-cog me-1"></i>
                                     {{ __('Settings') }}
-                                </a>
+                                </a> --}}
 
                                 <form action="{{ route('stores.destroy', $store) }}" method="POST" class="flex-fill"
                                     onsubmit="return confirm('{{ __('Are you sure you want to delete this store?') }}');">

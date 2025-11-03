@@ -1,4 +1,4 @@
-@extends('core::layouts.app')
+@extends('core::store.layouts.app')
 
 @section('title', 'تعديل ' . $store->name . ' - منصة المتاجر')
 

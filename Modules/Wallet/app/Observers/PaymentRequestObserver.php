@@ -46,7 +46,7 @@ class PaymentRequestObserver
                 'type' => 'payment_request',
                 'payment_request_id' => $paymentRequest->id,
                 'wallet_id' => $paymentRequest->wallet_id,
-                'url' => route('dashboard.dashboard.payment-requests.index'),
+                'url' => route('dashboard.payment-requests.index'),
                 'icon' => asset('assets/img/payment.png'),
             ];
             FirebaseNotificationService::send($owner, $data);

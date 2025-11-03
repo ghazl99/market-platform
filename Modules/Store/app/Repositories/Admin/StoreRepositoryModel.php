@@ -10,11 +10,11 @@ class StoreRepositoryModel implements StoreRepository
     public function index($user)
     {
         if ($user->hasRole('admin')) {
-            return Store::with('owners')->latest()->get();
+            return Store::with('owners', 'users')->latest()->get();
         }
 
         if ($user->hasRole('owner')) {
-            return $user->ownedStores()->latest()->get();
+            return $user->ownedStores()->with('owners')->latest()->get();
         }
 
         return collect();

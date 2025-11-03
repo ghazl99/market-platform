@@ -1,4 +1,4 @@
-@extends('core::layouts.app')
+@extends('core::store.layouts.app')
 
 @section('title', __('Create New Store') . ' - ' . __('Stores Platform'))
 

@@ -44,7 +44,6 @@ class StoreController extends Controller implements HasMiddleware
     public function index()
     {
         $stores = $this->storeService->index(Auth::user());
-
         return view('store::admin.index', compact('stores'));
     }
 

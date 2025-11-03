@@ -1269,7 +1269,7 @@
             function fetchPaymentRequests(page = 1) {
                 const search = searchInput.value;
 
-                fetch(`{{ route('dashboard.dashboard.payment-requests.index') }}?search=${encodeURIComponent(search)}&page=${page}`, {
+                fetch(`{{ route('dashboard.payment-requests.index') }}?search=${encodeURIComponent(search)}&page=${page}`, {
                         method: 'GET',
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest',
