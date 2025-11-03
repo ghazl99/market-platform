@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
 
@@ -14,6 +15,7 @@ class Group extends Model
         'name',
         'profit_percentage',
         'is_default',
+        'store_id',
     ];
 
     /**
@@ -28,6 +30,14 @@ class Group extends Model
         'is_default' => 'boolean',
         'name' => 'array',
     ];
+
+    /**
+     * Get the store that owns the group.
+     */
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Store\Models\Store::class);
+    }
 
     /**
      * Get the users for the group.

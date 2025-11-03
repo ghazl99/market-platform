@@ -1541,13 +1541,13 @@
         // Force apply theme styles for products (both light and dark)
         function applyThemeForProducts() {
             const theme = document.documentElement.getAttribute('data-theme');
-            
+
             // Force reflow
             document.body.offsetHeight;
 
             // Apply to all product cards
             const productCards = document.querySelectorAll('.product-card');
-            
+
             if (theme === 'light') {
                 // Light Mode
                 productCards.forEach(card => {
@@ -1570,7 +1570,8 @@
                 // Apply to placeholder icons and containers
                 const placeholders = document.querySelectorAll('.product-image-placeholder');
                 placeholders.forEach(placeholder => {
-                    placeholder.style.cssText += 'background: #f9fafb !important; border: 1px solid #e5e7eb !important; border-radius: 8px !important;';
+                    placeholder.style.cssText +=
+                        'background: #f9fafb !important; border: 1px solid #e5e7eb !important; border-radius: 8px !important;';
                     const icon = placeholder.querySelector('i');
                     if (icon) {
                         icon.style.cssText += 'color: #6b7280 !important;';
@@ -1610,7 +1611,8 @@
                 // Apply to placeholder icons and containers
                 const placeholders = document.querySelectorAll('.product-image-placeholder');
                 placeholders.forEach(placeholder => {
-                    placeholder.style.cssText += 'background: transparent !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 8px !important;';
+                    placeholder.style.cssText +=
+                        'background: transparent !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 8px !important;';
                     const icon = placeholder.querySelector('i');
                     if (icon) {
                         icon.style.cssText += 'color: #9ca3af !important;';
@@ -1634,16 +1636,16 @@
         // Apply theme immediately on script load (before DOM is ready)
         // This prevents flash of wrong theme
         (function() {
-            const theme = document.documentElement.getAttribute('data-theme') || 
-                         localStorage.getItem('dashboard-theme') || 
-                         localStorage.getItem('theme') || 
-                         'light';
-            
+            const theme = document.documentElement.getAttribute('data-theme') ||
+                localStorage.getItem('dashboard-theme') ||
+                localStorage.getItem('theme') ||
+                'light';
+
             // Apply theme to HTML if not already set
             if (!document.documentElement.getAttribute('data-theme')) {
                 document.documentElement.setAttribute('data-theme', theme);
             }
-            
+
             // Try to apply styles immediately if DOM is ready
             if (document.readyState === 'loading') {
                 // DOM is still loading, wait for it
@@ -1885,11 +1887,11 @@
                     <div class="notification-title">{{ __('Success') }}</div>
                     <div class="notification-message">${message}</div>
                     ${productId ? `
-                                                        <div class="notification-details">
-                                                            <i class="fas fa-info-circle"></i>
-                                                            {{ __('Product') }} #${productId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
-                                                        </div>
-                                                        ` : ''}
+                                                            <div class="notification-details">
+                                                                <i class="fas fa-info-circle"></i>
+                                                                {{ __('Product') }} #${productId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
+                                                            </div>
+                                                            ` : ''}
                 </div>
                 <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
                 <div class="notification-progress"></div>

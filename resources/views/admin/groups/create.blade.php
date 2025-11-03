@@ -67,6 +67,14 @@
             transition: all 0.3s ease;
         }
 
+        .form-input select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+
         .form-input:focus {
             outline: none;
             border-color: #f59e0b;
@@ -245,6 +253,23 @@
                     <div class="error-message">{{ $message }}</div>
                 @enderror
                 <div class="form-help">{{ __('Enter profit percentage (0-100)') }}</div>
+            </div>
+
+            <!-- Store Selection -->
+            <div class="form-group">
+                <label class="form-label">{{ __('Store') }}</label>
+                <select name="store_id" class="form-input @error('store_id') error @enderror">
+                    <option value="">{{ __('Select a store (optional)') }}</option>
+                    @foreach($stores as $store)
+                        <option value="{{ $store->id }}" {{ old('store_id') == $store->id ? 'selected' : '' }}>
+                            {{ $store->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('store_id')
+                    <div class="error-message">{{ $message }}</div>
+                @enderror
+                <div class="form-help">{{ __('Select a store to associate this group with (optional)') }}</div>
             </div>
 
             <!-- Form Actions -->

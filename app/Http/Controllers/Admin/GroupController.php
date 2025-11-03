@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Modules\Store\Models\Store;
 
 class GroupController extends Controller
 {
@@ -20,7 +21,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        $groups = Group::withCount('users')->get();
+        $groups = Group::with(['store', 'users'])->withCount('users')->get();
 
         return view('admin.groups.index', compact('groups'));
     }
@@ -30,7 +31,8 @@ class GroupController extends Controller
      */
     public function create()
     {
-        return view('admin.groups.create');
+        $stores = Store::where('status', 'active')->get();
+        return view('admin.groups.create', compact('stores'));
     }
 
     /**
@@ -41,6 +43,7 @@ class GroupController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'profit_percentage' => 'required|numeric|min:0|max:100',
+            'store_id' => 'nullable|exists:stores,id',
         ]);
 
         try {
@@ -48,6 +51,7 @@ class GroupController extends Controller
                 'name' => $request->name,
                 'profit_percentage' => $request->profit_percentage,
                 'is_default' => false,
+                'store_id' => $request->store_id,
             ]);
 
             return redirect()->to(LaravelLocalization::localizeURL(route('admin.groups.index')))
@@ -64,6 +68,7 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
+        $group->load('store');
         $users = $group->users()->paginate(20);
 
         return view('admin.groups.show', compact('group', 'users'));
@@ -74,7 +79,8 @@ class GroupController extends Controller
      */
     public function edit(Group $group)
     {
-        return view('admin.groups.edit', compact('group'));
+        $stores = Store::where('status', 'active')->get();
+        return view('admin.groups.edit', compact('group', 'stores'));
     }
 
     /**
@@ -85,12 +91,14 @@ class GroupController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'profit_percentage' => 'required|numeric|min:0|max:100',
+            'store_id' => 'nullable|exists:stores,id',
         ]);
 
         try {
             $this->groupService->update($group, [
                 'name' => $request->name,
                 'profit_percentage' => $request->profit_percentage,
+                'store_id' => $request->store_id,
             ]);
 
             return redirect()->to(LaravelLocalization::localizeURL(route('admin.groups.index')))

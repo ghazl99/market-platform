@@ -261,4 +261,12 @@ class Store extends Model implements HasMedia
     {
         return $this->hasMany(\Modules\Store\Models\StoreSetting::class);
     }
+
+    /**
+     * Get the groups for the store.
+     */
+    public function groups(): HasMany
+    {
+        return $this->hasMany(\App\Group::class);
+    }
 }

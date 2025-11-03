@@ -346,6 +346,11 @@
                 <div class="group-card {{ $group->is_default ? 'default' : '' }}"
                     onclick="window.location.href='{{ LaravelLocalization::localizeURL(route('admin.groups.show', $group->id)) }}'">
                     <div class="group-name">{{ $group->name }}</div>
+                    @if($group->store)
+                        <div style="color: #a0a0a0; font-size: 0.9rem; margin-bottom: 1rem;">
+                            <i class="fas fa-store"></i> {{ $group->store->name }}
+                        </div>
+                    @endif
                     <div class="group-stats">
                         <div class="profit-percentage">{{ $group->profit_percentage }}%</div>
                         <div class="users-count">{{ $group->users_count }} {{ __('users') }}</div>

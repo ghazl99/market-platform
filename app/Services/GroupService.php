@@ -62,6 +62,7 @@ class GroupService
 
             // إضافة القيم الافتراضية
             $groupData['is_default'] = $groupData['is_default'] ?? false;
+            $groupData['store_id'] = $groupData['store_id'] ?? null;
 
             $group = Group::create($groupData);
 

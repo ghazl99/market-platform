@@ -1223,11 +1223,11 @@
                     <div class="notification-title">{{ __('Success') }}</div>
                     <div class="notification-message">${message}</div>
                     ${categoryId ? `
-                                                                                                                                                                                        <div class="notification-details">
-                                                                                                                                                                                            <i class="fas fa-info-circle"></i>
-                                                                                                                                                                                            {{ __('Category') }} #${categoryId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
-                                                                                                                                                                                        </div>
-                                                                                                                                                                                        ` : ''}
+                                                                                                                                                                                            <div class="notification-details">
+                                                                                                                                                                                                <i class="fas fa-info-circle"></i>
+                                                                                                                                                                                                {{ __('Category') }} #${categoryId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
+                                                                                                                                                                                            </div>
+                                                                                                                                                                                            ` : ''}
                 </div>
                 <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
                 <div class="notification-progress"></div>

@@ -241,6 +241,12 @@
                     {{ __('Back to Groups') }}
                 </a>
             </div>
+            @if($group->store)
+                <div style="margin-bottom: 1rem; padding: 0.75rem; background: #374151; border-radius: 8px; color: #ffffff;">
+                    <i class="fas fa-store"></i> 
+                    <strong>{{ __('Store') }}:</strong> {{ $group->store->name }}
+                </div>
+            @endif
             <div class="group-stats">
                 <div class="stat-item">
                     <div class="stat-value">{{ $group->profit_percentage }}%</div>
