@@ -9,7 +9,10 @@ class OrderModelRepository implements OrderRepository
     public function index(int $storeId)
     {
         return Order::where('store_id', $storeId)
-            ->with(['items.product', 'user'])
+            ->with([
+                'items.product',
+                'user:id,name,email'
+            ])
             ->latest()
             ->paginate(10);
     }

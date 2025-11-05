@@ -1196,22 +1196,29 @@
                 margin-bottom: 2rem;
                 box-shadow: var(--shadow-md);
                 border: 1px solid var(--border-color);
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .date-filter-container::-webkit-scrollbar {
+                display: none;
             }
 
             .date-filter-form {
                 width: 100%;
+                min-width: 0;
             }
 
             .date-filter-row {
                 display: flex;
-                gap: 1.5rem;
+                gap: 1rem;
                 align-items: flex-end;
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
             }
 
             .date-filter-group {
                 flex: 1;
-                min-width: 200px;
+                min-width: 0;
             }
 
             .date-filter-label {
@@ -1239,6 +1246,8 @@
                 color: var(--text-primary);
                 font-size: 1rem;
                 transition: all 0.3s ease;
+                box-sizing: border-box;
+                min-width: 0;
             }
 
             .date-filter-input:focus {
@@ -1382,22 +1391,62 @@
             /* Responsive Design for Date Filter */
             @media (max-width: 768px) {
                 .date-filter-row {
-                    flex-direction: column;
+                    gap: 0.75rem;
+                    flex-wrap: nowrap;
                 }
 
                 .date-filter-group {
-                    width: 100%;
+                    flex: 1;
+                    min-width: 0;
+                }
+
+                .date-filter-label {
+                    font-size: 0.8rem;
+                    margin-bottom: 0.4rem;
+                }
+
+                .date-filter-input {
+                    padding: 0.6rem 0.75rem;
+                    font-size: 0.9rem;
                 }
 
                 .date-filter-actions {
-                    width: 100%;
-                    justify-content: stretch;
+                    flex-shrink: 0;
+                    gap: 0.5rem;
                 }
 
                 .filter-btn,
                 .clear-filter-btn {
-                    flex: 1;
-                    justify-content: center;
+                    padding: 0.6rem 1rem;
+                    font-size: 0.85rem;
+                    white-space: nowrap;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .date-filter-row {
+                    gap: 0.5rem;
+                }
+
+                .date-filter-label {
+                    font-size: 0.75rem;
+                    margin-bottom: 0.35rem;
+                }
+
+                .date-filter-input {
+                    padding: 0.5rem 0.6rem;
+                    font-size: 0.85rem;
+                }
+
+                .filter-btn,
+                .clear-filter-btn {
+                    padding: 0.5rem 0.75rem;
+                    font-size: 0.8rem;
+                }
+
+                .filter-btn i,
+                .clear-filter-btn i {
+                    display: none;
                 }
             }
 

@@ -671,7 +671,8 @@
                 </h3>
                 <div class="parent-product-info">
                     @if ($parentProduct->getFirstMedia('product_images'))
-                        <img src="{{ $parentProduct->getFirstMedia('product_images')->getUrl() }}"
+                        @php $parentProductMedia = $parentProduct->getFirstMedia('product_images'); @endphp
+                        <img src="{{ route('dashboard.product.image', $parentProductMedia->id) }}"
                             alt="{{ $parentProduct->name }}" class="parent-product-image">
                     @endif
                     <div>

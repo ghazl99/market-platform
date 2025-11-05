@@ -502,7 +502,8 @@
     <div class="product-header">
         <div class="product-title-section">
             @if ($product->getFirstMedia('product_images'))
-                <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}" alt="{{ $product->name }}"
+                @php $productHeaderMedia = $product->getFirstMedia('product_images'); @endphp
+                <img src="{{ route('dashboard.product.image', $productHeaderMedia->id) }}" alt="{{ $product->name }}"
                     class="product-image-small">
             @else
                 <div class="product-image-small"
@@ -667,7 +668,8 @@
                 @enderror
                 <div class="image-preview" id="imagePreview">
                     @if ($product->getFirstMedia('product_images'))
-                        <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}" alt="Current Product Image"
+                        @php $productPreviewMedia = $product->getFirstMedia('product_images'); @endphp
+                        <img src="{{ route('dashboard.product.image', $productPreviewMedia->id) }}" alt="Current Product Image"
                             class="preview-image">
                         <div class="image-overlay">
                             <span class="image-text">{{ __('Current Image') }}</span>
@@ -834,9 +836,10 @@
                     } else {
                         // If no file selected or invalid, show current image if exists
                         @if ($product->getFirstMedia('product_images'))
+                            @php $productScriptMedia = $product->getFirstMedia('product_images'); @endphp
                             imagePreview.innerHTML = `
                                 <div class="preview-item">
-                                    <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}" class="preview-image" alt="Current Product Image">
+                                    <img src="{{ route('dashboard.product.image', $productScriptMedia->id) }}" class="preview-image" alt="Current Product Image">
                                 </div>
                             `;
                             imagePreview.style.display = 'grid';
@@ -849,9 +852,10 @@
 
                 // Initialize preview with current image
                 @if ($product->getFirstMedia('product_images'))
+                    @php $productInitMedia = $product->getFirstMedia('product_images'); @endphp
                     imagePreview.innerHTML = `
                         <div class="preview-item">
-                            <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}" class="preview-image" alt="Current Product Image">
+                            <img src="{{ route('dashboard.product.image', $productInitMedia->id) }}" class="preview-image" alt="Current Product Image">
                         </div>
                     `;
                     imagePreview.style.display = 'grid';

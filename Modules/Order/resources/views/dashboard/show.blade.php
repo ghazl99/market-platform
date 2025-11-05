@@ -93,6 +93,7 @@
             </div>
         </div>
 
+        <!-- Order Information Cards -->
         <div class="order-info-grid">
             <!-- Order Details -->
             <div class="order-details-card">
@@ -112,6 +113,10 @@
                                 {{ __('Processing') }}
                             @break
 
+                            @case('canceled')
+                                {{ __('Cancelled') }}
+                            @break
+
                             @case('cancelled')
                                 {{ __('Cancelled') }}
                             @break
@@ -124,40 +129,208 @@
 
                 <div class="order-info">
                     <div class="info-item">
-                        <span class="info-label">{{ __('Order ID') }}</span>
+                        <span class="info-label">
+                            <i class="fas fa-hashtag"></i>
+                            {{ __('Order ID') }}
+                        </span>
                         <span class="info-value">#{{ $order->id }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">{{ __('Order Date') }}</span>
+                        <span class="info-label">
+                            <i class="fas fa-calendar-alt"></i>
+                            {{ __('Order Date') }}
+                        </span>
                         <span class="info-value">{{ $order->created_at->format('Y-m-d') }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">{{ __('Order Time') }}</span>
+                        <span class="info-label">
+                            <i class="fas fa-clock"></i>
+                            {{ __('Order Time') }}
+                        </span>
                         <span class="info-value">{{ $order->created_at->format('H:i') }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">{{ __('Payment Method') }}</span>
+                        <span class="info-label">
+                            <i class="fas fa-credit-card"></i>
+                            {{ __('Payment Method') }}
+                        </span>
                         <span class="info-value">{{ __('Electronic Wallet') }}</span>
                     </div>
+                    <div class="info-item">
+                        <span class="info-label">
+                            <i class="fas fa-money-check-alt"></i>
+                            {{ __('Payment Status') }}
+                        </span>
+                        <span class="info-value">
+                            @if ($order->payment_status === 'paid')
+                                <span class="badge success">{{ __('Paid') }}</span>
+                            @else
+                                <span class="badge warning">{{ __('Unpaid') }}</span>
+                            @endif
+                        </span>
+                    </div>
+                    @if ($order->cancel_reason)
+                        <div class="info-item">
+                            <span class="info-label">
+                                <i class="fas fa-exclamation-circle"></i>
+                                {{ __('Cancellation Reason') }}
+                            </span>
+                            <span class="info-value cancel-reason">{{ $order->cancel_reason }}</span>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Customer Information -->
+            <div class="order-details-card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ __('Customer Information') }}</h3>
                 </div>
 
                 <div class="customer-info">
                     <div class="customer-avatar">{{ substr($order->user->name ?? 'U', 0, 1) }}</div>
                     <div class="customer-details">
                         <h6>{{ $order->user->name ?? __('Guest') }}</h6>
-                        <p>{{ $order->user->email ?? __('No email') }}</p>
+                        <p>
+                            <i class="fas fa-envelope"></i>
+                            {{ $order->user->email ?? __('No email') }}
+                        </p>
+                        @if ($order->user)
+                            <p>
+                                <i class="fas fa-id-card"></i>
+                                {{ __('User ID') }}: #{{ $order->user->id }}
+                            </p>
+                        @endif
                     </div>
                 </div>
-
             </div>
+        </div>
 
-            <!-- Order Summary -->
-            <div class="order-summary">
-                <h4 class="summary-title">{{ __('Order Summary') }}</h4>
+        <!-- Order Items -->
+        <div class="order-items-section">
+            <div class="order-details-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-shopping-cart"></i>
+                        {{ __('Order Items') }} ({{ $order->items->count() }})
+                    </h3>
+                </div>
 
-                <div class="summary-row">
-                    <span class="summary-label">{{ __('Total') }}</span>
-                    <span class="summary-value">{{ number_format($order->total_amount, 2) }} {{ __('SAR') }}</span>
+                <div class="order-items-list">
+                    @forelse($order->items as $item)
+                        @php
+                            $product = $item->product;
+                            $productMedia = $product->media->first();
+                            $itemTotal = $item->quantity * ($product->price ?? 0);
+                        @endphp
+                        <div class="order-item-card">
+                            <div class="item-image-wrapper">
+                                @if ($productMedia)
+                                    <img src="{{ route('dashboard.product.image', $productMedia->id) }}"
+                                        alt="{{ $product->name }}" class="item-image"
+                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="item-image-placeholder" style="display: none;">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                @else
+                                    <div class="item-image-placeholder">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="item-details">
+                                <h4 class="item-name">{{ $product->name ?? __('Product') }}</h4>
+                                <div class="item-meta">
+                                    <span class="item-id">
+                                        <i class="fas fa-tag"></i>
+                                        {{ __('Product ID') }}: #{{ $product->id ?? 'N/A' }}
+                                    </span>
+                                </div>
+                                <div class="item-price-info">
+                                    <span class="item-unit-price">
+                                        {{ __('Unit Price') }}: {{ number_format($product->price ?? 0, 2) }}
+                                        {{ __('SAR') }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="item-quantity">
+                                <div class="quantity-badge">
+                                    <i class="fas fa-box"></i>
+                                    <span>{{ __('Quantity') }}: {{ $item->quantity }}</span>
+                                </div>
+                            </div>
+                            <div class="item-total">
+                                <div class="total-amount">
+                                    <span class="total-label">{{ __('Item Total') }}</span>
+                                    <span class="total-value">{{ number_format($itemTotal, 2) }}
+                                        {{ __('SAR') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="no-items">
+                            <i class="fas fa-inbox"></i>
+                            <p>{{ __('No items found in this order') }}</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary-section">
+            <div class="order-details-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-calculator"></i>
+                        {{ __('Order Summary') }}
+                    </h3>
+                </div>
+
+                <div class="summary-content">
+                    @php
+                        $subtotal = $order->items->sum(function ($item) {
+                            return $item->quantity * ($item->product->price ?? 0);
+                        });
+                        $discount = 0; // يمكن إضافته لاحقاً
+                        $tax = 0; // يمكن إضافته لاحقاً
+                        $total = $order->total_amount;
+                    @endphp
+
+                    <div class="summary-row">
+                        <span class="summary-label">
+                            <i class="fas fa-shopping-bag"></i>
+                            {{ __('Subtotal') }}
+                        </span>
+                        <span class="summary-value">{{ number_format($subtotal, 2) }} {{ __('SAR') }}</span>
+                    </div>
+                    @if ($discount > 0)
+                        <div class="summary-row">
+                            <span class="summary-label">
+                                <i class="fas fa-tag"></i>
+                                {{ __('Discount') }}
+                            </span>
+                            <span class="summary-value discount">-{{ number_format($discount, 2) }}
+                                {{ __('SAR') }}</span>
+                        </div>
+                    @endif
+                    @if ($tax > 0)
+                        <div class="summary-row">
+                            <span class="summary-label">
+                                <i class="fas fa-receipt"></i>
+                                {{ __('Tax') }}
+                            </span>
+                            <span class="summary-value">{{ number_format($tax, 2) }} {{ __('SAR') }}</span>
+                        </div>
+                    @endif
+                    <div class="summary-row total-row">
+                        <span class="summary-label">
+                            <i class="fas fa-money-bill-wave"></i>
+                            {{ __('Total Amount') }}
+                        </span>
+                        <span class="summary-value total-amount">{{ number_format($total, 2) }}
+                            {{ __('SAR') }}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -168,53 +341,39 @@
                 <i class="fas fa-print"></i>
                 {{ __('Print Invoice') }}
             </button>
-            <a href="{{ route('dashboard.order.edit', $order->id) }}" class="action-btn secondary">
-                <i class="fas fa-edit"></i>
-                {{ __('Edit Order') }}
-            </a>
-            <button class="action-btn secondary" onclick="updateDeliveryStatus()">
-                <i class="fas fa-truck"></i>
-                {{ __('Update Delivery Status') }}
-            </button>
-            <button class="action-btn danger" onclick="cancelOrder()">
-                <i class="fas fa-times"></i>
-                {{ __('Cancel Order') }}
-            </button>
-        </div>
-    </div>
 
-    <!-- Cancel Order Modal -->
-    <div id="cancelOrderModal" class="modal-overlay" style="display: none;">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3 class="modal-title">{{ __('Cancel Order') }}</h3>
-                <button class="modal-close" onclick="closeCancelModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="cancel-warning">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p>{{ __('Are you sure you want to cancel this order?') }}</p>
-                    <p class="order-info">{{ __('Order') }} #{{ $order->id }} {{ __('for customer') }}
-                        {{ $order->user->name }}</p>
-                    <p class="warning-text">{{ __('This action cannot be undone.') }}</p>
-                </div>
-                <form id="cancelOrderForm">
+            {{-- Complete Order Button --}}
+            {{-- Debug: Status is "{{ $order->status }}" --}}
+            <form action="{{ route('dashboard.order.update', $order->id) }}" method="POST" class="order-action-form"
+                style="display: inline-block !important; visibility: visible !important;">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="status" value="completed">
+                <button type="submit" class="action-btn success"
+                    style="display: inline-flex !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 10 !important;">
+                    <i class="fas fa-check-circle"></i>
+                    {{ __('Complete Order') }}
+                </button>
+            </form>
+
+            {{-- Cancel Order Button - Show if order is not canceled or cancelled --}}
+            @php
+                $canCancel = !in_array($order->status, ['canceled', 'cancelled']);
+            @endphp
+
+            @if ($canCancel)
+                <form action="{{ route('dashboard.order.update', $order->id) }}" method="POST"
+                    class="order-action-form">
                     @csrf
                     @method('PUT')
-                    <div class="form-group">
-                        <label for="cancel_reason" class="form-label">{{ __('Cancellation Reason') }}</label>
-                        <textarea name="cancel_reason" id="cancel_reason" class="form-textarea" rows="3"
-                            placeholder="{{ __('Please provide a reason for cancellation...') }}"></textarea>
-                    </div>
+                    <input type="hidden" name="status" value="canceled">
+                    <input type="hidden" name="cancel_reason" value="{{ __('Customer request') }}">
+                    <button type="submit" class="action-btn danger">
+                        <i class="fas fa-times"></i>
+                        {{ __('Cancel Order') }}
+                    </button>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-secondary" onclick="closeCancelModal()">{{ __('Cancel') }}</button>
-                <button type="button" class="btn-danger" onclick="confirmCancelOrder()">
-                    <i class="fas fa-times"></i>
-                    {{ __('Cancel Order') }}
-                </button>
-            </div>
+            @endif
         </div>
     </div>
 
@@ -270,7 +429,7 @@
 
         .order-info-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
         }
@@ -341,6 +500,9 @@
 
         .info-label {
             font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             color: #cccccc;
             font-weight: 500;
         }
@@ -385,8 +547,239 @@
             margin: 0;
             font-size: 0.9rem;
             color: #cccccc;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
         }
 
+        .cancel-reason {
+            color: #ef4444;
+            font-style: italic;
+            word-break: break-word;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .badge.warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        /* Order Items Section */
+        .order-items-section {
+            margin-bottom: 2rem;
+        }
+
+        .order-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .order-item-card {
+            display: grid;
+            grid-template-columns: 100px 1fr auto auto;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: #1a1a1a;
+            border-radius: 12px;
+            border: 1px solid #333333;
+            transition: all 0.3s ease;
+        }
+
+        .order-item-card:hover {
+            border-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .item-image-wrapper {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #2d2d2d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666666;
+            font-size: 2rem;
+        }
+
+        .item-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .item-name {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-id {
+            font-size: 0.85rem;
+            color: #cccccc;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .item-price-info {
+            margin-top: 0.5rem;
+        }
+
+        .item-unit-price {
+            font-size: 0.9rem;
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-badge {
+            padding: 0.75rem 1.25rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .item-total {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .total-amount {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .total-label {
+            font-size: 0.85rem;
+            color: #cccccc;
+            margin-bottom: 0.25rem;
+        }
+
+        .total-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .no-items {
+            text-align: center;
+            padding: 3rem;
+            color: #cccccc;
+        }
+
+        .no-items i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #666666;
+        }
+
+        /* Order Summary Section */
+        .order-summary-section {
+            margin-bottom: 2rem;
+        }
+
+        .summary-content {
+            padding: 1rem 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #333333;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #cccccc;
+            font-size: 0.95rem;
+        }
+
+        .summary-value {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .summary-row.total-row {
+            padding-top: 1.5rem;
+            margin-top: 1rem;
+            border-top: 2px solid #059669;
+        }
+
+        .summary-row.total-row .summary-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .summary-row.total-row .summary-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+        }
+
+        .summary-value.discount {
+            color: #10b981;
+        }
 
         .order-summary {
             background: #1a1a1a;
@@ -431,6 +824,13 @@
             margin-top: 2rem;
             flex-wrap: wrap;
             justify-content: center;
+            align-items: center;
+        }
+
+        .order-action-form {
+            display: inline-block !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
         .action-btn {
@@ -492,6 +892,23 @@
             border-color: #ef4444;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .action-btn.success {
+            background: rgba(16, 185, 129, 0.1) !important;
+            color: #10b981 !important;
+            border: 2px solid rgba(16, 185, 129, 0.3) !important;
+            display: inline-flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .action-btn.success:hover {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            color: white !important;
+            border-color: #10b981 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
         }
 
         /* Cancel Order Modal Styles */
@@ -693,6 +1110,18 @@
             .order-info-grid {
                 grid-template-columns: 1fr;
             }
+
+            .order-item-card {
+                grid-template-columns: 80px 1fr;
+                gap: 1rem;
+            }
+
+            .item-quantity,
+            .item-total {
+                grid-column: 2;
+                margin-top: 0.5rem;
+                justify-content: flex-start;
+            }
         }
 
         @media (max-width: 768px) {
@@ -846,6 +1275,20 @@
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
             color: #ffffff !important;
             border-color: #ef4444 !important;
+        }
+
+        html[data-theme="light"] .action-btn.success,
+        html[data-theme="light"] body .action-btn.success {
+            background: rgba(16, 185, 129, 0.1) !important;
+            color: #10b981 !important;
+            border: 2px solid rgba(16, 185, 129, 0.3) !important;
+        }
+
+        html[data-theme="light"] .action-btn.success:hover,
+        html[data-theme="light"] body .action-btn.success:hover {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            color: #ffffff !important;
+            border-color: #10b981 !important;
         }
 
         html[data-theme="light"] .modal-container,
@@ -1006,11 +1449,6 @@
             });
         });
 
-        function updateDeliveryStatus() {
-            // Implement update delivery status functionality
-            console.log('Update delivery status');
-            alert('{{ __('Update delivery status functionality will be implemented') }}');
-        }
 
         function cancelOrder() {
             document.getElementById('cancelOrderModal').style.display = 'flex';

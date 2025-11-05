@@ -217,7 +217,7 @@
                     @endphp
                     @if ($media)
                         <div class="current-image">
-                            <img src="{{ $media->getUrl() }}" alt="{{ $category->name }}"
+                            <img src="{{ route('dashboard.category.image', $media->id) }}" alt="{{ $category->name }}"
                                 class="current-image-preview">
                             <div class="current-image-info">
                                 <span class="current-image-text">{{ __('Current Image') }}</span>

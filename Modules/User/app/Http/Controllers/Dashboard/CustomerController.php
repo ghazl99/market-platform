@@ -825,6 +825,88 @@ class CustomerController extends Controller implements HasMiddleware
     }
 
     /**
+     * Update debt limit for customer
+     */
+    public function updateDebtLimit(Request $request, User $customer)
+    {
+        try {
+            Log::info('Update Debt Limit Request', [
+                'customer_id' => $customer->id,
+                'request_data' => $request->all()
+            ]);
+
+            $request->validate([
+                'debt_limit' => 'required|numeric|min:0',
+            ]);
+
+            $store = $this->getCurrentStore();
+            if (!$store || !$customer->stores->contains($store->id)) {
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => __('Customer not found or access denied')
+                    ], 403);
+                }
+                return redirect()->back()->with('error', __('Customer not found or access denied'));
+            }
+
+            $debtLimit = (float) $request->input('debt_limit');
+
+            $customer->debt_limit = $debtLimit;
+            $customer->save();
+
+            Log::info('Debt limit updated successfully', [
+                'customer_id' => $customer->id,
+                'debt_limit' => $debtLimit
+            ]);
+
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => __('تم تحديث حد الدين بنجاح'),
+                    'debt_limit' => $debtLimit
+                ]);
+            }
+
+            return redirect()->back()
+                ->with('success', __('تم تحديث حد الدين بنجاح'));
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed for debt limit update:', [
+                'errors' => $e->validator->errors()->toArray(),
+                'input' => $request->all()
+            ]);
+
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('خطأ في التحقق من البيانات'),
+                    'errors' => $e->validator->errors()
+                ], 422);
+            }
+
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
+        } catch (\Exception $e) {
+            Log::error('Error updating debt limit: ' . $e->getMessage(), [
+                'exception' => $e,
+                'request_data' => $request->all()
+            ]);
+
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('حدث خطأ أثناء تحديث حد الدين: ') . $e->getMessage()
+                ], 500);
+            }
+
+            return redirect()->back()
+                ->with('error', __('حدث خطأ أثناء تحديث حد الدين: ') . $e->getMessage());
+        }
+    }
+
+    /**
      * Get the current store from the authenticated user
      */
     private function getCurrentStore()

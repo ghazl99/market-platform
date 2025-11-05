@@ -15,6 +15,7 @@ use Modules\Product\Http\Requests\StoreProductRequest;
 use Modules\Product\Http\Requests\UpdateProductRequest;
 use Modules\Product\Models\Product;
 use Modules\Product\Services\ProductService;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductController extends Controller implements HasMiddleware
 {
@@ -293,5 +294,19 @@ class ProductController extends Controller implements HasMiddleware
                 'message' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    /**
+     * Show product image
+     */
+    public function showImage(Media $media)
+    {
+        $path = $media->getPath();
+
+        if (! file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path);
     }
 }

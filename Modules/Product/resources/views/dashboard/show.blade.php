@@ -1474,7 +1474,8 @@
         <div class="product-header">
             <div class="product-title-section">
                 @if ($product->getFirstMedia('product_images'))
-                    <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}" alt="{{ $product->name }}"
+                    @php $productShowMedia = $product->getFirstMedia('product_images'); @endphp
+                    <img src="{{ route('dashboard.product.image', $productShowMedia->id) }}" alt="{{ $product->name }}"
                         class="product-image-small">
                 @else
                     <div class="product-image-small"
@@ -1629,7 +1630,8 @@
                                 <td>
                                     <div class="product-cell">
                                         @if ($product->getFirstMedia('product_images'))
-                                            <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}"
+                                            @php $productCellMedia = $product->getFirstMedia('product_images'); @endphp
+                                            <img src="{{ route('dashboard.product.image', $productCellMedia->id) }}"
                                                 alt="{{ $product->name }}" class="product-image-tiny">
                                         @else
                                             <div class="product-image-tiny"
@@ -1667,7 +1669,8 @@
             <div class="settings-header">
                 <h2 class="settings-title">{{ __('Product Settings') }}</h2>
                 @if ($product->getFirstMedia('product_images'))
-                    <img src="{{ $product->getFirstMedia('product_images')->getUrl() }}" alt="{{ $product->name }}"
+                    @php $productSettingsMedia = $product->getFirstMedia('product_images'); @endphp
+                    <img src="{{ route('dashboard.product.image', $productSettingsMedia->id) }}" alt="{{ $product->name }}"
                         class="settings-product-image">
                 @else
                     <div class="settings-product-image"
@@ -1830,7 +1833,8 @@
                                         <td>{{ $index + 1 }}</td>
                                         <td>
                                             @if ($child->getFirstMedia('product_images'))
-                                                <img src="{{ $child->getFirstMedia('product_images')->getUrl() }}"
+                                                @php $childProductMedia = $child->getFirstMedia('product_images'); @endphp
+                                                <img src="{{ route('dashboard.product.image', $childProductMedia->id) }}"
                                                     alt="{{ $child->name }}" class="product-image-tiny">
                                             @else
                                                 <div class="product-image-tiny"

@@ -4,31 +4,136 @@
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
+    const isMobile = window.innerWidth <= 1024;
 
-    sidebar.classList.toggle('collapsed');
-    mainContent.classList.toggle('expanded');
+    if (isMobile) {
+        // Mobile behavior: toggle open/close with overlay
+        sidebar.classList.toggle('open');
+        let overlay = document.getElementById('sidebar-overlay');
+        
+        if (sidebar.classList.contains('open')) {
+            // Create overlay if it doesn't exist
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = 'sidebar-overlay';
+                overlay.className = 'sidebar-overlay';
+                overlay.addEventListener('click', closeMobileSidebar);
+                document.body.appendChild(overlay);
+                // Trigger reflow to ensure transition works
+                void overlay.offsetWidth;
+            }
+            // Add active class for animation
+            setTimeout(() => {
+                overlay.classList.add('active');
+            }, 10);
+            document.body.style.overflow = 'hidden'; // Prevent body scroll
+        } else {
+            // Remove active class first, then remove element after transition
+            if (overlay) {
+                overlay.classList.remove('active');
+                setTimeout(() => {
+                    if (overlay && overlay.parentNode) {
+                        overlay.remove();
+                    }
+                }, 300); // Match transition duration
+            }
+            document.body.style.overflow = '';
+        }
+    } else {
+        // Desktop behavior: collapse/expand
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
 
-    // Save state to localStorage
-    const isCollapsed = sidebar.classList.contains('collapsed');
-    localStorage.setItem('sidebarCollapsed', isCollapsed);
+        // Save state to localStorage
+        const isCollapsed = sidebar.classList.contains('collapsed');
+        localStorage.setItem('sidebarCollapsed', isCollapsed);
+    }
 }
 
-// Mobile sidebar toggle
+// Mobile sidebar toggle (alias for consistency)
 function toggleMobileSidebar() {
+    toggleSidebar();
+}
+
+// Close mobile sidebar
+function closeMobileSidebar() {
     const sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('open');
+    const overlay = document.getElementById('sidebar-overlay');
+    
+    sidebar.classList.remove('open');
+    if (overlay) {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            if (overlay && overlay.parentNode) {
+                overlay.remove();
+            }
+        }, 300); // Match transition duration
+    }
+    document.body.style.overflow = '';
+}
+
+// Close sidebar when clicking on a nav link (mobile only)
+function setupMobileNavLinks() {
+    const navLinks = document.querySelectorAll('.nav-item');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // Only close on mobile
+            if (window.innerWidth <= 1024) {
+                setTimeout(() => {
+                    closeMobileSidebar();
+                }, 100); // Small delay for better UX
+            }
+        });
+    });
+}
+
+// Handle window resize
+function handleResize() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const isMobile = window.innerWidth <= 1024;
+
+    if (!isMobile) {
+        // On desktop, remove mobile classes
+        sidebar.classList.remove('open');
+        if (overlay) {
+            overlay.remove();
+        }
+        document.body.style.overflow = '';
+    } else {
+        // On mobile, remove desktop collapse classes
+        sidebar.classList.remove('collapsed');
+        const mainContent = document.getElementById('mainContent');
+        if (mainContent) {
+            mainContent.classList.remove('expanded');
+        }
+    }
 }
 
 // Initialize sidebar state
 function initializeSidebar() {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
-    const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+    const isMobile = window.innerWidth <= 1024;
 
-    if (isCollapsed) {
-        sidebar.classList.add('collapsed');
-        mainContent.classList.add('expanded');
+    if (!isMobile) {
+        // Only restore collapsed state on desktop
+        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+        if (isCollapsed) {
+            sidebar.classList.add('collapsed');
+            mainContent.classList.add('expanded');
+        }
+    } else {
+        // On mobile, ensure sidebar is closed initially
+        sidebar.classList.remove('open');
+        sidebar.classList.remove('collapsed');
+        if (mainContent) {
+            mainContent.classList.remove('expanded');
+        }
     }
+
+    // Setup mobile nav links
+    setupMobileNavLinks();
 }
 
 // Chart buttons functionality
@@ -308,8 +413,8 @@ function initializeKeyboardShortcuts() {
         // Escape to close mobile sidebar
         if (e.key === 'Escape') {
             const sidebar = document.getElementById('sidebar');
-            if (sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
+            if (sidebar && sidebar.classList.contains('open')) {
+                closeMobileSidebar();
             }
         }
     });
@@ -356,10 +461,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start real-time updates
     simulateRealTimeUpdates();
 
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(handleResize, 250);
+    });
+
     console.log('Dashboard initialized successfully!');
 });
 
 // Export functions for global access
 window.toggleSidebar = toggleSidebar;
 window.toggleMobileSidebar = toggleMobileSidebar;
+window.closeMobileSidebar = closeMobileSidebar;
 window.toggleTheme = toggleTheme;

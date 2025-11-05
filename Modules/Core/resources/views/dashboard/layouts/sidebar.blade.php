@@ -1,6 +1,11 @@
 <!-- Sidebar -->
 @php
     use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+    use Modules\Store\Models\Store;
+    
+    // الحصول على المتجر الحالي من URL
+    $currentStore = Store::currentFromUrl()->first();
+    
     // دالة مساعدة لتحديد الصفحة النشطة
     function isActive($patterns)
     {
@@ -18,18 +23,18 @@
 
     <div class="sidebar-header">
         <div class="sidebar-logo">
-            @if (!empty($store) && !empty($media))
+            @if ($currentStore)
                 @php
-                    $media = $store->getFirstMedia('logo');
+                    $storeLogo = $currentStore->getFirstMedia('logo');
                 @endphp
-                @if ($media)
-                    <img src="{{ route('store.image', $media->id) }}" alt="{{ $store->name }}">
+                @if ($storeLogo)
+                    <img src="{{ route('store.image', $storeLogo->id) }}" alt="{{ $currentStore->name }}">
                 @else
                     <i class="fas fa-store fa-2x"></i>
                 @endif
                 <div class="sidebar-logo-text">
                     <h2>{{ __('Dashboard') }}</h2>
-                    <p>{{ $store->name }}</p>
+                    <p>{{ $currentStore->name }}</p>
                 </div>
             @else
                 <i class="fas fa-store fa-2x text-primary"></i>
@@ -158,8 +163,8 @@
 
         <div class="nav-section">
             <div class="nav-section-title">الإعدادات</div>
-            @if (!empty($store))
-                <a href="{{ route('store.settings.edit', $store->id) }}"
+            @if ($currentStore)
+                <a href="{{ route('store.settings.edit', $currentStore->id) }}"
                     class="nav-item {{ isActive(['store/settings']) ? 'active' : '' }}">
                     <i class="fas fa-cog"></i>
                     <span class="nav-item-text">{{ __('Store Settings') }}</span>

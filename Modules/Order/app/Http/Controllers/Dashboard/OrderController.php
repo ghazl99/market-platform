@@ -41,7 +41,10 @@ class OrderController extends Controller implements HasMiddleware
      */
     public function show(Order $order)
     {
-        $order->load('items.product', 'user');
+        $order->load([
+            'items.product.media',
+            'user'
+        ]);
 
         return view('order::dashboard.show', compact('order'));
     }
@@ -86,14 +89,22 @@ class OrderController extends Controller implements HasMiddleware
             ]);
 
             $message = __('Updated successfully');
-            if ($request->status === 'canceled' && $request->cancel_reason) {
+            if ($request->status === 'completed') {
+                $message = __('Order completed successfully');
+            } elseif ($request->status === 'canceled' && $request->cancel_reason) {
                 $message = __('Order cancelled successfully');
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => $message,
-            ]);
+            // Check if request expects JSON (AJAX) or regular redirect
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $message,
+                ]);
+            }
+
+            return redirect()->route('dashboard.order.show', $order->id)
+                ->with('success', $message);
         } catch (\Exception $e) {
             logger()->error('Order update failed', [
                 'order_id' => $order->id,

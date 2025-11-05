@@ -1269,6 +1269,19 @@
             color: #111827 !important;
         }
 
+        html[data-theme="light"] #debt-limit-input,
+        html[data-theme="light"] body #debt-limit-input {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] #debt-limit-input:focus,
+        html[data-theme="light"] body #debt-limit-input:focus {
+            border-color: #059669 !important;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+        }
+
         html[data-theme="light"] .sub-tabs-header,
         html[data-theme="light"] body .sub-tabs-header {
             background: #ffffff !important;
@@ -1365,9 +1378,23 @@
                 </div>
                 <div class="account-detail-item">
                     <div class="detail-icon debt"></div>
-                    <div class="detail-content">
-                        <div class="detail-label">{{ __('الديون') }}</div>
-                        <div class="detail-value">${{ number_format($customer->debt_limit ?? 0, 2) }}</div>
+                    <div class="detail-content" style="flex: 1;">
+                        <div class="detail-label">{{ __('حد الدين') }}</div>
+                        <div class="detail-value" id="debt-limit-display">${{ number_format($customer->debt_limit ?? 0, 2) }}</div>
+                        <div style="display: none; margin-top: 0.5rem;" id="debt-limit-edit">
+                            <input type="number" step="0.01" min="0" 
+                                class="form-input" 
+                                id="debt-limit-input" 
+                                value="{{ $customer->debt_limit ?? 0 }}" 
+                                style="width: 100%; padding: 0.5rem; border: 1px solid var(--dark-border); border-radius: 6px; background: var(--dark-bg-primary); color: var(--dark-text-primary);">
+                            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                                <button type="button" onclick="saveDebtLimit()" style="padding: 0.5rem 1rem; background: var(--dark-success); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">{{ __('حفظ') }}</button>
+                                <button type="button" onclick="cancelDebtLimitEdit()" style="padding: 0.5rem 1rem; background: var(--dark-text-muted); color: white; border: none; border-radius: 6px; cursor: pointer;">{{ __('إلغاء') }}</button>
+                            </div>
+                        </div>
+                        <button type="button" onclick="editDebtLimit()" id="edit-debt-limit-btn" style="margin-top: 0.5rem; padding: 0.4rem 0.8rem; background: var(--dark-info); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                            <i class="fas fa-edit"></i> {{ __('تعديل') }}
+                        </button>
                     </div>
                 </div>
                 <div class="account-detail-item">
@@ -2105,5 +2132,77 @@
         }
     `;
                 document.head.appendChild(style);
+
+                // Debt Limit Edit Functions
+                function editDebtLimit() {
+                    document.getElementById('debt-limit-display').style.display = 'none';
+                    document.getElementById('edit-debt-limit-btn').style.display = 'none';
+                    document.getElementById('debt-limit-edit').style.display = 'block';
+                    document.getElementById('debt-limit-input').focus();
+                }
+
+                function cancelDebtLimitEdit() {
+                    document.getElementById('debt-limit-display').style.display = 'block';
+                    document.getElementById('edit-debt-limit-btn').style.display = 'block';
+                    document.getElementById('debt-limit-edit').style.display = 'none';
+                    // Reset input value to original
+                    const displayValue = document.getElementById('debt-limit-display').textContent;
+                    const originalValue = parseFloat(displayValue.replace('$', '').replace(/,/g, '')) || 0;
+                    document.getElementById('debt-limit-input').value = originalValue;
+                    // Re-enable save button
+                    const saveBtn = document.querySelector('#debt-limit-edit button[onclick="saveDebtLimit()"]');
+                    if (saveBtn) {
+                        saveBtn.disabled = false;
+                        saveBtn.textContent = '{{ __('حفظ') }}';
+                    }
+                }
+
+                function saveDebtLimit() {
+                    const input = document.getElementById('debt-limit-input');
+                    const newValue = parseFloat(input.value) || 0;
+                    
+                    if (newValue < 0) {
+                        showNotification('{{ __('المبلغ يجب أن يكون أكبر من أو يساوي الصفر') }}', 'error');
+                        return;
+                    }
+
+                    // Show loading state
+                    const saveBtn = document.querySelector('#debt-limit-edit button[onclick="saveDebtLimit()"]');
+                    const originalText = saveBtn.textContent;
+                    saveBtn.textContent = '{{ __('جاري الحفظ...') }}';
+                    saveBtn.disabled = true;
+
+                    // Make AJAX request
+                    fetch('{{ route("dashboard.customer.updateDebtLimit", $customer->id) }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            debt_limit: newValue
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update display
+                            document.getElementById('debt-limit-display').textContent = '$' + parseFloat(newValue).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            cancelDebtLimitEdit();
+                            showNotification(data.message || '{{ __('تم تحديث حد الدين بنجاح') }}', 'success');
+                        } else {
+                            showNotification(data.message || '{{ __('حدث خطأ أثناء التحديث') }}', 'error');
+                            saveBtn.textContent = originalText;
+                            saveBtn.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('{{ __('حدث خطأ أثناء التحديث') }}', 'error');
+                        saveBtn.textContent = originalText;
+                        saveBtn.disabled = false;
+                    });
+                }
             </script>
 @endpush

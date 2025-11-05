@@ -45,7 +45,7 @@ class StorePaymentRequest extends Notification
                 'ar' => "قام العميل {$customerName} بطلب إضافة رصيد بمبلغ {$this->paymentRequest->amount_usd} .",
                 'en' => "Customer {$customerName} has requested to add a balance of {$this->paymentRequest->amount_usd} .",
             ],
-            'url' => route('dashboard.dashboard.payment-requests.index'),
+            'url' => route('dashboard.payment-requests.index'),
         ];
     }
 }

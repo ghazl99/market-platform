@@ -189,15 +189,64 @@
                 </thead>
                 <tbody>
                     @forelse($orders as $order)
+                        @php
+                            $firstItem = $order->items->first();
+                            $product = $firstItem->product ?? null;
+                            // Get customer info for this specific order
+                            $orderUser = $order->user;
+                            $customerDisplayName = __('Guest');
+                            if ($orderUser) {
+                                $customerDisplayName = $orderUser->name ?: $orderUser->email ?: __('Guest');
+                            }
+                        @endphp
                         <tr>
                             <td><span class="order-id">#{{ $order->id }}</span></td>
                             <td>
-                                <div class="customer-info">
-                                    <div class="customer-avatar">{{ substr($order->user->name ?? 'U', 0, 1) }}</div>
-                                    <div class="customer-details">
-                                        <h6>{{ $order->user->name ?? __('Guest') }}</h6>
-                                        <p>{{ $order->user->email ?? __('No email') }}</p>
-                                    </div>
+                                <div class="order-item-info">
+                                    @if($product)
+                                        <div class="order-product">
+                                            <div class="product-image-wrapper">
+                                                @if($product->getFirstMedia('product_images'))
+                                                    @php $productMedia = $product->getFirstMedia('product_images'); @endphp
+                                                    <img src="{{ route('dashboard.product.image', $productMedia->id) }}" 
+                                                         alt="{{ $product->name }}" 
+                                                         class="product-image" 
+                                                         onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.product-image-placeholder').style.display='flex';">
+                                                    <div class="product-image-placeholder" style="display: none;">
+                                                        <i class="fas fa-image"></i>
+                                                    </div>
+                                                @else
+                                                    <div class="product-image-placeholder">
+                                                        <i class="fas fa-image"></i>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="product-details">
+                                                <h6 class="product-name" title="{{ $product->name }}">{{ $product->name }}</h6>
+                                                <div class="customer-name" title="Order #{{ $order->id }} - User ID: {{ $order->user_id }}">
+                                                    <i class="fas fa-user"></i>
+                                                    <span class="customer-name-text" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">
+                                                        {{ $customerDisplayName }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="order-product">
+                                            <div class="product-image-placeholder">
+                                                <i class="fas fa-box"></i>
+                                            </div>
+                                            <div class="product-details">
+                                                <h6 class="product-name">{{ __('No Product') }}</h6>
+                                                <div class="customer-name" title="Order #{{ $order->id }} - User ID: {{ $order->user_id }}">
+                                                    <i class="fas fa-user"></i>
+                                                    <span class="customer-name-text" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">
+                                                        {{ $customerDisplayName }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             </td>
                             <td>{{ $order->created_at->format('Y-m-d') }}</td>
@@ -243,7 +292,7 @@
                                         @method('DELETE')
                                         <button type="button" class="action-btn delete delete-order-btn"
                                             data-order-id="{{ $order->id }}"
-                                            data-customer-name="{{ $order->user->name ?? __('Guest') }}">
+                                            data-customer-name="{{ $orderUser ? ($orderUser->name ?: $orderUser->email) : __('Guest') }}">
                                             <i class="fas fa-trash"></i>
                                             {{ __('Delete') }}
                                         </button>
@@ -780,6 +829,163 @@
                 transition: color 0.3s ease;
             }
 
+            /* Order Item Info Styles */
+            .order-item-info {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+
+            .order-product {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                width: 100%;
+            }
+
+            .product-image-wrapper {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                overflow: hidden;
+                flex-shrink: 0;
+                background: var(--bg-secondary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid var(--border-color);
+                position: relative;
+            }
+
+            .product-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 50%;
+                display: block;
+            }
+
+            .product-image-placeholder {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(135deg, #059669 0%, #047857 100%);
+                color: white;
+                font-size: 1.2rem;
+                border-radius: 50%;
+            }
+
+            .product-details {
+                flex: 1;
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 0.35rem;
+            }
+
+            .product-name {
+                margin: 0;
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: var(--text-primary);
+                transition: color 0.3s ease;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 1.3;
+            }
+
+            .customer-name {
+                margin: 0;
+                padding: 0;
+                font-size: 0.8rem;
+                color: var(--text-secondary);
+                transition: color 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                line-height: 1.5;
+                min-height: 20px;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            .customer-name i {
+                flex-shrink: 0;
+                font-size: 0.7rem;
+                opacity: 0.9;
+                color: var(--text-secondary);
+                width: 12px;
+                text-align: center;
+            }
+
+            .customer-name-text {
+                display: inline-block !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 150px;
+                font-weight: 500;
+                line-height: 1.5;
+                visibility: visible !important;
+                opacity: 1 !important;
+                color: inherit;
+            }
+
+            /* Light Mode Styles for Order Product */
+            [data-theme="light"] .product-image-wrapper {
+                background: #f9fafb;
+                border: 1px solid #e5e7eb;
+            }
+
+            [data-theme="light"] .product-name {
+                color: #111827;
+            }
+
+            [data-theme="light"] .customer-name {
+                color: #4b5563;
+            }
+
+            [data-theme="light"] .customer-name i {
+                color: #6b7280;
+            }
+
+            [data-theme="light"] .customer-name-text {
+                color: #374151;
+            }
+
+            /* Dark Mode Styles for Order Product */
+            [data-theme="dark"] .product-image-wrapper {
+                background: #1f2937;
+                border: 1px solid #374151;
+            }
+
+            [data-theme="dark"] .product-name {
+                color: #f9fafb;
+            }
+
+            [data-theme="dark"] .customer-name {
+                color: #d1d5db;
+            }
+
+            [data-theme="dark"] .customer-name i {
+                color: #9ca3af;
+            }
+
+            [data-theme="dark"] .customer-name-text {
+                color: #e5e7eb !important;
+            }
+
+            [data-theme="dark"] .customer-name {
+                color: #d1d5db !important;
+            }
+
+            [data-theme="dark"] .customer-name i {
+                color: #9ca3af !important;
+            }
+
             .status-badge {
                 padding: 0.25rem 0.75rem;
                 border-radius: 20px;
@@ -1305,10 +1511,11 @@
             function filterOrders(query) {
                 const rows = document.querySelectorAll('.orders-table tbody tr');
                 rows.forEach(row => {
-                    const orderId = row.querySelector('.order-id').textContent.toLowerCase();
-                    const customerName = row.querySelector('.customer-details h6').textContent.toLowerCase();
+                    const orderId = row.querySelector('.order-id')?.textContent.toLowerCase() || '';
+                    const productName = row.querySelector('.product-name')?.textContent.toLowerCase() || '';
+                    const customerName = row.querySelector('.customer-name')?.textContent.toLowerCase() || '';
 
-                    if (orderId.includes(query) || customerName.includes(query)) {
+                    if (orderId.includes(query) || productName.includes(query) || customerName.includes(query)) {
                         row.style.display = 'table-row';
                     } else {
                         row.style.display = 'none';

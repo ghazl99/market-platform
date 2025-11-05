@@ -131,8 +131,8 @@
                             @php
                                 $media = $category->getFirstMedia('category_images');
                             @endphp
-                            @if ($media && $media->getUrl())
-                                <img src="{{ $media->getUrl() }}"
+                            @if ($media)
+                                <img src="{{ route('dashboard.category.image', $media->id) }}"
                                     alt="{{ $category->getTranslation('name', app()->getLocale()) }}"
                                     style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;"
                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">

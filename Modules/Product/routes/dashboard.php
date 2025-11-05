@@ -16,4 +16,7 @@ Route::middleware(['web', 'auth', 'ensure-store-access', 'check.store.status'])-
 
     // Route لعرض منتجات قسم معين
     Route::get('/products/category/{category}', [ProductController::class, 'index'])->name('product.category');
+    
+    // Route to show product image by media ID
+    Route::get('/product/image/{media}', [ProductController::class, 'showImage'])->name('product.image');
 });
