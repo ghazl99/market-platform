@@ -2,6 +2,7 @@
 
 namespace Modules\Store\Services\Admin;
 
+use App\Services\GroupService;
 use Modules\Store\Models\Store;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -14,7 +15,9 @@ class StoreService
     use \Modules\Core\Traits\ImageTrait, TranslatableTrait;
 
     public function __construct(
-        protected StoreRepository $storeRepository
+        protected StoreRepository $storeRepository,
+        protected GroupService $groupService
+
     ) {}
 
     /**
@@ -42,7 +45,7 @@ class StoreService
         $data['settings'] = $settings;
         // Create store
         $store = $this->storeRepository->create($data);
-        if (isset($data['logo'])) {
+        if (!empty($data['logo']) && $data['logo'] instanceof \Illuminate\Http\UploadedFile) {
             $this->uploadOrUpdateImageWithResize(
                 $store,
                 $data['logo'],
@@ -52,17 +55,14 @@ class StoreService
             );
         }
 
-        if (isset($data['banner'])) {
-            $this->uploadOrUpdateImageWithResize(
-                $store,
-                $data['banner'],
-                'banner',
-                'private_media',
-                false
-            );
-        }
         // Attach user if provided
         $store->users()->attach($user_id, ['is_active' => true]);
+        $this->groupService->create([
+            'name' => 'الافتراضي',
+            'profit_percentage' => 1,
+            'is_default' => true,
+            'store_id' => $store->id,
+        ]);
 
         DB::commit();
 

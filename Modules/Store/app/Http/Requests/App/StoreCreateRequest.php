@@ -14,12 +14,12 @@ class StoreCreateRequest extends FormRequest
         $timezones = implode(',', array_slice(timezone_identifiers_list(), 0, 400));
 
         return [
-            'name' => ['required', 'string', 'max:255','unique:stores,name'],
+            'name' => ['required', 'string', 'max:255', 'unique:stores,name'],
 
             'domain' => [
                 'required',
                 'string',
-                'regex/^(?!-)([a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$/', // حروف لاتينية فقط وأرقام وشرطة
+                'regex:/^(?!-)([a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$/',
                 'min:3',
                 'max:50',
                 'unique:stores,domain',
@@ -32,7 +32,7 @@ class StoreCreateRequest extends FormRequest
             'user_id' => ['required', 'exists:users,id'],
 
             // ميم تايبز بشكل آمن لجميع الإصدارات
-            'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg'],
             // نتحقق فقط من أنه timezone صالح من القائمة المسموحة
             'timezone' => ['required', 'string', "in:$timezones"],
         ];

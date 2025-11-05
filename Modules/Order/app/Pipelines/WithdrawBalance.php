@@ -9,14 +9,13 @@ class WithdrawBalance
     public function handle($data, Closure $next)
     {
         $wallet = $data['wallet'];
-        $data['old_balance'] = $wallet->balance;
+        $old = $wallet->balance;
+        $new = $old - $data['total_amount'];
 
-        $wallet->balance -= $data['total_amount'];
-        $data['new_balance'] = $wallet->balance;
-        
-        $wallet->save();
+        $wallet->update(['balance' => $new]);
 
-        $data['wallet'] = $wallet;
+        $data['old_balance'] = $old;
+        $data['new_balance'] = $new;
 
         return $next($data);
     }

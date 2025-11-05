@@ -52,7 +52,9 @@ class Group extends Model
      */
     public static function getDefaultGroup()
     {
-        return self::where('is_default', true)->first();
+        $store = function_exists('current_store') ? current_store() : null;
+
+        return self::where('is_default', true)->where('store_id', $store->id)->first();
     }
 
     /**

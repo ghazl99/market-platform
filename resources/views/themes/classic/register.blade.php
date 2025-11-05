@@ -22,7 +22,7 @@
                         <i class="fas fa-store"></i>
                     </div>
                     <div class="logo-text">
-                        <span class="logo-name">{{ __('Market Platform') }}</span>
+                        <span class="logo-name">{{ __('Mtjree') }}</span>
                         <span class="logo-tagline">{{ __('Smart Commerce Platform') }}</span>
                     </div>
                 </a>

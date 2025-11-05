@@ -22,7 +22,6 @@ class OrderController extends Controller
     {
         try {
             $result = $this->orderService->store($request->validated());
-            // if ($result)
             return redirect()
                 ->back()
                 ->with('success', __('Created successfully'));
