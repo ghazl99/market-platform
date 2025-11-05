@@ -28,11 +28,7 @@ class HomeController extends Controller
             ? config('app.main_domain', 'soqsyria.com')
             : 'market-platform.localhost';
 
-        if (auth()->check() && auth()->user()->hasAnyRole(['owner', 'admin'])) {
-            auth()->logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-        }
+
         // ✅ التحقق الصحيح
         if ($host === $mainDomain) {
             return view('core::app.home');
@@ -44,7 +40,11 @@ class HomeController extends Controller
         if (! $store) {
             abort(404, 'Store not found');
         }
-
+        if (auth()->check() && auth()->user()->hasAnyRole(['owner', 'admin'])) {
+            auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
         $categories = $this->categoryService->getAllcategories();
         $topOrdered = $this->productService->getTopOrderedProducts($store->id, 10);
         $topViewed = $this->productService->getTopViewedProducts($store->id, 10);

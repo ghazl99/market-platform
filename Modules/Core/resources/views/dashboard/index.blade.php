@@ -1,9 +1,9 @@
-@extends('core::layouts.app')
+@extends('core::store.main-dashboard.layouts.app')
 
 @section('title', __('Dashboard') . ' - ' . __('Store Platform'))
 
 @section('content')
-    <div class="container-fluid "style="margin-top: 120px; ">
+    <div class="container-fluid "style="margin-top: 20px; ">
         <!-- Page Header -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">

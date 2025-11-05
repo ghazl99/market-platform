@@ -497,7 +497,7 @@
                             @php $media =  $order->items->first()->product->getFirstMedia('product_images'); @endphp
 
                             @if ($media)
-                                <img src="{{ route('product.image', $media->id) }}" alt="{{ $product->name }}"
+                                <img src="{{ route('product.image', $media->id) }}" alt="alt="{{  $order->items->first()->product->name ?? '' }}""
                                     class="product-image">
                             @endif
                             <div class="product-details">

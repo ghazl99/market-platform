@@ -1,4 +1,4 @@
-@extends('core::layouts.app')
+@extends('core::store.main-dashboard.layouts.app')
 
 @section('title', 'Stores Management - Dashboard')
 
@@ -269,7 +269,8 @@
                                 @foreach ($stores as $store)
                                     <tr>
                                         <td>{{ $store->name }}</td>
-                                        <td>{{ $store->owners->first()->name }}</td>
+
+                                        <td>{{ $store->owners->first()?->email ?? '-' }}</td>
                                         <td>{{ $store->store_url }}</td>
                                         <td><span class="badge badge-secondary">{{ $store->type }}</span></td>
                                         <td>
