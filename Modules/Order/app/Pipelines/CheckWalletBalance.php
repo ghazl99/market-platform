@@ -13,14 +13,12 @@ class CheckWalletBalance
     {
         $user = Auth::user();
         $wallet = Wallet::where('user_id', $user->id)->firstOrFail();
-        $product = Product::findOrFail($data['product_id']);
 
         $quantity = (int) $data['quantity'];
-        $totalCost = $product->price * $quantity;
+        $totalCost = $data['product']->price * $quantity;
 
-        // إذا المستخدم مميز يسمح له بالدين حتى 1000
         if ($user->debt_limit) {
-            $maxDebt = $user->debt_limit; // الحد الأقصى للدين
+            $maxDebt = $user->debt_limit;
             $currentDebt = max(0, $totalCost - $wallet->balance);
 
             if ($currentDebt > $maxDebt) {
@@ -30,7 +28,6 @@ class CheckWalletBalance
                     ->with('error', __('Your premium limit exceeded. Maximum allowed debt is :amount $', ['amount' => $maxDebt]));
             }
         } else {
-            // مستخدم عادي: الرصيد يجب أن يكون كافي
             if ($wallet->balance < $totalCost) {
                 return redirect()
                     ->back()
@@ -39,11 +36,10 @@ class CheckWalletBalance
             }
         }
 
-        // تمرير البيانات للخطوة التالية
         $data['wallet'] = $wallet;
         $data['total_amount'] = $totalCost;
         $data['quantity'] = $quantity;
-        $data['store_id'] = $product->store_id;
+        $data['store_id'] = $data['product']->store_id;
 
         return $next($data);
     }

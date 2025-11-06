@@ -2,17 +2,19 @@
 
 namespace Modules\Product\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Group;
 use Laravel\Scout\Searchable;
-use Modules\Attribute\Models\Attribute;
-use Modules\Category\Models\Category;
-use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Store\Models\Store;
 use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Support\Facades\Auth;
+use Modules\Category\Models\Category;
+use Illuminate\Database\Eloquent\Model;
+use Modules\Attribute\Models\Attribute;
 use Spatie\Translatable\HasTranslations;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Product\Database\Factories\ProductFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Product extends Model implements HasMedia
 {
@@ -59,6 +61,26 @@ class Product extends Model implements HasMedia
     ];
 
     public $translatable = ['name', 'description'];
+
+    public function getPriceWithGroupProfitAttribute()
+    {
+        $basePrice = $this->price;
+
+        $user = Auth::user();
+
+        $store = function_exists('current_store') ? current_store() : null;
+        $profitPercentage = 0;
+
+        // إذا المستخدم عنده مجموعة → خذ نسبتها
+        if ($user && $user->group) {
+            $profitPercentage = $user->group->profit_percentage;
+        } else {
+            $profitPercentage = \App\Group::getDefaultGroup()?->profit_percentage ?? 0;
+        }
+        // احسب السعر النهائي
+        return $basePrice + ($basePrice * $profitPercentage / 100);
+    }
+
 
     protected static function newFactory(): ProductFactory
     {

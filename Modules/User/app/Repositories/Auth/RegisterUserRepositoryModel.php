@@ -8,9 +8,9 @@ class RegisterUserRepositoryModel implements RegisterUserRepository
 {
     public function create(array $data): User
     {
-        $user = User::firstOrCreate(
-            ['email' => $data['email']],
+        $user = User::Create(
             [
+                'email' => $data['email'],
                 'name' => $data['name'],
                 'password' => $data['password'],
             ]

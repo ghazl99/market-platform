@@ -1076,7 +1076,7 @@
                 <div class="price-section">
                     <div class="price-label">السعر النهائي</div>
                     <div class="price-value">
-                        <span id="product-request-TotalPrice">{{ $product->price }}</span> $
+                        <span id="product-request-TotalPrice">{{ number_format($product->price_with_group_profit, 2) }}</span> $
                     </div>
                 </div>
 
@@ -1094,7 +1094,7 @@
                             <div class="input-group">
                                 <input name="quantity" id="quantity" placeholder="{{ __('Quantity') }}"
                                     class="form-control int-format-jaafar" value="1">
-                                <span class="input-group-text">{{ $product->price }} $</span>
+                                <span class="input-group-text">{{ number_format($product->price_with_group_profit, 2) }} $</span>
                             </div>
                         </div>
 
@@ -1135,7 +1135,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const quantityInput = document.getElementById('quantity');
             const totalPriceDisplay = document.getElementById('product-request-TotalPrice');
-            const unitPrice = parseFloat("{{ $product->price }}");
+            const unitPrice = parseFloat("{{ $product->price_with_group_profit }}");
 
             function updateTotalPrice() {
                 let quantity = parseInt(quantityInput.value) || 1;

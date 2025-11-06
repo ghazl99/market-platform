@@ -56,7 +56,7 @@ class StoreController extends Controller implements HasMiddleware
     {
         $themes = $this->themeService->getAllThemes();
 
-        return view('store::app.create',compact('themes'));
+        return view('store::app.create', compact('themes'));
     }
 
     /**
@@ -64,14 +64,29 @@ class StoreController extends Controller implements HasMiddleware
      */
     public function store(StoreCreateRequest $request)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        $store = $this->storeService->store($data);
+            $data['logo'] = $request->file('logo');
 
-        return redirect()
-            ->route('stores.show', $store)
-            ->with('success', __('Created successfully'));
+            $store = $this->storeService->store($data);
+
+            return redirect()
+                ->route('stores.index')
+                ->with('success', __('Created successfully'));
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        }
     }
+
 
 
     /**

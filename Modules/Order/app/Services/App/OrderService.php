@@ -49,18 +49,23 @@ class OrderService
         */
     public function store(array $data)
     {
+        // ✅ جلب المنتج مرة واحدة قبل الـ transaction
+        $product = \Modules\Product\Models\Product::select('id', 'price', 'min_quantity', 'max_quantity', 'store_id')
+            ->findOrFail($data['product_id']);
+
+        $data['product'] = $product;
+
         return DB::transaction(function () use ($data) {
             return app(\Illuminate\Pipeline\Pipeline::class)
                 ->send($data)
                 ->through([
-                    CheckWalletBalance::class,
-                    CheckQuantityLimits::class,
-                    CreateOrder::class,
-                    WithdrawBalance::class,
-                    LogTransaction::class,
+                    \Modules\Order\Pipelines\CheckWalletBalance::class,
+                    \Modules\Order\Pipelines\CheckQuantityLimits::class,
+                    \Modules\Order\Pipelines\CreateOrder::class,
+                    \Modules\Order\Pipelines\WithdrawBalance::class,
+                    \Modules\Order\Pipelines\LogTransaction::class,
                 ])
                 ->thenReturn();
-
-        });
+        }); // مستوى العزل 1 لتسريع التنفيذ
     }
 }

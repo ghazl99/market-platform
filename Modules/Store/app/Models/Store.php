@@ -2,18 +2,19 @@
 
 namespace Modules\Store\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Log;
-use Modules\Product\Models\Product;
 use Modules\User\Models\User;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Support\Facades\Log;
+use Modules\Product\Models\Product;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Wallet\Models\PaymentMethod;
 use Spatie\Translatable\HasTranslations;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Modules\Store\Database\Factories\StoreFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Store extends Model implements HasMedia
 {
@@ -238,7 +239,7 @@ class Store extends Model implements HasMedia
             }
 
             // Try to get from URL path (e.g., /ar/dashboard -> get from auth user's store)
-            $user = auth()->user();
+            $user =Auth::user();
             if ($user) {
                 // Try to get store from user's stores relationship
                 $userStore = $user->stores()->where('is_active', true)->first();
