@@ -227,7 +227,7 @@ class CategoryModelRepository implements CategoryRepository
             $queryBuilder->where('name', 'like', "%{$query}%");
         }
 
-        // استخدم distinct لحل مشكلة duplicate عند belongsToMany
-        return $queryBuilder->distinct('products.id')->paginate(10)->appends(['query' => $query]);
+        // إلغاء الباجينيشن واستخدام get()
+        return $queryBuilder->distinct('products.id')->get();
     }
 }

@@ -2722,7 +2722,7 @@ body.dark-mode .category-image::after {
 }
 
 .product-info {
-    padding: 1.5rem;
+    padding: 5px;
 }
 
 .product-name {
@@ -4349,7 +4349,7 @@ body.dark-mode .sidebar-footer {
     .main-content-adjust {
         margin-right: 0 !important;
         margin-top: 65px;
-        padding: 0 1rem;
+        padding: 0 5px;
     }
 
     .menu-toggle {
@@ -4659,7 +4659,7 @@ body.dark-mode .sidebar-footer {
     }
 
     .products-section .container {
-        padding: 0 0.5rem;
+        padding: 0 1px;
     }
 
     .products-toolbar {
@@ -4701,8 +4701,7 @@ body.dark-mode .sidebar-footer {
     }
 
     .product-name {
-        font-size: 1rem;
-        min-height: 2.5rem;
+        font-size: 8px;
     }
 
     .current-price {

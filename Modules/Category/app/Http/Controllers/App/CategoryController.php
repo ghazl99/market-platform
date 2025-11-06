@@ -41,12 +41,10 @@ class CategoryController extends Controller
 
         if ($request->ajax()) {
             $html = view('themes.' . current_theme_name_en() . '._products', compact('products'))->render();
-            $pagination = $products->hasPages() ? $products->links()->toHtml() : '';
 
             return response()->json([
                 'html' => $html,
-                'pagination' => $pagination,
-                'hasPages' => $products->hasPages(),
+                'hasPages' => false, // لم يعد هناك صفحات
             ]);
         }
 
