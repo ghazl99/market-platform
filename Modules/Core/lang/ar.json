@@ -335,6 +335,25 @@
     "Filter": "فلترة",
     "Clear": "مسح",
     "From date must be before to date": "تاريخ البداية يجب أن يكون قبل تاريخ النهاية",
-    "To date must be after from date": "تاريخ النهاية يجب أن يكون بعد تاريخ البداية"
+    "To date must be after from date": "تاريخ النهاية يجب أن يكون بعد تاريخ البداية",
+    "New Orders Today": "الطلبات الجديدة اليوم",
+    "New Customers Today": "العملاء الجدد اليوم",
+    "Conversion Rate": "معدل التحويل",
+    "Recent Activities": "الأنشطة الأخيرة",
+    "New Order": "طلب جديد",
+    "Order received with amount": "تم استلام طلب بقيمة",
+    "Payment Received": "دفعة مستلمة",
+    "Payment with amount": "دفعة بقيمة",
+    "New Customer": "عميل جديد",
+    "registered new account": "سجل حساب جديد",
+    "Stock Update": "تحديث المخزون",
+    "New product added": "تم إضافة منتج جديد",
+    "No recent activities": "لا توجد أنشطة حديثة",
+    "Welcome to Dashboard": "مرحباً بك في لوحة التحكم",
+    "Here is an overview of your store performance today": "إليك نظرة عامة على أداء متجرك اليوم",
+    "Monthly Sales": "مبيعات الشهر",
+    "7 Days": "7 أيام",
+    "30 Days": "30 يوم",
+    "90 Days": "90 يوم"
 }
 
