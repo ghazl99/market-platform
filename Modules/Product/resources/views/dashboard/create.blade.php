@@ -716,7 +716,7 @@
                         @error('price')
                             <div class="form-error">{{ $message }}</div>
                         @enderror
-                        <div class="form-help">{{ __('Price in Saudi Riyal') }}</div>
+                        <div class="form-help">{{ __('Enter selling price in USD') }}</div>
                     </div>
 
 

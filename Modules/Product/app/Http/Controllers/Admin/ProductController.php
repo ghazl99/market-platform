@@ -279,20 +279,45 @@ class ProductController extends Controller implements HasMiddleware
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product, Request $request)
     {
         try {
             $this->productService->deleteProduct($product);
 
-            return response()->json([
-                'success' => true,
-                'message' => __('Product deleted successfully'),
-            ]);
+            // Check if it's an AJAX/JSON request
+            $isAjax = $request->ajax() || 
+                     $request->expectsJson() || 
+                     $request->wantsJson() ||
+                     $request->header('Accept') === 'application/json' ||
+                     str_contains($request->header('Accept', ''), 'application/json');
+
+            if ($isAjax) {
+                return response()->json([
+                    'success' => true,
+                    'message' => __('Product deleted successfully'),
+                ]);
+            }
+
+            // For non-AJAX requests, redirect with success message
+            return redirect()->route('dashboard.product.index')
+                ->with('success', __('Product deleted successfully'));
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
+            // Check if it's an AJAX/JSON request
+            $isAjax = $request->ajax() || 
+                     $request->expectsJson() || 
+                     $request->wantsJson() ||
+                     $request->header('Accept') === 'application/json' ||
+                     str_contains($request->header('Accept', ''), 'application/json');
+
+            if ($isAjax) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
+            
+            return redirect()->back()
+                ->with('error', $e->getMessage());
         }
     }
 

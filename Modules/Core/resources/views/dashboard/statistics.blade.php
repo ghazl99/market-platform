@@ -140,15 +140,15 @@
                     </div>
                     <div class="stat-content">
                         <h3 class="stat-label">{{ __('Total Sales') }}</h3>
-                        <div class="stat-value">{{ number_format($totalSalesAmount, 2) }} {{ __('SAR') }}</div>
+                        <div class="stat-value">${{ number_format($totalSalesAmount, 2) }}</div>
                         <div class="stat-details">
                             <span class="stat-item">
                                 <i class="fas fa-sun"></i>
-                                {{ __('Today') }}: {{ number_format($todaySales, 2) }} {{ __('SAR') }}
+                                {{ __('Today') }}: ${{ number_format($todaySales, 2) }}
                             </span>
                             <span class="stat-item">
                                 <i class="fas fa-calendar-alt"></i>
-                                {{ __('This Month') }}: {{ number_format($thisMonthSales, 2) }} {{ __('SAR') }}
+                                {{ __('This Month') }}: ${{ number_format($thisMonthSales, 2) }}
                             </span>
                         </div>
                     </div>
@@ -203,20 +203,19 @@
                     </div>
                     <div class="stat-content">
                         <h3 class="stat-label">{{ __('Wallet Transactions') }}</h3>
-                        <div class="stat-value">{{ number_format($totalDeposits - $totalWithdrawals, 2) }}
-                            {{ __('SAR') }}</div>
+                        <div class="stat-value">${{ number_format($totalDeposits - $totalWithdrawals, 2) }}</div>
                         <div class="stat-details">
                             <span class="stat-item">
                                 <i class="fas fa-arrow-down text-success"></i>
-                                {{ __('Deposits') }}: {{ number_format($totalDeposits, 2) }} {{ __('SAR') }}
+                                {{ __('Deposits') }}: ${{ number_format($totalDeposits, 2) }}
                             </span>
                             <span class="stat-item">
                                 <i class="fas fa-arrow-up text-danger"></i>
-                                {{ __('Withdrawals') }}: {{ number_format($totalWithdrawals, 2) }} {{ __('SAR') }}
+                                {{ __('Withdrawals') }}: ${{ number_format($totalWithdrawals, 2) }}
                             </span>
                             <span class="stat-item">
                                 <i class="fas fa-calendar-day"></i>
-                                {{ __('Today Deposits') }}: {{ number_format($todayDeposits, 2) }} {{ __('SAR') }}
+                                {{ __('Today Deposits') }}: ${{ number_format($todayDeposits, 2) }}
                             </span>
                         </div>
                     </div>
@@ -307,8 +306,7 @@
                                     <tr>
                                         <td>#{{ $order->id }}</td>
                                         <td>{{ $order->user->name ?? __('Guest') }}</td>
-                                        <td class="amount">{{ number_format($order->total_amount, 2) }}
-                                            {{ __('SAR') }}</td>
+                                        <td class="amount">${{ number_format($order->total_amount, 2) }}</td>
                                         <td>
                                             <span class="status-badge status-{{ $order->status }}">
                                                 @switch($order->status)
@@ -1594,7 +1592,7 @@
                                     fill: true
                                 },
                                 {
-                                    label: '{{ __('Sales') }} ({{ __('SAR') }})',
+                                    label: '{{ __('Sales') }} ($)',
                                     data: {!! json_encode(array_column($last7Days, 'sales')) !!},
                                     borderColor: 'rgb(16, 185, 129)',
                                     backgroundColor: 'rgba(16, 185, 129, 0.1)',

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @php
         use Modules\Store\Models\Store;
@@ -133,32 +133,71 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Suppress browser extension errors
+        if (typeof chrome !== 'undefined' && chrome.runtime) {
+            chrome.runtime.onMessage && chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+                try {
+                    // Handle extension messages if needed
+                } catch (e) {
+                    // Silently ignore extension errors
+                }
+                return true;
+            });
+        }
+
+        // Global error handler to suppress extension-related errors
+        window.addEventListener('error', function(e) {
+            // Suppress known extension errors
+            if (e.message && (
+                e.message.includes('runtime.lastError') ||
+                e.message.includes('extension port') ||
+                e.message.includes('message channel')
+            )) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
         $(document).ready(function() {
-            // Handle session messages with new notification system
-            @if (session('success'))
-                showSuccess('تم بنجاح!', '{{ session('success') }}');
-            @endif
+            try {
+                // Handle session messages with new notification system
+                @if (session('success'))
+                    if (typeof showSuccess === 'function') {
+                        showSuccess('تم بنجاح!', '{{ session('success') }}');
+                    }
+                @endif
 
-            @if (session('error'))
-                showError('حدث خطأ!', '{{ session('error') }}');
-            @endif
+                @if (session('error'))
+                    if (typeof showError === 'function') {
+                        showError('حدث خطأ!', '{{ session('error') }}');
+                    }
+                @endif
 
-            @if (session('warning'))
-                showWarning('تحذير!', '{{ session('warning') }}');
-            @endif
+                @if (session('warning'))
+                    if (typeof showWarning === 'function') {
+                        showWarning('تحذير!', '{{ session('warning') }}');
+                    }
+                @endif
 
-            @if (session('info'))
-                showInfo('معلومة', '{{ session('info') }}');
-            @endif
+                @if (session('info'))
+                    if (typeof showInfo === 'function') {
+                        showInfo('معلومة', '{{ session('info') }}');
+                    }
+                @endif
 
-            // Handle validation errors
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    showError('خطأ في التحقق', '{{ $error }}');
-                @endforeach
-            @endif
+                // Handle validation errors
+                @if ($errors->any())
+                    @foreach ($errors->all() as $error)
+                        if (typeof showError === 'function') {
+                            showError('خطأ في التحقق', '{{ $error }}');
+                        }
+                    @endforeach
+                @endif
 
-            // Delete confirmation is handled by individual pages
+                // Delete confirmation is handled by individual pages
+            } catch (error) {
+                console.warn('Error in document ready handler:', error);
+            }
         });
     </script>
 

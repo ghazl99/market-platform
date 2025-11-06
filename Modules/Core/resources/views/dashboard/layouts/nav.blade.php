@@ -1,7 +1,7 @@
 <!-- Top Bar -->
 <header class="dashboard-topbar">
     <div class="topbar-left">
-        <button class="sidebar-toggle mobile-only" onclick="toggleSidebar()">
+        <button class="sidebar-toggle mobile-only" onclick="toggleSidebar()" aria-label="{{ __('Toggle Sidebar') }}">
             <i class="fas fa-bars"></i>
         </button>
         <div class="breadcrumb">

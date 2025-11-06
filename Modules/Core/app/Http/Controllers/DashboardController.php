@@ -158,7 +158,7 @@ class DashboardController extends Controller implements HasMiddleware
                     'type' => 'order',
                     'icon' => 'shopping-cart',
                     'title' => __('New Order') . ' #' . $order->id,
-                    'description' => __('Order received with amount') . ' ' . number_format($order->total_amount, 2) . ' ' . __('SAR'),
+                    'description' => __('Order received with amount') . ' $' . number_format($order->total_amount, 2),
                     'time' => $order->created_at,
                     'url' => route('dashboard.order.show', $order->id)
                 ];
@@ -177,7 +177,7 @@ class DashboardController extends Controller implements HasMiddleware
                 'type' => 'payment',
                 'icon' => 'credit-card',
                 'title' => __('Payment Received'),
-                'description' => __('Payment with amount') . ' ' . number_format($transaction->amount, 2) . ' ' . __('SAR'),
+                'description' => __('Payment with amount') . ' $' . number_format($transaction->amount, 2),
                 'time' => $transaction->created_at,
                 'url' => null
             ];

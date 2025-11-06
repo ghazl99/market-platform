@@ -28,16 +28,24 @@ class DashboardNotifications {
     }
 
     setupNotificationActions() {
-        // Add hover effects to notification items
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                item.style.transform = 'translateX(4px)';
-            });
+        try {
+            // Add hover effects to notification items
+            document.querySelectorAll('.notification-item').forEach(item => {
+                try {
+                    item.addEventListener('mouseenter', () => {
+                        item.style.transform = 'translateX(4px)';
+                    });
 
-            item.addEventListener('mouseleave', () => {
-                item.style.transform = 'translateX(0)';
+                    item.addEventListener('mouseleave', () => {
+                        item.style.transform = 'translateX(0)';
+                    });
+                } catch (e) {
+                    console.warn('Error setting up notification item actions:', e);
+                }
             });
-        });
+        } catch (error) {
+            console.warn('Error in setupNotificationActions:', error);
+        }
     }
 
 
@@ -57,7 +65,11 @@ class DashboardNotifications {
                 this.updateNotificationBadges(data.count);
             }
         } catch (error) {
-            console.error('Error refreshing notification count:', error);
+            // Silently ignore fetch errors (network issues, etc.)
+            // Only log if it's not a network error
+            if (error.name !== 'TypeError' && error.name !== 'NetworkError') {
+                console.warn('Error refreshing notification count:', error);
+            }
         }
     }
 
@@ -108,7 +120,11 @@ class DashboardNotifications {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    new DashboardNotifications();
+    try {
+        new DashboardNotifications();
+    } catch (error) {
+        console.error('Error initializing DashboardNotifications:', error);
+    }
 });
 
 // Add CSS for slide out animation

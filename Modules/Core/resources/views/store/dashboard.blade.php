@@ -19,7 +19,7 @@
                         <i class="fas fa-coins"></i>
                     </div>
                 </div>
-                <div class="stat-value">{{ number_format($totalSales, 2) }} {{ __('SAR') }}</div>
+                <div class="stat-value">${{ number_format($totalSales, 2) }}</div>
                 <div class="stat-change {{ $salesGrowth >= 0 ? 'positive' : 'negative' }}">
                     <i class="fas fa-arrow-{{ $salesGrowth >= 0 ? 'up' : 'down' }}"></i>
                     <span>{{ $salesGrowth >= 0 ? '+' : '' }}{{ number_format($salesGrowth, 1) }}%</span>
@@ -175,7 +175,7 @@
                     data: {
                         labels: data.map(item => item.label),
                         datasets: [{
-                            label: '{{ __('Sales') }} ({{ __('SAR') }})',
+                            label: '{{ __('Sales') }} ($)',
                             data: data.map(item => item.sales),
                             borderColor: borderColor,
                             backgroundColor: backgroundColor,
@@ -215,7 +215,7 @@
                                 padding: 12,
                                 callbacks: {
                                     label: function(context) {
-                                        return '{{ __('Sales') }}: ' + Number(context.parsed.y).toFixed(2) + ' {{ __('SAR') }}';
+                                        return '{{ __('Sales') }}: $' + Number(context.parsed.y).toFixed(2);
                                     }
                                 }
                             }
@@ -245,7 +245,7 @@
                                         size: 11
                                     },
                                     callback: function(value) {
-                                        return Number(value).toFixed(0) + ' {{ __('SAR') }}';
+                                        return '$' + Number(value).toFixed(0);
                                     }
                                 }
                             }

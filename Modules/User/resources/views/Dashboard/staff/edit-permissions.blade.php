@@ -475,139 +475,498 @@
 
         /* Light Mode Styles - Maximum Priority */
         html[data-theme="light"] .staff-container,
-        html[data-theme="light"] body .staff-container {
+        html[data-theme="light"] body .staff-container,
+        [data-theme="light"] .staff-container,
+        [data-theme="light"] body .staff-container {
             background: #ffffff !important;
         }
 
         html[data-theme="light"] .page-title,
-        html[data-theme="light"] body .page-title {
+        html[data-theme="light"] body .page-title,
+        [data-theme="light"] .page-title,
+        [data-theme="light"] body .page-title {
             color: #111827 !important;
         }
 
         html[data-theme="light"] .page-header,
-        html[data-theme="light"] body .page-header {
+        html[data-theme="light"] body .page-header,
+        [data-theme="light"] .page-header,
+        [data-theme="light"] body .page-header {
             border-bottom: 1px solid #e5e7eb !important;
         }
 
         html[data-theme="light"] .staff-info-card,
-        html[data-theme="light"] body .staff-info-card {
+        html[data-theme="light"] body .staff-info-card,
+        [data-theme="light"] .staff-info-card,
+        [data-theme="light"] body .staff-info-card {
             background: #ffffff !important;
             border: 1px solid #e5e7eb !important;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
         }
 
         html[data-theme="light"] .staff-details h3,
-        html[data-theme="light"] body .staff-details h3 {
+        html[data-theme="light"] body .staff-details h3,
+        [data-theme="light"] .staff-details h3,
+        [data-theme="light"] body .staff-details h3 {
             color: #111827 !important;
         }
 
         html[data-theme="light"] .staff-details p,
-        html[data-theme="light"] body .staff-details p {
+        html[data-theme="light"] body .staff-details p,
+        [data-theme="light"] .staff-details p,
+        [data-theme="light"] body .staff-details p {
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .staff-avatar img,
+        html[data-theme="light"] body .staff-avatar img,
+        [data-theme="light"] .staff-avatar img,
+        [data-theme="light"] body .staff-avatar img {
+            border-color: #d1d5db !important;
+        }
+
+        html[data-theme="light"] .avatar-placeholder,
+        html[data-theme="light"] body .avatar-placeholder,
+        [data-theme="light"] .avatar-placeholder,
+        [data-theme="light"] body .avatar-placeholder {
+            background: #f3f4f6 !important;
             color: #6b7280 !important;
+            border-color: #d1d5db !important;
         }
 
         html[data-theme="light"] .permissions-form-container,
-        html[data-theme="light"] body .permissions-form-container {
+        html[data-theme="light"] body .permissions-form-container,
+        [data-theme="light"] .permissions-form-container,
+        [data-theme="light"] body .permissions-form-container {
             background: #ffffff !important;
             border: 1px solid #e5e7eb !important;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
         }
 
         html[data-theme="light"] .form-header,
-        html[data-theme="light"] body .form-header {
+        html[data-theme="light"] body .form-header,
+        [data-theme="light"] .form-header,
+        [data-theme="light"] body .form-header {
             background: #f9fafb !important;
             border-bottom: 1px solid #e5e7eb !important;
         }
 
         html[data-theme="light"] .form-header h3,
-        html[data-theme="light"] body .form-header h3 {
+        html[data-theme="light"] body .form-header h3,
+        [data-theme="light"] .form-header h3,
+        [data-theme="light"] body .form-header h3 {
             color: #111827 !important;
         }
 
         html[data-theme="light"] .form-header p,
-        html[data-theme="light"] body .form-header p {
-            color: #6b7280 !important;
+        html[data-theme="light"] body .form-header p,
+        [data-theme="light"] .form-header p,
+        [data-theme="light"] body .form-header p {
+            color: #374151 !important;
         }
 
         html[data-theme="light"] .form-label,
-        html[data-theme="light"] body .form-label {
+        html[data-theme="light"] body .form-label,
+        [data-theme="light"] .form-label,
+        [data-theme="light"] body .form-label {
             color: #111827 !important;
         }
 
+        html[data-theme="light"] .form-label i,
+        html[data-theme="light"] body .form-label i,
+        [data-theme="light"] .form-label i,
+        [data-theme="light"] body .form-label i {
+            color: #6b7280 !important;
+        }
+
         html[data-theme="light"] .form-control,
-        html[data-theme="light"] body .form-control {
+        html[data-theme="light"] body .form-control,
+        [data-theme="light"] .form-control,
+        [data-theme="light"] body .form-control {
             background: #ffffff !important;
-            border: 1px solid #e5e7eb !important;
+            border: 1px solid #d1d5db !important;
             color: #111827 !important;
         }
 
         html[data-theme="light"] .form-control:focus,
-        html[data-theme="light"] body .form-control:focus {
+        html[data-theme="light"] body .form-control:focus,
+        [data-theme="light"] .form-control:focus,
+        [data-theme="light"] body .form-control:focus {
             background: #ffffff !important;
             border-color: #059669 !important;
+            color: #111827 !important;
         }
 
         html[data-theme="light"] .form-text,
-        html[data-theme="light"] body .form-text {
+        html[data-theme="light"] body .form-text,
+        [data-theme="light"] .form-text,
+        [data-theme="light"] body .form-text {
             color: #6b7280 !important;
         }
 
         html[data-theme="light"] .form-actions,
-        html[data-theme="light"] body .form-actions {
+        html[data-theme="light"] body .form-actions,
+        [data-theme="light"] .form-actions,
+        [data-theme="light"] body .form-actions {
             border-top: 1px solid #e5e7eb !important;
         }
 
         html[data-theme="light"] .notification,
-        html[data-theme="light"] body .notification {
+        html[data-theme="light"] body .notification,
+        [data-theme="light"] .notification,
+        [data-theme="light"] body .notification {
             background: #ffffff !important;
             border: 1px solid #e5e7eb !important;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
         }
 
         html[data-theme="light"] .notification-title,
-        html[data-theme="light"] body .notification-title {
+        html[data-theme="light"] body .notification-title,
+        [data-theme="light"] .notification-title,
+        [data-theme="light"] body .notification-title {
             color: #111827 !important;
         }
 
         html[data-theme="light"] .notification-message,
-        html[data-theme="light"] body .notification-message {
-            color: #6b7280 !important;
+        html[data-theme="light"] body .notification-message,
+        [data-theme="light"] .notification-message,
+        [data-theme="light"] body .notification-message {
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .notification.success .notification-title,
+        html[data-theme="light"] body .notification.success .notification-title,
+        [data-theme="light"] .notification.success .notification-title,
+        [data-theme="light"] body .notification.success .notification-title {
+            color: #059669 !important;
+        }
+
+        html[data-theme="light"] .notification.error .notification-title,
+        html[data-theme="light"] body .notification.error .notification-title,
+        [data-theme="light"] .notification.error .notification-title,
+        [data-theme="light"] body .notification.error .notification-title {
+            color: #dc2626 !important;
+        }
+
+        html[data-theme="light"] .notification.warning .notification-title,
+        html[data-theme="light"] body .notification.warning .notification-title,
+        [data-theme="light"] .notification.warning .notification-title,
+        [data-theme="light"] body .notification.warning .notification-title {
+            color: #d97706 !important;
+        }
+
+        html[data-theme="light"] .notification.info .notification-title,
+        html[data-theme="light"] body .notification.info .notification-title,
+        [data-theme="light"] .notification.info .notification-title,
+        [data-theme="light"] body .notification.info .notification-title {
+            color: #2563eb !important;
         }
 
         /* Select2 Light Mode Styles */
         html[data-theme="light"] .select2-container--default .select2-selection--multiple,
-        html[data-theme="light"] body .select2-container--default .select2-selection--multiple {
+        html[data-theme="light"] body .select2-container--default .select2-selection--multiple,
+        [data-theme="light"] .select2-container--default .select2-selection--multiple,
+        [data-theme="light"] body .select2-container--default .select2-selection--multiple {
             background: #ffffff !important;
-            border: 1px solid #e5e7eb !important;
+            border: 1px solid #d1d5db !important;
             color: #111827 !important;
         }
 
         html[data-theme="light"] .select2-container--default .select2-selection--multiple .select2-selection__choice,
-        html[data-theme="light"] body .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        html[data-theme="light"] body .select2-container--default .select2-selection--multiple .select2-selection__choice,
+        [data-theme="light"] .select2-container--default .select2-selection--multiple .select2-selection__choice,
+        [data-theme="light"] body .select2-container--default .select2-selection--multiple .select2-selection__choice {
             background: #f3f4f6 !important;
-            border: 1px solid #e5e7eb !important;
+            border: 1px solid #d1d5db !important;
             color: #111827 !important;
         }
 
         html[data-theme="light"] .select2-container--default .select2-search--inline .select2-search__field,
-        html[data-theme="light"] body .select2-container--default .select2-search--inline .select2-search__field {
+        html[data-theme="light"] body .select2-container--default .select2-search--inline .select2-search__field,
+        [data-theme="light"] .select2-container--default .select2-search--inline .select2-search__field,
+        [data-theme="light"] body .select2-container--default .select2-search--inline .select2-search__field {
             color: #111827 !important;
         }
 
         html[data-theme="light"] .select2-dropdown,
-        html[data-theme="light"] body .select2-dropdown {
+        html[data-theme="light"] body .select2-dropdown,
+        [data-theme="light"] .select2-dropdown,
+        [data-theme="light"] body .select2-dropdown {
             background: #ffffff !important;
-            border: 1px solid #e5e7eb !important;
+            border: 1px solid #d1d5db !important;
         }
 
         html[data-theme="light"] .select2-results__option,
-        html[data-theme="light"] body .select2-results__option {
+        html[data-theme="light"] body .select2-results__option,
+        [data-theme="light"] .select2-results__option,
+        [data-theme="light"] body .select2-results__option {
             color: #111827 !important;
         }
 
         html[data-theme="light"] .select2-results__option--highlighted,
-        html[data-theme="light"] body .select2-results__option--highlighted {
+        html[data-theme="light"] body .select2-results__option--highlighted,
+        [data-theme="light"] .select2-results__option--highlighted,
+        [data-theme="light"] body .select2-results__option--highlighted {
             background: #f3f4f6 !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .select2-results__option[aria-selected="true"],
+        html[data-theme="light"] body .select2-results__option[aria-selected="true"],
+        [data-theme="light"] .select2-results__option[aria-selected="true"],
+        [data-theme="light"] body .select2-results__option[aria-selected="true"] {
+            background: #e0f2fe !important;
+            color: #111827 !important;
+        }
+
+
+        /* Ensure buttons are visible in light mode */
+        html[data-theme="light"] .back-btn,
+        html[data-theme="light"] body .back-btn,
+        [data-theme="light"] .back-btn,
+        [data-theme="light"] body .back-btn {
+            background: #6b7280 !important;
+            color: #ffffff !important;
+        }
+
+        html[data-theme="light"] .submit-btn,
+        html[data-theme="light"] body .submit-btn,
+        [data-theme="light"] .submit-btn,
+        [data-theme="light"] body .submit-btn {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+            color: #ffffff !important;
+        }
+
+        html[data-theme="light"] .cancel-btn,
+        html[data-theme="light"] body .cancel-btn,
+        [data-theme="light"] .cancel-btn,
+        [data-theme="light"] body .cancel-btn {
+            background: #6b7280 !important;
+            color: #ffffff !important;
+        }
+
+        /* Select2 container text visibility */
+        html[data-theme="light"] .select2-container .select2-selection__rendered,
+        html[data-theme="light"] body .select2-container .select2-selection__rendered,
+        [data-theme="light"] .select2-container .select2-selection__rendered,
+        [data-theme="light"] body .select2-container .select2-selection__rendered {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .select2-container--default .select2-selection__placeholder,
+        html[data-theme="light"] body .select2-container--default .select2-selection__placeholder,
+        [data-theme="light"] .select2-container--default .select2-selection__placeholder,
+        [data-theme="light"] body .select2-container--default .select2-selection__placeholder {
+            color: #9ca3af !important;
+        }
+
+        /* Select2 search input */
+        html[data-theme="light"] .select2-search__field,
+        html[data-theme="light"] body .select2-search__field,
+        [data-theme="light"] .select2-search__field,
+        [data-theme="light"] body .select2-search__field {
+            color: #111827 !important;
+            background: #ffffff !important;
+        }
+
+        /* Select2 results container */
+        html[data-theme="light"] .select2-results,
+        html[data-theme="light"] body .select2-results,
+        [data-theme="light"] .select2-results,
+        [data-theme="light"] body .select2-results {
+            background: #ffffff !important;
+        }
+
+        /* Notification close button */
+        html[data-theme="light"] .notification-close,
+        html[data-theme="light"] body .notification-close,
+        [data-theme="light"] .notification-close,
+        [data-theme="light"] body .notification-close {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .notification-close:hover,
+        html[data-theme="light"] body .notification-close:hover,
+        [data-theme="light"] .notification-close:hover,
+        [data-theme="light"] body .notification-close:hover {
+            color: #111827 !important;
+        }
+
+        /* Select2 Dark Mode Styles - Force Dark Theme (Default) */
+        .select2-container--default .select2-selection--multiple,
+        html:not([data-theme="light"]) .select2-container--default .select2-selection--multiple,
+        body:not([data-theme="light"]) .select2-container--default .select2-selection--multiple {
+            background-color: #1f2937 !important;
+            border: 1px solid #6b7280 !important;
+            color: #ffffff !important;
+            min-height: 42px;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__rendered,
+        html:not([data-theme="light"]) .select2-container--default .select2-selection--multiple .select2-selection__rendered,
+        body:not([data-theme="light"]) .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+            color: #ffffff !important;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice,
+        html:not([data-theme="light"]) .select2-container--default .select2-selection--multiple .select2-selection__choice,
+        body:not([data-theme="light"]) .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #374151 !important;
+            border: 1px solid #4b5563 !important;
+            color: #ffffff !important;
+            padding: 0 8px;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: #9ca3af !important;
+            margin-right: 5px;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+            color: #ffffff !important;
+        }
+
+        .select2-container--default .select2-search--inline .select2-search__field,
+        html:not([data-theme="light"]) .select2-container--default .select2-search--inline .select2-search__field,
+        body:not([data-theme="light"]) .select2-container--default .select2-search--inline .select2-search__field {
+            background: transparent !important;
+            border: none !important;
+            color: #ffffff !important;
+            padding: 0;
+            margin: 0;
+        }
+
+        .select2-container--default .select2-search--inline .select2-search__field::placeholder {
+            color: #9ca3af !important;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__placeholder {
+            color: #9ca3af !important;
+        }
+
+        .select2-dropdown,
+        html:not([data-theme="light"]) .select2-dropdown,
+        body:not([data-theme="light"]) .select2-dropdown {
+            background-color: #374151 !important;
+            border: 1px solid #4b5563 !important;
+            color: #ffffff !important;
+        }
+
+        .select2-results,
+        html:not([data-theme="light"]) .select2-results,
+        body:not([data-theme="light"]) .select2-results {
+            background-color: #374151 !important;
+        }
+
+        .select2-results__option,
+        html:not([data-theme="light"]) .select2-results__option,
+        body:not([data-theme="light"]) .select2-results__option {
+            color: #ffffff !important;
+            background-color: #374151 !important;
+            padding: 8px 12px;
+        }
+
+        .select2-results__option--highlighted,
+        html:not([data-theme="light"]) .select2-results__option--highlighted,
+        body:not([data-theme="light"]) .select2-results__option--highlighted {
+            background-color: #4b5563 !important;
+            color: #ffffff !important;
+        }
+
+        .select2-results__option[aria-selected="true"],
+        html:not([data-theme="light"]) .select2-results__option[aria-selected="true"],
+        body:not([data-theme="light"]) .select2-results__option[aria-selected="true"] {
+            background-color: #059669 !important;
+            color: #ffffff !important;
+        }
+
+        .select2-search__field {
+            background-color: #1f2937 !important;
+            border: 1px solid #4b5563 !important;
+            color: #ffffff !important;
+            padding: 8px;
+        }
+
+        .select2-search__field::placeholder {
+            color: #9ca3af !important;
+        }
+
+        .select2-search__field:focus {
+            outline: none;
+            border-color: #059669 !important;
+        }
+
+        /* Override for light theme */
+        html[data-theme="light"] .select2-container--default .select2-selection--multiple,
+        html[data-theme="light"] body .select2-container--default .select2-selection--multiple,
+        [data-theme="light"] .select2-container--default .select2-selection--multiple,
+        [data-theme="light"] body .select2-container--default .select2-selection--multiple {
+            background-color: #ffffff !important;
+            border: 1px solid #d1d5db !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .select2-container--default .select2-selection--multiple .select2-selection__rendered,
+        html[data-theme="light"] body .select2-container--default .select2-selection--multiple .select2-selection__rendered,
+        [data-theme="light"] .select2-container--default .select2-selection--multiple .select2-selection__rendered,
+        [data-theme="light"] body .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .select2-container--default .select2-selection--multiple .select2-selection__choice,
+        html[data-theme="light"] body .select2-container--default .select2-selection--multiple .select2-selection__choice,
+        [data-theme="light"] .select2-container--default .select2-selection--multiple .select2-selection__choice,
+        [data-theme="light"] body .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #f3f4f6 !important;
+            border: 1px solid #d1d5db !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .select2-container--default .select2-selection--multiple .select2-selection__choice__remove,
+        html[data-theme="light"] body .select2-container--default .select2-selection--multiple .select2-selection__choice__remove,
+        [data-theme="light"] .select2-container--default .select2-selection--multiple .select2-selection__choice__remove,
+        [data-theme="light"] body .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .select2-container--default .select2-search--inline .select2-search__field,
+        html[data-theme="light"] body .select2-container--default .select2-search--inline .select2-search__field,
+        [data-theme="light"] .select2-container--default .select2-search--inline .select2-search__field,
+        [data-theme="light"] body .select2-container--default .select2-search--inline .select2-search__field {
+            background: transparent !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .select2-dropdown,
+        html[data-theme="light"] body .select2-dropdown,
+        [data-theme="light"] .select2-dropdown,
+        [data-theme="light"] body .select2-dropdown {
+            background-color: #ffffff !important;
+            border: 1px solid #d1d5db !important;
+        }
+
+        html[data-theme="light"] .select2-results__option,
+        html[data-theme="light"] body .select2-results__option,
+        [data-theme="light"] .select2-results__option,
+        [data-theme="light"] body .select2-results__option {
+            color: #111827 !important;
+            background-color: #ffffff !important;
+        }
+
+        html[data-theme="light"] .select2-results__option--highlighted,
+        html[data-theme="light"] body .select2-results__option--highlighted,
+        [data-theme="light"] .select2-results__option--highlighted,
+        [data-theme="light"] body .select2-results__option--highlighted {
+            background-color: #f3f4f6 !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .select2-search__field,
+        html[data-theme="light"] body .select2-search__field,
+        [data-theme="light"] .select2-search__field,
+        [data-theme="light"] body .select2-search__field {
+            background-color: #ffffff !important;
+            border: 1px solid #d1d5db !important;
             color: #111827 !important;
         }
     </style>
@@ -689,11 +1048,11 @@
 
         <!-- Page Header -->
         <div class="page-header">
-            <h1 class="page-title">{{ __('إدارة صلاحيات الموظف') }}</h1>
+            <h1 class="page-title">{{ __('Manage Staff Permissions') }}</h1>
             <div class="page-actions">
                 <a href="{{ route('dashboard.staff.index') }}" class="back-btn">
                     <i class="fas fa-arrow-left"></i>
-                    {{ __('العودة لقائمة الموظفين') }}
+                    {{ __('Back to Staff List') }}
                 </a>
             </div>
         </div>
@@ -718,7 +1077,7 @@
                     $isActive = $user->stores->firstWhere('id', $store->id)?->pivot->is_active ?? false;
                 @endphp
                 <span class="staff-status {{ $isActive ? 'verified' : 'unverified' }}">
-                    {{ $isActive ? __('متفعل') : __('غير متفعل') }}
+                    {{ $isActive ? __('Active') : __('Inactive') }}
                 </span>
             </div>
         </div>
@@ -726,8 +1085,8 @@
         <!-- Permissions Form -->
         <div class="permissions-form-container">
             <div class="form-header">
-                <h3>{{ __('إدارة الصلاحيات') }}</h3>
-                <p>{{ __('اختر الصلاحيات المناسبة لهذا الموظف') }}</p>
+                <h3>{{ __('Manage Permissions') }}</h3>
+                <p>{{ __('Choose appropriate permissions for this staff member') }}</p>
             </div>
             <form method="POST" action="{{ route('dashboard.staff.update', $user->id) }}" class="permissions-form">
                 @csrf
@@ -736,10 +1095,10 @@
                 <div class="form-group">
                     <label for="permissions" class="form-label">
                         <i class="fas fa-shield-alt"></i>
-                        {{ __('الصلاحيات') }}
+                        {{ __('Permissions') }}
                     </label>
                     <select id="permissions" name="permissions[]" class="form-control" multiple="multiple"
-                        data-placeholder="{{ __('اختر أو أضف صلاحيات...') }}">
+                        data-placeholder="{{ __('Choose or add permissions...') }}">
                         @foreach ($permissions as $permission)
                             <option value="{{ $permission->name }}"
                                 {{ $user->hasPermissionTo($permission->name) ? 'selected' : '' }}>
@@ -747,17 +1106,17 @@
                             </option>
                         @endforeach
                     </select>
-                    <small class="form-text">{{ __('يمكنك اختيار عدة صلاحيات للموظف') }}</small>
+                    <small class="form-text">{{ __('You can select multiple permissions for the staff') }}</small>
                 </div>
 
                 <div class="form-actions">
                     <button type="submit" class="submit-btn">
                         <i class="fas fa-save"></i>
-                        {{ __('حفظ الصلاحيات') }}
+                        {{ __('Save Permissions') }}
                     </button>
                     <a href="{{ route('dashboard.staff.index') }}" class="cancel-btn">
                         <i class="fas fa-times"></i>
-                        {{ __('إلغاء') }}
+                        {{ __('Cancel') }}
                     </a>
                 </div>
             </form>
@@ -768,15 +1127,49 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        // Ensure theme is applied
-        document.addEventListener('DOMContentLoaded', function() {
-            const theme = document.documentElement.getAttribute('data-theme');
-            if (theme === 'light') {
-                // Force reflow to apply styles
-                document.body.offsetHeight;
-                // Re-apply theme to ensure styles are loaded
-                document.documentElement.setAttribute('data-theme', 'light');
+        // Ensure theme is applied correctly
+        function applyThemeStyles() {
+            const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+            
+            // Force reflow to apply styles
+            document.body.offsetHeight;
+            
+            // Re-apply theme to ensure styles are loaded
+            document.documentElement.setAttribute('data-theme', theme);
+            
+            // Force style recalculation
+            const container = document.querySelector('.staff-container');
+            if (container) {
+                container.style.display = 'none';
+                container.offsetHeight; // Trigger reflow
+                container.style.display = '';
             }
+        }
+
+        // Apply theme on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', applyThemeStyles);
+        } else {
+            applyThemeStyles();
+        }
+
+        // Watch for theme changes
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    setTimeout(applyThemeStyles, 10);
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+
+        // Also listen for custom themechange event
+        window.addEventListener('themechange', function(e) {
+            setTimeout(applyThemeStyles, 10);
         });
 
         // Professional Notification System
@@ -807,13 +1200,115 @@
             }, 100);
         });
 
+        // Function to apply theme to Select2
+        function applySelect2Theme() {
+            const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+            
+            // Apply styles directly to Select2 elements
+            $('.select2-container--default .select2-selection--multiple').each(function() {
+                $(this).css({
+                    'background-color': theme === 'light' ? '#ffffff' : '#1f2937',
+                    'border-color': theme === 'light' ? '#d1d5db' : '#6b7280',
+                    'color': theme === 'light' ? '#111827' : '#ffffff'
+                });
+            });
+
+            $('.select2-container--default .select2-selection--multiple .select2-selection__rendered').each(function() {
+                $(this).css({
+                    'color': theme === 'light' ? '#111827' : '#ffffff'
+                });
+            });
+
+            $('.select2-container--default .select2-selection--multiple .select2-selection__choice').each(function() {
+                $(this).css({
+                    'background-color': theme === 'light' ? '#f3f4f6' : '#374151',
+                    'border-color': theme === 'light' ? '#d1d5db' : '#4b5563',
+                    'color': theme === 'light' ? '#111827' : '#ffffff'
+                });
+            });
+
+            $('.select2-container--default .select2-search--inline .select2-search__field').each(function() {
+                $(this).css({
+                    'color': theme === 'light' ? '#111827' : '#ffffff',
+                    'background': 'transparent'
+                });
+            });
+
+            // Apply to dropdown
+            $('.select2-dropdown').each(function() {
+                $(this).css({
+                    'background-color': theme === 'light' ? '#ffffff' : '#374151',
+                    'border-color': theme === 'light' ? '#d1d5db' : '#4b5563',
+                    'color': theme === 'light' ? '#111827' : '#ffffff'
+                });
+            });
+
+            $('.select2-results__option').each(function() {
+                $(this).css({
+                    'background-color': theme === 'light' ? '#ffffff' : '#374151',
+                    'color': theme === 'light' ? '#111827' : '#ffffff'
+                });
+            });
+
+            $('.select2-results__option--highlighted').each(function() {
+                $(this).css({
+                    'background-color': theme === 'light' ? '#f3f4f6' : '#4b5563',
+                    'color': theme === 'light' ? '#111827' : '#ffffff'
+                });
+            });
+
+            $('.select2-search__field').each(function() {
+                $(this).css({
+                    'background-color': theme === 'light' ? '#ffffff' : '#1f2937',
+                    'border-color': theme === 'light' ? '#d1d5db' : '#4b5563',
+                    'color': theme === 'light' ? '#111827' : '#ffffff'
+                });
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             $('#permissions').select2({
-                // theme: 'bootstrap-5',
-                placeholder: "{{ __('Select or add permissions...') }}",
-
+                placeholder: "{{ __('Choose or add permissions...') }}",
                 width: '100%',
+                language: {
+                    noResults: function() {
+                        return "{{ __('No results found') }}";
+                    },
+                    searching: function() {
+                        return "{{ __('Searching...') }}";
+                    }
+                }
+            }).on('select2:open', function() {
+                // Apply theme when dropdown opens
+                setTimeout(applySelect2Theme, 10);
+            }).on('select2:select select2:unselect', function() {
+                // Apply theme when selection changes
+                setTimeout(applySelect2Theme, 10);
             });
+
+            // Apply theme after Select2 initialization with multiple attempts
+            setTimeout(applySelect2Theme, 50);
+            setTimeout(applySelect2Theme, 200);
+            setTimeout(applySelect2Theme, 500);
+        });
+
+        // Re-apply theme when theme changes
+        const select2Observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    setTimeout(applySelect2Theme, 50);
+                }
+            });
+        });
+
+        select2Observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+
+        // Listen for theme change event
+        window.addEventListener('themechange', function() {
+            setTimeout(applySelect2Theme, 50);
         });
     </script>
 @endpush

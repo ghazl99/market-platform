@@ -174,5 +174,19 @@
     "Total Spent": "Total Spent",
     "Last Order": "Last Order",
     "Email Notifications": "Email Notifications",
-    "SMS Notifications": "SMS Notifications"
+    "SMS Notifications": "SMS Notifications",
+    "Manage Permissions": "Manage Permissions",
+    "Manage Permissions for": "Manage Permissions for",
+    "Permissions": "Permissions",
+    "Select or add permissions...": "Select or add permissions...",
+    "Manage Staff Permissions": "Manage Staff Permissions",
+    "Back to Staff List": "Back to Staff List",
+    "Active": "Active",
+    "Inactive": "Inactive",
+    "Choose appropriate permissions for this staff member": "Choose appropriate permissions for this staff member",
+    "Choose or add permissions...": "Choose or add permissions...",
+    "You can select multiple permissions for the staff": "You can select multiple permissions for the staff",
+    "Save Permissions": "Save Permissions",
+    "No results found": "No results found",
+    "Searching...": "Searching..."
 }

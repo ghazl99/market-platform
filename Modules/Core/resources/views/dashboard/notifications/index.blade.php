@@ -63,6 +63,7 @@
             position: relative;
             background: var(--bg-primary);
             color: var(--text-primary);
+            gap: 1rem;
         }
 
         .notification-item:last-child {
@@ -189,20 +190,40 @@
         }
 
         .btn-delete {
-            background: var(--error-color);
-            color: #ffffff;
-            border-color: var(--error-color);
+            background: transparent !important;
+            color: #dc2626 !important;
+            border: none;
             cursor: pointer;
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            font-size: 0.875rem;
+            margin-left: auto;
+            order: 999;
+        }
+
+        .btn-delete i {
+            color: #dc2626 !important;
         }
 
         .btn-delete:hover {
-            background: #dc2626;
-            color: #ffffff;
-            transform: scale(1.05);
+            background: var(--bg-secondary);
+            color: #b91c1c !important;
+            transform: scale(1.1);
+        }
+
+        .btn-delete:hover i {
+            color: #b91c1c !important;
         }
 
         .btn-delete:active {
@@ -349,6 +370,23 @@
             color: #6b7280;
         }
 
+        [data-theme="light"] .btn-delete {
+            color: #dc2626 !important;
+        }
+
+        [data-theme="light"] .btn-delete i {
+            color: #dc2626 !important;
+        }
+
+        [data-theme="light"] .btn-delete:hover {
+            background: #f3f4f6;
+            color: #b91c1c !important;
+        }
+
+        [data-theme="light"] .btn-delete:hover i {
+            color: #b91c1c !important;
+        }
+
         /* Dark Mode Specific Styles */
         [data-theme="dark"] .notifications-page {
             background: #111827;
@@ -421,6 +459,23 @@
         [data-theme="dark"] .notification-icon.default {
             background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
             color: #d1d5db;
+        }
+
+        [data-theme="dark"] .btn-delete {
+            color: #ef4444 !important;
+        }
+
+        [data-theme="dark"] .btn-delete i {
+            color: #ef4444 !important;
+        }
+
+        [data-theme="dark"] .btn-delete:hover {
+            background: #374151;
+            color: #dc2626 !important;
+        }
+
+        [data-theme="dark"] .btn-delete:hover i {
+            color: #dc2626 !important;
         }
 
         /* Responsive */
@@ -513,7 +568,6 @@
                     @endphp
 
                     <div class="notification-item {{ $notification->read_at ? '' : 'unread' }}">
-
                         <div class="notification-icon {{ explode(' ', $iconClass)[1] }}">
                             <i class="{{ $iconClass }}"></i>
                         </div>
@@ -528,15 +582,13 @@
                                     {{ $notification->created_at->diffForHumans() }}
                                 </span>
                             </div>
-
-                            <div class="notification-actions">
-                                <button type="button" class="btn-notification btn-delete"
-                                    data-notification-id="{{ $notification->id }}">
-                                    <i class="fas fa-trash"></i>
-                                    {{ __('حذف') }}
-                                </button>
-                            </div>
                         </div>
+
+                        <!-- Delete Button - Moved to far right -->
+                        <button type="button" class="btn-notification btn-delete"
+                            data-notification-id="{{ $notification->id }}">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 @empty
                     <div class="empty-state">

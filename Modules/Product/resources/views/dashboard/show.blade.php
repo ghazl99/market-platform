@@ -1518,7 +1518,7 @@
                     <div class="metric-icon neutral">
                         <i class="fas fa-calculator"></i>
                     </div>
-                    <div class="metric-value">{{ number_format($capital, 2) }}</div>
+                    <div class="metric-value">${{ number_format($capital, 2) }}</div>
                     <div class="metric-label">{{ __('Capital') }}</div>
                 </div>
                 <div class="metric-card">

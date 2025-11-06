@@ -2,15 +2,22 @@
 
 // Sidebar Management
 function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('mainContent');
-    const isMobile = window.innerWidth <= 1024;
+    try {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+
+        if (!sidebar) {
+            console.warn('Sidebar element not found');
+            return;
+        }
+
+        const isMobile = window.innerWidth <= 1024;
 
     if (isMobile) {
         // Mobile behavior: toggle open/close with overlay
         sidebar.classList.toggle('open');
         let overlay = document.getElementById('sidebar-overlay');
-        
+
         if (sidebar.classList.contains('open')) {
             // Create overlay if it doesn't exist
             if (!overlay) {
@@ -46,7 +53,14 @@ function toggleSidebar() {
 
         // Save state to localStorage
         const isCollapsed = sidebar.classList.contains('collapsed');
-        localStorage.setItem('sidebarCollapsed', isCollapsed);
+        try {
+            localStorage.setItem('sidebarCollapsed', isCollapsed);
+        } catch (e) {
+            console.warn('Error saving sidebar state to localStorage:', e);
+        }
+    }
+    } catch (error) {
+        console.error('Error in toggleSidebar:', error);
     }
 }
 
@@ -57,19 +71,27 @@ function toggleMobileSidebar() {
 
 // Close mobile sidebar
 function closeMobileSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-    
-    sidebar.classList.remove('open');
-    if (overlay) {
-        overlay.classList.remove('active');
-        setTimeout(() => {
-            if (overlay && overlay.parentNode) {
-                overlay.remove();
-            }
-        }, 300); // Match transition duration
+    try {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        if (sidebar) {
+            sidebar.classList.remove('open');
+        }
+
+        if (overlay) {
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                if (overlay && overlay.parentNode) {
+                    overlay.remove();
+                }
+            }, 300); // Match transition duration
+        }
+
+        document.body.style.overflow = '';
+    } catch (error) {
+        console.error('Error in closeMobileSidebar:', error);
     }
-    document.body.style.overflow = '';
 }
 
 // Close sidebar when clicking on a nav link (mobile only)
@@ -89,51 +111,75 @@ function setupMobileNavLinks() {
 
 // Handle window resize
 function handleResize() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-    const isMobile = window.innerWidth <= 1024;
+    try {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const isMobile = window.innerWidth <= 1024;
 
-    if (!isMobile) {
-        // On desktop, remove mobile classes
-        sidebar.classList.remove('open');
-        if (overlay) {
-            overlay.remove();
+        if (!sidebar) {
+            return;
         }
-        document.body.style.overflow = '';
-    } else {
-        // On mobile, remove desktop collapse classes
-        sidebar.classList.remove('collapsed');
-        const mainContent = document.getElementById('mainContent');
-        if (mainContent) {
-            mainContent.classList.remove('expanded');
+
+        if (!isMobile) {
+            // On desktop, remove mobile classes
+            sidebar.classList.remove('open');
+            if (overlay) {
+                overlay.remove();
+            }
+            document.body.style.overflow = '';
+        } else {
+            // On mobile, remove desktop collapse classes
+            sidebar.classList.remove('collapsed');
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent) {
+                mainContent.classList.remove('expanded');
+            }
         }
+    } catch (error) {
+        console.error('Error in handleResize:', error);
     }
 }
 
 // Initialize sidebar state
 function initializeSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('mainContent');
-    const isMobile = window.innerWidth <= 1024;
+    try {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
 
-    if (!isMobile) {
-        // Only restore collapsed state on desktop
-        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-        if (isCollapsed) {
-            sidebar.classList.add('collapsed');
-            mainContent.classList.add('expanded');
+        if (!sidebar) {
+            console.warn('Sidebar element not found');
+            return;
         }
-    } else {
-        // On mobile, ensure sidebar is closed initially
-        sidebar.classList.remove('open');
-        sidebar.classList.remove('collapsed');
-        if (mainContent) {
-            mainContent.classList.remove('expanded');
+
+        const isMobile = window.innerWidth <= 1024;
+
+        if (!isMobile) {
+            // Only restore collapsed state on desktop
+            try {
+                const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                if (isCollapsed) {
+                    sidebar.classList.add('collapsed');
+                    if (mainContent) {
+                        mainContent.classList.add('expanded');
+                    }
+                }
+            } catch (e) {
+                console.warn('Error reading sidebar state from localStorage:', e);
+            }
+        } else {
+            // On mobile, ensure sidebar is closed initially
+            sidebar.classList.remove('open');
+            sidebar.classList.remove('collapsed');
+            if (mainContent) {
+                mainContent.classList.remove('expanded');
+            }
         }
+
+        // Setup mobile nav links
+        setupMobileNavLinks();
+    } catch (error) {
+        console.error('Error in initializeSidebar:', error);
     }
-
-    // Setup mobile nav links
-    setupMobileNavLinks();
 }
 
 // Chart buttons functionality
@@ -322,10 +368,10 @@ function updateActivityFeed() {
 // Theme management
 function initializeTheme() {
     // Check for saved theme preference (already applied in head script, but sync here)
-    const savedTheme = localStorage.getItem('dashboard-theme') || 
-                      localStorage.getItem('theme') || 
+    const savedTheme = localStorage.getItem('dashboard-theme') ||
+                      localStorage.getItem('theme') ||
                       'light';
-    
+
     // Ensure theme is applied (redundant but ensures sync)
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateThemeIcon(savedTheme);
@@ -333,32 +379,40 @@ function initializeTheme() {
 
 // Toggle theme
 function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    try {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-    document.documentElement.setAttribute('data-theme', newTheme);
-    
-    // Save to both keys for compatibility
-    localStorage.setItem('dashboard-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    
-    // Update body class for backward compatibility
-    if (newTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-    } else {
-        document.body.classList.remove('dark-mode');
+        document.documentElement.setAttribute('data-theme', newTheme);
+
+        // Save to both keys for compatibility
+        try {
+            localStorage.setItem('dashboard-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        } catch (e) {
+            console.warn('Error saving theme to localStorage:', e);
+        }
+
+        // Update body class for backward compatibility
+        if (newTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+
+        updateThemeIcon(newTheme);
+
+        // Add transition effect
+        document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+        setTimeout(() => {
+            document.body.style.transition = '';
+        }, 300);
+
+        // Trigger custom event for other scripts
+        window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: newTheme } }));
+    } catch (error) {
+        console.error('Error in toggleTheme:', error);
     }
-    
-    updateThemeIcon(newTheme);
-
-    // Add transition effect
-    document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-    setTimeout(() => {
-        document.body.style.transition = '';
-    }, 300);
-    
-    // Trigger custom event for other scripts
-    window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: newTheme } }));
 }
 
 // Update theme icon
@@ -440,35 +494,99 @@ function initializePerformanceMonitoring() {
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Dashboard initializing...');
+    try {
+        console.log('Dashboard initializing...');
 
-    // Initialize all components
-    initializeSidebar();
-    initializeChartButtons();
-    initializeSearch();
-    initializeNotifications();
-    initializeUserMenu();
-    // initializeNavigation();
-    initializeTheme();
-    initializeSystemThemeListener();
-    initializeKeyboardShortcuts();
-    initializePerformanceMonitoring();
+        // Initialize all components with error handling
+        try {
+            initializeSidebar();
+        } catch (e) {
+            console.warn('Error initializing sidebar:', e);
+        }
 
-    // Add visual effects
-    animateStats();
-    addRippleEffect();
+        try {
+            initializeChartButtons();
+        } catch (e) {
+            console.warn('Error initializing chart buttons:', e);
+        }
 
-    // Start real-time updates
-    simulateRealTimeUpdates();
+        try {
+            initializeSearch();
+        } catch (e) {
+            console.warn('Error initializing search:', e);
+        }
 
-    // Handle window resize
-    let resizeTimeout;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(handleResize, 250);
-    });
+        try {
+            initializeNotifications();
+        } catch (e) {
+            console.warn('Error initializing notifications:', e);
+        }
 
-    console.log('Dashboard initialized successfully!');
+        try {
+            initializeUserMenu();
+        } catch (e) {
+            console.warn('Error initializing user menu:', e);
+        }
+
+        try {
+            initializeTheme();
+        } catch (e) {
+            console.warn('Error initializing theme:', e);
+        }
+
+        try {
+            initializeSystemThemeListener();
+        } catch (e) {
+            console.warn('Error initializing system theme listener:', e);
+        }
+
+        try {
+            initializeKeyboardShortcuts();
+        } catch (e) {
+            console.warn('Error initializing keyboard shortcuts:', e);
+        }
+
+        try {
+            initializePerformanceMonitoring();
+        } catch (e) {
+            console.warn('Error initializing performance monitoring:', e);
+        }
+
+        // Add visual effects
+        try {
+            animateStats();
+        } catch (e) {
+            console.warn('Error animating stats:', e);
+        }
+
+        try {
+            addRippleEffect();
+        } catch (e) {
+            console.warn('Error adding ripple effect:', e);
+        }
+
+        // Start real-time updates
+        try {
+            simulateRealTimeUpdates();
+        } catch (e) {
+            console.warn('Error starting real-time updates:', e);
+        }
+
+        // Handle window resize
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            try {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(handleResize, 250);
+            } catch (e) {
+                console.warn('Error handling resize:', e);
+            }
+        });
+
+        console.log('Dashboard initialized successfully!');
+    } catch (error) {
+        console.error('Critical error during dashboard initialization:', error);
+    }
 });
 
 // Export functions for global access

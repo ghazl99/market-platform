@@ -168,7 +168,7 @@
                         @if (isset($product->price) && $product->price > 0)
                             <span class="product-price-badge">
                                 <i class="fas fa-money-bill-wave"></i>
-                                {{ number_format($product->price, 2) }} {{ __('SAR') }}
+                                ${{ number_format($product->price, 2) }}
                             </span>
                         @endif
                     </div>
@@ -444,8 +444,8 @@
                                     <i class="fas fa-money-bill-wave"></i>
                                 </div>
                                 <div class="stat-content">
-                                    <div class="stat-value">{{ number_format($userTotalSpent, 2) }}</div>
-                                    <div class="stat-label">{{ __('Total Spent') }} ({{ __('SAR') }})</div>
+                                    <div class="stat-value">${{ number_format($userTotalSpent, 2) }}</div>
+                                    <div class="stat-label">{{ __('Total Spent') }}</div>
                                 </div>
                             </div>
                             @if ($userWallet && isset($userWallet->balance))
@@ -454,8 +454,8 @@
                                         <i class="fas fa-wallet"></i>
                                     </div>
                                     <div class="stat-content">
-                                        <div class="stat-value">{{ number_format((float) $userWallet->balance, 2) }}</div>
-                                        <div class="stat-label">{{ __('Wallet Balance') }} ({{ __('SAR') }})</div>
+                                        <div class="stat-value">${{ number_format((float) $userWallet->balance, 2) }}</div>
+                                        <div class="stat-label">{{ __('Wallet Balance') }}</div>
                                     </div>
                                 </div>
                             @endif
@@ -465,8 +465,8 @@
                                         <i class="fas fa-chart-bar"></i>
                                     </div>
                                     <div class="stat-content">
-                                        <div class="stat-value">{{ number_format($userAverageOrder, 2) }}</div>
-                                        <div class="stat-label">{{ __('Average Order') }} ({{ __('SAR') }})</div>
+                                        <div class="stat-value">${{ number_format($userAverageOrder, 2) }}</div>
+                                        <div class="stat-label">{{ __('Average Order') }}</div>
                                     </div>
                                 </div>
                             @endif
@@ -506,7 +506,7 @@
                                             @endif
                                         </div>
                                         <div class="transaction-amount">
-                                            {{ number_format($transaction->amount, 2) }} {{ __('SAR') }}
+                                            ${{ number_format($transaction->amount, 2) }}
                                         </div>
                                         @if ($transaction->note)
                                             <div class="transaction-note">
@@ -521,7 +521,7 @@
                                     </div>
                                     <div class="transaction-balance">
                                         <div class="balance-label">{{ __('Balance') }}</div>
-                                        <div class="balance-value">{{ number_format($transaction->new_balance, 2) }} {{ __('SAR') }}</div>
+                                        <div class="balance-value">${{ number_format($transaction->new_balance, 2) }}</div>
                                     </div>
                                 </div>
                             @endforeach
@@ -585,7 +585,7 @@
                                     @if (isset($itemProduct->price) && $itemProduct->price > 0)
                                         <span class="item-meta-badge">
                                             <i class="fas fa-money-bill-wave"></i>
-                                            {{ __('Unit Price') }}: {{ number_format($itemProduct->price, 2) }} {{ __('SAR') }}
+                                            {{ __('Unit Price') }}: ${{ number_format($itemProduct->price, 2) }}
                                         </span>
                                     @endif
                                 </div>
@@ -623,7 +623,7 @@
                             <div class="item-total-section">
                                 <div class="total-amount-badge">
                                     <span class="total-label">{{ __('Item Total') }}</span>
-                                    <span class="total-value">{{ number_format($itemTotal, 2) }} {{ __('SAR') }}</span>
+                                    <span class="total-value">${{ number_format($itemTotal, 2) }}</span>
                                 </div>
                             </div>
                         </div>
@@ -665,7 +665,7 @@
                             <i class="fas fa-shopping-bag"></i>
                             {{ __('Subtotal') }}
                         </span>
-                        <span class="summary-value">{{ number_format($subtotal, 2) }} {{ __('SAR') }}</span>
+                        <span class="summary-value">${{ number_format($subtotal, 2) }}</span>
                     </div>
                     @if ($discount > 0)
                         <div class="summary-row">
@@ -673,7 +673,7 @@
                                 <i class="fas fa-tag"></i>
                                 {{ __('Discount') }}
                             </span>
-                            <span class="summary-value discount">-{{ number_format($discount, 2) }} {{ __('SAR') }}</span>
+                            <span class="summary-value discount">-${{ number_format($discount, 2) }}</span>
                         </div>
                     @endif
                     @if ($tax > 0)
@@ -682,7 +682,7 @@
                                 <i class="fas fa-receipt"></i>
                                 {{ __('Tax') }}
                             </span>
-                            <span class="summary-value">{{ number_format($tax, 2) }} {{ __('SAR') }}</span>
+                            <span class="summary-value">${{ number_format($tax, 2) }}</span>
                         </div>
                     @endif
                     <div class="summary-row total-row">
@@ -690,7 +690,7 @@
                             <i class="fas fa-money-bill-wave"></i>
                             {{ __('Total Amount') }}
                         </span>
-                        <span class="summary-value total">{{ number_format($total, 2) }} {{ __('SAR') }}</span>
+                        <span class="summary-value total">${{ number_format($total, 2) }}</span>
                     </div>
                 </div>
             </div>

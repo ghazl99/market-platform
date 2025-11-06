@@ -3,6 +3,16 @@
     min-height: 100vh;
     background: var(--bg-secondary);
     display: flex;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Ensure container works on all screen sizes */
+@media (max-width: 1024px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
 }
 
 /* Sidebar Styles */
@@ -254,6 +264,18 @@
     margin-right: 80px;
 }
 
+@media (max-width: 1024px) {
+    .dashboard-main {
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
+    
+    .dashboard-main.expanded {
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
+}
+
 /* Top Bar */
 .dashboard-topbar {
     background: var(--bg-primary);
@@ -263,6 +285,30 @@
     justify-content: space-between;
     align-items: center;
     box-shadow: var(--shadow-sm);
+    width: 100%;
+    position: relative;
+    z-index: 100;
+}
+
+/* Ensure topbar works on all screen sizes */
+@media (max-width: 1024px) {
+    .dashboard-topbar {
+        padding: 0.75rem 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-topbar {
+        padding: 0.75rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-topbar {
+        padding: 0.5rem 0.75rem;
+    }
 }
 
 .topbar-left {
@@ -287,6 +333,26 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Ensure topbar-right works on all screen sizes */
+@media (max-width: 1024px) {
+    .topbar-right {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 768px) {
+    .topbar-right {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: flex-end;
+    }
 }
 
 .search-box {
@@ -876,7 +942,12 @@
     .dashboard-sidebar {
         width: 280px;
         transition: transform 0.3s ease;
-        z-index: 1000;
+        z-index: 1001;
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        overflow-y: auto;
     }
 
     /* LTR: slide from right (hidden by default) */
@@ -921,7 +992,38 @@
     }
 
     .dashboard-main {
-        margin-right: 0;
+        margin-right: 0 !important;
+        width: 100%;
+    }
+    
+    /* Ensure sidebar toggle button is visible on tablets and mobile */
+    .sidebar-toggle.mobile-only {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 0.5rem;
+        margin-left: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 40px;
+        min-height: 40px;
+    }
+    
+    .sidebar-toggle.mobile-only:hover {
+        background: var(--bg-tertiary);
+        transform: scale(1.05);
+    }
+    
+    .sidebar-toggle.mobile-only:active {
+        transform: scale(0.95);
+    }
+    
+    /* Ensure overlay is visible on tablets */
+    .sidebar-overlay {
+        z-index: 1000;
     }
 
     .sidebar-header {
@@ -1127,6 +1229,17 @@
         flex: 1;
         min-width: 0;
         order: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    /* Ensure sidebar toggle button is visible and properly styled */
+    .topbar-left .sidebar-toggle.mobile-only {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        flex-shrink: 0;
     }
 
     .topbar-right {
@@ -1275,7 +1388,16 @@
     }
 
     .mobile-only {
-        display: block;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Ensure sidebar toggle is always visible on mobile/tablet */
+    .topbar-left .sidebar-toggle.mobile-only {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 
     .sidebar-header {
@@ -1472,8 +1594,18 @@
     }
 }
 
-@media (min-width: 769px) {
+/* Show mobile-only elements on tablets and mobile (up to 1024px) */
+@media (max-width: 1024px) {
     .mobile-only {
-        display: none;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+}
+
+/* Hide mobile-only elements on desktop (above 1024px) */
+@media (min-width: 1025px) {
+    .mobile-only {
+        display: none !important;
     }
 }

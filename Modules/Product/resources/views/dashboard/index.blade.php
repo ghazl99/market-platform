@@ -1120,6 +1120,20 @@
             </div>
         @endif
 
+        @if (request()->get('success'))
+            <div class="notification success professional-notification show">
+                <div class="notification-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">{{ __('Success') }}</div>
+                    <div class="notification-message">{{ urldecode(request()->get('success')) }}</div>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+                <div class="notification-progress"></div>
+            </div>
+        @endif
+
         @if (session('error'))
             <div class="notification error professional-notification show">
                 <div class="notification-icon">
@@ -1265,8 +1279,7 @@
                                 class="menu-item-form">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="menu-item delete-item"
-                                    onclick="return confirm('هل أنت متأكد من حذف هذا المنتج؟')">
+                                <button type="button" class="menu-item delete-item delete-btn">
                                     <i class="fas fa-trash"></i>
                                     {{ __('حذف') }}
                                 </button>
@@ -1693,27 +1706,112 @@
             }
         });
 
-        // Handle delete confirmation with custom modal
+        // Handle delete directly without confirmation
         let currentDeleteForm = null;
         let currentDeleteBtn = null;
 
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
+                e.stopPropagation(); // منع انتشار الحدث إلى product-card
 
-                const productCard = this.closest('.product-card');
-                const productName = productCard.querySelector('.product-name').textContent;
                 const form = this.closest('form');
+                const originalText = this.innerHTML;
 
                 // Store references for later use
                 currentDeleteForm = form;
                 currentDeleteBtn = this;
 
-                // Show product name in modal
-                document.getElementById('productNameToDelete').textContent = productName;
 
-                // Show modal
-                document.getElementById('deleteModal').style.display = 'flex';
+                // Show loading state
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ __('Deleting...') }}';
+                this.disabled = true;
+
+                // Close menu dropdown if open
+                const dropdown = this.closest('.menu-dropdown');
+                if (dropdown) {
+                    dropdown.classList.remove('show');
+                }
+
+                // Send AJAX delete request with current page context
+                const deleteUrl = form.action;
+                console.log('Deleting product from:', deleteUrl);
+                
+                fetch(deleteUrl, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-HTTP-Method-Override': 'DELETE',
+                            'Referer': window.location.href
+                        }
+                    })
+                    .then(response => {
+                        // Check if response is ok
+                        if (!response.ok) {
+                            // Try to get error message from response
+                            return response.json().then(err => {
+                                throw new Error(err.message || 'Network response was not ok');
+                            }).catch(() => {
+                                throw new Error('Network response was not ok: ' + response.status);
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            // Show success notification
+                            showSuccessNotification(data.message, null, 'deleted');
+
+                            // Remove the product card from the page with animation
+                            const productCard = currentDeleteBtn.closest('.product-card');
+                            if (productCard) {
+                                productCard.style.transition = 'all 0.3s ease';
+                                productCard.style.opacity = '0';
+                                productCard.style.transform = 'scale(0.8)';
+                                setTimeout(() => {
+                                    productCard.remove();
+                                    
+                                    // Check if there are no more products
+                                    const productsGrid = document.getElementById('productsGrid');
+                                    if (productsGrid) {
+                                        const remainingProducts = productsGrid.querySelectorAll('.product-card');
+                                        if (remainingProducts.length === 0) {
+                                            // Show empty state if no products left
+                                            const emptyState = productsGrid.querySelector('.empty-state');
+                                            if (!emptyState) {
+                                                const emptyStateHtml = `
+                                                    <div class="empty-state">
+                                                        <i class="fas fa-box-open"></i>
+                                                        <h3>{{ __('No products found') }}</h3>
+                                                        <p>{{ __('Create your first product') }}</p>
+                                                        <a href="{{ route('dashboard.product.create') }}" class="add-product-btn">
+                                                            <i class="fas fa-plus"></i>
+                                                            {{ __('Add New Product') }}
+                                                        </a>
+                                                    </div>
+                                                `;
+                                                productsGrid.insertAdjacentHTML('beforeend', emptyStateHtml);
+                                            }
+                                        }
+                                    }
+                                }, 300);
+                            }
+                        } else {
+                            showErrorNotification(data.message || '{{ __('An error occurred while deleting the product') }}');
+                            // Restore button state
+                            currentDeleteBtn.innerHTML = originalText;
+                            currentDeleteBtn.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Delete error:', error);
+                        showErrorNotification('{{ __('An error occurred while deleting the product') }}');
+                        // Restore button state
+                        currentDeleteBtn.innerHTML = originalText;
+                        currentDeleteBtn.disabled = false;
+                    });
             });
         });
 
@@ -1741,26 +1839,6 @@
             });
         });
 
-        // Handle modal close
-        document.querySelector('.delete-modal-close').addEventListener('click', function() {
-            document.getElementById('deleteModal').style.display = 'none';
-            currentDeleteForm = null;
-            currentDeleteBtn = null;
-        });
-
-        // Handle modal cancel
-        document.querySelector('.delete-modal-cancel').addEventListener('click', function() {
-            document.getElementById('deleteModal').style.display = 'none';
-            currentDeleteForm = null;
-            currentDeleteBtn = null;
-        });
-
-        // Handle modal overlay click
-        document.querySelector('.delete-modal-overlay').addEventListener('click', function() {
-            document.getElementById('deleteModal').style.display = 'none';
-            currentDeleteForm = null;
-            currentDeleteBtn = null;
-        });
 
         // Toggle menu dropdown
         function toggleMenu(button, event) {
@@ -1783,6 +1861,22 @@
             }
         }
 
+        // منع انتشار الحدث عند النقر على القائمة المنسدلة
+        document.querySelectorAll('.menu-dropdown').forEach(dropdown => {
+            dropdown.addEventListener('click', function(e) {
+                e.stopPropagation(); // منع انتشار الحدث إلى product-card
+            });
+        });
+
+        // منع انتشار الحدث عند النقر على رابط التعديل
+        document.querySelectorAll('.menu-item').forEach(item => {
+            if (item.tagName === 'A') {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation(); // منع انتشار الحدث إلى product-card
+                });
+            }
+        });
+
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             if (!event.target.closest('.product-menu')) {
@@ -1792,68 +1886,6 @@
             }
         });
 
-        // Handle delete confirmation
-        document.querySelector('.delete-modal-confirm').addEventListener('click', function() {
-            if (currentDeleteForm && currentDeleteBtn) {
-                const originalText = currentDeleteBtn.innerHTML;
-
-                // Show loading state
-                currentDeleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ __('Deleting...') }}';
-                currentDeleteBtn.disabled = true;
-
-                // Hide modal
-                document.getElementById('deleteModal').style.display = 'none';
-
-                // Send AJAX delete request
-                fetch(currentDeleteForm.action, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'X-HTTP-Method-Override': 'DELETE'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Show success notification
-                            showSuccessNotification(data.message, null, 'deleted');
-
-                            // Remove the card from grid
-                            const card = currentDeleteBtn.closest('.product-card');
-                            if (card) {
-                                card.style.transition = 'all 0.3s ease';
-                                card.style.opacity = '0';
-                                card.style.transform = 'scale(0.8)';
-                                setTimeout(() => {
-                                    card.remove();
-                                }, 300);
-                            }
-                        } else {
-                            showErrorNotification(data.message);
-                            // Restore button state
-                            currentDeleteBtn.innerHTML = originalText;
-                            currentDeleteBtn.disabled = false;
-                        }
-                    })
-                    .catch(error => {
-                        showErrorNotification('{{ __('An error occurred while deleting the product') }}');
-                        // Restore button state
-                        currentDeleteBtn.innerHTML = originalText;
-                        currentDeleteBtn.disabled = false;
-                    });
-            }
-        });
-
-        // Handle ESC key to close modal
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                document.getElementById('deleteModal').style.display = 'none';
-                currentDeleteForm = null;
-                currentDeleteBtn = null;
-            }
-        });
 
         // Show and auto-hide notifications
         document.addEventListener('DOMContentLoaded', function() {
@@ -1874,6 +1906,39 @@
                     }, 400);
                 }, 6000);
             });
+
+            // Restore scroll position after product deletion
+            const deleteContext = sessionStorage.getItem('productDeleteContext');
+            if (deleteContext) {
+                try {
+                    const context = JSON.parse(deleteContext);
+                    if (context.scrollPosition && context.scrollPosition > 0) {
+                        // Wait for page to fully load before scrolling
+                        setTimeout(() => {
+                            window.scrollTo({
+                                top: context.scrollPosition,
+                                behavior: 'smooth'
+                            });
+                            // Clean up sessionStorage
+                            sessionStorage.removeItem('productDeleteContext');
+                        }, 100);
+                    } else {
+                        sessionStorage.removeItem('productDeleteContext');
+                    }
+                } catch (e) {
+                    console.error('Error restoring scroll position:', e);
+                    sessionStorage.removeItem('productDeleteContext');
+                }
+            }
+
+            // Clean URL after showing notification from URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('success')) {
+                // Remove success parameter from URL without reloading
+                urlParams.delete('success');
+                const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+                window.history.replaceState({}, '', newUrl);
+            }
         });
 
         // Professional Success Notification

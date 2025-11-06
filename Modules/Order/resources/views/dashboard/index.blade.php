@@ -169,10 +169,10 @@
                 </select>
                 <select class="filter-select" id="amountFilter">
                     <option value="">{{ __('All Amounts') }}</option>
-                    <option value="0-100">0 - 100 {{ __('SAR') }}</option>
-                    <option value="100-500">100 - 500 {{ __('SAR') }}</option>
-                    <option value="500-1000">500 - 1000 {{ __('SAR') }}</option>
-                    <option value="1000+">{{ __('More than') }} 1000 {{ __('SAR') }}</option>
+                    <option value="0-100">0 - 100 $</option>
+                    <option value="100-500">100 - 500 $</option>
+                    <option value="500-1000">500 - 1000 $</option>
+                    <option value="1000+">{{ __('More than') }} 1000 $</option>
                 </select>
                 <button class="filter-btn" id="applyFilters">
                     <i class="fas fa-filter"></i>
@@ -268,8 +268,7 @@
                                 </div>
                             </td>
                             <td>{{ $order->created_at->format('Y-m-d') }}</td>
-                            <td><span class="order-amount">{{ number_format($order->total_amount, 2) }}
-                                    {{ __('SAR') }}</span></td>
+                            <td><span class="order-amount">${{ number_format($order->total_amount, 2) }}</span></td>
                             <td>
                                 <span class="status-badge {{ $order->status }}">
                                     @switch($order->status)
@@ -1600,11 +1599,11 @@
                         <div class="notification-title">{{ __('Success') }}</div>
                         <div class="notification-message">${message}</div>
                         ${orderId ? `
-                                                                                <div class="notification-details">
-                                                                                    <i class="fas fa-info-circle"></i>
-                                                                                    {{ __('Order') }} #${orderId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
-                                                                                </div>
-                                                                                ` : ''}
+                                                                                                <div class="notification-details">
+                                                                                                    <i class="fas fa-info-circle"></i>
+                                                                                                    {{ __('Order') }} #${orderId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
+                                                                                                </div>
+                                                                                                ` : ''}
                     </div>
                     <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
                     <div class="notification-progress"></div>
