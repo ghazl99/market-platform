@@ -43,8 +43,17 @@ class OrderController extends Controller implements HasMiddleware
     {
         $order->load([
             'items.product.media',
-            'user'
+            'user.wallets',
+            'store',
+            'walletTransactions'
         ]);
+
+        // تحميل محفظة العميل للمتجر الحالي
+        if ($order->user && $order->store_id) {
+            $order->user->load(['wallets' => function($query) use ($order) {
+                $query->where('store_id', $order->store_id);
+            }]);
+        }
 
         return view('order::dashboard.show', compact('order'));
     }
@@ -71,7 +80,7 @@ class OrderController extends Controller implements HasMiddleware
         ]);
 
         $request->validate([
-            'status' => 'nullable|in:pending,confirmed,completed,canceled',
+            'status' => 'nullable|in:pending,processing,completed,canceled,cancelled',
             'cancel_reason' => 'nullable|string|max:500',
         ]);
 

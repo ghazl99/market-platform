@@ -20,6 +20,8 @@ class OrderItem extends Model
         'product_id',
         'quantity',
         'player_id',
+        'delivery_email',
+        'activation_code',
     ];
 
     public function order()

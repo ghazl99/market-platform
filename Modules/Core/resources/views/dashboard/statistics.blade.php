@@ -136,7 +136,7 @@
                 <!-- Sales Statistics -->
                 <div class="stat-card sales-card">
                     <div class="stat-icon">
-                        <i class="fas fa-dollar-sign"></i>
+                        <i class="fas fa-coins"></i>
                     </div>
                     <div class="stat-content">
                         <h3 class="stat-label">{{ __('Total Sales') }}</h3>

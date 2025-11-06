@@ -116,12 +116,19 @@
                 <div class="stat-number">{{ $orders->total() }}</div>
                 <div class="stat-label">{{ __('Total Orders') }}</div>
             </div>
+            <div class="stat-card priority">
+                <div class="stat-icon processing">
+                    <i class="fas fa-hand-paper"></i>
+                </div>
+                <div class="stat-number">{{ $orders->where('status', 'processing')->count() }}</div>
+                <div class="stat-label">{{ __('Manual Processing') }}</div>
+            </div>
             <div class="stat-card">
                 <div class="stat-icon pending">
-                    <i class="fas fa-clock"></i>
+                    <i class="fas fa-cog"></i>
                 </div>
                 <div class="stat-number">{{ $orders->where('status', 'pending')->count() }}</div>
-                <div class="stat-label">{{ __('Pending') }}</div>
+                <div class="stat-label">{{ __('Automatic Processing') }}</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon completed">
@@ -134,7 +141,7 @@
                 <div class="stat-icon cancelled">
                     <i class="fas fa-times-circle"></i>
                 </div>
-                <div class="stat-number">{{ $orders->where('status', 'canceled')->count() }}</div>
+                <div class="stat-number">{{ $orders->whereIn('status', ['canceled', 'cancelled'])->count() }}</div>
                 <div class="stat-label">{{ __('Cancelled') }}</div>
             </div>
         </div>
@@ -148,9 +155,9 @@
                 </div>
                 <select class="filter-select" id="statusFilter">
                     <option value="">{{ __('All Statuses') }}</option>
+                    <option value="processing">{{ __('Manual Processing') }}</option>
+                    <option value="pending">{{ __('Automatic Processing') }}</option>
                     <option value="completed">{{ __('Completed') }}</option>
-                    <option value="pending">{{ __('Pending') }}</option>
-                    <option value="processing">{{ __('Processing') }}</option>
                     <option value="canceled">{{ __('Cancelled') }}</option>
                 </select>
                 <select class="filter-select" id="periodFilter">
@@ -200,18 +207,18 @@
                             }
                         @endphp
                         <tr>
-                            <td><span class="order-id">#{{ $order->id }}</span></td>
+                            <td><a href="{{ route('dashboard.order.show', $order->id) }}" class="order-id-link"><span
+                                        class="order-id">#{{ $order->id }}</span></a></td>
                             <td>
                                 <div class="order-item-info">
-                                    @if($product)
+                                    @if ($product)
                                         <div class="order-product">
                                             <div class="product-image-wrapper">
-                                                @if($product->getFirstMedia('product_images'))
+                                                @if ($product->getFirstMedia('product_images'))
                                                     @php $productMedia = $product->getFirstMedia('product_images'); @endphp
-                                                    <img src="{{ route('dashboard.product.image', $productMedia->id) }}" 
-                                                         alt="{{ $product->name }}" 
-                                                         class="product-image" 
-                                                         onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.product-image-placeholder').style.display='flex';">
+                                                    <img src="{{ route('dashboard.product.image', $productMedia->id) }}"
+                                                        alt="{{ $product->name }}" class="product-image"
+                                                        onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.product-image-placeholder').style.display='flex';">
                                                     <div class="product-image-placeholder" style="display: none;">
                                                         <i class="fas fa-image"></i>
                                                     </div>
@@ -222,10 +229,16 @@
                                                 @endif
                                             </div>
                                             <div class="product-details">
-                                                <h6 class="product-name" title="{{ $product->name }}">{{ $product->name }}</h6>
-                                                <div class="customer-name" title="Order #{{ $order->id }} - User ID: {{ $order->user_id }}">
+                                                <a href="{{ route('dashboard.order.show', $order->id) }}"
+                                                    class="product-name-link">
+                                                    <h6 class="product-name" title="{{ $product->name }}">
+                                                        {{ $product->name }}</h6>
+                                                </a>
+                                                <div class="customer-name"
+                                                    title="Order #{{ $order->id }} - User ID: {{ $order->user_id }}">
                                                     <i class="fas fa-user"></i>
-                                                    <span class="customer-name-text" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">
+                                                    <span class="customer-name-text"
+                                                        style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">
                                                         {{ $customerDisplayName }}
                                                     </span>
                                                 </div>
@@ -237,10 +250,15 @@
                                                 <i class="fas fa-box"></i>
                                             </div>
                                             <div class="product-details">
-                                                <h6 class="product-name">{{ __('No Product') }}</h6>
-                                                <div class="customer-name" title="Order #{{ $order->id }} - User ID: {{ $order->user_id }}">
+                                                <a href="{{ route('dashboard.order.show', $order->id) }}"
+                                                    class="product-name-link">
+                                                    <h6 class="product-name">{{ __('No Product') }}</h6>
+                                                </a>
+                                                <div class="customer-name"
+                                                    title="Order #{{ $order->id }} - User ID: {{ $order->user_id }}">
                                                     <i class="fas fa-user"></i>
-                                                    <span class="customer-name-text" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">
+                                                    <span class="customer-name-text"
+                                                        style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">
                                                         {{ $customerDisplayName }}
                                                     </span>
                                                 </div>
@@ -260,28 +278,25 @@
                                         @break
 
                                         @case('pending')
-                                            {{ __('Pending') }}
+                                            {{ __('Automatic Processing') }}
                                         @break
 
                                         @case('processing')
-                                            {{ __('Processing') }}
+                                            {{ __('Manual Processing') }}
                                         @break
 
                                         @case('canceled')
+                                        @case('cancelled')
                                             {{ __('Cancelled') }}
                                         @break
 
                                         @default
-                                            {{ ucfirst($order->status) }}
+                                            {{ __('Status') }}: {{ ucfirst($order->status) }}
                                     @endswitch
                                 </span>
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                    <a href="{{ route('dashboard.order.show', $order->id) }}" class="action-btn view">
-                                        <i class="fas fa-eye"></i>
-                                        {{ __('View') }}
-                                    </a>
                                     <a href="{{ route('dashboard.order.edit', $order->id) }}" class="action-btn edit">
                                         <i class="fas fa-edit"></i>
                                         {{ __('Edit') }}
@@ -456,9 +471,18 @@
                 transition: all 0.3s ease;
             }
 
+            .stat-card.priority {
+                border: 2px solid #3b82f6;
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            }
+
             .stat-card:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            }
+
+            .stat-card.priority:hover {
+                box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
             }
 
             .stat-icon {
@@ -478,7 +502,11 @@
             }
 
             .stat-icon.pending {
-                background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+                background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            }
+
+            .stat-icon.processing {
+                background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             }
 
             .stat-icon.completed {
@@ -795,6 +823,30 @@
                 color: #059669;
             }
 
+            .order-id-link {
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+
+            .order-id-link:hover .order-id {
+                color: #047857;
+                text-decoration: underline;
+            }
+
+            .product-name-link {
+                text-decoration: none;
+                display: block;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+
+            .product-name-link:hover .product-name {
+                color: #059669;
+                text-decoration: underline;
+            }
+
             .customer-info {
                 display: flex;
                 align-items: center;
@@ -999,8 +1051,8 @@
             }
 
             .status-badge.pending {
-                background: rgba(245, 158, 11, 0.1);
-                color: #f59e0b;
+                background: rgba(139, 92, 246, 0.1);
+                color: #8b5cf6;
             }
 
             .status-badge.canceled {
@@ -1548,11 +1600,11 @@
                         <div class="notification-title">{{ __('Success') }}</div>
                         <div class="notification-message">${message}</div>
                         ${orderId ? `
-                                                                        <div class="notification-details">
-                                                                            <i class="fas fa-info-circle"></i>
-                                                                            {{ __('Order') }} #${orderId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
-                                                                        </div>
-                                                                        ` : ''}
+                                                                                <div class="notification-details">
+                                                                                    <i class="fas fa-info-circle"></i>
+                                                                                    {{ __('Order') }} #${orderId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
+                                                                                </div>
+                                                                                ` : ''}
                     </div>
                     <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
                     <div class="notification-progress"></div>

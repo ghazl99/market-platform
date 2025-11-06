@@ -66,14 +66,23 @@
             padding: 2rem;
             border: 1px solid #404040;
             transition: all 0.3s ease;
-            cursor: pointer;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         .group-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             border-color: #f59e0b;
+        }
+
+        .group-card-content {
+            flex: 1;
+        }
+
+        .group-card-content:hover {
+            cursor: pointer;
         }
 
         .group-card.default {
@@ -126,10 +135,18 @@
             gap: 0.5rem;
             opacity: 0;
             transition: opacity 0.3s ease;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #404040;
         }
 
         .group-card:hover .group-actions {
             opacity: 1;
+        }
+
+        html[data-theme="light"] .group-actions,
+        html[data-theme="light"] body .group-actions {
+            border-top: 1px solid #e5e7eb !important;
         }
 
         .action-btn {
@@ -146,6 +163,8 @@
             justify-content: center;
             width: 40px;
             height: 40px;
+            position: relative;
+            z-index: 10;
         }
 
         .action-btn:hover {
@@ -316,6 +335,245 @@
         html[data-theme="light"] body .no-groups i {
             color: #d1d5db !important;
         }
+
+        /* Delete Modal Styles */
+        .delete-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .delete-modal-overlay.show {
+            display: flex;
+        }
+
+        .delete-modal {
+            background: #2d2d2d;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid #404040;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .delete-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #404040;
+        }
+
+        .delete-modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .delete-modal-title i {
+            color: #ef4444;
+            font-size: 1.5rem;
+        }
+
+        .delete-modal-close {
+            background: none;
+            border: none;
+            color: #cccccc;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .delete-modal-close:hover {
+            background: #404040;
+            color: #ffffff;
+        }
+
+        .delete-modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .delete-modal-warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .delete-modal-warning i {
+            color: #ef4444;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .delete-modal-warning-text {
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .delete-modal-warning-text strong {
+            color: #ef4444;
+        }
+
+        .delete-modal-group-info {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .delete-modal-group-info-label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .delete-modal-group-info-value {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .delete-modal-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .delete-modal-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .delete-modal-btn-cancel {
+            background: #404040;
+            color: #ffffff;
+        }
+
+        .delete-modal-btn-cancel:hover {
+            background: #555555;
+        }
+
+        .delete-modal-btn-confirm {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        .delete-modal-btn-confirm:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Light Mode for Modal */
+        html[data-theme="light"] .delete-modal,
+        html[data-theme="light"] body .delete-modal {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html[data-theme="light"] .delete-modal-header,
+        html[data-theme="light"] body .delete-modal-header {
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        html[data-theme="light"] .delete-modal-title,
+        html[data-theme="light"] body .delete-modal-title {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .delete-modal-close,
+        html[data-theme="light"] body .delete-modal-close {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .delete-modal-close:hover,
+        html[data-theme="light"] body .delete-modal-close:hover {
+            background: #f3f4f6 !important;
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .delete-modal-warning,
+        html[data-theme="light"] body .delete-modal-warning {
+            background: rgba(239, 68, 68, 0.1) !important;
+            border: 1px solid rgba(239, 68, 68, 0.3) !important;
+        }
+
+        html[data-theme="light"] .delete-modal-warning-text,
+        html[data-theme="light"] body .delete-modal-warning-text {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .delete-modal-group-info,
+        html[data-theme="light"] body .delete-modal-group-info {
+            background: #f9fafb !important;
+        }
+
+        html[data-theme="light"] .delete-modal-group-info-label,
+        html[data-theme="light"] body .delete-modal-group-info-label {
+            color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .delete-modal-group-info-value,
+        html[data-theme="light"] body .delete-modal-group-info-value {
+            color: #111827 !important;
+        }
+
+        html[data-theme="light"] .delete-modal-btn-cancel,
+        html[data-theme="light"] body .delete-modal-btn-cancel {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+        }
+
+        html[data-theme="light"] .delete-modal-btn-cancel:hover,
+        html[data-theme="light"] body .delete-modal-btn-cancel:hover {
+            background: #e5e7eb !important;
+        }
     </style>
 @endpush
 
@@ -343,33 +601,33 @@
 
             <!-- Existing Groups -->
             @forelse($groups as $group)
-                <div class="group-card {{ $group->is_default ? 'default' : '' }}"
-                    onclick="window.location.href='{{ LaravelLocalization::localizeURL(route('admin.groups.show', $group->id)) }}'">
-                    <div class="group-name">{{ $group->name }}</div>
-                    @if($group->store)
-                        <div style="color: #a0a0a0; font-size: 0.9rem; margin-bottom: 1rem;">
-                            <i class="fas fa-store"></i> {{ $group->store->name }}
+                <div class="group-card {{ $group->is_default ? 'default' : '' }}">
+                    <div class="group-card-content" 
+                         onclick="window.location.href='{{ LaravelLocalization::localizeURL(route('admin.groups.show', $group->id)) }}'"
+                         style="cursor: pointer;">
+                        <div class="group-name">{{ $group->name }}</div>
+                        @if($group->store)
+                            <div style="color: #a0a0a0; font-size: 0.9rem; margin-bottom: 1rem;">
+                                <i class="fas fa-store"></i> {{ $group->store->name }}
+                            </div>
+                        @endif
+                        <div class="group-stats">
+                            <div class="profit-percentage">{{ $group->profit_percentage }}%</div>
+                            <div class="users-count">{{ $group->users_count }} {{ __('users') }}</div>
                         </div>
-                    @endif
-                    <div class="group-stats">
-                        <div class="profit-percentage">{{ $group->profit_percentage }}%</div>
-                        <div class="users-count">{{ $group->users_count }} {{ __('users') }}</div>
                     </div>
-                    <div class="group-actions">
+                    <div class="group-actions" onclick="event.stopPropagation();">
                         <a href="{{ LaravelLocalization::localizeURL(route('admin.groups.edit', $group->id)) }}"
-                            class="action-btn edit" title="{{ __('Edit') }}">
+                            class="action-btn edit" title="{{ __('Edit') }}" onclick="event.stopPropagation();">
                             <i class="fas fa-edit"></i>
                         </a>
                         @if (!$group->is_default)
-                            <form action="{{ route('admin.groups.destroy', $group->id) }}" method="POST"
-                                style="display: inline;"
-                                onsubmit="return confirm('{{ __('Are you sure you want to delete this group?') }}')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="action-btn delete" title="{{ __('Delete') }}">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
+                            <button type="button" 
+                                    class="action-btn delete" 
+                                    title="{{ __('Delete') }}"
+                                    onclick="event.stopPropagation(); openDeleteModal({{ $group->id }}, '{{ addslashes($group->name) }}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         @endif
                     </div>
                 </div>
@@ -380,6 +638,51 @@
                     <p>{{ __('Start by creating your first group.') }}</p>
                 </div>
             @endforelse
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="delete-modal-overlay" onclick="if(event.target === this) closeDeleteModal()">
+        <div class="delete-modal">
+            <div class="delete-modal-header">
+                <h3 class="delete-modal-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {{ __('Confirm Deletion') }}
+                </h3>
+                <button type="button" class="delete-modal-close" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="delete-modal-body">
+                <div class="delete-modal-warning">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div class="delete-modal-warning-text">
+                        {{ __('Are you sure you want to delete this group?') }}
+                        <br>
+                        <strong>{{ __('This action cannot be undone.') }}</strong>
+                        <br>
+                        {{ __('All users in this group will be moved to the default group.') }}
+                    </div>
+                </div>
+                <div class="delete-modal-group-info">
+                    <div class="delete-modal-group-info-label">{{ __('Group Name') }}</div>
+                    <div class="delete-modal-group-info-value" id="deleteModalGroupName"></div>
+                </div>
+            </div>
+            <div class="delete-modal-footer">
+                <button type="button" class="delete-modal-btn delete-modal-btn-cancel" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                    {{ __('Cancel') }}
+                </button>
+                <form id="deleteGroupForm" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="delete-modal-btn delete-modal-btn-confirm">
+                        <i class="fas fa-trash"></i>
+                        {{ __('Delete Group') }}
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 @endsection
@@ -396,6 +699,177 @@
                 // Re-apply theme to ensure styles are loaded
                 document.documentElement.setAttribute('data-theme', 'light');
             }
+
+            // Handle session messages with reliable notification display
+            @if (session('success'))
+                (function() {
+                    function showSuccessNotification() {
+                        try {
+                            if (typeof window.showSuccess === 'function') {
+                                window.showSuccess('{{ __('Success') }}', '{{ session('success') }}');
+                                return true;
+                            } else if (typeof showSuccess === 'function') {
+                                showSuccess('{{ __('Success') }}', '{{ session('success') }}');
+                                return true;
+                            } else if (typeof window.showNotification === 'function') {
+                                window.showNotification('success', '{{ __('Success') }}', '{{ session('success') }}');
+                                return true;
+                            }
+                            return false;
+                        } catch(e) {
+                            console.error('Error in showSuccessNotification:', e);
+                            return false;
+                        }
+                    }
+                    
+                    // Try immediately
+                    if (!showSuccessNotification()) {
+                        // Try again after delays
+                        setTimeout(() => showSuccessNotification(), 200);
+                        setTimeout(() => showSuccessNotification(), 500);
+                        setTimeout(() => {
+                            if (!showSuccessNotification()) {
+                                // Final fallback: create notification manually
+                                const container = document.getElementById('notification-container') || (() => {
+                                    const div = document.createElement('div');
+                                    div.id = 'notification-container';
+                                    div.className = 'notification-container';
+                                    document.body.appendChild(div);
+                                    return div;
+                                })();
+                                
+                                const notification = document.createElement('div');
+                                notification.className = 'notification success';
+                                notification.innerHTML = `
+                                    <div class="notification-icon">✓</div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">{{ __('Success') }}</div>
+                                        <div class="notification-message">{{ session('success') }}</div>
+                                    </div>
+                                    <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+                                    <div class="notification-progress"></div>
+                                `;
+                                container.appendChild(notification);
+                                setTimeout(() => notification.classList.add('show'), 100);
+                                const progressBar = notification.querySelector('.notification-progress');
+                                if (progressBar) {
+                                    setTimeout(() => {
+                                        progressBar.style.width = '100%';
+                                        progressBar.style.transition = 'width 5000ms linear';
+                                    }, 100);
+                                }
+                                setTimeout(() => {
+                                    notification.classList.add('hide');
+                                    setTimeout(() => notification.remove(), 400);
+                                }, 5000);
+                            }
+                        }, 1000);
+                    }
+                })();
+            @endif
+
+            @if (session('error'))
+                (function() {
+                    function showErrorNotification() {
+                        try {
+                            if (typeof window.showError === 'function') {
+                                window.showError('{{ __('Error') }}', '{{ session('error') }}');
+                                return true;
+                            } else if (typeof showError === 'function') {
+                                showError('{{ __('Error') }}', '{{ session('error') }}');
+                                return true;
+                            } else if (typeof window.showNotification === 'function') {
+                                window.showNotification('error', '{{ __('Error') }}', '{{ session('error') }}');
+                                return true;
+                            }
+                            return false;
+                        } catch(e) {
+                            console.error('Error in showErrorNotification:', e);
+                            return false;
+                        }
+                    }
+                    
+                    // Try immediately
+                    if (!showErrorNotification()) {
+                        // Try again after delays
+                        setTimeout(() => showErrorNotification(), 200);
+                        setTimeout(() => showErrorNotification(), 500);
+                        setTimeout(() => {
+                            if (!showErrorNotification()) {
+                                // Final fallback: create notification manually
+                                const container = document.getElementById('notification-container') || (() => {
+                                    const div = document.createElement('div');
+                                    div.id = 'notification-container';
+                                    div.className = 'notification-container';
+                                    document.body.appendChild(div);
+                                    return div;
+                                })();
+                                
+                                const notification = document.createElement('div');
+                                notification.className = 'notification error';
+                                notification.innerHTML = `
+                                    <div class="notification-icon">✕</div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">{{ __('Error') }}</div>
+                                        <div class="notification-message">{{ session('error') }}</div>
+                                    </div>
+                                    <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+                                    <div class="notification-progress"></div>
+                                `;
+                                container.appendChild(notification);
+                                setTimeout(() => notification.classList.add('show'), 100);
+                                const progressBar = notification.querySelector('.notification-progress');
+                                if (progressBar) {
+                                    setTimeout(() => {
+                                        progressBar.style.width = '100%';
+                                        progressBar.style.transition = 'width 5000ms linear';
+                                    }, 100);
+                                }
+                                setTimeout(() => {
+                                    notification.classList.add('hide');
+                                    setTimeout(() => notification.remove(), 400);
+                                }, 5000);
+                            }
+                        }, 1000);
+                    }
+                })();
+            @endif
+        });
+
+        // Delete Modal Functions
+        function openDeleteModal(groupId, groupName) {
+            const modal = document.getElementById('deleteModal');
+            const form = document.getElementById('deleteGroupForm');
+            const groupNameElement = document.getElementById('deleteModalGroupName');
+            
+            // Set form action
+            form.action = '{{ LaravelLocalization::localizeURL(route("admin.groups.destroy", ":id")) }}'.replace(':id', groupId);
+            
+            // Set group name
+            groupNameElement.textContent = groupName;
+            
+            // Show modal
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('deleteGroupForm')?.addEventListener('submit', function(e) {
+            // Form will submit normally, server will handle the deletion
+            // Success notification will be shown from session message
         });
     </script>
 @endpush

@@ -45,7 +45,251 @@ class DashboardController extends Controller implements HasMiddleware
             abort(404, 'Store not found');
         }
 
-        return view('core::store.dashboard', compact('store'));
+        // إحصائيات حقيقية من المتجر
+        // إجمالي المبيعات (جميع الطلبات المكتملة)
+        $totalSales = Order::where('store_id', $store->id)
+            ->where('status', 'completed')
+            ->sum('total_amount');
+
+        // مبيعات الشهر الماضي
+        $totalSalesLastMonth = Order::where('store_id', $store->id)
+            ->where('status', 'completed')
+            ->whereMonth('created_at', Carbon::now()->subMonth()->month)
+            ->whereYear('created_at', Carbon::now()->subMonth()->year)
+            ->sum('total_amount');
+
+        // مبيعات الشهر الحالي
+        $totalSalesThisMonth = Order::where('store_id', $store->id)
+            ->where('status', 'completed')
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->sum('total_amount');
+
+        // حساب نسبة النمو (مقارنة الشهر الحالي بالشهر الماضي)
+        $salesGrowth = $totalSalesLastMonth > 0
+            ? (($totalSalesThisMonth - $totalSalesLastMonth) / $totalSalesLastMonth) * 100
+            : ($totalSalesThisMonth > 0 ? 100 : 0);
+
+        // الطلبات الجديدة اليوم
+        $newOrders = Order::where('store_id', $store->id)
+            ->whereDate('created_at', Carbon::today())
+            ->count();
+
+        // متوسط الطلبات يومياً في الأسبوع الماضي
+        $newOrdersLastWeek = Order::where('store_id', $store->id)
+            ->whereBetween('created_at', [
+                Carbon::now()->subWeek()->startOfWeek(),
+                Carbon::now()->subWeek()->endOfWeek()
+            ])
+            ->count();
+
+        // حساب نسبة النمو (مقارنة اليوم بمتوسط الأسبوع الماضي)
+        $averageOrdersLastWeek = $newOrdersLastWeek > 0 ? $newOrdersLastWeek / 7 : 0;
+        $ordersGrowth = $averageOrdersLastWeek > 0
+            ? (($newOrders - $averageOrdersLastWeek) / $averageOrdersLastWeek) * 100
+            : ($newOrders > 0 ? 100 : 0);
+
+        // العملاء الجدد اليوم
+        $newCustomers = User::whereHas('stores', function($query) use ($store) {
+            $query->where('stores.id', $store->id);
+        })
+        ->whereDate('created_at', Carbon::today())
+        ->count();
+
+        // العملاء الجدد في الأسبوع الماضي
+        $newCustomersLastWeek = User::whereHas('stores', function($query) use ($store) {
+            $query->where('stores.id', $store->id);
+        })
+        ->whereBetween('created_at', [
+            Carbon::now()->subWeek()->startOfWeek(),
+            Carbon::now()->subWeek()->endOfWeek()
+        ])
+        ->count();
+
+        // حساب نسبة النمو (مقارنة اليوم بمتوسط الأسبوع الماضي)
+        $averageCustomersLastWeek = $newCustomersLastWeek > 0 ? $newCustomersLastWeek / 7 : 0;
+        $customersGrowth = $averageCustomersLastWeek > 0
+            ? (($newCustomers - $averageCustomersLastWeek) / $averageCustomersLastWeek) * 100
+            : ($newCustomers > 0 ? 100 : 0);
+
+        // حساب معدل التحويل (عدد الطلبات / عدد المستخدمين)
+        $totalOrders = Order::where('store_id', $store->id)->count();
+        $totalUsers = User::whereHas('stores', function($query) use ($store) {
+            $query->where('stores.id', $store->id);
+        })->count();
+
+        // معدل التحويل الحالي = (عدد الطلبات / عدد المستخدمين) * 100
+        $conversionRate = $totalUsers > 0 ? ($totalOrders / $totalUsers) * 100 : 0;
+
+        // الطلبات في الشهر الماضي
+        $ordersLastMonth = Order::where('store_id', $store->id)
+            ->whereMonth('created_at', Carbon::now()->subMonth()->month)
+            ->whereYear('created_at', Carbon::now()->subMonth()->year)
+            ->count();
+
+        // المستخدمين حتى نهاية الشهر الماضي
+        $usersUntilLastMonth = User::whereHas('stores', function($query) use ($store) {
+            $query->where('stores.id', $store->id);
+        })
+        ->where('created_at', '<=', Carbon::now()->subMonth()->endOfMonth())
+        ->count();
+
+        // معدل التحويل الشهر الماضي
+        $conversionRateLastMonth = $usersUntilLastMonth > 0
+            ? ($ordersLastMonth / $usersUntilLastMonth) * 100
+            : 0;
+
+        // حساب نسبة النمو في معدل التحويل
+        $conversionGrowth = $conversionRateLastMonth > 0
+            ? (($conversionRate - $conversionRateLastMonth) / $conversionRateLastMonth) * 100
+            : ($conversionRate > 0 ? 100 : 0);
+
+        // الأنشطة الأخيرة الحقيقية
+        $activities = collect();
+
+        // أحدث الطلبات
+        $recentOrders = Order::where('store_id', $store->id)
+            ->with('user')
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function($order) {
+                return [
+                    'type' => 'order',
+                    'icon' => 'shopping-cart',
+                    'title' => __('New Order') . ' #' . $order->id,
+                    'description' => __('Order received with amount') . ' ' . number_format($order->total_amount, 2) . ' ' . __('SAR'),
+                    'time' => $order->created_at,
+                    'url' => route('dashboard.order.show', $order->id)
+                ];
+            });
+
+        // أحدث المدفوعات
+        $recentPayments = WalletTransaction::whereHas('wallet', function($query) use ($store) {
+            $query->where('store_id', $store->id);
+        })
+        ->where('type', 'deposit')
+        ->latest()
+        ->take(5)
+        ->get()
+        ->map(function($transaction) {
+            return [
+                'type' => 'payment',
+                'icon' => 'credit-card',
+                'title' => __('Payment Received'),
+                'description' => __('Payment with amount') . ' ' . number_format($transaction->amount, 2) . ' ' . __('SAR'),
+                'time' => $transaction->created_at,
+                'url' => null
+            ];
+        });
+
+        // أحدث المستخدمين
+        $recentUsers = User::whereHas('stores', function($query) use ($store) {
+            $query->where('stores.id', $store->id);
+        })
+        ->latest()
+        ->take(5)
+        ->get()
+        ->map(function($user) {
+            return [
+                'type' => 'user',
+                'icon' => 'user-plus',
+                'title' => __('New Customer'),
+                'description' => $user->name . ' ' . __('registered new account'),
+                'time' => $user->created_at,
+                'url' => route('dashboard.customer.show', $user->id)
+            ];
+        });
+
+        // أحدث المنتجات
+        $recentProducts = Product::where('store_id', $store->id)
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function($product) {
+                return [
+                    'type' => 'product',
+                    'icon' => 'box',
+                    'title' => __('Stock Update'),
+                    'description' => __('New product added') . ': ' . $product->name,
+                    'time' => $product->created_at,
+                    'url' => route('dashboard.product.show', $product->id)
+                ];
+            });
+
+        // دمج جميع الأنشطة وترتيبها حسب التاريخ
+        $activities = $recentOrders
+            ->concat($recentPayments)
+            ->concat($recentUsers)
+            ->concat($recentProducts)
+            ->sortByDesc('time')
+            ->take(10)
+            ->values();
+
+        // بيانات المبيعات للرسم البياني (آخر 7 أيام)
+        $salesData7Days = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::now()->subDays($i);
+            $daySales = Order::where('store_id', $store->id)
+                ->where('status', 'completed')
+                ->whereDate('created_at', $date)
+                ->sum('total_amount');
+
+            $salesData7Days[] = [
+                'date' => $date->format('Y-m-d'),
+                'label' => $date->locale(app()->getLocale())->dayName,
+                'sales' => (float) $daySales // تأكد من أن القيمة عدد عشري
+            ];
+        }
+
+        // بيانات المبيعات للرسم البياني (آخر 30 يوم)
+        $salesData30Days = [];
+        for ($i = 29; $i >= 0; $i--) {
+            $date = Carbon::now()->subDays($i);
+            $daySales = Order::where('store_id', $store->id)
+                ->where('status', 'completed')
+                ->whereDate('created_at', $date)
+                ->sum('total_amount');
+
+            $salesData30Days[] = [
+                'date' => $date->format('Y-m-d'),
+                'label' => $date->format('d/m'),
+                'sales' => (float) $daySales // تأكد من أن القيمة عدد عشري
+            ];
+        }
+
+        // بيانات المبيعات للرسم البياني (آخر 90 يوم - تجميع أسبوعي)
+        $salesData90Days = [];
+        for ($i = 12; $i >= 0; $i--) {
+            $weekStart = Carbon::now()->subWeeks($i)->startOfWeek();
+            $weekEnd = Carbon::now()->subWeeks($i)->endOfWeek();
+            $weekSales = Order::where('store_id', $store->id)
+                ->where('status', 'completed')
+                ->whereBetween('created_at', [$weekStart, $weekEnd])
+                ->sum('total_amount');
+
+            $salesData90Days[] = [
+                'date' => $weekStart->format('Y-m-d'),
+                'label' => $weekStart->format('d/m') . ' - ' . $weekEnd->format('d/m'),
+                'sales' => (float) $weekSales // تأكد من أن القيمة عدد عشري
+            ];
+        }
+
+        return view('core::store.dashboard', compact(
+            'store',
+            'totalSales',
+            'salesGrowth',
+            'newOrders',
+            'ordersGrowth',
+            'newCustomers',
+            'customersGrowth',
+            'conversionRate',
+            'conversionGrowth',
+            'activities',
+            'salesData7Days',
+            'salesData30Days',
+            'salesData90Days'
+        ));
     }
 
     public function dashboadAdmin()

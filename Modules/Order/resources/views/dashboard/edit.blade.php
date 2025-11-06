@@ -62,9 +62,9 @@
         <div class="page-header">
             <h1 class="page-title">{{ __('Edit Order') }} #{{ $order->id }}</h1>
             <div class="page-actions">
-                <a href="{{ route('dashboard.order.show', $order->id) }}" class="back-btn">
+                <a href="{{ route('dashboard.order.index') }}" class="back-btn">
                     <i class="fas fa-arrow-right"></i>
-                    {{ __('Back to Order Details') }}
+                    {{ __('Back to Orders') }}
                 </a>
             </div>
         </div>
@@ -84,19 +84,20 @@
                                 @break
 
                                 @case('pending')
-                                    {{ __('Pending') }}
+                                    {{ __('Automatic Processing') }}
                                 @break
 
-                                @case('confirmed')
-                                    {{ __('Confirmed') }}
+                                @case('processing')
+                                    {{ __('Manual Processing') }}
                                 @break
 
                                 @case('canceled')
-                                    {{ __('Canceled') }}
+                                @case('cancelled')
+                                    {{ __('Cancelled') }}
                                 @break
 
                                 @default
-                                    {{ ucfirst($order->status) }}
+                                    {{ __('Status') }}: {{ ucfirst($order->status) }}
                             @endswitch
                         </span>
                     </div>
@@ -104,14 +105,14 @@
                     <div class="form-group">
                         <label for="status" class="form-label">{{ __('Order Status') }}</label>
                         <select name="status" id="status" class="form-select">
+                            <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>
+                                {{ __('Manual Processing') }}</option>
                             <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>
-                                {{ __('Pending') }}</option>
-                            <option value="confirmed" {{ $order->status === 'confirmed' ? 'selected' : '' }}>
-                                {{ __('Confirmed') }}</option>
+                                {{ __('Automatic Processing') }}</option>
                             <option value="completed" {{ $order->status === 'completed' ? 'selected' : '' }}>
                                 {{ __('Completed') }}</option>
-                            <option value="canceled" {{ $order->status === 'canceled' ? 'selected' : '' }}>
-                                {{ __('Canceled') }}</option>
+                            <option value="canceled" {{ $order->status === 'canceled' || $order->status === 'cancelled' ? 'selected' : '' }}>
+                                {{ __('Cancelled') }}</option>
                         </select>
                     </div>
 
@@ -352,11 +353,11 @@
         }
 
         .order-status.pending {
-            background: rgba(245, 158, 11, 0.1);
-            color: #f59e0b;
+            background: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
         }
 
-        .order-status.confirmed {
+        .order-status.processing {
             background: rgba(59, 130, 246, 0.1);
             color: #3b82f6;
         }

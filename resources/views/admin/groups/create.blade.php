@@ -255,23 +255,6 @@
                 <div class="form-help">{{ __('Enter profit percentage (0-100)') }}</div>
             </div>
 
-            <!-- Store Selection -->
-            <div class="form-group">
-                <label class="form-label">{{ __('Store') }}</label>
-                <select name="store_id" class="form-input @error('store_id') error @enderror">
-                    <option value="">{{ __('Select a store (optional)') }}</option>
-                    @foreach($stores as $store)
-                        <option value="{{ $store->id }}" {{ old('store_id') == $store->id ? 'selected' : '' }}>
-                            {{ $store->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('store_id')
-                    <div class="error-message">{{ $message }}</div>
-                @enderror
-                <div class="form-help">{{ __('Select a store to associate this group with (optional)') }}</div>
-            </div>
-
             <!-- Form Actions -->
             <div class="form-actions">
                 <a href="{{ LaravelLocalization::localizeURL(route('admin.groups.index')) }}" class="btn-secondary">

@@ -36,7 +36,9 @@
 
 .notification.success {
     border-right-color: #10b981;
-    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    background: rgba(240, 253, 244, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .notification.error {
@@ -168,8 +170,16 @@
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
     .notification {
-        background: #1f2937;
+        background: rgba(31, 41, 55, 0.95);
         color: #f9fafb;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .notification.success {
+        background: rgba(16, 185, 129, 0.15);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
     }
 
     .notification-title {
@@ -188,6 +198,28 @@
         background: rgba(255, 255, 255, 0.1);
         color: #f9fafb;
     }
+}
+
+/* Dark theme support for data-theme attribute */
+[data-theme="dark"] .notification {
+    background: rgba(31, 41, 55, 0.95);
+    color: #f9fafb;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+[data-theme="dark"] .notification.success {
+    background: rgba(16, 185, 129, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+[data-theme="dark"] .notification-title {
+    color: #f9fafb;
+}
+
+[data-theme="dark"] .notification-message {
+    color: #d1d5db;
 }
 
 /* RTL Support */

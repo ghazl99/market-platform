@@ -31,8 +31,8 @@ class GroupController extends Controller
      */
     public function create()
     {
-        $stores = Store::where('status', 'active')->get();
-        return view('admin.groups.create', compact('stores'));
+        // Store will be obtained automatically using helper in store() method
+        return view('admin.groups.create');
     }
 
     /**
@@ -40,26 +40,56 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
+        // Get current store using helper
+        $currentStore = current_store();
+
+        if (!$currentStore) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', __('Store not found. Please access from a valid store subdomain.'));
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'profit_percentage' => 'required|numeric|min:0|max:100',
-            'store_id' => 'nullable|exists:stores,id',
         ]);
 
         try {
-            $this->groupService->create([
-                'name' => $request->name,
-                'profit_percentage' => $request->profit_percentage,
+            \Log::info('GroupController::store called', [
+                'request_data' => $request->all(),
+                'store_id' => $currentStore->id,
+                'store_name' => $currentStore->name,
+            ]);
+
+            $groupData = [
+                'name' => trim($request->name),
+                'profit_percentage' => (float) $request->profit_percentage,
                 'is_default' => false,
-                'store_id' => $request->store_id,
+                'store_id' => (int) $currentStore->id, // Ensure it's an integer
+            ];
+
+            \Log::info('Group data prepared for service:', $groupData);
+
+            $group = $this->groupService->create($groupData);
+
+            \Log::info('Group created successfully in controller', [
+                'id' => $group->id,
+                'store_id' => $group->store_id,
+                'name' => $group->name,
             ]);
 
             return redirect()->to(LaravelLocalization::localizeURL(route('admin.groups.index')))
                 ->with('success', __('Group created successfully'));
         } catch (\Exception $e) {
+            \Log::error('Group creation failed in controller', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all(),
+                'store_id' => $currentStore->id ?? null,
+            ]);
             return redirect()->back()
                 ->withInput()
-                ->with('error', __('Failed to create group. Please try again.'));
+                ->with('error', __('Failed to create group: ') . $e->getMessage());
         }
     }
 
@@ -79,8 +109,8 @@ class GroupController extends Controller
      */
     public function edit(Group $group)
     {
-        $stores = Store::where('status', 'active')->get();
-        return view('admin.groups.edit', compact('group', 'stores'));
+        // Store association cannot be changed, so no need to pass currentStore
+        return view('admin.groups.edit', compact('group'));
     }
 
     /**
@@ -91,14 +121,14 @@ class GroupController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'profit_percentage' => 'required|numeric|min:0|max:100',
-            'store_id' => 'nullable|exists:stores,id',
         ]);
 
         try {
+            // Keep the original store_id, don't allow changing it
             $this->groupService->update($group, [
                 'name' => $request->name,
                 'profit_percentage' => $request->profit_percentage,
-                'store_id' => $request->store_id,
+                // store_id is not updated - keep the original store association
             ]);
 
             return redirect()->to(LaravelLocalization::localizeURL(route('admin.groups.index')))
@@ -116,20 +146,43 @@ class GroupController extends Controller
     public function destroy(Group $group)
     {
         try {
+            \Log::info('Attempting to delete group', [
+                'group_id' => $group->id,
+                'group_name' => $group->name,
+                'is_default' => $group->is_default,
+            ]);
+
+            // Check if this is the default group before calling service
+            if ($group->is_default) {
+                \Log::warning('Attempted to delete default group', ['group_id' => $group->id]);
+                return redirect()->route('admin.groups.index')
+                    ->with('error', __('Cannot delete the default group'));
+            }
+
             $this->groupService->delete($group);
+
+            \Log::info('Group deleted successfully', ['group_id' => $group->id]);
 
             return redirect()->to(LaravelLocalization::localizeURL(route('admin.groups.index')))
                 ->with('success', __('Group deleted successfully'));
         } catch (\Exception $e) {
+            \Log::error('Group deletion failed', [
+                'group_id' => $group->id ?? null,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
             $message = $e->getMessage();
             
             if (str_contains($message, 'Cannot delete the default group')) {
-                return redirect()->back()
+                return redirect()->route('admin.groups.index')
                     ->with('error', __('Cannot delete the default group'));
             }
 
-            return redirect()->back()
-                ->with('error', __('Failed to delete group. Please try again.'));
+            return redirect()->route('admin.groups.index')
+                ->with('error', __('Failed to delete group: ') . $e->getMessage());
         }
     }
 }
