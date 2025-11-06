@@ -64,7 +64,7 @@
             font-weight: 800;
             color: #111827;
             margin: 0;
-            background: linear-gradient(135deg, #059669, #10b981);
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -72,7 +72,7 @@
 
         /* Balance Card */
         .balance-card {
-            background: linear-gradient(135deg, #059669, #10b981);
+            background: var(--gradient-primary);
             border-radius: 20px;
             padding: 2.5rem;
             margin-bottom: 2rem;
@@ -160,7 +160,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #059669, #10b981, #3b82f6, #8b5cf6);
+            background: var(--gradient-primary);
             border-radius: 24px 24px 0 0;
         }
 
@@ -182,7 +182,7 @@
         }
 
         .stats-title i {
-            color: #059669;
+            color: var(--gradient-primary);
             font-size: 1.5rem;
         }
 
@@ -207,9 +207,9 @@
         }
 
         .scroll-btn:hover {
-            background: #059669;
+            background: var(--gradient-primary);
             color: white;
-            border-color: #059669;
+            border-color: var(--gradient-primary);
             transform: scale(1.1);
         }
 
@@ -266,15 +266,15 @@
         }
 
         .stat-card.primary::before {
-            background: linear-gradient(135deg, #059669, #10b981);
+            background: var(--gradient-primary);
         }
 
         .stat-card.success::before {
-            background: linear-gradient(135deg, #10b981, #34d399);
+            background: var(--gradient-primary);
         }
 
         .stat-card.error::before {
-            background: linear-gradient(135deg, #ef4444, #f87171);
+            background: var(--gradient-primary);
         }
 
         .stat-card.purple::before {
@@ -311,15 +311,15 @@
         }
 
         .stat-icon.income {
-            background: linear-gradient(135deg, #059669, #10b981);
+            background: var(--gradient-primary);
         }
 
         .stat-icon.expense {
-            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            background: var(--gradient-primary);
         }
 
         .stat-icon.pending {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+            background: var(--gradient-primary);
         }
 
         .stat-content {
@@ -358,12 +358,12 @@
             padding: 0.4rem 0.8rem;
             border-radius: 16px;
             background: #f0fdf4;
-            color: #059669;
+            color: var(--gradient-primary);
         }
 
         .stat-trend.negative {
             background: #fef2f2;
-            color: #ef4444;
+            color: var(--gradient-primary);
         }
 
         .stat-trend.neutral {
@@ -384,7 +384,7 @@
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #059669, #10b981);
+            background: var(--gradient-primary);
             border-radius: 2px;
             transition: width 0.3s ease;
             width: 0%;
@@ -410,7 +410,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #059669, #10b981, #3b82f6);
+            background: var(--gradient-primary);
             border-radius: 24px 24px 0 0;
         }
 
@@ -431,7 +431,7 @@
         }
 
         .filter-title i {
-            color: #059669;
+            color: var(--gradient-primary);
             font-size: 1.5rem;
         }
 
@@ -465,7 +465,7 @@
         }
 
         .date-label i {
-            color: #059669;
+            color: var(--gradient-primary);
             font-size: 0.9rem;
         }
 
@@ -489,13 +489,13 @@
 
         .date-input:focus {
             outline: none;
-            border-color: #059669;
+            border-color: var(--gradient-primary);
             box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
             transform: translateY(-1px);
         }
 
         .date-input:hover {
-            border-color: #10b981;
+            border-color: var(--gradient-primary);
         }
 
         .date-icon {
@@ -540,7 +540,7 @@
         }
 
         .search-btn.primary {
-            background: linear-gradient(135deg, #059669, #10b981);
+            background: var(--gradient-primary);
             color: white;
             box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
         }
@@ -586,9 +586,9 @@
         }
 
         .quick-date-btn:hover {
-            background: #059669;
+            background: var(--gradient-primary);
             color: white;
-            border-color: #059669;
+            border-color: var(--gradient-primary);
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
         }
@@ -772,13 +772,13 @@
         }
 
         .filter-tab.active {
-            background: linear-gradient(135deg, #059669, #10b981);
+            background: var(--gradient-primary);
             color: white;
-            border-color: #059669;
+            border-color: var(--gradient-primary);
         }
 
         .filter-tab:hover {
-            background: #059669;
+            background: var(--gradient-primary);
             color: white;
         }
 
@@ -808,7 +808,7 @@
             left: 0;
             width: 4px;
             height: 100%;
-            background: linear-gradient(135deg, #059669, #10b981);
+            background: var(--gradient-primary);
             transform: scaleY(0);
             transition: transform 0.3s ease;
         }
@@ -1147,8 +1147,11 @@
                             <h5 class="transaction-title">
                                 @if ($transaction->order)
                                     {{ $transaction->order->items->first()?->product->name ?? __('Order Item') }}
-                                @elseif($transaction->paymentRequest)
-                                    {{ __('Add Balance') }} ({{ number_format($transaction->amount, 2) }} $)
+                                @elseif($transaction->type == 'deposit' && $transaction->paymentRequest)
+                                    {{ __('Add Balance') }}
+                                    ({{ number_format($transaction->amount, 2) }} $)
+                                    — <small>{{ __('Payment Method:') }}
+                                        {{ $transaction->paymentRequest?->paymentMethod?->name ?? '-' }}</small>
                                 @endif
                             </h5>
 
@@ -1166,9 +1169,7 @@
                         </div>
 
                         <div class="transaction-action">
-                            <h4
-                                class="transaction-amount
-                                {{ $transaction->type == 'deposit' ? 'positive' : '' }}">
+                            <h4 class="transaction-amount {{ $transaction->type == 'deposit' ? 'positive' : '' }}">
                                 {{ $transaction->type == 'deposit' ? '+' : '-' }}{{ number_format($transaction->amount, 2) }}
                                 $
                             </h4>
@@ -1177,7 +1178,6 @@
                                 - <span class="new-balance">{{ number_format($transaction->new_balance, 2) }}</span>
                             </small>
                         </div>
-
                     </div>
                 @empty
                     <div class="empty-state">
@@ -1186,6 +1186,7 @@
                         <p>{{ __('No transactions found for the selected period.') }}</p>
                     </div>
                 @endforelse
+
 
                 <div class="d-flex justify-content-center mt-4">
                     {{ $transactions->links() }}

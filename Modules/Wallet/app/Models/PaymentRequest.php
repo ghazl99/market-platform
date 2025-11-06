@@ -2,15 +2,16 @@
 
 namespace Modules\Wallet\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\User\Models\User;
 use Modules\Store\Models\Store;
+use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Modules\Wallet\Models\PaymentMethod;
 use Spatie\Translatable\HasTranslations;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Notifications\Notifiable;
 
 class PaymentRequest extends Model implements HasMedia
 {
@@ -25,6 +26,7 @@ class PaymentRequest extends Model implements HasMedia
         'exchange_rate',
         'status',
         'notes',
+        'payment_method_id'
     ];
 
     protected $casts = [
@@ -40,6 +42,12 @@ class PaymentRequest extends Model implements HasMedia
     {
         return $this->belongsTo(Wallet::class);
     }
+
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
+
     public function getUserAttribute()
     {
         return $this->wallet?->user;

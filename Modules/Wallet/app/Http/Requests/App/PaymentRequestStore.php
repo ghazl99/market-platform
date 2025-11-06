@@ -15,6 +15,7 @@ class PaymentRequestStore extends FormRequest
             'amount' => 'required|numeric|min:1',
             'currency' => 'required|string',
             'wallet_id' => 'required|exists:wallets,id',
+            'payment_method_id' => 'required|exists:payment_methods,id',
             'receipt_image' => 'required|image|mimes:jpg,jpeg,png,pdf',
         ];
     }

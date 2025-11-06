@@ -31,6 +31,7 @@ class PaymentRequestService
             'original_amount' => $amount,
             'original_currency' => $currency,
             'amount_usd' => $converted,
+            'payment_method_id' => $data['payment_method_id'],
             'exchange_rate' => $exchangeRate,
         ];
 

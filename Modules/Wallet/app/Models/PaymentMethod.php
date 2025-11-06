@@ -3,12 +3,13 @@
 namespace Modules\Wallet\Models;
 
 use Modules\Store\Models\Store;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
+use Modules\Wallet\Models\PaymentRequest;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Wallet\Database\Factories\PaymentMethodFactory;
-use Spatie\Translatable\HasTranslations;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\HasMedia;
 
 class PaymentMethod extends Model implements HasMedia
 
@@ -46,6 +47,10 @@ class PaymentMethod extends Model implements HasMedia
     protected static function newFactory()
     {
         return PaymentMethodFactory::new();
+    }
+    public function paymentRequests()
+    {
+        return $this->hasMany(PaymentRequest::class);
     }
 
     public function store()

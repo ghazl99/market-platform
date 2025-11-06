@@ -1311,7 +1311,7 @@
             const title = document.getElementById('modalTitle');
             const submitBtn = document.getElementById('submitBtn');
 
-            form.action = `{{ url('ar/dashboard/dashboard/payment-requests') }}/${paymentId}/update`;
+            form.action = `{{ url('ar/dashboard/payment-requests') }}/${paymentId}/update`;
 
             if (action === 'approve') {
                 title.textContent = '{{ __('تأكيد الموافقة') }}';

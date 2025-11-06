@@ -682,136 +682,142 @@
     </style>
 @endpush
 @section('content')
-    <div class="payment-details-container">
-        <div class="page-header">
-            <h1 class="page-title">{{ __('Payment Details') }}</h1>
-            <p class="page-subtitle">{{ __('Enter the amount and upload the transfer receipt to complete the process') }}</p>
-        </div>
+    <main class="main-content-adjust">
 
-        @php $media = $paymentMethod->getFirstMedia('payment_method_images'); @endphp
-
-        <div class="payment-info-card">
-            <div class="payment-method-header">
-                <div class="payment-method-icon">
-                    @if ($paymentMethod->getFirstMediaUrl('image'))
-                        <img src="{{ route('payment.methode.image', $media->id) }}" alt="{{ $paymentMethod->name }}">
-                    @else
-                        <img src="{{ asset('assets/img/payment.png') }}" alt="{{ $paymentMethod->name }}">
-                    @endif
-                </div>
-                <div class="payment-method-info">
-                    <h3>{{ $paymentMethod->name }}</h3>
-                    <p>{{ $paymentMethod->description }}</p>
-                </div>
+        <div class="payment-details-container">
+            <div class="page-header">
+                <h1 class="page-title">{{ __('Payment Details') }}</h1>
+                <p class="page-subtitle">{{ __('Enter the amount and upload the transfer receipt to complete the process') }}
+                </p>
             </div>
 
-            <form action="{{ route('payment-request.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="amount-section">
-                    <div class="amount-label">{{ __('Amount to Add') }}</div>
-                    <div class="amount-input-group">
-                        <input class="amount-input" type="number" id="amountInput" name="amount" placeholder="0.00"
-                            min="1" step="0.01">
+            @php $media = $paymentMethod->getFirstMedia('payment_method_images'); @endphp
 
-                        <div class="currency-selector">
-                            <select class="currency-select" id="currencySelect" name="currency">
-                                @php
-                                    $currencies = $paymentMethod->currencies; // JSON
-                                    $currentLang = app()->getLocale(); // 'ar' أو 'en'
-                                    $currencyEn = $currencies['en'];
-                                    $currencyAr = $currencies['ar'];
-                                @endphp
-
-                                @foreach ($currencyEn as $index => $code)
-                                    <option value="{{ $code }}">
-                                        {{ $currencyAr[$index] }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+            <div class="payment-info-card">
+                <div class="payment-method-header">
+                    <div class="payment-method-icon">
+                        @if ($paymentMethod->getFirstMediaUrl('image'))
+                            <img src="{{ route('payment.methode.image', $media->id) }}" alt="{{ $paymentMethod->name }}">
+                        @else
+                            <img src="{{ asset('assets/img/payment.png') }}" alt="{{ $paymentMethod->name }}">
+                        @endif
                     </div>
-
-                    <div class="exchange-rate hidden" id="exchangeRate">
-                        <div class="exchange-label">{{ __('Amount in USD') }}</div>
-                        <div class="exchange-amount" id="exchangeAmount">$0.00</div>
-                        <div class="exchange-rate-text" id="exchangeRateText">{{ __('Exchange rate: 1.00') }}</div>
-                    </div>
-
-                    <div class="final-amount-display hidden" id="convertedDiv">
-                        <div class="final-amount-label">{{ __('Final Amount to Transfer') }}</div>
-                        <div class="final-amount-value">
-                            <span id="convertedAmount">0.00</span> <span class="final-amount-currency">$</span>
-                        </div>
-                        <div class="final-amount-subtitle">{{ __('This amount will be added to your wallet') }}</div>
+                    <div class="payment-method-info">
+                        <h3>{{ $paymentMethod->name }}</h3>
+                        <p>{{ $paymentMethod->description }}</p>
                     </div>
                 </div>
-                <div class="transfer-details">
-                    <h3 class="section-title"><i class="fas fa-university"></i> {{ __('Transfer Details') }}</h3>
-                    <div class="transfer-info">
-                        <div class="info-item">
-                            <div class="info-label"><i class="fas fa-user"></i> {{ __('Recipient Name') }}</div>
-                            <div class="info-value">{{ $paymentMethod->recipient_name }}</div>
+
+                <form action="{{ route('payment-request.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="payment_method_id" value="{{ $paymentMethod->id }}">
+
+                    <div class="amount-section">
+                        <div class="amount-label">{{ __('Amount to Add') }}</div>
+                        <div class="amount-input-group">
+                            <input class="amount-input" type="number" id="amountInput" name="amount" placeholder="0.00"
+                                min="1" step="0.01">
+
+                            <div class="currency-selector">
+                                <select class="currency-select" id="currencySelect" name="currency">
+                                    @php
+                                        $currencies = $paymentMethod->currencies; // JSON
+                                        $currentLang = app()->getLocale(); // 'ar' أو 'en'
+                                        $currencyEn = $currencies['en'];
+                                        $currencyAr = $currencies['ar'];
+                                    @endphp
+
+                                    @foreach ($currencyEn as $index => $code)
+                                        <option value="{{ $code }}">
+                                            {{ $currencyAr[$index] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
-                        <div class="info-item">
-                            <div class="info-label"><i class="fas fa-credit-card"></i> {{ __('Account Number') }}</div>
-                            <div class="info-value">{{ $paymentMethod->account_number }}</div>
+                        <div class="exchange-rate hidden" id="exchangeRate">
+                            <div class="exchange-label">{{ __('Amount in USD') }}</div>
+                            <div class="exchange-amount" id="exchangeAmount">$0.00</div>
+                            <div class="exchange-rate-text" id="exchangeRateText">{{ __('Exchange rate: 1.00') }}</div>
                         </div>
 
-                        <div class="info-item">
-                            <div class="info-label"><i class="fas fa-building"></i> {{ __('Bank Name') }}</div>
-                            <div class="info-value">{{ $paymentMethod->bank_name }}</div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-label"><i class="fas fa-hashtag"></i> {{ __('Transfer Number') }}</div>
-                            <div class="info-value">{{ $paymentMethod->transfer_number }}</div>
+                        <div class="final-amount-display hidden" id="convertedDiv">
+                            <div class="final-amount-label">{{ __('Final Amount to Transfer') }}</div>
+                            <div class="final-amount-value">
+                                <span id="convertedAmount">0.00</span> <span class="final-amount-currency">$</span>
+                            </div>
+                            <div class="final-amount-subtitle">{{ __('This amount will be added to your wallet') }}</div>
                         </div>
                     </div>
+                    <div class="transfer-details">
+                        <h3 class="section-title"><i class="fas fa-university"></i> {{ __('Transfer Details') }}</h3>
+                        <div class="transfer-info">
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-user"></i> {{ __('Recipient Name') }}</div>
+                                <div class="info-value">{{ $paymentMethod->recipient_name }}</div>
+                            </div>
 
-                    <div class="important-note">
-                        <div class="note-title"><i class="fas fa-exclamation-triangle"></i>
-                            {{ __('Important Instructions') }}</div>
-                        <div class="note-content">
-                            <ul class="note-list">
-                                @foreach ($paymentMethod->instructions as $instruction)
-                                    <li>{{ $instruction }}</li>
-                                @endforeach
-                            </ul>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-credit-card"></i> {{ __('Account Number') }}</div>
+                                <div class="info-value">{{ $paymentMethod->account_number }}</div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-building"></i> {{ __('Bank Name') }}</div>
+                                <div class="info-value">{{ $paymentMethod->bank_name }}</div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-hashtag"></i> {{ __('Transfer Number') }}</div>
+                                <div class="info-value">{{ $paymentMethod->transfer_number }}</div>
+                            </div>
+                        </div>
+
+                        <div class="important-note">
+                            <div class="note-title"><i class="fas fa-exclamation-triangle"></i>
+                                {{ __('Important Instructions') }}</div>
+                            <div class="note-content">
+                                <ul class="note-list">
+                                    @foreach ($paymentMethod->instructions as $instruction)
+                                        <li>{{ $instruction }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Upload Section -->
-                <div class="upload-section" id="uploadSection">
-                    <div class="upload-icon">
-                        <i class="fas fa-cloud-upload-alt"></i>
+                    <!-- Upload Section -->
+                    <div class="upload-section" id="uploadSection">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-text">{{ __('Upload Transfer Receipt') }}</div>
+                        <div class="upload-subtext">{{ __('Drag the file here or click to select') }}</div>
+                        <input type="file" name="receipt_image" class="file-input" id="fileInput" accept="image/*,.pdf"
+                            multiple style="display:none;">
+
+                        <button type="button" class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-plus"></i>
+                            {{ __('Choose File') }}
+                        </button>
+
+                        <!-- Preview -->
+                        <div id="previewContainer" class="preview-container"
+                            style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;"></div>
                     </div>
-                    <div class="upload-text">{{ __('Upload Transfer Receipt') }}</div>
-                    <div class="upload-subtext">{{ __('Drag the file here or click to select') }}</div>
-                    <input type="file" name="receipt_image" class="file-input" id="fileInput" accept="image/*,.pdf"
-                        multiple style="display:none;">
 
-                    <button type="button" class="upload-btn" onclick="document.getElementById('fileInput').click()">
-                        <i class="fas fa-plus"></i>
-                        {{ __('Choose File') }}
-                    </button>
+                    <!-- Hidden Wallet ID -->
+                    <input type="hidden" name="wallet_id" value="{{ Auth::user()->walletForStore->id }}">
 
-                    <!-- Preview -->
-                    <div id="previewContainer" class="preview-container"
-                        style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;"></div>
-                </div>
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-primary">{{ __('Confirm Payment') }}</button>
+                    </div>
+                </form>
+            </div>
 
-                <!-- Hidden Wallet ID -->
-                <input type="hidden" name="wallet_id" value="{{ Auth::user()->walletForStore->id }}">
 
-                <div class="action-buttons">
-                    <button type="submit" class="btn btn-primary">{{ __('Confirm Payment') }}</button>
-                </div>
-            </form>
         </div>
-
-
-    </div>
+    </main>
 @endsection
 
 

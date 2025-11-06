@@ -2,12 +2,39 @@
 @section('title', __('Wallet'))
 @push('styles')
     <style>
+        .balance-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .balance-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
         /* Wallet Page Styles */
+        .balance-actions {
+            flex-direction: column;
+        }
+
+        .balance-btn {
+            width: 100%;
+        }
+
         .quick-date-btn.active {
             background-color: var(--primary-color);
             color: #fff;
             border-color: var(--primary-color);
         }
+
         .wallet-section {
             padding: 2rem 0;
             min-height: calc(100vh - 80px);
@@ -1321,8 +1348,11 @@
                                 <h5 class="transaction-title">
                                     @if ($transaction->order)
                                         {{ $transaction->order->items->first()?->product->name ?? __('Order Item') }}
-                                    @elseif($transaction->paymentRequest)
-                                        {{ __('Add Balance') }} ({{ number_format($transaction->amount, 2) }} $)
+                                    @elseif($transaction->type == 'deposit' && $transaction->paymentRequest)
+                                        {{ __('Add Balance') }}
+                                        ({{ number_format($transaction->amount, 2) }} $)
+                                        — <small>{{ __('Payment Method:') }}
+                                            {{ $transaction->paymentRequest?->paymentMethod?->name ?? '-' }}</small>
                                     @endif
                                 </h5>
 
@@ -1340,9 +1370,7 @@
                             </div>
 
                             <div class="transaction-action">
-                                <h4
-                                    class="transaction-amount
-                                {{ $transaction->type == 'deposit' ? 'positive' : '' }}">
+                                <h4 class="transaction-amount {{ $transaction->type == 'deposit' ? 'positive' : '' }}">
                                     {{ $transaction->type == 'deposit' ? '+' : '-' }}{{ number_format($transaction->amount, 2) }}
                                     $
                                 </h4>
@@ -1351,7 +1379,6 @@
                                     - <span class="new-balance">{{ number_format($transaction->new_balance, 2) }}</span>
                                 </small>
                             </div>
-
                         </div>
                     @empty
                         <div class="empty-state">
@@ -1360,6 +1387,7 @@
                             <p>{{ __('No transactions found for the selected period.') }}</p>
                         </div>
                     @endforelse
+
 
                     <div class="d-flex justify-content-center mt-4">
                         {{ $transactions->links() }}

@@ -40,10 +40,11 @@
             border: 1px solid var(--border-color);
         }
 
+        /* ✅ تعديل مهم لجعل العناصر عمودية */
         .request-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 1rem;
             padding: 1.5rem;
             margin-bottom: 1rem;
             background: var(--bg-secondary);
@@ -75,9 +76,10 @@
             border-radius: 20px;
             font-weight: 600;
             font-size: 0.875rem;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            width: fit-content;
         }
 
         .request-status.accepted {
@@ -103,6 +105,21 @@
             color: var(--text-secondary);
         }
 
+        /* ✅ ملاحظة مستقلة واوضح */
+        .request-notes {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .request-notes strong {
+            color: var(--text-primary);
+        }
+
         /* Empty State */
         .empty-state {
             text-align: center;
@@ -126,90 +143,82 @@
             font-size: 1rem;
             margin: 0;
         }
-
-        .request-notes {
-            margin-top: 1rem;
-            background: rgba(0, 0, 0, 0.03);
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            border-left: 3px solid var(--primary-color);
-        }
-
-        .request-notes strong {
-            color: var(--text-primary);
-        }
     </style>
 @endpush
 
 @section('content')
-    <div class="payment-requests-section">
-        <div class="requests-container">
+    <main class="main-content-adjust">
 
-            <!-- Page Header -->
-            <div class="requests-header">
-                <h2 class="requests-title">{{ __('Payment Requests') }}</h2>
-            </div>
+        <div class="payment-requests-section">
+            <div class="requests-container">
 
-            <!-- Requests List -->
-            <div class="requests-list">
-                @forelse($paymentRequests as $request)
-                    <div class="request-item">
-                        <div class="request-info">
-                            <div>{{ __('Original:') }} {{ $request->original_amount }} {{ $request->original_currency }}
+                <!-- Page Header -->
+                <div class="requests-header">
+                    <h2 class="requests-title">{{ __('Payment Requests') }}</h2>
+                </div>
+
+                <!-- Requests List -->
+                <div class="requests-list">
+                    @forelse($paymentRequests as $request)
+                        <div class="request-item">
+
+                            <div class="request-info">
+                                <div>{{ __('Original:') }} {{ $request->original_amount }} {{ $request->original_currency }}
+                                </div>
+                                <div>{{ __('Exchange Rate:') }} {{ $request->exchange_rate }}</div>
+                                <div>{{ __('USD:') }} {{ $request->amount_usd }} $</div>
+                                <div>{{ __('Payment Method:') }} {{ $request->paymentMethod?->name ?? '-' }}</div>
+
                             </div>
-                            <div>{{ __('Exchange Rate:') }} {{ $request->exchange_rate }}</div>
-                            <div>{{ __('USD:') }} {{ $request->amount_usd }} $</div>
-                        </div>
 
-                        @php
-                            $statusClass = match ($request->status) {
-                                'pending' => 'pending',
-                                'approved' => 'accepted',
-                                'rejected' => 'rejected',
-                                default => 'pending',
-                            };
-                        @endphp
+                            @php
+                                $statusClass = match ($request->status) {
+                                    'pending' => 'pending',
+                                    'approved' => 'accepted',
+                                    'rejected' => 'rejected',
+                                    default => 'pending',
+                                };
+                            @endphp
 
-                        <div class="request-status {{ $statusClass }}">
-                            @if ($statusClass == 'accepted')
-                                <i class="fas fa-check-circle"></i>
-                            @elseif($statusClass == 'rejected')
-                                <i class="fas fa-times-circle"></i>
-                            @elseif($statusClass == 'pending')
-                                <i class="fas fa-clock"></i>
+                            <div class="request-status {{ $statusClass }}">
+                                @if ($statusClass == 'accepted')
+                                    <i class="fas fa-check-circle"></i>
+                                @elseif($statusClass == 'rejected')
+                                    <i class="fas fa-times-circle"></i>
+                                @elseif($statusClass == 'pending')
+                                    <i class="fas fa-clock"></i>
+                                @endif
+                                <span>{{ $statusLabels[$request->status] ?? $request->status }}</span>
+                            </div>
+
+                            @if (in_array($request->status, ['approved', 'rejected']) && $request->notes)
+                                <div class="request-notes">
+                                    <strong>{{ __('Notes:') }}</strong>
+                                    <span>{{ $request->notes }}</span>
+                                </div>
                             @endif
-                            <span>{{ $statusLabels[$request->status] ?? $request->status }}</span>
+
+                            <div class="request-date">{{ $request->created_at->format('Y-m-d H:i:s') }}</div>
+
                         </div>
+                    @empty
+                        <div class="empty-state">
+                            <i class="fas fa-wallet"></i>
+                            <h3>{{ __('No payment requests') }}</h3>
+                            <p>{{ __('There are no payment requests yet.') }}</p>
+                        </div>
+                    @endforelse
 
-                        {{-- Show notes only if approved or rejected --}}
-                        @if (in_array($request->status, ['approved', 'rejected']) && $request->notes)
-                            <div class="request-notes">
-                                <strong>{{ __('Notes:') }}</strong>
-                                <span>{{ $request->notes }}</span>
-                            </div>
-                        @endif
+                </div>
 
-                        <div class="request-date">{{ $request->created_at->format('Y-m-d H:i:s') }}</div>
-                    </div>
-                @empty
-                    <div class="empty-state">
-                        <i class="fas fa-wallet"></i>
-                        <h3>{{ __('No payment requests') }}</h3>
-                        <p>{{ __('There are no payment requests yet.') }}</p>
-                    </div>
-                @endforelse
+                <!-- Pagination -->
+                <div class="d-flex justify-content-center mt-4">
+                    @if ($paymentRequests->hasPages())
+                        {{ $paymentRequests->links() }}
+                    @endif
+                </div>
 
             </div>
-
-            <!-- Pagination -->
-            <div class="d-flex justify-content-center mt-4">
-                @if ($paymentRequests->hasPages())
-                    {{ $paymentRequests->links() }}
-                @endif
-            </div>
-
         </div>
-    </div>
+    </main>
 @endsection
