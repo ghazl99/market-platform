@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> {{ __('Login') }} - {{ __('My Store') }}</title>
-     <style>
+    <style>
         :root {
             --primary-color: #7C3AED;
             /* Purple 600 */
@@ -28,7 +28,6 @@
             --border-light: #EDE9FE;
             --gradient-primary: linear-gradient(135deg, #8B5CF6, #7C3AED);
         }
-
     </style>
     <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/auth-styles.css') }}">
@@ -58,7 +57,6 @@
             --border-light: #EDE9FE;
             --gradient-primary: linear-gradient(135deg, #8B5CF6, #7C3AED);
         }
-
     </style>
 </head>
 
@@ -216,7 +214,17 @@
             <p>{{ __('Logging in...') }}</p>
         </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('auth'))
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: '{{ __('Attention') }}',
+                text: '{{ session('auth') }}',
+                confirmButtonText: '{{ __('OK') }}'
+            });
+        </script>
+    @endif
     <script type="module">
         import {
             initializeApp

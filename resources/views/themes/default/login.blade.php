@@ -166,7 +166,17 @@
             <p>{{ __('Logging in...') }}</p>
         </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('auth'))
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: '{{ __('Attention') }}',
+                text: '{{ session('auth') }}',
+                confirmButtonText: '{{ __('OK') }}'
+            });
+        </script>
+    @endif
     <script type="module">
         import {
             initializeApp

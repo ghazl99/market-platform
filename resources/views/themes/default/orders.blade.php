@@ -555,9 +555,9 @@
                     <div class="status-chips">
                         @php
                             $statusLabels = [
-                                'pending' => __('Pending'),
+                                'manual processing' => __('Manual Processing'),
                                 'confirmed' => __('Confirmed'),
-                                'completed' => __('Completed'),
+                                'automatic processing' => __('Automatic Processing'),
                                 'canceled' => __('Canceled'),
                             ];
                             $currentStatus = request('status', 'all');
@@ -609,10 +609,10 @@
                         <div class="order-details">
                             @php
                                 $statusClass = match ($order->status) {
-                                    'pending' => 'pending',
-                                    'confirmed', 'completed' => 'accepted',
+                                    'manual processing' => 'pending',
+                                    'confirmed', 'automatic processing' => 'accepted',
                                     'canceled' => 'rejected',
-                                    default => 'pending',
+                                    default => 'manual processing',
                                 };
                             @endphp
                             <div class="order-status {{ $statusClass }}">
@@ -635,7 +635,8 @@
                             <h3 class="price-value">
                                 {{ $order->items->sum(fn($i) => $i->quantity * $i->product->price) }} $
                             </h3>
-                            <small class="price-quantity">{{$order->items->first()->product->price  }} $/ {{ $order->items->sum('quantity') }}</small>
+                            <small class="price-quantity">{{ $order->items->first()->product->price }} $/
+                                {{ $order->items->sum('quantity') }}</small>
                         </div>
                     </a>
                 @empty

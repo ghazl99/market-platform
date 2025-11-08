@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
-            $table->enum('status', ['pending', 'confirmed', 'completed', 'canceled'])->default('pending');
+            $table->enum('status', ['manual processing', 'confirmed', 'automatic processing', 'canceled'])->default('manual processing');
             $table->enum('payment_status', ['paid', 'unpaid'])->default('unpaid');
             $table->decimal('total_amount', 10, 2)->default(0);
             $table->timestamps();

@@ -63,9 +63,9 @@ class OrderController extends Controller
         $orders = $this->orderService->getOrders($userId, $storeId, $filters);
         $statusCounts = [
             'all' => Order::where('user_id', $userId)->where('store_id', $storeId)->count(),
-            'pending' => Order::where('user_id', $userId)->where('store_id', $storeId)->where('status', 'pending')->count(),
+            'manual processing' => Order::where('user_id', $userId)->where('store_id', $storeId)->where('status', 'manual processing')->count(),
             'confirmed' => Order::where('user_id', $userId)->where('store_id', $storeId)->where('status', 'confirmed')->count(),
-            'completed' => Order::where('user_id', $userId)->where('store_id', $storeId)->where('status', 'completed')->count(),
+            'automatic processing' => Order::where('user_id', $userId)->where('store_id', $storeId)->where('status', 'automatic processing')->count(),
             'canceled' => Order::where('user_id', $userId)->where('store_id', $storeId)->where('status', 'canceled')->count(),
         ];
 

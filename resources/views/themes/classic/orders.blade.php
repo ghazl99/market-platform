@@ -677,8 +677,8 @@
                         <div class="stat-icon pending">
                             <i class="fas fa-clock"></i>
                         </div>
-                        <div class="stat-number">{{ $statusCounts['pending'] ?? 0 }}</div>
-                        <div class="stat-label">{{ __('Pending') }} </div>
+                        <div class="stat-number">{{ $statusCounts['manual processing'] ?? 0 }}</div>
+                        <div class="stat-label">{{ __('manual processing') }} </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon processing">
@@ -691,8 +691,8 @@
                         <div class="stat-icon completed">
                             <i class="fas fa-check"></i>
                         </div>
-                        <div class="stat-number">{{ $statusCounts['completed'] ?? 0 }}</div>
-                        <div class="stat-label">{{ __('Completed') }}</div>
+                        <div class="stat-number">{{ $statusCounts['automatic processing'] ?? 0 }}</div>
+                        <div class="stat-label">{{ __('automatic processing') }}</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon cancelled">
@@ -727,9 +727,9 @@
                         <div class="status-chips">
                             @php
                                 $statusLabels = [
-                                    'pending' => __('Pending'),
+                                    'manual processing' => __('Manual Processing'),
                                     'confirmed' => __('Confirmed'),
-                                    'completed' => __('Completed'),
+                                    'automatic processing' => __('Automatic Processing'),
                                     'canceled' => __('Canceled'),
                                 ];
                                 $currentStatus = request('status', 'all');
@@ -796,20 +796,20 @@
 
                                 </div>
 
-                                @if ($order->status == 'completed')
+                                @if ($order->status == 'automatic processing')
                                     <span class="order-status-badge completed">
                                         <i class="fas fa-check-circle"></i>
-                                        {{ __('Completed') }}
+                                        {{ __('Automatic Processing') }}
                                     </span>
                                 @elseif($order->status == 'canceled')
                                     <span class="order-status-badge cancelled">
                                         <i class="fas fa-times-circle"></i>
                                         {{ __('Canceled') }}
                                     </span>
-                                @elseif($order->status == 'pending')
+                                @elseif($order->status == 'manual processing')
                                     <span class="order-status-badge pending">
                                         <i class="fas fa-clock"></i>
-                                        {{ __('Pending') }}
+                                        {{ __('Manual Processing') }}
                                     </span>
                                 @elseif($order->status == 'confirmed')
                                     <span class="order-status-badge processing">
