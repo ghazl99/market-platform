@@ -299,7 +299,22 @@
                 @csrf
                 @method('PUT')
 
+                {{-- Contact Phone --}}
+                <h3 style="margin: 20px 0 15px 0; font-size: 1.1rem;">{{ __('Contact Information') }}</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="contact_phone">{{ __('Contact Phone Number') }}</label>
+                        <input type="text" id="contact_phone" name="contact_phone"
+                            value="{{ old('contact_phone', $settings['contact_phone'] ?? '') }}"
+                            placeholder="963992609703">
+                        <small style="color: var(--text-secondary); margin-top: 5px;">
+                            {{ __('Enter phone number with country code (e.g., 963992609703)') }}
+                        </small>
+                    </div>
+                </div>
+
                 {{-- Social Links --}}
+                <h3 style="margin: 20px 0 15px 0; font-size: 1.1rem;">{{ __('Social Media Links') }}</h3>
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="facebook">{{ __('Facebook Link') }}</label>

@@ -74,7 +74,7 @@
                  <span>{{ __('Security') }}</span>
              </a>
 
-             <a href="https://api.whatsapp.com/send?phone=963992609703" class="nav-item">
+             <a href="https://api.whatsapp.com/send?phone={{ store_setting('contact_phone', '963992609703') }}" class="nav-item">
                  <i class="fas fa-phone"></i>
                  <span>اتصل بنا</span>
              </a>

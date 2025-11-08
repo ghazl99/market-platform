@@ -66,9 +66,10 @@ class StoreRepositoryModel implements StoreRepository
             if (is_null($value) || $value === '') {
                 continue;
             }
+            
             StoreSetting::updateOrCreate(
                 ['store_id' => $store->id, 'key' => $key],
-                ['value' => $value,'theme_id'=>$store->theme->id]
+                ['value' => $value]
             );
         }
 

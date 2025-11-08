@@ -119,7 +119,7 @@
                 <span class="nav-label">{{ __('Security') }}</span>
             </a>
 
-            <a href="https://api.whatsapp.com/send?phone=967733544937" class="nav-item-pro whatsapp">
+            <a href="https://api.whatsapp.com/send?phone={{ store_setting('contact_phone', '967733544937') }}" class="nav-item-pro whatsapp">
                 <div class="nav-icon-box">
                     <i class="fab fa-whatsapp"></i>
                 </div>

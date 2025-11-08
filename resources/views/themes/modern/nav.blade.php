@@ -805,7 +805,7 @@
         <!-- User Actions -->
         <div class="user-actions">
             <!-- WhatsApp Button -->
-            <a href="https://api.whatsapp.com/send?phone=967733544937" class="action-btn whatsapp-btn">
+            <a href="https://api.whatsapp.com/send?phone={{ store_setting('contact_phone', '967733544937') }}" class="action-btn whatsapp-btn">
                 <i class="fab fa-whatsapp"></i>
                 <span class="btn-text">واتساب</span>
                 <div class="btn-ripple"></div>

@@ -125,7 +125,7 @@
                      </div>
                      <span class="menu-item-title">{{ __('Security') }}</span>
                  </a>
-                 <a href="https://api.whatsapp.com/send?phone=963992609703" class="menu-item">
+                 <a href="https://api.whatsapp.com/send?phone={{ store_setting('contact_phone', '963992609703') }}" class="menu-item">
                      <div class="menu-item-icon">
                          <i class="fas fa-headset"></i>
                      </div>
