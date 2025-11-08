@@ -1646,7 +1646,7 @@
                                     </div>
                                 </td>
                                 <td class="price-cell">
-                                    ${{ number_format($orderItem->product->price ?? ($product->price ?? 0), 4) }}</td>
+                                    ${{ $orderItem->product->price ?? ($product->price ?? 0) }}</td>
                                 <td><span class="status-badge">{{ __('Completed') }}</span></td>
                                 <td class="date-cell">{{ $orderItem->created_at->format('H:i:s Y-m-d') }}</td>
                             </tr>
@@ -1847,7 +1847,7 @@
                                         <td class="product-name-cell">
                                             {{ $child->getTranslation('name', app()->getLocale()) }}
                                         </td>
-                                        <td class="price-cell">${{ number_format($child->price, 2) }}</td>
+                                        <td class="price-cell">${{ $child->price }}</td>
                                         <td>
                                             @if ($child->is_active)
                                                 <span class="status-badge">{{ __('Available') }}</span>

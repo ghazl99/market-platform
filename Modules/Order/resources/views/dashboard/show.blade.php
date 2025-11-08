@@ -348,7 +348,7 @@
                                     @if ($order->user->address)
                                         <div class="customer-info-item">
                                             <i class="fas fa-map-marker-alt"></i>
-                                            <span>{{ __('Address') }}: 
+                                            <span>{{ __('Address') }}:
                                                 @if (is_array($order->user->address))
                                                     {{ $order->user->address[app()->getLocale()] ?? implode(', ', $order->user->address) }}
                                                 @else
@@ -360,7 +360,7 @@
                                     @if ($order->user->city)
                                         <div class="customer-info-item">
                                             <i class="fas fa-city"></i>
-                                            <span>{{ __('City') }}: 
+                                            <span>{{ __('City') }}:
                                                 @if (is_array($order->user->city))
                                                     {{ $order->user->city[app()->getLocale()] ?? implode(', ', $order->user->city) }}
                                                 @else
@@ -403,8 +403,8 @@
             <!-- Customer Statistics Card -->
             @if ($order->user)
                 @php
-                    $userWallet = $order->user && $order->user->wallets 
-                        ? $order->user->wallets->where('store_id', $order->store_id)->first() 
+                    $userWallet = $order->user && $order->user->wallets
+                        ? $order->user->wallets->where('store_id', $order->store_id)->first()
                         : null;
                     $userOrdersCount = $order->user && $order->store_id
                         ? \Modules\Order\Models\Order::where('user_id', $order->user->id)
@@ -417,8 +417,8 @@
                             ->where('status', 'completed')
                             ->sum('total_amount')
                         : 0;
-                    $userAverageOrder = $userOrdersCount > 0 && $userTotalSpent > 0 
-                        ? (float) ($userTotalSpent / $userOrdersCount) 
+                    $userAverageOrder = $userOrdersCount > 0 && $userTotalSpent > 0
+                        ? (float) ($userTotalSpent / $userOrdersCount)
                         : 0;
                 @endphp
                 <div class="info-card">
@@ -606,7 +606,7 @@
                                         @if ($item->activation_code)
                                             <div class="digital-info-item">
                                                 <i class="fas fa-key"></i>
-                                                <span><strong>{{ __('Activation Code') }}:</strong> 
+                                                <span><strong>{{ __('Activation Code') }}:</strong>
                                                     <code class="activation-code">{{ $item->activation_code }}</code>
                                                 </span>
                                             </div>
@@ -654,8 +654,8 @@
                     }) : 0;
                     $discount = 0;
                     $tax = 0;
-                    $total = $order->total_amount && $order->total_amount > 0 
-                        ? (float) $order->total_amount 
+                    $total = $order->total_amount && $order->total_amount > 0
+                        ? (float) $order->total_amount
                         : (float) $subtotal;
                 @endphp
 

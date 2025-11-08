@@ -17,8 +17,8 @@ class StoreProductRequest extends FormRequest
         $rules = [
             'name' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:products,id',
-            'original_price' => 'nullable|numeric|min:0',
-            'price' => 'required|numeric|min:0',
+            'original_price' => 'nullable',
+            'price' => 'required',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
             'names' => 'nullable|array',

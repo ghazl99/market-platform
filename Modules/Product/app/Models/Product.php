@@ -51,9 +51,9 @@ class Product extends Model implements HasMedia
         'product_type' => 'string',
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
-        'price' => 'decimal:2',
-        'original_price' => 'decimal:2',
-        'capital' => 'decimal:2',
+        'price' => 'decimal:20',
+        'original_price' => 'decimal:20',
+        'capital' => 'decimal:20',
         'views_count' => 'integer',
         'orders_count' => 'integer',
         'min_quantity' => 'integer',
@@ -61,6 +61,40 @@ class Product extends Model implements HasMedia
     ];
 
     public $translatable = ['name', 'description'];
+
+    /**
+     * Get price attribute without trailing zeros
+     */
+    public function getPriceAttribute($value)
+    {
+        // Get raw value from database to avoid infinite loop
+        $rawValue = $this->getRawOriginal('price') ?? $value;
+
+        if ($rawValue === null || $rawValue === '') {
+            return null;
+        }
+
+        // Convert to string and remove trailing zeros
+        $formatted = (string)(float)$rawValue;
+        return rtrim(rtrim($formatted, '0'), '.');
+    }
+
+    /**
+     * Get original_price attribute without trailing zeros
+     */
+    public function getOriginalPriceAttribute($value)
+    {
+        // Get raw value from database to avoid infinite loop
+        $rawValue = $this->getRawOriginal('original_price') ?? $value;
+
+        if ($rawValue === null || $rawValue === '') {
+            return null;
+        }
+
+        // Convert to string and remove trailing zeros
+        $formatted = (string)(float)$rawValue;
+        return rtrim(rtrim($formatted, '0'), '.');
+    }
 
     public function getPriceWithGroupProfitAttribute()
     {

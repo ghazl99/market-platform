@@ -680,7 +680,7 @@
                             {{ __('Parent Product') }}: {{ $parentProduct->getTranslation('name', app()->getLocale()) }}
                         </p>
                         <p class="parent-product-details">
-                            ID: {{ $parentProduct->id }} | ${{ number_format($parentProduct->price, 2) }}
+                            ID: {{ $parentProduct->id }} | ${{ $parentProduct->price }}
                         </p>
                     </div>
                 </div>
@@ -712,7 +712,7 @@
                     <div class="form-group">
                         <label class="form-label required">{{ __('Price') }}</label>
                         <input type="number" class="form-input @error('price') is-invalid @enderror" name="price"
-                            value="{{ old('price') }}" placeholder="0.00" step="0.01" required>
+                            value="{{ old('price') }}" placeholder="0.00" step="any" required>
                         @error('price')
                             <div class="form-error">{{ $message }}</div>
                         @enderror

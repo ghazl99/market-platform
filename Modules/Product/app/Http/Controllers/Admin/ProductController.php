@@ -239,6 +239,9 @@ class ProductController extends Controller implements HasMiddleware
         $user = Auth::user();
         $attributes = $this->attributeService->getAllAttributes();
         $categories = $this->categoryService->getAllCategoriesForProducts();
+        
+        // تحميل الفئات مع المنتج
+        $product->load('categories');
 
         return view('product::dashboard.edit', compact('product', 'attributes', 'categories'));
     }

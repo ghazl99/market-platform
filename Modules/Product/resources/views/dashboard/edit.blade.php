@@ -549,7 +549,7 @@
                 <div class="form-group">
                     <label class="form-label required">{{ __('Price') }}</label>
                     <input type="number" class="form-input @error('price') is-invalid @enderror" name="price"
-                        value="{{ old('price', $product->price) }}" placeholder="0.00" step="0.01" required>
+                        value="{{ old('price', $product->price) }}" placeholder="0.00" step="any" required>
                     @error('price')
                         <div class="form-error">{{ $message }}</div>
                     @enderror
@@ -560,7 +560,7 @@
                     <label class="form-label">{{ __('Original Price') }}</label>
                     <input type="number" class="form-input @error('original_price') is-invalid @enderror"
                         name="original_price" value="{{ old('original_price', $product->original_price) }}"
-                        placeholder="0.00" step="0.01">
+                        placeholder="0.00" step="any">
                     @error('original_price')
                         <div class="form-error">{{ $message }}</div>
                     @enderror
