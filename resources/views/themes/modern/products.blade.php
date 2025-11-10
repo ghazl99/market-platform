@@ -1,6 +1,6 @@
 @extends('themes.app')
 
-@section('title', __('Products - ') . $category->name)
+@section('title', __('Products') )
 @push('styles')
     <style>
         /* Products Page Specific Styles */

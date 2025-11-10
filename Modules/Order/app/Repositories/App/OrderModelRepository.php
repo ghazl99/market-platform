@@ -75,7 +75,7 @@ class OrderModelRepository implements OrderRepository
             $order = Order::create([
                 'user_id' => Auth::user()->id,
                 'store_id' => $data['store_id'],
-                'status' => 'pending',
+                'status' => 'manual processing',
                 'payment_status' => 'paid',
                 'total_amount' => $data['total_amount'], // حفظ المبلغ المحسوب
             ]);

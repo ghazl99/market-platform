@@ -4,6 +4,8 @@
     "Export Excel": "تصدير إكسل",
     "From": "من",
     "To": "إلى",
+    "The quantity must be at least :min": "يجب أن تكون الكمية على الأقل :min",
+    "The quantity must not exceed :max": "يجب ألا تتجاوز الكمية :max",
     "Search orders...": "ابحث عن الطلبات...",
     "You have not made any orders yet.": "لم تقم بأي طلبات بعد.",
     "Order Details": "تفاصيل الطلب",

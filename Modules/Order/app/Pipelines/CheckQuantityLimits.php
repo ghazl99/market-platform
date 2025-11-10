@@ -21,7 +21,7 @@ class CheckQuantityLimits
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', __('The quantity may not be greater than :max', ['max' => $data['product']->max_quantity]));
+                ->with('error', __('The quantity must not exceed :max', ['max' => $data['product']->max_quantity]));
         }
         $data['product']->increment('orders_count');
         return $next($data);

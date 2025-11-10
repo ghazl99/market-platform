@@ -4,7 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $store->name }}</title>
+    <title>
+        @yield('title', 'My Store')
+        {{ isset($store) ? ' - ' . $store->name : '' }}
+    </title>
+
+    <meta name="description" content="@yield('meta_description')">
+
+    <meta property="og:title" content="@yield('title')">
+    <meta property="og:description" content="@yield('meta_description')">
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="@yield('meta_image')">
+
+    @yield('product_schema')
 
     <!-- Stylesheets -->
     <link rel="stylesheet"
@@ -44,7 +57,8 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Store Scripts -->
-    <script src="{{ asset('assets/js/themes/' . (current_theme_name_en() ?? 'default') . '.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/js/themes/' . (current_theme_name_en() ?? 'default') . '.js') }}?v={{ time() }}">
+    </script>
 
     <!-- Blade pushed scripts -->
     @stack('scripts')

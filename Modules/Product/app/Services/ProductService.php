@@ -110,13 +110,35 @@ class ProductService
             $data['orders_count'] = 0;
 
             // تنظيف البيانات - إزالة الحقول غير الضرورية والحقول غير الموجودة في قاعدة البيانات
-            $data = array_filter($data, function($key) {
-                $allowedFields = ['store_id', 'parent_id', 'name', 'description', 'price',
-                                  'original_price', 'status', 'is_active', 'is_featured', 'sku',
-                                  'dimensions', 'seo_title', 'seo_description',
-                                  'min_quantity', 'max_quantity', 'product_type', 'notes',
-                                  'views_count', 'orders_count', 'image', 'names', 'value', 'unit',
-                                  'categories', 'category', 'category_id'];
+            $data = array_filter($data, function ($key) {
+                $allowedFields = [
+                    'store_id',
+                    'parent_id',
+                    'name',
+                    'description',
+                    'price',
+                    'original_price',
+                    'status',
+                    'is_active',
+                    'is_featured',
+                    'sku',
+                    'dimensions',
+                    'seo_title',
+                    'seo_description',
+                    'min_quantity',
+                    'max_quantity',
+                    'product_type',
+                    'notes',
+                    'views_count',
+                    'orders_count',
+                    'image',
+                    'names',
+                    'value',
+                    'unit',
+                    'categories',
+                    'category',
+                    'category_id'
+                ];
                 return in_array($key, $allowedFields);
             }, ARRAY_FILTER_USE_KEY);
 
@@ -351,5 +373,10 @@ class ProductService
     public function getTopViewedProducts($storeId, $limit = 10)
     {
         return $this->productRepository->getTopViewedProductsByStore($storeId, $limit);
+    }
+
+    public function getSubProducts($id,$storeId, ?string $query = null)
+    {
+        return $this->productRepository->getSubProducts($id,$storeId, $query );
     }
 }
