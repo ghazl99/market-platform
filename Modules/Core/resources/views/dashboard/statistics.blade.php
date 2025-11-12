@@ -85,7 +85,7 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="stat-content">
-                        <h3 class="stat-label">{{ __('Total Users') }}</h3>
+                        <h3 class="stat-label">{{ __('Total Customers') }}</h3>
                         <div class="stat-value">{{ number_format($totalUsers) }}</div>
                         <div class="stat-details">
                             <span class="stat-item">
@@ -305,7 +305,47 @@
                                 @forelse($recentOrders as $order)
                                     <tr>
                                         <td>#{{ $order->id }}</td>
-                                        <td>{{ $order->user->name ?? __('Guest') }}</td>
+                                        <td>
+                                            @php
+                                                $customerName = __('Guest');
+                                                
+                                                // التحقق من وجود user_id
+                                                if ($order->user_id) {
+                                                    // محاولة الحصول على المستخدم
+                                                    $user = $order->user;
+                                                    
+                                                    // إذا لم تكن العلاقة محملة، حاول تحميلها
+                                                    if (!$user && $order->user_id) {
+                                                        try {
+                                                            $user = \Modules\User\Models\User::find($order->user_id);
+                                                        } catch (\Exception $e) {
+                                                            $user = null;
+                                                        }
+                                                    }
+                                                    
+                                                    if ($user) {
+                                                        $name = $user->name;
+                                                        
+                                                        // معالجة الاسم إذا كان array (translatable)
+                                                        if (is_array($name)) {
+                                                            $locale = app()->getLocale();
+                                                            $customerName = $name[$locale] ?? $name['ar'] ?? $name['en'] ?? $user->email ?? __('Guest');
+                                                        } 
+                                                        // إذا كان الاسم string
+                                                        elseif (is_string($name) && !empty(trim($name))) {
+                                                            $customerName = $name;
+                                                        } 
+                                                        // إذا كان الاسم فارغ، استخدم البريد الإلكتروني
+                                                        else {
+                                                            $customerName = $user->email ?? __('Guest');
+                                                        }
+                                                    }
+                                                }
+                                            @endphp
+                                            <span title="User ID: {{ $order->user_id ?? 'N/A' }}">
+                                                {{ $customerName }}
+                                            </span>
+                                        </td>
                                         <td class="amount">${{ number_format($order->total_amount, 2) }}</td>
                                         <td>
                                             <span class="status-badge status-{{ $order->status }}">
@@ -348,12 +388,12 @@
                         </div>
                     </div>
 
-                    <!-- Recent Users -->
+                    <!-- Recent Customers -->
                     <div class="table-card">
                         <div class="table-header">
                             <h3 class="table-title">
                                 <i class="fas fa-user-friends"></i>
-                                {{ __('Recent Users') }}
+                                {{ __('Recent Customers') }}
                             </h3>
                             <a href="{{ route('dashboard.customer.index') }}" class="view-all-link">
                                 {{ __('View All') }}
@@ -383,7 +423,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="empty-table">{{ __('No users found') }}</td>
+                                            <td colspan="5" class="empty-table">{{ __('No customers found') }}</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -1579,34 +1619,55 @@
                 // Activity Chart
                 const activityCtx = document.getElementById('activityChart');
                 if (activityCtx) {
+                    // تحضير البيانات
+                    const last7DaysData = @json($last7Days);
+                    const labels = last7DaysData.map(item => item.day_name || item.date_label || '');
+                    const ordersData = last7DaysData.map(item => parseInt(item.orders) || 0);
+                    const salesData = last7DaysData.map(item => parseFloat(item.sales) || 0);
+                    const usersData = last7DaysData.map(item => parseInt(item.users) || 0);
+                    
+                    // Debug: طباعة البيانات في console
+                    console.log('Activity Chart Data:', {
+                        labels: labels,
+                        orders: ordersData,
+                        sales: salesData,
+                        users: usersData
+                    });
+                    
                     activityChart = new Chart(activityCtx, {
                         type: 'line',
                         data: {
-                            labels: {!! json_encode(array_column($last7Days, 'day_name')) !!},
+                            labels: labels,
                             datasets: [{
                                     label: '{{ __('Orders') }}',
-                                    data: {!! json_encode(array_column($last7Days, 'orders')) !!},
+                                    data: ordersData,
                                     borderColor: 'rgb(59, 130, 246)',
                                     backgroundColor: 'rgba(59, 130, 246, 0.1)',
                                     tension: 0.4,
-                                    fill: true
+                                    fill: true,
+                                    pointRadius: 4,
+                                    pointHoverRadius: 6
                                 },
                                 {
                                     label: '{{ __('Sales') }} ($)',
-                                    data: {!! json_encode(array_column($last7Days, 'sales')) !!},
+                                    data: salesData,
                                     borderColor: 'rgb(16, 185, 129)',
                                     backgroundColor: 'rgba(16, 185, 129, 0.1)',
                                     tension: 0.4,
                                     fill: true,
-                                    yAxisID: 'y1'
+                                    yAxisID: 'y1',
+                                    pointRadius: 4,
+                                    pointHoverRadius: 6
                                 },
                                 {
                                     label: '{{ __('New Users') }}',
-                                    data: {!! json_encode(array_column($last7Days, 'users')) !!},
+                                    data: usersData,
                                     borderColor: 'rgb(245, 158, 11)',
                                     backgroundColor: 'rgba(245, 158, 11, 0.1)',
                                     tension: 0.4,
-                                    fill: true
+                                    fill: true,
+                                    pointRadius: 4,
+                                    pointHoverRadius: 6
                                 }
                             ]
                         },
@@ -1661,6 +1722,10 @@
                                         color: getTheme() === 'dark' ? '#ffffff' : '#111827',
                                         font: {
                                             size: 11
+                                        },
+                                        stepSize: 1,
+                                        callback: function(value) {
+                                            return Number.isInteger(value) ? value : '';
                                         }
                                     }
                                 },
@@ -1676,6 +1741,9 @@
                                         color: getTheme() === 'dark' ? '#ffffff' : '#111827',
                                         font: {
                                             size: 11
+                                        },
+                                        callback: function(value) {
+                                            return '$' + Number(value).toFixed(0);
                                         }
                                     }
                                 }

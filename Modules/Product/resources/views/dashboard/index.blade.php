@@ -953,9 +953,14 @@
             color: #111827 !important;
         }
 
-        html[data-theme="light"] .search-box i,
-        html[data-theme="light"] body .search-box i {
+        html[data-theme="light"] .search-box .search-icon,
+        html[data-theme="light"] body .search-box .search-icon {
             color: #6b7280 !important;
+        }
+
+        html[data-theme="light"] .search-box .search-icon:hover,
+        html[data-theme="light"] body .search-box .search-icon:hover {
+            color: #059669 !important;
         }
 
         html[data-theme="light"] .filter-select,
@@ -1105,91 +1110,8 @@
 
 @section('content')
     <!-- Professional Notifications -->
-    <div class="notification-container">
-        @if (session('success'))
-            <div class="notification success professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Success') }}</div>
-                    <div class="notification-message">{{ session('success') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if (request()->get('success'))
-            <div class="notification success professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Success') }}</div>
-                    <div class="notification-message">{{ urldecode(request()->get('success')) }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="notification error professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Error') }}</div>
-                    <div class="notification-message">{{ session('error') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if (session('warning'))
-            <div class="notification warning professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Warning') }}</div>
-                    <div class="notification-message">{{ session('warning') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if (session('info'))
-            <div class="notification info professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-info-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Info') }}</div>
-                    <div class="notification-message">{{ session('info') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="notification error professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Error') }}</div>
-                    <div class="notification-message">{{ __('Please fix the errors below') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-    </div>
+    <!-- تم نقل جميع الإشعارات إلى layout الرئيسي (app.blade.php) لتجنب التكرار -->
+    <!-- الإشعارات تظهر تلقائياً من layout عند وجود session messages -->
 
     <div class="products-container">
         <!-- Breadcrumb Navigation -->
@@ -1233,23 +1155,22 @@
         <div class="search-filter-bar">
             <div class="search-filter-content">
                 <div class="search-box">
-                    <input type="text" id="search-input" placeholder="{{ __('Search for products...') }}">
-                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="{{ __('Search for products...') }}" value="{{ request('search') }}">
+                    <i class="fas fa-search search-icon" id="search-icon"></i>
                 </div>
-                <select class="filter-select">
-                    <option value="">{{ __('All Categories') }}</option>
-                    <option value="electronics">{{ __('Electronics') }}</option>
-                    <option value="clothing">{{ __('Clothing') }}</option>
-                    <option value="books">{{ __('Books') }}</option>
-                    <option value="home">{{ __('Home') }}</option>
-                </select>
-                <select class="filter-select">
+                <select class="filter-select" id="status-filter" name="status">
                     <option value="">{{ __('All Status') }}</option>
-                    <option value="in-stock">{{ __('In Stock') }}</option>
-                    <option value="low-stock">{{ __('Low Stock') }}</option>
-                    <option value="out-of-stock">{{ __('Out of Stock') }}</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>{{ __('Active') }}</option>
+                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>{{ __('Inactive') }}</option>
+                    <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>{{ __('Draft') }}</option>
                 </select>
-                <button class="filter-btn">
+                <select class="filter-select" id="stock-status-filter" name="stock_status">
+                    <option value="">{{ __('Stock Status') }}</option>
+                    <option value="in_stock" {{ request('stock_status') == 'in_stock' ? 'selected' : '' }}>{{ __('In Stock') }}</option>
+                    <option value="low_stock" {{ request('stock_status') == 'low_stock' ? 'selected' : '' }}>{{ __('Low Stock') }}</option>
+                    <option value="out_of_stock" {{ request('stock_status') == 'out_of_stock' ? 'selected' : '' }}>{{ __('Out of Stock') }}</option>
+                </select>
+                <button class="filter-btn" id="apply-filters-btn">
                     <i class="fas fa-filter"></i>
                     {{ __('Apply') }}
                 </button>
@@ -1696,14 +1617,8 @@
                 setTimeout(applyThemeForProducts, 10);
             });
 
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('success') === '1') {
-                if (typeof showSuccess === 'function') {
-                    showSuccess('{{ __('Success') }}', '{{ __('Product updated successfully') }}');
-                }
-                // Clean URL
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
+            // تم نقل معالجة الإشعارات إلى layout الرئيسي (app.blade.php)
+            // لا حاجة لإشعارات إضافية هنا
         });
 
         // Handle delete directly without confirmation
@@ -1889,6 +1804,24 @@
 
         // Show and auto-hide notifications
         document.addEventListener('DOMContentLoaded', function() {
+            // Remove duplicate notifications - keep only the first one of each type
+            const notificationContainers = document.querySelectorAll('.notification-container');
+            if (notificationContainers.length > 1) {
+                // Keep only the first container, remove others
+                for (let i = 1; i < notificationContainers.length; i++) {
+                    notificationContainers[i].remove();
+                }
+            }
+
+            // Remove duplicate success notifications
+            const successNotifications = document.querySelectorAll('.notification.success');
+            if (successNotifications.length > 1) {
+                // Keep only the first one, remove others
+                for (let i = 1; i < successNotifications.length; i++) {
+                    successNotifications[i].remove();
+                }
+            }
+
             const notifications = document.querySelectorAll('.professional-notification');
             notifications.forEach(notification => {
                 // Progress bar animation
@@ -2023,6 +1956,102 @@
                 progressBar.style.width = '100%';
                 progressBar.style.transition = 'width 5s linear';
             }
+        }
+
+        // تفعيل البحث في المنتجات
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const searchIcon = document.getElementById('search-icon');
+
+            function performSearch() {
+                const keyword = searchInput ? searchInput.value.trim() : '';
+                const url = new URL(window.location.href);
+                
+                if (keyword && keyword.length >= 1) {
+                    url.searchParams.set('search', keyword);
+                } else {
+                    url.searchParams.delete('search');
+                }
+                
+                // إعادة تحميل الصفحة مع معامل البحث
+                window.location.href = url.toString();
+            }
+
+            // البحث عند الضغط على Enter
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        performSearch();
+                    }
+                });
+            }
+
+            // البحث عند النقر على أيقونة البحث
+            if (searchIcon) {
+                searchIcon.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    performSearch();
+                });
+                
+                // جعل الأيقونة قابلة للنقر (cursor pointer)
+                searchIcon.style.cursor = 'pointer';
+            }
+
+            // استعادة قيمة البحث من URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchParam = urlParams.get('search');
+            if (searchParam && searchInput) {
+                searchInput.value = searchParam;
+            }
+        });
+
+        // تفعيل أزرار الفلترة
+        document.addEventListener('DOMContentLoaded', function() {
+            const applyFiltersBtn = document.getElementById('apply-filters-btn');
+            
+            // تطبيق الفلاتر
+            if (applyFiltersBtn) {
+                applyFiltersBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    applyFilters();
+                });
+            }
+        });
+
+        // دالة تطبيق الفلاتر
+        function applyFilters() {
+            const url = new URL(window.location.href);
+            
+            // الحصول على جميع قيم الفلاتر
+            const searchInput = document.getElementById('search-input');
+            const statusFilter = document.getElementById('status-filter');
+            const stockStatusFilter = document.getElementById('stock-status-filter');
+            
+            // البحث
+            if (searchInput && searchInput.value.trim()) {
+                url.searchParams.set('search', searchInput.value.trim());
+            } else {
+                url.searchParams.delete('search');
+            }
+            
+            // حالة المنتج
+            if (statusFilter && statusFilter.value) {
+                url.searchParams.set('status', statusFilter.value);
+            } else {
+                url.searchParams.delete('status');
+            }
+            
+            // حالة المخزون
+            if (stockStatusFilter && stockStatusFilter.value) {
+                url.searchParams.set('stock_status', stockStatusFilter.value);
+            } else {
+                url.searchParams.delete('stock_status');
+            }
+            
+            // إعادة تحميل الصفحة مع الفلاتر
+            window.location.href = url.toString();
         }
     </script>
 

@@ -422,81 +422,8 @@
 
 @section('content')
     <!-- Professional Notifications -->
-    <div class="notification-container">
-        @if (session('success'))
-            <div class="notification success professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Success') }}</div>
-                    <div class="notification-message">{{ session('success') }}</div>
-                    <div class="notification-details">
-                        <i class="fas fa-info-circle"></i>
-                        {{ __('Product') }} #{{ $product->id }} {{ __('has been updated successfully') }}
-                    </div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="notification error professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Error') }}</div>
-                    <div class="notification-message">{{ session('error') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if (session('warning'))
-            <div class="notification warning professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Warning') }}</div>
-                    <div class="notification-message">{{ session('warning') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if (session('info'))
-            <div class="notification info professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-info-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Info') }}</div>
-                    <div class="notification-message">{{ session('info') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="notification error professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Error') }}</div>
-                    <div class="notification-message">{{ __('Please fix the errors below') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-    </div>
+    <!-- تم نقل جميع الإشعارات إلى layout الرئيسي (app.blade.php) لتجنب التكرار -->
+    <!-- الإشعارات تظهر تلقائياً من layout عند وجود session messages -->
 
     <!-- Product Header Section -->
     <div class="product-header">

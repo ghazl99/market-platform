@@ -128,8 +128,61 @@
 
     <script src="{{ asset('assets/js/script-store.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('assets/js/dashboard.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('assets/js/notifications.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/js/notifications.js') }}?v={{ time() }}" onload="handleNotificationsLoaded()"></script>
     <script src="{{ asset('assets/js/dashboard-notifications.js') }}?v={{ time() }}" defer></script>
+    
+    <!-- Handle session messages after notifications.js loads -->
+    <script>
+        @if (session('success'))
+            const successMessage = '{{ session('success') }}';
+            let notificationShown = false;
+            
+            function handleNotificationsLoaded() {
+                if (!notificationShown && typeof window.showSuccess === 'function') {
+                    notificationShown = true;
+                    window.showSuccess('تم بنجاح!', successMessage);
+                }
+            }
+            
+            // محاولة عرض الإشعار بعد تحميل notifications.js
+            function showSuccessNotification() {
+                if (!notificationShown) {
+                    if (typeof window.showSuccess === 'function') {
+                        notificationShown = true;
+                        window.showSuccess('تم بنجاح!', successMessage);
+                    } else if (typeof showSuccess === 'function') {
+                        notificationShown = true;
+                        showSuccess('تم بنجاح!', successMessage);
+                    } else {
+                        // محاولة أخرى بعد 100ms (بحد أقصى 20 محاولة)
+                        if (typeof showSuccessNotification.attempts === 'undefined') {
+                            showSuccessNotification.attempts = 0;
+                        }
+                        showSuccessNotification.attempts++;
+                        
+                        if (showSuccessNotification.attempts < 20) {
+                            setTimeout(showSuccessNotification, 100);
+                        }
+                    }
+                }
+            }
+            
+            // محاولة فورية
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    setTimeout(showSuccessNotification, 200);
+                });
+            } else {
+                setTimeout(showSuccessNotification, 200);
+            }
+            
+            // أيضاً محاولة مع window.load
+            window.addEventListener('load', function() {
+                setTimeout(showSuccessNotification, 300);
+            });
+        @endif
+    </script>
+    
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -158,14 +211,9 @@
             }
         });
 
+        // Handle session messages (تم نقلها إلى بعد notifications.js مباشرة)
         $(document).ready(function() {
             try {
-                // Handle session messages with new notification system
-                @if (session('success'))
-                    if (typeof showSuccess === 'function') {
-                        showSuccess('تم بنجاح!', '{{ session('success') }}');
-                    }
-                @endif
 
                 @if (session('error'))
                     if (typeof showError === 'function') {

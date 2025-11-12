@@ -19,9 +19,9 @@ class ProductService
 
     ) {}
 
-    public function getAllProducts(?string $keyword = null, ?int $categoryFilter = null, ?string $statusFilter = null)
+    public function getAllProducts(?string $keyword = null, ?int $categoryFilter = null, ?string $statusFilter = null, ?string $productTypeFilter = null, ?string $stockStatusFilter = null)
     {
-        return $this->productRepository->index($keyword, $categoryFilter, $statusFilter);
+        return $this->productRepository->index($keyword, $categoryFilter, $statusFilter, $productTypeFilter, $stockStatusFilter);
     }
 
     /**
@@ -114,14 +114,11 @@ class ProductService
                 $allowedFields = ['store_id', 'parent_id', 'name', 'description', 'price',
                                   'original_price', 'status', 'is_active', 'is_featured', 'sku',
                                   'dimensions', 'seo_title', 'seo_description',
-                                  'min_quantity', 'max_quantity', 'product_type', 'notes',
+                                  'min_quantity', 'max_quantity', 'product_type', 'linking_type', 'provider_id', 'notes',
                                   'views_count', 'orders_count', 'image', 'names', 'value', 'unit',
                                   'categories', 'category', 'category_id'];
                 return in_array($key, $allowedFields);
             }, ARRAY_FILTER_USE_KEY);
-
-            // إزالة الحقول غير الموجودة في قاعدة البيانات
-            unset($data['linking_type']); // هذا الحقل غير موجود في قاعدة البيانات
 
             Log::info('Data after cleanup:', $data);
 

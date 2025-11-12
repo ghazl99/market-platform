@@ -56,15 +56,74 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <h3 class="stat-title">{{ __('Conversion Rate') }}</h3>
+                    <h3 class="stat-title">{{ __('Average Orders per Customer') }}</h3>
                     <div class="stat-icon">
-                        <i class="fas fa-percentage"></i>
+                        <i class="fas fa-shopping-bag"></i>
                     </div>
                 </div>
-                <div class="stat-value">{{ number_format($conversionRate, 2) }}%</div>
+                <div class="stat-value">{{ number_format($conversionRate, 2) }}</div>
                 <div class="stat-change {{ $conversionGrowth >= 0 ? 'positive' : 'negative' }}">
                     <i class="fas fa-arrow-{{ $conversionGrowth >= 0 ? 'up' : 'down' }}"></i>
                     <span>{{ $conversionGrowth >= 0 ? '+' : '' }}{{ number_format($conversionGrowth, 1) }}%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Stats -->
+        <div class="stats-grid" style="margin-top: 2rem;">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">{{ __('Total Customers') }}</h3>
+                    <div class="stat-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                </div>
+                <div class="stat-value">{{ number_format($totalCustomersCount) }}</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-info-circle"></i>
+                    <span>{{ __('Active customers with orders') }}</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">{{ __('Average Order Value') }}</h3>
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+                <div class="stat-value">${{ number_format($averageOrderValue, 2) }}</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-chart-line"></i>
+                    <span>{{ __('Per order') }}</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">{{ __('Active Products') }}</h3>
+                    <div class="stat-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                </div>
+                <div class="stat-value">{{ number_format($activeProducts) }}</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-check-circle"></i>
+                    <span>{{ __('Available for sale') }}</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">{{ __('Pending Orders') }}</h3>
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="stat-value">{{ number_format($pendingOrders) }}</div>
+                <div class="stat-change {{ $pendingOrders > 0 ? 'negative' : 'positive' }}">
+                    <i class="fas fa-{{ $pendingOrders > 0 ? 'exclamation-triangle' : 'check-circle' }}"></i>
+                    <span>{{ __('Require attention') }}</span>
                 </div>
             </div>
         </div>

@@ -12,79 +12,6 @@
 
 
 @section('content')
-    <!-- Notifications -->
-    <div class="notification-container">
-        @if (session('success'))
-            <div class="notification success professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Success') }}</div>
-                    <div class="notification-message">{{ session('success') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="notification error professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Error') }}</div>
-                    <div class="notification-message">{{ session('error') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if (session('warning'))
-            <div class="notification warning professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Warning') }}</div>
-                    <div class="notification-message">{{ session('warning') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if (session('info'))
-            <div class="notification info professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-info-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Info') }}</div>
-                    <div class="notification-message">{{ session('info') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="notification error professional-notification show">
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Error') }}</div>
-                    <div class="notification-message">{{ __('Please fix the errors below') }}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            </div>
-        @endif
-    </div>
-
     <div class="categories-container">
         <!-- Breadcrumb Navigation -->
         @if ($parentCategory)
@@ -1211,109 +1138,40 @@
             }
         });
 
-        // Professional Success Notification
+        // Professional Success Notification - استخدام النظام العام
         function showSuccessNotification(message, categoryId = null, action = 'deleted') {
-            const notification = document.createElement('div');
-            notification.className = 'notification success professional-notification';
-            notification.innerHTML = `
-                <div class="notification-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Success') }}</div>
-                    <div class="notification-message">${message}</div>
-                    ${categoryId ? `
-                                                                                                                                                                                            <div class="notification-details">
-                                                                                                                                                                                                <i class="fas fa-info-circle"></i>
-                                                                                                                                                                                                {{ __('Category') }} #${categoryId} ${action === 'deleted' ? '{{ __('has been permanently deleted') }}' : action === 'updated' ? '{{ __('has been updated successfully') }}' : '{{ __('has been created successfully') }}'}
-                                                                                                                                                                                            </div>
-                                                                                                                                                                                            ` : ''}
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            `;
-
-            document.querySelector('.notification-container').appendChild(notification);
-
-            // Show notification with animation
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-
-            // Auto-hide after 6 seconds
-            setTimeout(() => {
-                notification.classList.add('hide');
+            // استخدام النظام العام للإشعارات
+            if (typeof window.showSuccess === 'function') {
+                window.showSuccess('{{ __('Success') }}', message);
+            } else if (typeof showSuccess === 'function') {
+                showSuccess('{{ __('Success') }}', message);
+            } else {
+                // Fallback: محاولة بعد 100ms
                 setTimeout(() => {
-                    notification.remove();
-                }, 400);
-            }, 6000);
-
-            // Progress bar animation
-            const progressBar = notification.querySelector('.notification-progress');
-            if (progressBar) {
-                progressBar.style.width = '100%';
-                progressBar.style.transition = 'width 6s linear';
+                    if (typeof window.showSuccess === 'function') {
+                        window.showSuccess('{{ __('Success') }}', message);
+                    }
+                }, 100);
             }
         }
 
-        // Professional Error Notification
+        // Professional Error Notification - استخدام النظام العام
         function showErrorNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'notification error professional-notification';
-            notification.innerHTML = `
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">{{ __('Error') }}</div>
-                    <div class="notification-message">${message}</div>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
-                <div class="notification-progress"></div>
-            `;
-
-            document.querySelector('.notification-container').appendChild(notification);
-
-            // Show notification with animation
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                notification.classList.add('hide');
+            // استخدام النظام العام للإشعارات
+            if (typeof window.showError === 'function') {
+                window.showError('{{ __('Error') }}', message);
+            } else if (typeof showError === 'function') {
+                showError('{{ __('Error') }}', message);
+            } else {
+                // Fallback: محاولة بعد 100ms
                 setTimeout(() => {
-                    notification.remove();
-                }, 400);
-            }, 5000);
-
-            // Progress bar animation
-            const progressBar = notification.querySelector('.notification-progress');
-            if (progressBar) {
-                progressBar.style.width = '100%';
-                progressBar.style.transition = 'width 5s linear';
+                    if (typeof window.showError === 'function') {
+                        window.showError('{{ __('Error') }}', message);
+                    }
+                }, 100);
             }
         }
 
-        // Auto-hide notifications after 6 seconds
-        document.addEventListener('DOMContentLoaded', function() {
-            const notifications = document.querySelectorAll('.professional-notification');
-            notifications.forEach(notification => {
-                // Progress bar animation
-                const progressBar = notification.querySelector('.notification-progress');
-                if (progressBar) {
-                    progressBar.style.width = '100%';
-                    progressBar.style.transition = 'width 6s linear';
-                }
-
-                // Auto-hide after 6 seconds
-                setTimeout(() => {
-                    notification.classList.add('hide');
-                    setTimeout(() => {
-                        notification.remove();
-                    }, 400);
-                }, 6000);
-            });
-        });
+        // تم إزالة الكود المحلي للإشعارات - الآن نستخدم النظام العام
     </script>
 @endpush

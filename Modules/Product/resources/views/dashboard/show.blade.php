@@ -829,8 +829,8 @@
         }
 
         /* ============================================
-                   Light Mode Styles - Maximum Priority
-                   ============================================ */
+                                       Light Mode Styles - Maximum Priority
+                                       ============================================ */
 
         /* Container and Main Elements */
         html[data-theme="light"] body,
@@ -1670,8 +1670,8 @@
                 <h2 class="settings-title">{{ __('Product Settings') }}</h2>
                 @if ($product->getFirstMedia('product_images'))
                     @php $productSettingsMedia = $product->getFirstMedia('product_images'); @endphp
-                    <img src="{{ route('dashboard.product.image', $productSettingsMedia->id) }}" alt="{{ $product->name }}"
-                        class="settings-product-image">
+                    <img src="{{ route('dashboard.product.image', $productSettingsMedia->id) }}"
+                        alt="{{ $product->name }}" class="settings-product-image">
                 @else
                     <div class="settings-product-image"
                         style="background: #3a3a3a; display: flex; align-items: center; justify-content: center;">
@@ -1683,6 +1683,13 @@
             <form class="settings-form" method="POST" action="{{ route('dashboard.product.update', $product->id) }}">
                 @csrf
                 @method('PUT')
+
+                <!-- Hidden fields to ensure required fields are always sent with current values -->
+                <input type="hidden" name="name" value="{{ old('name', $product->getTranslation('name', app()->getLocale())) }}">
+                <input type="hidden" name="description" value="{{ old('description', $product->getTranslation('description', app()->getLocale())) }}">
+                <input type="hidden" name="price" value="{{ old('price', $product->price) }}">
+                <input type="hidden" name="category" value="{{ old('category', $product->categories()->first()?->id) }}">
+                <input type="hidden" name="status" value="{{ old('status', $product->status) }}">
 
                 <div class="settings-grid">
                     <!-- Product Type -->
@@ -1715,18 +1722,38 @@
                         </select>
                     </div>
 
-                    <!-- Provider Names (Empty for now) -->
-                    <div class="settings-group">
+                    <!-- Provider Selection (Only show if linking_type is automatic) -->
+                    <div class="settings-group" id="provider-selection-group"
+                        style="display: {{ old('linking_type', $product->linking_type ?? 'automatic') == 'automatic' ? 'block' : 'none' }};">
                         <label class="settings-label">{{ __('Provider Names') }}</label>
-                        <input type="text" class="settings-input"
-                            placeholder="{{ __('Provider names will be added later') }}" disabled>
+                        <select class="settings-select" name="provider_id" id="provider_id">
+                            <option value="">{{ __('Choose a provider...') }}</option>
+                            @foreach ($linkedProviders as $provider)
+                                <option value="{{ $provider->id }}"
+                                    {{ old('provider_id', $product->provider_id) == $provider->id ? 'selected' : '' }}>
+                                    {{ $provider->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @if ($linkedProviders->isEmpty())
+                            <small style="color: #6b7280; margin-top: 5px; display: block;">
+                                {{ __('No providers linked to your store. Please link a provider first.') }}
+                            </small>
+                        @endif
                     </div>
 
-                    <!-- Product Number at Provider (Empty for now) -->
-                    <div class="settings-group">
+                    <!-- Product Number at Provider (Only show if linking_type is automatic and provider is selected) -->
+                    <div class="settings-group" id="provider-product-selection-group"
+                        style="display: {{ old('linking_type', $product->linking_type ?? 'automatic') == 'automatic' && old('provider_id', $product->provider_id) ? 'block' : 'none' }};">
                         <label class="settings-label">{{ __('Product Number at Provider') }}</label>
-                        <input type="text" class="settings-input"
-                            placeholder="{{ __('Product number will be added later') }}" disabled>
+                        <select class="settings-select" name="provider_product_number" id="provider_product_number">
+                            <option value="">{{ __('Choose a product...') }}</option>
+                        </select>
+                        <small style="color: #6b7280; margin-top: 5px; display: none;" id="provider-product-loading">
+                            <i class="fas fa-spinner fa-spin"></i> {{ __('Loading products...') }}
+                        </small>
+                        <small style="color: #ef4444; margin-top: 5px; display: none;" id="provider-product-error">
+                        </small>
                     </div>
 
                     <!-- Min and Max Quantity - Side by Side -->
@@ -1859,13 +1886,33 @@
                                         <td>
                                             <div style="display: flex; gap: 0.5rem;">
                                                 <a href="{{ route('dashboard.product.show', $child->id) }}"
-                                                    style="color: #f59e0b; text-decoration: none;">
+                                                    style="color: #f59e0b; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(245, 158, 11, 0.1); transition: all 0.3s ease;"
+                                                    onmouseover="this.style.background='rgba(245, 158, 11, 0.2)'"
+                                                    onmouseout="this.style.background='rgba(245, 158, 11, 0.1)'"
+                                                    title="{{ __('View') }}">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 <a href="{{ route('dashboard.product.edit', $child->id) }}"
-                                                    style="color: #3b82f6; text-decoration: none;">
+                                                    style="color: #3b82f6; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(59, 130, 246, 0.1); transition: all 0.3s ease;"
+                                                    onmouseover="this.style.background='rgba(59, 130, 246, 0.2)'"
+                                                    onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'"
+                                                    title="{{ __('Edit') }}">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
+                                                <form action="{{ route('dashboard.product.destroy', $child->id) }}"
+                                                    method="POST" class="delete-subproduct-form"
+                                                    style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="delete-subproduct-btn"
+                                                        style="color: #ef4444; background: rgba(239, 68, 68, 0.1); border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; transition: all 0.3s ease; padding: 0;"
+                                                        onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'"
+                                                        onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'"
+                                                        data-product-name="{{ $child->getTranslation('name', app()->getLocale()) }}"
+                                                        title="{{ __('Delete') }}">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -1892,57 +1939,235 @@
     <script src="{{ asset('assets/js/notifications.js') }}"></script>
 
     <script>
-        // Handle success message from session
+        // Handle success message from session - عرض إشعار واحد فقط
+        // منع الإشعارات المكررة باستخدام sessionStorage
         document.addEventListener('DOMContentLoaded', function() {
-            // إظهار رسالة نجاح من الـ session
+            // إظهار رسالة نجاح من الـ session - مرة واحدة فقط
             @if (session('success'))
-                // استخدام دالة showSuccess إذا كانت متوفرة
-                if (typeof showSuccess === 'function') {
-                    showSuccess('{{ __('Success') }}', '{{ session('success') }}');
-                } else {
-                    // إنشاء إشعار مخصص
-                    const notification = document.createElement('div');
-                    notification.className = 'success-notification';
-                    notification.innerHTML = `
-                        <div style="position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(16,185,129,0.3); z-index: 10000; display: flex; align-items: center; gap: 1rem; max-width: 400px; animation: slideInRight 0.4s ease;">
-                            <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
-                            <div>
-                                <strong style="display: block; margin-bottom: 0.25rem;">{{ __('Success') }}</strong>
-                                <span style="font-size: 0.9rem;">{{ session('success') }}</span>
-                            </div>
-                        </div>
-                    `;
-                    document.body.appendChild(notification);
+                // التحقق من أن الإشعار لم يُعرض من قبل
+                const successMessage = '{{ session('success') }}';
+                const successKey = 'success_notification_' + btoa(successMessage).replace(/[^a-zA-Z0-9]/g, '');
+                if (!sessionStorage.getItem(successKey)) {
+                    // وضع علامة أن الإشعار تم عرضه
+                    sessionStorage.setItem(successKey, 'shown');
 
-                    // إخفاء الإشعار بعد 5 ثواني
-                    setTimeout(() => {
-                        notification.style.opacity = '0';
-                        notification.style.transform = 'translateX(120%)';
-                        setTimeout(() => notification.remove(), 300);
-                    }, 5000);
+                    // انتظار تحميل notifications.js أولاً
+                    setTimeout(function() {
+                        if (typeof showSuccess === 'function') {
+                            showSuccess('{{ __('Success') }}', successMessage);
+                        } else {
+                            // Fallback إذا لم تكن showSuccess متوفرة
+                            const notification = document.createElement('div');
+                            notification.className = 'success-notification';
+                            notification.innerHTML = `
+                                <div style="position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(16,185,129,0.3); z-index: 10000; display: flex; align-items: center; gap: 1rem; max-width: 400px; animation: slideInRight 0.4s ease;">
+                                    <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
+                                    <div>
+                                        <strong style="display: block; margin-bottom: 0.25rem;">{{ __('Success') }}</strong>
+                                        <span style="font-size: 0.9rem;">' + successMessage + '</span>
+                                    </div>
+                                </div>
+                            `;
+                            document.body.appendChild(notification);
+                            setTimeout(() => {
+                                notification.style.opacity = '0';
+                                notification.style.transform = 'translateX(120%)';
+                                setTimeout(() => notification.remove(), 300);
+                            }, 5000);
+                        }
+                    }, 300);
                 }
             @endif
 
+            // Handle linking_type change - show/hide provider fields
+            const linkingTypeSelect = document.querySelector('select[name="linking_type"]');
+            const providerSelectionGroup = document.getElementById('provider-selection-group');
+            const providerProductSelectionGroup = document.getElementById('provider-product-selection-group');
+            const providerSelect = document.getElementById('provider_id');
+            const providerProductSelect = document.getElementById('provider_product_number');
+
+            // Function to toggle provider fields based on linking type
+            function toggleProviderFields(linkingType) {
+                if (linkingType === 'automatic') {
+                    // Show provider selection
+                    if (providerSelectionGroup) {
+                        providerSelectionGroup.style.display = 'block';
+                    }
+                    // Show product selection only if provider is already selected
+                    if (providerProductSelectionGroup && providerSelect && providerSelect.value) {
+                        providerProductSelectionGroup.style.display = 'block';
+                    } else if (providerProductSelectionGroup) {
+                        providerProductSelectionGroup.style.display = 'none';
+                    }
+                } else {
+                    // Hide provider fields for manual linking
+                    if (providerSelectionGroup) {
+                        providerSelectionGroup.style.display = 'none';
+                    }
+                    if (providerProductSelectionGroup) {
+                        providerProductSelectionGroup.style.display = 'none';
+                    }
+                    // Clear provider selection values
+                    if (providerSelect) {
+                        providerSelect.value = '';
+                    }
+                    if (providerProductSelect) {
+                        providerProductSelect.value = '';
+                        // Clear the options list
+                        providerProductSelect.innerHTML = '<option value="">{{ __('Choose a product...') }}</option>';
+                    }
+                }
+            }
+
+            if (linkingTypeSelect) {
+                // Set initial state on page load
+                const initialLinkingType = linkingTypeSelect.value;
+                toggleProviderFields(initialLinkingType);
+
+                // Handle linking_type change
+                linkingTypeSelect.addEventListener('change', function() {
+                    toggleProviderFields(this.value);
+                });
+            }
+
+            // Handle provider selection - fetch products from API
+            // Note: providerSelect is already defined above, so we use the existing reference
+            const productSelect = document.getElementById('provider_product_number');
+            const loadingMessage = document.getElementById('provider-product-loading');
+            const errorMessage = document.getElementById('provider-product-error');
+
+            if (providerSelect) {
+                providerSelect.addEventListener('change', function() {
+                    // Check if linking_type is automatic before fetching products
+                    const currentLinkingType = linkingTypeSelect ? linkingTypeSelect.value : 'automatic';
+                    if (currentLinkingType !== 'automatic') {
+                        // Don't fetch products if linking type is manual
+                        return;
+                    }
+
+                    const providerId = this.value;
+                    const productSelectionGroup = document.getElementById(
+                        'provider-product-selection-group');
+
+                    // Clear previous selection
+                    productSelect.innerHTML = '<option value="">{{ __('Choose a product...') }}</option>';
+                    errorMessage.style.display = 'none';
+
+                    if (!providerId) {
+                        if (productSelectionGroup) {
+                            productSelectionGroup.style.display = 'none';
+                        }
+                        return;
+                    }
+
+                    // Show loading
+                    if (loadingMessage) {
+                        loadingMessage.style.display = 'block';
+                    }
+                    if (productSelectionGroup) {
+                        productSelectionGroup.style.display = 'block';
+                    }
+
+                    // Fetch products from provider API
+                    fetch(`{{ route('providers.products', ['provider' => ':providerId']) }}`.replace(
+                            ':providerId', providerId), {
+                            method: 'GET',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json',
+                            }
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(err => {
+                                    throw new Error(err.error || 'HTTP Error: ' + response
+                                        .status);
+                                });
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            loadingMessage.style.display = 'none';
+                            errorMessage.style.display = 'none';
+
+                            console.log('Products data received:', data);
+                            console.log('Products count:', data.products?.length || 0);
+                            console.log('Raw count:', data.raw_count || 0);
+
+                            if (data.success && data.products && Array.isArray(data.products) && data
+                                .products.length > 0) {
+                                // Clear existing options except the first one
+                                productSelect.innerHTML =
+                                    '<option value="">{{ __('Choose a product...') }}</option>';
+
+                                // Get current provider_product_number value if exists
+                                const currentProviderProductNumber = '{{ old('provider_product_number', $product->provider_product_number) }}';
+
+                                // Add products to select
+                                data.products.forEach(product => {
+                                    const option = document.createElement('option');
+                                    option.value = product.value; // رقم المنتج (id)
+                                    option.textContent = product.text; // الاسم - الرقم للعرض
+                                    // Select if this is the current provider_product_number
+                                    if (currentProviderProductNumber && product.value == currentProviderProductNumber) {
+                                        option.selected = true;
+                                    }
+                                    productSelect.appendChild(option);
+                                });
+                            } else {
+                                const errorMsg = data.error || '{{ __('No products found.') }}';
+                                errorMessage.textContent = errorMsg;
+                                errorMessage.style.display = 'block';
+                                console.warn('No products found:', data);
+                            }
+                        })
+                        .catch(error => {
+                            loadingMessage.style.display = 'none';
+                            const errorMsg = error.message ||
+                                '{{ __('Error loading products. Please try again.') }}';
+                            errorMessage.textContent = errorMsg;
+                            errorMessage.style.display = 'block';
+                            console.error('Error fetching products:', error);
+                        });
+                });
+
+                // If provider is already selected on page load, fetch products
+                // Only if linking_type is automatic
+                @if (old('provider_id', $product->provider_id))
+                    const initialProviderId = {{ old('provider_id', $product->provider_id) }};
+                    const initialLinkingType = linkingTypeSelect ? linkingTypeSelect.value : 'automatic';
+                    if (initialProviderId && initialLinkingType === 'automatic') {
+                        providerSelect.value = initialProviderId;
+                        providerSelect.dispatchEvent(new Event('change'));
+                    }
+                @endif
+            }
+
             // إظهار رسالة خطأ من الـ session
             @if (session('error'))
-                const errorNotification = document.createElement('div');
-                errorNotification.className = 'error-notification';
-                errorNotification.innerHTML = `
-                    <div style="position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(239,68,68,0.3); z-index: 10000; display: flex; align-items: center; gap: 1rem; max-width: 400px; animation: slideInRight 0.4s ease;">
-                        <i class="fas fa-exclamation-circle" style="font-size: 1.5rem;"></i>
-                        <div>
-                            <strong style="display: block; margin-bottom: 0.25rem;">{{ __('Error') }}</strong>
-                            <span style="font-size: 0.9rem;">{{ session('error') }}</span>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(errorNotification);
-
-                setTimeout(() => {
-                    errorNotification.style.opacity = '0';
-                    errorNotification.style.transform = 'translateX(120%)';
-                    setTimeout(() => errorNotification.remove(), 300);
-                }, 5000);
+                setTimeout(function() {
+                    if (typeof showError === 'function') {
+                        showError('{{ __('Error') }}', '{{ session('error') }}');
+                    } else {
+                        const errorNotification = document.createElement('div');
+                        errorNotification.className = 'error-notification';
+                        errorNotification.innerHTML = `
+                            <div style="position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(239,68,68,0.3); z-index: 10000; display: flex; align-items: center; gap: 1rem; max-width: 400px; animation: slideInRight 0.4s ease;">
+                                <i class="fas fa-exclamation-circle" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <strong style="display: block; margin-bottom: 0.25rem;">{{ __('Error') }}</strong>
+                                    <span style="font-size: 0.9rem;">{{ session('error') }}</span>
+                                </div>
+                            </div>
+                        `;
+                        document.body.appendChild(errorNotification);
+                        setTimeout(() => {
+                            errorNotification.style.opacity = '0';
+                            errorNotification.style.transform = 'translateX(120%)';
+                            setTimeout(() => errorNotification.remove(), 300);
+                        }, 5000);
+                    }
+                }, 100);
             @endif
         });
 
@@ -2085,6 +2310,121 @@
                     };
                 }
             }
+
+            // Handle sub-product deletion
+            document.querySelectorAll('.delete-subproduct-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const form = this.closest('form');
+                    const productName = this.getAttribute('data-product-name');
+                    const productRow = this.closest('tr');
+
+                    // Confirm deletion
+                    if (confirm('{{ __('Are you sure you want to delete the product') }} "' +
+                            productName + '"?\n{{ __('This action cannot be undone.') }}')) {
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                        this.disabled = true;
+
+                        // Get CSRF token
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]')
+                            ?.getAttribute('content') ||
+                            form.querySelector('input[name="_token"]')?.value;
+
+                        // Create FormData
+                        const formData = new FormData();
+                        formData.append('_method', 'DELETE');
+                        formData.append('_token', csrfToken);
+
+                        // Send AJAX delete request
+                        fetch(form.action, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken,
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'Accept': 'application/json'
+                                },
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // Show success notification
+                                    if (typeof showSuccess === 'function') {
+                                        showSuccess('{{ __('Success') }}', data.message ||
+                                            '{{ __('Product deleted successfully') }}');
+                                    } else {
+                                        // Fallback notification
+                                        const notification = document.createElement('div');
+                                        notification.className = 'success-notification';
+                                        notification.innerHTML = `
+                                        <div style="position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(16,185,129,0.3); z-index: 10000; display: flex; align-items: center; gap: 1rem; max-width: 400px; animation: slideInRight 0.4s ease;">
+                                            <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
+                                            <div>
+                                                <strong style="display: block; margin-bottom: 0.25rem;">{{ __('Success') }}</strong>
+                                                <span style="font-size: 0.9rem;">${data.message || '{{ __('Product deleted successfully') }}'}</span>
+                                            </div>
+                                        </div>
+                                    `;
+                                        document.body.appendChild(notification);
+                                        setTimeout(() => {
+                                            notification.style.opacity = '0';
+                                            notification.style.transform =
+                                                'translateX(120%)';
+                                            setTimeout(() => notification.remove(),
+                                                300);
+                                        }, 5000);
+                                    }
+
+                                    // Remove the row from table with animation
+                                    productRow.style.transition =
+                                        'opacity 0.3s ease, transform 0.3s ease';
+                                    productRow.style.opacity = '0';
+                                    productRow.style.transform = 'translateX(-20px)';
+                                    setTimeout(() => {
+                                        productRow.remove();
+
+                                        // Check if table is empty and show empty state
+                                        const tbody = document.querySelector(
+                                            '#subproducts-tab tbody');
+                                        if (tbody && tbody.children.length === 0) {
+                                            const table = tbody.closest('table');
+                                            if (table) {
+                                                const tableContainer = table.closest(
+                                                    '.sales-table-container');
+                                                if (tableContainer) {
+                                                    tableContainer.innerHTML = `
+                                                    <div class="prices-content" style="padding: 3rem;">
+                                                        <p class="prices-placeholder">
+                                                            <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 1rem; display: block; color: #6b7280;"></i>
+                                                            {{ __('No sub-products yet. Add sub-products to this product.') }}
+                                                        </p>
+                                                    </div>
+                                                `;
+                                                }
+                                            }
+                                        }
+                                    }, 300);
+                                } else {
+                                    // Show error notification
+                                    alert(data.message ||
+                                        '{{ __('An error occurred while deleting the product') }}'
+                                    );
+                                    this.innerHTML = originalText;
+                                    this.disabled = false;
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Delete error:', error);
+                                alert(
+                                    '{{ __('An error occurred while deleting the product') }}'
+                                );
+                                this.innerHTML = originalText;
+                                this.disabled = false;
+                            });
+                    }
+                });
+            });
         });
     </script>
 @endpush

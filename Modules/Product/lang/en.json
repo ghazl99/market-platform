@@ -393,5 +393,9 @@
     "Sub-product created successfully": "Sub-product created successfully",
     "Description is optional for sub-products": "Description is optional for sub-products",
     "Unavailable": "Unavailable",
-    "Purchase cost is higher than selling price": "Purchase cost is higher than selling price"
+    "Purchase cost is higher than selling price": "Purchase cost is higher than selling price",
+    "Confirm Delete": "Confirm Delete",
+    "Are you sure you want to delete the product": "Are you sure you want to delete the product",
+    "This action cannot be undone.": "This action cannot be undone.",
+    "A product with this name already exists in this store. Please choose a different name.": "A product with this name already exists in this store. Please choose a different name."
 }

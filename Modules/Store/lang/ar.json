@@ -117,7 +117,29 @@
     "Cannot change domain after creation": "لا يمكن تغيير الدومين بعد الإنشاء",
     "Inactive Store": "المتجر غير نشط",
     "Confirm Delete": "تأكيد الحذف",
-    "Are you sure you want to delete this store?": "هل أنت متأكد من حذف هذا المتجر؟"
+    "Are you sure you want to delete this store?": "هل أنت متأكد من حذف هذا المتجر؟",
+    "Providers": "المزودين",
+    "Provider": "مزود",
+    "Add Provider": "إضافة مزود",
+    "Select Provider": "اختر مزود",
+    "Choose a provider...": "اختر مزود...",
+    "Link Provider": "ربط مزود",
+    "Linked Providers": "المزودين المرتبطين",
+    "No Providers Linked": "لا توجد مزودين مرتبطين",
+    "You haven't linked any providers to your store yet. Use the form above to add a provider.": "لم تقم بربط أي مزودين بمتجرك بعد. استخدم النموذج أعلاه لإضافة مزود.",
+    "All available providers are already linked to your store.": "جميع المزودين المتاحين مرتبطين بالفعل بمتجرك.",
+    "This provider is already linked to your store.": "هذا المزود مرتبط بالفعل بمتجرك.",
+    "Provider linked successfully.": "تم ربط المزود بنجاح.",
+    "Provider unlinked successfully.": "تم إلغاء ربط المزود بنجاح.",
+    "Provider is not linked to your store.": "المزود غير مرتبط بمتجرك.",
+    "Provider status updated successfully.": "تم تحديث حالة المزود بنجاح.",
+    "Are you sure you want to unlink this provider?": "هل أنت متأكد من إلغاء ربط هذا المزود؟",
+    "Active": "نشط",
+    "Inactive": "غير نشط",
+    "Activate": "تفعيل",
+    "Deactivate": "تعطيل",
+    "Unlink": "إلغاء الربط",
+    "API URL": "رابط API"
 
 
 }

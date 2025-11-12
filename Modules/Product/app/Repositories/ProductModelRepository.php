@@ -8,7 +8,7 @@ use Modules\Store\Models\Store;
 
 class ProductModelRepository implements ProductRepository
 {
-    public function index(?string $keyword = null, ?int $categoryFilter = null, ?string $statusFilter = null)
+    public function index(?string $keyword = null, ?int $categoryFilter = null, ?string $statusFilter = null, ?string $productTypeFilter = null, ?string $stockStatusFilter = null)
     {
         $store = Store::currentFromUrl()->first();
 
@@ -20,14 +20,24 @@ class ProductModelRepository implements ProductRepository
             ->where('store_id', $store->id)
             ->whereNull('parent_id'); // Only show main products, not sub-products
 
-        // تطبيق فلتر الكلمة المفتاحية
-        if ($keyword) {
+        // تطبيق فلتر الكلمة المفتاحية - دعم البحث بحرف أو حرفين
+        if ($keyword && strlen(trim($keyword)) >= 1) {
+            $keyword = trim($keyword);
             $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'like', "%{$keyword}%")
-                    ->orWhere('description', 'like', "%{$keyword}%")
+                // البحث في الحقول متعددة اللغات (JSON)
+                $locale = app()->getLocale();
+                $q->whereRaw("JSON_EXTRACT(name, '$.{$locale}') LIKE ?", ["%{$keyword}%"])
+                    ->orWhereRaw("JSON_EXTRACT(name, '$.en') LIKE ?", ["%{$keyword}%"])
+                    ->orWhereRaw("JSON_EXTRACT(name, '$.ar') LIKE ?", ["%{$keyword}%"])
+                    // البحث في الوصف
+                    ->orWhereRaw("JSON_EXTRACT(description, '$.{$locale}') LIKE ?", ["%{$keyword}%"])
+                    ->orWhereRaw("JSON_EXTRACT(description, '$.en') LIKE ?", ["%{$keyword}%"])
+                    ->orWhereRaw("JSON_EXTRACT(description, '$.ar') LIKE ?", ["%{$keyword}%"])
+                    // البحث في الفئات
                     ->orWhereHas('categories', function ($catQuery) use ($keyword) {
                         $catQuery->where('name', 'like', "%{$keyword}%");
                     })
+                    // البحث في الخصائص
                     ->orWhereHas('attributes', function ($attrQuery) use ($keyword) {
                         $attrQuery->where('name', 'like', "%{$keyword}%");
                     });
@@ -52,6 +62,41 @@ class ProductModelRepository implements ProductRepository
                     break;
                 case 'draft':
                     $query->where('status', 'draft');
+                    break;
+            }
+        }
+
+        // تطبيق فلتر نوع المنتج
+        if ($productTypeFilter) {
+            $query->where('product_type', $productTypeFilter);
+        }
+
+        // تطبيق فلتر حالة المخزون
+        if ($stockStatusFilter) {
+            switch ($stockStatusFilter) {
+                case 'in_stock':
+                    // المنتجات المتوفرة (max_quantity > 0 أو null)
+                    $query->where(function ($q) {
+                        $q->whereNull('max_quantity')
+                            ->orWhere('max_quantity', '>', 0);
+                    });
+                    break;
+                case 'low_stock':
+                    // المنتجات قليلة المخزون (max_quantity بين 1 و 10)
+                    $query->whereBetween('max_quantity', [1, 10]);
+                    break;
+                case 'out_of_stock':
+                    // المنتجات غير المتوفرة (max_quantity = 0 أو null مع min_quantity = 0)
+                    $query->where(function ($q) {
+                        $q->where('max_quantity', 0)
+                            ->orWhere(function ($q2) {
+                                $q2->whereNull('max_quantity')
+                                    ->where(function ($q3) {
+                                        $q3->where('min_quantity', 0)
+                                            ->orWhereNull('min_quantity');
+                                    });
+                            });
+                    });
                     break;
             }
         }

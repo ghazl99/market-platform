@@ -12,6 +12,7 @@ use Modules\Wallet\Models\PaymentMethod;
 use Spatie\Translatable\HasTranslations;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Modules\Store\Database\Factories\StoreFactory;
+use Modules\Store\Models\Provider;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -269,5 +270,23 @@ class Store extends Model implements HasMedia
     public function groups(): HasMany
     {
         return $this->hasMany(\App\Group::class);
+    }
+
+    /**
+     * Get the providers linked to this store.
+     */
+    public function providers(): BelongsToMany
+    {
+        return $this->belongsToMany(Provider::class, 'store_providers')
+            ->withPivot('is_active')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get only active providers linked to this store.
+     */
+    public function activeProviders(): BelongsToMany
+    {
+        return $this->providers()->wherePivot('is_active', true);
     }
 }

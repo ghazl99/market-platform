@@ -40,22 +40,14 @@ class ProductController extends Controller implements HasMiddleware
     public function index(Request $request)
     {
         $keyword = $request->input('search');
-        $categoryFilter = $request->input('category');
         $statusFilter = $request->input('status');
+        $stockStatusFilter = $request->input('stock_status');
 
-        // دعم فلترة المنتجات حسب القسم من URL parameter
-        if ($request->route('category')) {
-            $categoryFilter = $request->route('category');
-        }
-
-        $products = $this->productService->getAllProducts($keyword, $categoryFilter, $statusFilter);
+        $products = $this->productService->getAllProducts($keyword, null, $statusFilter, null, $stockStatusFilter);
         $categories = $this->categoryService->getAllSubcategories();
 
         // الحصول على معلومات القسم المحدد إذا كان موجوداً
         $selectedCategory = null;
-        if ($categoryFilter) {
-            $selectedCategory = $this->categoryService->getCategoryById($categoryFilter);
-        }
 
         if ($request->ajax()) {
             $html = view('product::dashboard.dataTables', compact('products'))->render();
@@ -219,6 +211,10 @@ class ProductController extends Controller implements HasMiddleware
             ->limit(10)
             ->get();
 
+        // Get linked providers for the current store
+        $store = current_store();
+        $linkedProviders = $store ? $store->activeProviders()->get() : collect();
+
         return view('product::dashboard.show', compact(
             'product',
             'maxQuantity',
@@ -227,7 +223,8 @@ class ProductController extends Controller implements HasMiddleware
             'salesQuantity',
             'totalSales',
             'netProfit',
-            'recentOrders'
+            'recentOrders',
+            'linkedProviders'
         ));
     }
 
@@ -239,7 +236,7 @@ class ProductController extends Controller implements HasMiddleware
         $user = Auth::user();
         $attributes = $this->attributeService->getAllAttributes();
         $categories = $this->categoryService->getAllCategoriesForProducts();
-        
+
         // تحميل الفئات مع المنتج
         $product->load('categories');
 
@@ -256,6 +253,57 @@ class ProductController extends Controller implements HasMiddleware
             'request_data' => $request->all(),
             'method' => $request->method()
         ]);
+
+        // Get the product first
+            $product = Product::find($id);
+        if (!$product) {
+            Log::error('Product update failed - product not found', ['id' => $id]);
+            return redirect()->route('dashboard.product.index')->with('error', __('Failed to update the product.'));
+        }
+
+        // If linking_type is manual, clear provider fields
+        $linkingType = $request->input('linking_type', $product->linking_type ?? 'automatic');
+        if ($linkingType === 'manual') {
+            $request->merge([
+                'provider_id' => null,
+                'provider_product_number' => null,
+            ]);
+        }
+
+        // If only provider fields are being updated, merge current product data for required fields
+        // This ensures validation passes when only updating provider settings
+        $hasProviderFields = $request->filled('provider_id') || $request->filled('provider_product_number');
+        $hasName = $request->filled('name');
+        $hasDescription = $request->filled('description');
+        $hasPrice = $request->filled('price');
+        $hasCategory = $request->filled('category');
+        $hasStatus = $request->filled('status');
+        
+        $hasAllRequiredFields = $hasName && $hasDescription && $hasPrice && $hasCategory && $hasStatus;
+
+        if ($hasProviderFields && !$hasAllRequiredFields) {
+            // Merge current product data for validation (only if not already present)
+            $mergeData = [];
+            if (!$hasName) {
+                $mergeData['name'] = $product->getTranslation('name', app()->getLocale());
+            }
+            if (!$hasDescription) {
+                $mergeData['description'] = $product->getTranslation('description', app()->getLocale());
+            }
+            if (!$hasPrice) {
+                $mergeData['price'] = $product->price;
+            }
+            if (!$hasCategory) {
+                $mergeData['category'] = $product->categories()->first()?->id;
+            }
+            if (!$hasStatus) {
+                $mergeData['status'] = $product->status;
+            }
+            
+            if (!empty($mergeData)) {
+                $request->merge($mergeData);
+            }
+        }
 
         $data = $request->validated();
 
@@ -275,7 +323,7 @@ class ProductController extends Controller implements HasMiddleware
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->route('dashboard.product.index')->with('error', $e->getMessage());
         }
     }
 
@@ -288,8 +336,8 @@ class ProductController extends Controller implements HasMiddleware
             $this->productService->deleteProduct($product);
 
             // Check if it's an AJAX/JSON request
-            $isAjax = $request->ajax() || 
-                     $request->expectsJson() || 
+            $isAjax = $request->ajax() ||
+                     $request->expectsJson() ||
                      $request->wantsJson() ||
                      $request->header('Accept') === 'application/json' ||
                      str_contains($request->header('Accept', ''), 'application/json');
@@ -306,8 +354,8 @@ class ProductController extends Controller implements HasMiddleware
                 ->with('success', __('Product deleted successfully'));
         } catch (\Exception $e) {
             // Check if it's an AJAX/JSON request
-            $isAjax = $request->ajax() || 
-                     $request->expectsJson() || 
+            $isAjax = $request->ajax() ||
+                     $request->expectsJson() ||
                      $request->wantsJson() ||
                      $request->header('Accept') === 'application/json' ||
                      str_contains($request->header('Accept', ''), 'application/json');
@@ -318,7 +366,7 @@ class ProductController extends Controller implements HasMiddleware
                     'message' => $e->getMessage(),
                 ], 500);
             }
-            
+
             return redirect()->back()
                 ->with('error', $e->getMessage());
         }

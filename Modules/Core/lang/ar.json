@@ -357,6 +357,26 @@
     "Monthly Sales": "مبيعات الشهر",
     "7 Days": "7 أيام",
     "30 Days": "30 يوم",
-    "90 Days": "90 يوم"
+    "90 Days": "90 يوم",
+    "Average Orders per Customer": "متوسط الطلبات لكل عميل",
+    "placed first order": "قام بأول طلب",
+    "Sales": "المبيعات",
+    "vs last month": "مقارنة بالشهر الماضي",
+    "vs last week": "مقارنة بالأسبوع الماضي",
+    "Total Customers": "إجمالي العملاء",
+    "Active Products": "المنتجات النشطة",
+    "Pending Orders": "الطلبات قيد الانتظار",
+    "Average Order Value": "متوسط قيمة الطلب",
+    "Total Revenue": "إجمالي الإيرادات",
+    "This Week": "هذا الأسبوع",
+    "Last Week": "الأسبوع الماضي",
+    "This Month": "هذا الشهر",
+    "Last Month": "الشهر الماضي",
+    "Active customers with orders": "عملاء نشطون لديهم طلبات",
+    "Per order": "لكل طلب",
+    "Available for sale": "متاح للبيع",
+    "Require attention": "يحتاج إلى انتباه",
+    "Recent Customers": "أحدث العملاء",
+    "No customers found": "لم يتم العثور على عملاء"
 }
 

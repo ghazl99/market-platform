@@ -3,6 +3,8 @@
 namespace Modules\Product\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
+use Modules\Product\Models\Product;
 
 class StoreProductRequest extends FormRequest
 {
@@ -54,6 +56,42 @@ class StoreProductRequest extends FormRequest
         }
 
         return $rules;
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            // الحصول على المتجر الحالي
+            $store = \Modules\Store\Models\Store::currentFromUrl()->first();
+            if (!$store) {
+                return;
+            }
+
+            // استخراج الاسم العربي للتحقق من التكرار
+            $nameAr = null;
+            if ($this->has('names') && is_array($this->input('names')) && isset($this->input('names')['ar'])) {
+                $nameAr = trim($this->input('names')['ar']);
+            } elseif ($this->has('name')) {
+                $nameAr = trim($this->input('name'));
+            }
+
+            if ($nameAr) {
+                // التحقق من وجود منتج بنفس الاسم العربي في نفس المتجر
+                $exists = Product::where('store_id', $store->id)
+                    ->whereRaw('JSON_UNQUOTE(JSON_EXTRACT(name, "$.ar")) = ?', [$nameAr])
+                    ->exists();
+
+                if ($exists) {
+                    $validator->errors()->add(
+                        'name',
+                        __('A product with this name already exists in this store. Please choose a different name.')
+                    );
+                }
+            }
+        });
     }
 
     /**

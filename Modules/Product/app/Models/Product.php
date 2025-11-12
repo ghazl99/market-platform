@@ -33,6 +33,9 @@ class Product extends Model implements HasMedia
         'capital',
         'status',
         'product_type',
+        'linking_type',
+        'provider_id',
+        'provider_product_number',
         'notes',
         'is_active',
         'is_featured',
@@ -178,6 +181,11 @@ class Product extends Model implements HasMedia
     public function store()
     {
         return $this->belongsTo(Store::class);
+    }
+
+    public function provider()
+    {
+        return $this->belongsTo(\Modules\Store\Models\Provider::class);
     }
 
     public function categories()

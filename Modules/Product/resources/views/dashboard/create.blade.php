@@ -952,10 +952,8 @@
     <script src="{{ asset('modules/product/product_create_simple_fix.js') }}"></script>
     <script>
         // Handle Laravel session messages
-        @if (session('success'))
-            showSuccess('نجح!', '{{ session('success') }}');
-        @endif
-
+        // Note: Success messages are handled in the redirected page (index.blade.php)
+        // to avoid duplicate notifications
         @if (session('error'))
             showError('خطأ!', '{{ session('error') }}');
         @endif

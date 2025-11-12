@@ -10,15 +10,49 @@ if (typeof NotificationSystem === 'undefined') {
         }
 
         init() {
-            // Create notification container if it doesn't exist
-            if (!document.getElementById('notification-container')) {
-                this.container = document.createElement('div');
-                this.container.id = 'notification-container';
-                this.container.className = 'notification-container';
-                document.body.appendChild(this.container);
+            // Wait for DOM to be fully loaded before checking for container
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => this.findOrCreateContainer());
             } else {
-                this.container = document.getElementById('notification-container');
+                this.findOrCreateContainer();
             }
+        }
+
+        findOrCreateContainer() {
+            // Check for existing container first by ID
+            let existingContainer = document.getElementById('notification-container');
+            if (existingContainer) {
+                this.container = existingContainer;
+                return;
+            }
+
+            // Also check for container by class name (in case id is missing)
+            const containerByClass = document.querySelector('.notification-container');
+            if (containerByClass) {
+                // If it doesn't have an id, add one
+                if (!containerByClass.id) {
+                    containerByClass.id = 'notification-container';
+                }
+                this.container = containerByClass;
+                return;
+            }
+
+            // Check if there are any notification containers in the page
+            const allContainers = document.querySelectorAll('.notification-container');
+            if (allContainers.length > 0) {
+                // Use the first existing container
+                this.container = allContainers[0];
+                if (!this.container.id) {
+                    this.container.id = 'notification-container';
+                }
+                return;
+            }
+
+            // Create new container only if none exists anywhere
+            this.container = document.createElement('div');
+            this.container.id = 'notification-container';
+            this.container.className = 'notification-container';
+            document.body.appendChild(this.container);
         }
 
         /**

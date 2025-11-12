@@ -1,0 +1,25 @@
+{
+    "Providers": "Providers",
+    "Provider": "Provider",
+    "Add Provider": "Add Provider",
+    "Select Provider": "Select Provider",
+    "Choose a provider...": "Choose a provider...",
+    "Link Provider": "Link Provider",
+    "Linked Providers": "Linked Providers",
+    "No Providers Linked": "No Providers Linked",
+    "You haven't linked any providers to your store yet. Use the form above to add a provider.": "You haven't linked any providers to your store yet. Use the form above to add a provider.",
+    "All available providers are already linked to your store.": "All available providers are already linked to your store.",
+    "This provider is already linked to your store.": "This provider is already linked to your store.",
+    "Provider linked successfully.": "Provider linked successfully.",
+    "Provider unlinked successfully.": "Provider unlinked successfully.",
+    "Provider is not linked to your store.": "Provider is not linked to your store.",
+    "Provider status updated successfully.": "Provider status updated successfully.",
+    "Are you sure you want to unlink this provider?": "Are you sure you want to unlink this provider?",
+    "Active": "Active",
+    "Inactive": "Inactive",
+    "Activate": "Activate",
+    "Deactivate": "Deactivate",
+    "Unlink": "Unlink",
+    "API URL": "API URL"
+}
+

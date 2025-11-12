@@ -2,10 +2,10 @@
 @php
     use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
     use Modules\Store\Models\Store;
-    
+
     // الحصول على المتجر الحالي من URL
     $currentStore = Store::currentFromUrl()->first();
-    
+
     // دالة مساعدة لتحديد الصفحة النشطة
     function isActive($patterns)
     {
@@ -97,6 +97,11 @@
                 class="nav-item {{ isActive(['dashboard/categories']) ? 'active' : '' }}">
                 <i class="fas fa-tags"></i>
                 <span class="nav-item-text">{{ __('Sections') }}</span>
+            </a>
+            <a href="{{ route('dashboard.providers.index') }}"
+                class="nav-item {{ isActive(['dashboard/providers']) ? 'active' : '' }}">
+                <i class="fas fa-network-wired"></i>
+                <span class="nav-item-text">{{ __('Providers') }}</span>
             </a>
             <a href="#" class="nav-item">
                 <i class="fas fa-warehouse"></i>

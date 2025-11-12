@@ -75,51 +75,72 @@ class DashboardController extends Controller implements HasMiddleware
             ->whereDate('created_at', Carbon::today())
             ->count();
 
-        // متوسط الطلبات يومياً في الأسبوع الماضي
+        // الطلبات في نفس اليوم من الأسبوع الماضي (للمقارنة الصحيحة)
+        $sameDayLastWeek = Carbon::now()->subWeek();
         $newOrdersLastWeek = Order::where('store_id', $store->id)
-            ->whereBetween('created_at', [
-                Carbon::now()->subWeek()->startOfWeek(),
-                Carbon::now()->subWeek()->endOfWeek()
-            ])
+            ->whereDate('created_at', $sameDayLastWeek)
             ->count();
 
-        // حساب نسبة النمو (مقارنة اليوم بمتوسط الأسبوع الماضي)
-        $averageOrdersLastWeek = $newOrdersLastWeek > 0 ? $newOrdersLastWeek / 7 : 0;
-        $ordersGrowth = $averageOrdersLastWeek > 0
-            ? (($newOrders - $averageOrdersLastWeek) / $averageOrdersLastWeek) * 100
+        // حساب نسبة النمو (مقارنة اليوم بنفس اليوم من الأسبوع الماضي)
+        $ordersGrowth = $newOrdersLastWeek > 0
+            ? (($newOrders - $newOrdersLastWeek) / $newOrdersLastWeek) * 100
             : ($newOrders > 0 ? 100 : 0);
 
-        // العملاء الجدد اليوم
-        $newCustomers = User::whereHas('stores', function($query) use ($store) {
-            $query->where('stores.id', $store->id);
-        })
-        ->whereDate('created_at', Carbon::today())
-        ->count();
+        // العملاء الجدد اليوم (العملاء الحقيقيون = الذين لديهم طلبات في المتجر)
+        // جلب العملاء الذين لديهم أول طلب لهم اليوم (ليس لديهم طلبات سابقة)
+        $customersWithOrdersToday = Order::where('store_id', $store->id)
+            ->whereDate('created_at', Carbon::today())
+            ->select('user_id')
+            ->distinct()
+            ->pluck('user_id')
+            ->toArray();
+        
+        // جلب العملاء الذين لديهم طلبات قبل اليوم
+        $customersWithPreviousOrders = Order::where('store_id', $store->id)
+            ->whereDate('created_at', '<', Carbon::today())
+            ->select('user_id')
+            ->distinct()
+            ->pluck('user_id')
+            ->toArray();
+        
+        // العملاء الجدد = الذين لديهم طلبات اليوم وليس لديهم طلبات سابقة
+        $newCustomers = count(array_diff($customersWithOrdersToday, $customersWithPreviousOrders));
 
-        // العملاء الجدد في الأسبوع الماضي
-        $newCustomersLastWeek = User::whereHas('stores', function($query) use ($store) {
-            $query->where('stores.id', $store->id);
-        })
-        ->whereBetween('created_at', [
-            Carbon::now()->subWeek()->startOfWeek(),
-            Carbon::now()->subWeek()->endOfWeek()
-        ])
-        ->count();
+        // العملاء الجدد في نفس اليوم من الأسبوع الماضي (للمقارنة الصحيحة)
+        // استخدام نفس المتغير $sameDayLastWeek المحدد أعلاه
+        $customersWithOrdersSameDayLastWeek = Order::where('store_id', $store->id)
+            ->whereDate('created_at', $sameDayLastWeek)
+            ->select('user_id')
+            ->distinct()
+            ->pluck('user_id')
+            ->toArray();
+        
+        $customersWithPreviousOrdersBeforeLastWeek = Order::where('store_id', $store->id)
+            ->whereDate('created_at', '<', $sameDayLastWeek)
+            ->select('user_id')
+            ->distinct()
+            ->pluck('user_id')
+            ->toArray();
+        
+        $newCustomersLastWeek = count(array_diff($customersWithOrdersSameDayLastWeek, $customersWithPreviousOrdersBeforeLastWeek));
 
-        // حساب نسبة النمو (مقارنة اليوم بمتوسط الأسبوع الماضي)
-        $averageCustomersLastWeek = $newCustomersLastWeek > 0 ? $newCustomersLastWeek / 7 : 0;
-        $customersGrowth = $averageCustomersLastWeek > 0
-            ? (($newCustomers - $averageCustomersLastWeek) / $averageCustomersLastWeek) * 100
+        // حساب نسبة النمو (مقارنة اليوم بنفس اليوم من الأسبوع الماضي)
+        $customersGrowth = $newCustomersLastWeek > 0
+            ? (($newCustomers - $newCustomersLastWeek) / $newCustomersLastWeek) * 100
             : ($newCustomers > 0 ? 100 : 0);
 
-        // حساب معدل التحويل (عدد الطلبات / عدد المستخدمين)
+        // حساب معدل التحويل (عدد العملاء الذين لديهم طلبات / إجمالي العملاء الفريدين)
         $totalOrders = Order::where('store_id', $store->id)->count();
-        $totalUsers = User::whereHas('stores', function($query) use ($store) {
-            $query->where('stores.id', $store->id);
-        })->count();
+        
+        // إجمالي العملاء الفريدين (الذين لديهم طلبات في المتجر)
+        $totalCustomers = Order::where('store_id', $store->id)
+            ->select('user_id')
+            ->distinct()
+            ->count('user_id');
 
-        // معدل التحويل الحالي = (عدد الطلبات / عدد المستخدمين) * 100
-        $conversionRate = $totalUsers > 0 ? ($totalOrders / $totalUsers) * 100 : 0;
+        // معدل التحويل الحالي = (عدد الطلبات / عدد العملاء الفريدين)
+        // هذا يعطي متوسط عدد الطلبات لكل عميل
+        $conversionRate = $totalCustomers > 0 ? ($totalOrders / $totalCustomers) : 0;
 
         // الطلبات في الشهر الماضي
         $ordersLastMonth = Order::where('store_id', $store->id)
@@ -127,16 +148,16 @@ class DashboardController extends Controller implements HasMiddleware
             ->whereYear('created_at', Carbon::now()->subMonth()->year)
             ->count();
 
-        // المستخدمين حتى نهاية الشهر الماضي
-        $usersUntilLastMonth = User::whereHas('stores', function($query) use ($store) {
-            $query->where('stores.id', $store->id);
-        })
-        ->where('created_at', '<=', Carbon::now()->subMonth()->endOfMonth())
-        ->count();
+        // العملاء الفريدين حتى نهاية الشهر الماضي
+        $customersUntilLastMonth = Order::where('store_id', $store->id)
+            ->where('created_at', '<=', Carbon::now()->subMonth()->endOfMonth())
+            ->select('user_id')
+            ->distinct()
+            ->count('user_id');
 
         // معدل التحويل الشهر الماضي
-        $conversionRateLastMonth = $usersUntilLastMonth > 0
-            ? ($ordersLastMonth / $usersUntilLastMonth) * 100
+        $conversionRateLastMonth = $customersUntilLastMonth > 0
+            ? ($ordersLastMonth / $customersUntilLastMonth)
             : 0;
 
         // حساب نسبة النمو في معدل التحويل
@@ -183,23 +204,29 @@ class DashboardController extends Controller implements HasMiddleware
             ];
         });
 
-        // أحدث المستخدمين
-        $recentUsers = User::whereHas('stores', function($query) use ($store) {
-            $query->where('stores.id', $store->id);
-        })
-        ->latest()
-        ->take(5)
-        ->get()
-        ->map(function($user) {
-            return [
-                'type' => 'user',
-                'icon' => 'user-plus',
-                'title' => __('New Customer'),
-                'description' => $user->name . ' ' . __('registered new account'),
-                'time' => $user->created_at,
-                'url' => route('dashboard.customer.show', $user->id)
-            ];
-        });
+        // أحدث العملاء (الذين لديهم طلبات في المتجر) - حسب تاريخ أول طلب
+        $recentUsers = Order::where('store_id', $store->id)
+            ->select('user_id', DB::raw('MIN(created_at) as first_order_date'))
+            ->groupBy('user_id')
+            ->orderBy('first_order_date', 'desc')
+            ->take(5)
+            ->get()
+            ->map(function($order) use ($store) {
+                $user = User::find($order->user_id);
+                if (!$user) {
+                    return null;
+                }
+                
+                return [
+                    'type' => 'user',
+                    'icon' => 'user-plus',
+                    'title' => __('New Customer'),
+                    'description' => $user->name . ' ' . __('placed first order'),
+                    'time' => Carbon::parse($order->first_order_date),
+                    'url' => route('dashboard.customer.show', $user->id)
+                ];
+            })
+            ->filter(); // إزالة القيم null
 
         // أحدث المنتجات
         $recentProducts = Product::where('store_id', $store->id)
@@ -275,6 +302,44 @@ class DashboardController extends Controller implements HasMiddleware
             ];
         }
 
+        // معلومات إضافية مفيدة
+        // إجمالي العملاء (الذين لديهم طلبات)
+        $totalCustomersCount = $totalCustomers;
+        
+        // متوسط قيمة الطلب
+        $averageOrderValue = $totalOrders > 0 ? ($totalSales / $totalOrders) : 0;
+        
+        // المنتجات النشطة
+        $activeProducts = Product::where('store_id', $store->id)
+            ->where(function($query) {
+                $query->where('status', 'active')
+                      ->orWhere('is_active', true);
+            })
+            ->count();
+        
+        // الطلبات قيد الانتظار
+        $pendingOrders = Order::where('store_id', $store->id)
+            ->where('status', 'pending')
+            ->count();
+        
+        // مبيعات هذا الأسبوع
+        $thisWeekSales = Order::where('store_id', $store->id)
+            ->where('status', 'completed')
+            ->whereBetween('created_at', [
+                Carbon::now()->startOfWeek(),
+                Carbon::now()->endOfWeek()
+            ])
+            ->sum('total_amount');
+        
+        // مبيعات الأسبوع الماضي
+        $lastWeekSales = Order::where('store_id', $store->id)
+            ->where('status', 'completed')
+            ->whereBetween('created_at', [
+                Carbon::now()->subWeek()->startOfWeek(),
+                Carbon::now()->subWeek()->endOfWeek()
+            ])
+            ->sum('total_amount');
+
         return view('core::store.dashboard', compact(
             'store',
             'totalSales',
@@ -288,7 +353,13 @@ class DashboardController extends Controller implements HasMiddleware
             'activities',
             'salesData7Days',
             'salesData30Days',
-            'salesData90Days'
+            'salesData90Days',
+            'totalCustomersCount',
+            'averageOrderValue',
+            'activeProducts',
+            'pendingOrders',
+            'thisWeekSales',
+            'lastWeekSales'
         ));
     }
 
@@ -377,45 +448,57 @@ class DashboardController extends Controller implements HasMiddleware
             }
         };
 
-        // إحصائيات المستخدمين
-        $totalUsersQuery = User::whereHas('stores', function($query) use ($store) {
-            $query->where('stores.id', $store->id);
-        });
+        // إحصائيات العملاء (الذين لديهم طلبات في المتجر)
+        // إجمالي العملاء الفريدين
+        $totalUsersQuery = Order::where('store_id', $store->id)
+            ->select('user_id')
+            ->distinct();
         if ($fromDate || $toDate) {
-            $totalUsersQuery->where(function($q) use ($fromDate, $toDate) {
-                if ($fromDate && $toDate) {
-                    $q->whereBetween('created_at', [
-                        Carbon::parse($fromDate)->startOfDay(),
-                        Carbon::parse($toDate)->endOfDay()
-                    ]);
-                } elseif ($fromDate) {
-                    $q->whereDate('created_at', '>=', $fromDate);
-                } elseif ($toDate) {
-                    $q->whereDate('created_at', '<=', $toDate);
-                }
-            });
+            $applyDateFilter($totalUsersQuery);
         }
-        $totalUsers = $totalUsersQuery->count();
+        $totalUsers = $totalUsersQuery->count('user_id');
 
-        $activeUsers = User::whereHas('stores', function($query) use ($store) {
-            $query->where('stores.id', $store->id);
-        })
-            ->whereNotNull('last_login_at')
-            ->where('last_login_at', '>=', Carbon::now()->subDays(30))
-            ->count();
+        // العملاء النشطين (الذين لديهم طلبات في آخر 30 يوم)
+        $activeUsers = Order::where('store_id', $store->id)
+            ->where('created_at', '>=', Carbon::now()->subDays(30))
+            ->select('user_id')
+            ->distinct()
+            ->count('user_id');
 
-        $newUsersToday = User::whereHas('stores', function($query) use ($store) {
-            $query->where('stores.id', $store->id);
-        })
+        // العملاء الجدد اليوم (أول طلب لهم اليوم)
+        $customersWithOrdersToday = Order::where('store_id', $store->id)
             ->whereDate('created_at', Carbon::today())
-            ->count();
+            ->select('user_id')
+            ->distinct()
+            ->pluck('user_id')
+            ->toArray();
+        
+        $customersWithPreviousOrders = Order::where('store_id', $store->id)
+            ->whereDate('created_at', '<', Carbon::today())
+            ->select('user_id')
+            ->distinct()
+            ->pluck('user_id')
+            ->toArray();
+        
+        $newUsersToday = count(array_diff($customersWithOrdersToday, $customersWithPreviousOrders));
 
-        $newUsersThisMonth = User::whereHas('stores', function($query) use ($store) {
-            $query->where('stores.id', $store->id);
-        })
+        // العملاء الجدد هذا الشهر (أول طلب لهم هذا الشهر)
+        $customersWithOrdersThisMonth = Order::where('store_id', $store->id)
             ->whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
-            ->count();
+            ->select('user_id')
+            ->distinct()
+            ->pluck('user_id')
+            ->toArray();
+        
+        $customersWithPreviousOrdersBeforeMonth = Order::where('store_id', $store->id)
+            ->where('created_at', '<', Carbon::now()->startOfMonth())
+            ->select('user_id')
+            ->distinct()
+            ->pluck('user_id')
+            ->toArray();
+        
+        $newUsersThisMonth = count(array_diff($customersWithOrdersThisMonth, $customersWithPreviousOrdersBeforeMonth));
 
         // إحصائيات الطلبات
         $totalOrdersQuery = Order::where('store_id', $store->id);
@@ -593,11 +676,11 @@ class DashboardController extends Controller implements HasMiddleware
                         ->where('status', 'completed')
                         ->whereDate('created_at', $date)
                         ->sum('total_amount'),
-                    'users' => User::whereHas('stores', function($query) use ($store) {
-                        $query->where('stores.id', $store->id);
-                    })
+                    'users' => Order::where('store_id', $store->id)
                         ->whereDate('created_at', $date)
-                        ->count(),
+                        ->select('user_id')
+                        ->distinct()
+                        ->count('user_id'),
                 ];
             }
         } else {
@@ -615,11 +698,11 @@ class DashboardController extends Controller implements HasMiddleware
                         ->where('status', 'completed')
                         ->whereDate('created_at', $date)
                         ->sum('total_amount'),
-                    'users' => User::whereHas('stores', function($query) use ($store) {
-                        $query->where('stores.id', $store->id);
-                    })
+                    'users' => Order::where('store_id', $store->id)
                         ->whereDate('created_at', $date)
-                        ->count(),
+                        ->select('user_id')
+                        ->distinct()
+                        ->count('user_id'),
                 ];
             }
         }
@@ -665,19 +748,31 @@ class DashboardController extends Controller implements HasMiddleware
 
         // أحدث الطلبات
         $recentOrdersQuery = Order::where('store_id', $store->id);
+        
         if ($fromDate || $toDate) {
             $applyDateFilter($recentOrdersQuery);
         }
+        
         $recentOrders = $recentOrdersQuery
-            ->with('user')
+            ->with(['user' => function($query) {
+                // تحميل جميع الحقول المطلوبة
+                $query->select('id', 'name', 'email');
+            }])
             ->latest()
             ->take(10)
             ->get();
+        
+        // التأكد من تحميل العلاقة لكل طلب
+        foreach ($recentOrders as $order) {
+            if ($order->user_id && !$order->relationLoaded('user')) {
+                $order->load('user');
+            }
+        }
 
-        // أحدث المستخدمين
-        $recentUsersQuery = User::whereHas('stores', function($query) use ($store) {
-            $query->where('stores.id', $store->id);
-        });
+        // أحدث العملاء (الذين لديهم طلبات في المتجر) - حسب تاريخ أول طلب
+        $recentUsersQuery = Order::where('store_id', $store->id)
+            ->select('user_id', DB::raw('MIN(created_at) as first_order_date'));
+        
         if ($fromDate || $toDate) {
             $recentUsersQuery->where(function($q) use ($fromDate, $toDate) {
                 if ($fromDate && $toDate) {
@@ -692,10 +787,20 @@ class DashboardController extends Controller implements HasMiddleware
                 }
             });
         }
+        
         $recentUsers = $recentUsersQuery
-            ->latest()
+            ->groupBy('user_id')
+            ->orderBy('first_order_date', 'desc')
             ->take(10)
-            ->get();
+            ->get()
+            ->map(function($order) {
+                $user = User::find($order->user_id);
+                if (!$user) {
+                    return null;
+                }
+                return $user;
+            })
+            ->filter();
 
         // أفضل المنتجات مبيعاً
         $topProductsQuery = DB::table('order_items')

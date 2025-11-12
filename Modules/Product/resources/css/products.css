@@ -76,12 +76,20 @@
     color: #888888;
 }
 
-.search-box i {
+.search-box .search-icon {
     position: absolute;
     right: 1rem;
     top: 50%;
     transform: translateY(-50%);
     color: #888888;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.search-box .search-icon:hover {
+    color: #059669;
+    transform: translateY(-50%) scale(1.1);
 }
 
 .filter-select {
@@ -403,7 +411,7 @@
 }
 
 /* RTL Support */
-[dir="rtl"] .search-box i {
+[dir="rtl"] .search-box .search-icon {
     right: auto;
     left: 1rem;
 }

@@ -427,5 +427,9 @@
     "Sub-product created successfully": "تم إنشاء المنتج الفرعي بنجاح",
     "Description is optional for sub-products": "الوصف اختياري للمنتجات الفرعية",
     "Unavailable": "غير متوفر",
-    "Purchase cost is higher than selling price": "تكلفة الشراء أعلى من سعر البيع"
+    "Purchase cost is higher than selling price": "تكلفة الشراء أعلى من سعر البيع",
+    "Confirm Delete": "تأكيد الحذف",
+    "Are you sure you want to delete the product": "هل أنت متأكد من حذف المنتج",
+    "This action cannot be undone.": "لا يمكن التراجع عن هذا الإجراء.",
+    "A product with this name already exists in this store. Please choose a different name.": "يوجد منتج بهذا الاسم في هذا المتجر بالفعل. يرجى اختيار اسم مختلف."
 }
