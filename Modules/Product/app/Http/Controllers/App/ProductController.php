@@ -12,15 +12,32 @@ class ProductController extends Controller
 {
     public function __construct(
         protected CategoryService $categoryService,
+        protected \Modules\Product\Services\ProductService $productService
     ) {}
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function subProducts($id, Request $request)
     {
-        return view('product::index');
+        $storeId = current_store()->id;
+        $query = $request->input('query'); // نص البحث
+        $parentProductId = $id; // معرف المنتج الرئيسي
+
+        $products = $this->productService->getSubProducts($id, $storeId, $query);
+
+        if ($request->ajax()) {
+            $html = view('themes.' . current_theme_name_en() . '._subProducts', compact('products'))->render();
+
+            return response()->json([
+                'html' => $html,
+                'hasPages' => false, // لا pagination
+            ]);
+        }
+
+        return view('themes.' . current_theme_name_en() . '.subProducts', compact('products', 'parentProductId'));
     }
+
 
     /**
      * Show the form for creating a new resource.

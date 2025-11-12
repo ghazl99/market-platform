@@ -2,11 +2,9 @@
     @foreach ($products as $product)
      @php
         $media = $product->getFirstMedia('product_images');
-        $route = $product->isParentProduct()
-            ? route('product.subProducts', $product->id)  // راوت للمنتجات الفرعية
-            : route('product.show', $product->id);       // راوت للمنتج نفسه
+  // راوت للمنتج نفسه
     @endphp
-        <a href="{{ $route }}" class="product-card-v2" style="text-decoration: none">
+        <a href="{{ route('product.show', $product->id) }}" class="product-card-v2" style="text-decoration: none">
             @if ($media)
                 <div class="product-image">
 

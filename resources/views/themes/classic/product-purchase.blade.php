@@ -1,6 +1,42 @@
 @extends('themes.app')
 
-@section('title', __('Product') . ' - ' . $product->name)
+@php
+    $media = $product->getFirstMedia('product_images');
+    $metaImage = $media ? route('product.image', $media->id) : asset('default.jpg');
+
+    $productSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $product->seo_title ?: $product->name,
+        'image' => $metaImage,
+        'description' => strip_tags($product->seo_description ?: Str::limit($product->description, 160)),
+        'sku' => $product->sku ?? '',
+        'brand' => [
+            '@type' => 'Brand',
+            'name' => $store->name ?? '',
+        ],
+        'offers' => [
+            '@type' => 'Offer',
+            'url' => url()->current(),
+            'priceCurrency' => 'USD',
+            'price' => $product->price_with_group_profit,
+            'availability' => $product->status ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+            'itemCondition' => 'https://schema.org/NewCondition',
+        ],
+    ];
+@endphp
+
+@section('title', $product->seo_title ?: $product->name)
+@section('meta_description', $product->seo_description ?: Str::limit(strip_tags($product->description), 160))
+@section('meta_image', $metaImage)
+
+@section('product_schema')
+    <script type="application/ld+json">
+{!! json_encode($productSchema, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT) !!}
+</script>
+@endsection
+
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/product-purchase.css') }}?v={{ time() }}">
 @endpush
@@ -97,9 +133,11 @@
 
                             <!-- Price Section -->
                             <div class="price-section">
-                                <div class="price-label">السعر النهائي</div>
+                                <div class="price-label">{{ __('Final price') }}</div>
                                 <div class="price-value">
-                                    <span id="product-request-TotalPrice">{{ number_format($product->price_with_group_profit, 2) }} $</span> $
+                                    <span
+                                        id="product-request-TotalPrice">{{ number_format($product->price_with_group_profit, 10) }}
+                                    </span> $
                                 </div>
                             </div>
 
@@ -116,8 +154,11 @@
                                         <label class="form-label">{{ __('Quantity') }}</label>
                                         <div class="input-group">
                                             <input name="quantity" id="quantity" placeholder="{{ __('Quantity') }}"
-                                                class="form-control int-format-jaafar" value="1">
-                                            <span class="input-group-text">{{ number_format($product->price_with_group_profit, 2) }} $</span>
+                                                class="form-control int-format-jaafar" value="{{ $product->min_quantity }}"
+                                                type="number">
+                                            <span
+                                                class="input-group-text">{{ number_format($product->price_with_group_profit, 10) }}
+                                                $</span>
                                         </div>
                                     </div>
 
@@ -126,7 +167,8 @@
                                             <label class="form-label"> {{ __('Player ID') }}</label>
                                             <div class="input-group">
                                                 <input name="player_id" id="player_id"
-                                                    placeholder="{{ __('Enter Player ID') }}" required class="form-control">
+                                                    placeholder="{{ __('Enter Player ID') }}" required
+                                                    class="form-control">
 
                                             </div>
                                         </div>
@@ -160,20 +202,16 @@
         document.addEventListener('DOMContentLoaded', function() {
             const quantityInput = document.getElementById('quantity');
             const totalPriceDisplay = document.getElementById('product-request-TotalPrice');
-            const unitPrice = parseFloat("{{ $product->price_with_group_profit  }}");
+            const unitPrice = parseFloat("{{ $product->price_with_group_profit }}");
 
             function updateTotalPrice() {
-                let quantity = parseInt(quantityInput.value) || 1;
+                let quantity = parseInt(quantityInput.value);
 
-                const minQty = parseInt("{{ $product->min_quantity }}");
-                const maxQty = parseInt("{{ $product->max_quantity }}") || Infinity;
+                if (isNaN(quantity) || quantity < 1) {
+                    quantity = 0;
+                }
 
-                if (quantity < minQty) quantity = minQty;
-                if (quantity > maxQty) quantity = maxQty;
-
-                quantityInput.value = quantity;
-
-                const total = (unitPrice * quantity).toFixed(2);
+                const total = (unitPrice * quantity).toFixed(10);
                 totalPriceDisplay.textContent = total;
             }
 
@@ -181,5 +219,4 @@
             quantityInput.addEventListener('input', updateTotalPrice);
         });
     </script>
-
 @endpush

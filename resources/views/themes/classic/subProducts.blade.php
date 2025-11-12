@@ -52,7 +52,7 @@
 
                 <!-- Search Input -->
                 <div class="my-3">
-                    <input type="text" id="categorySearchInput" class="form-control"
+                    <input type="text" id="productSearchInput" class="form-control"
                         placeholder="{{ __('Search products...') }}">
                 </div>
                 <br>
@@ -71,44 +71,40 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            const productId = "{{ $parentProductId }}";
 
             function fetchProducts(query = '') {
-                let baseUrl = "{{ route('category.show', $category->id) }}";
+                let baseUrl = "/sub-products/" + productId;
                 let requestUrl = query ? baseUrl + '?query=' + encodeURIComponent(query) : baseUrl;
 
                 $.ajax({
                     url: requestUrl,
                     type: 'GET',
                     success: function(response) {
-                        // تحديث شبكة المنتجات مباشرة
                         $('#productsGrid').html(response.html);
-
-                        // لا داعي للباجينيشن
-                        $('#paginationLinks').empty().hide();
+                        $('#paginationLinks').empty().hide(); // بدون Pagination
                     },
                     error: function(xhr) {
                         console.error('AJAX error:', xhr);
                         $('#productsGrid').html(
                             '<div class="alert alert-danger w-100 text-center">{{ __('Error loading products.') }}</div>'
                         );
-                        $('#paginationLinks').empty().hide();
                     }
                 });
             }
 
             // البحث عند الكتابة
-            $(document).on('keyup', '#categorySearchInput', function() {
+            $(document).on('keyup', '#productSearchInput', function() {
                 fetchProducts($(this).val());
             });
 
             // البحث عند الضغط على Enter
-            $(document).on('keypress', '#categorySearchInput', function(e) {
+            $(document).on('keypress', '#productSearchInput', function(e) {
                 if (e.which == 13) {
                     e.preventDefault();
                     fetchProducts($(this).val());
                 }
             });
-
         });
     </script>
 @endpush

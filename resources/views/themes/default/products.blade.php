@@ -1,6 +1,6 @@
 @extends('themes.app')
 
-@section('title', __('Products - ') . $category->name)
+@section('title', __('Products - '))
 
 @push('styles')
     <style>
@@ -189,13 +189,14 @@
     <div class="container my-5">
 
         <h2 class="section-title">{{ $category->name }}</h2>
-
+        <br>
         <div class="search-box">
             <i class="fas fa-search search-icon"></i>
             <input type="text" id="categorySearchInput" class="category-search-input" placeholder="">
         </div>
 
         <br>
+
         <div class="products-grid" id="productsGrid">
             @include('themes.default._products', ['products' => $products])
         </div>
@@ -213,29 +214,22 @@
     <script>
         $(document).ready(function() {
 
-            function fetchProducts(url = null, query = '') {
-                console.log('Fetching products for query:', query); // Debug
+            function fetchProducts(query = '') {
                 let baseUrl = "{{ route('category.show', $category->id) }}";
-                let requestUrl = url ? url : baseUrl;
-                if (query) {
-                    requestUrl += requestUrl.includes('?') ? '&query=' + encodeURIComponent(query) : '?query=' +
-                        encodeURIComponent(query);
-                }
-                console.log(baseUrl);
+                let requestUrl = query ? baseUrl + '?query=' + encodeURIComponent(query) : baseUrl;
 
                 $.ajax({
                     url: requestUrl,
                     type: 'GET',
                     success: function(response) {
+                        // تحديث شبكة المنتجات مباشرة
                         $('#productsGrid').html(response.html);
-                        if (response.hasPages) {
-                            $('#paginationLinks').html(response.pagination).show();
-                        } else {
-                            $('#paginationLinks').empty().hide();
-                        }
+
+                        // لا داعي للباجينيشن
+                        $('#paginationLinks').empty().hide();
                     },
                     error: function(xhr) {
-                        console.log('AJAX error:', xhr);
+                        console.error('AJAX error:', xhr);
                         $('#productsGrid').html(
                             '<div class="alert alert-danger w-100 text-center">{{ __('Error loading products.') }}</div>'
                         );
@@ -244,26 +238,17 @@
                 });
             }
 
-            // Event delegation: يعمل حتى لو تم تحميل input لاحقاً
-            $(document).on('keyup', '#categorySearchInput', function(e) {
-                const query = $(this).val();
-                fetchProducts(null, query);
+            // البحث عند الكتابة
+            $(document).on('keyup', '#categorySearchInput', function() {
+                fetchProducts($(this).val());
             });
 
+            // البحث عند الضغط على Enter
             $(document).on('keypress', '#categorySearchInput', function(e) {
-                if (e.which == 13) { // Enter
+                if (e.which == 13) {
                     e.preventDefault();
-                    const query = $(this).val();
-                    fetchProducts(null, query);
+                    fetchProducts($(this).val());
                 }
-            });
-
-            // Pagination
-            $(document).on('click', '#paginationLinks .pagination a', function(e) {
-                e.preventDefault();
-                const pageUrl = $(this).attr('href');
-                const query = $('#categorySearchInput').val();
-                fetchProducts(pageUrl, query);
             });
 
         });

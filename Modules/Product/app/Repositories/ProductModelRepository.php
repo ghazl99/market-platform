@@ -164,4 +164,24 @@ class ProductModelRepository implements ProductRepository
             ->limit($limit)
             ->get();
     }
+
+    public function getSubProducts($id, $storeId, ?string $query = null)
+    {
+        $product = Product::where('id', $id)
+            ->where('store_id', $storeId)
+            ->where('status', 'active')
+            ->first();
+
+        if (!$product) {
+            return collect(); // مجموعة فارغة إذا المنتج غير موجود
+        }
+
+        $queryBuilder = $product->children()->orderBy('created_at', 'desc');
+
+        if ($query) {
+            $queryBuilder->where('name', 'like', "%{$query}%");
+        }
+
+        return $queryBuilder->get();
+    }
 }

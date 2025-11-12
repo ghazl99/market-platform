@@ -221,13 +221,12 @@ class CategoryModelRepository implements CategoryRepository
 
     public function getProducts(Category $category, ?string $query = null)
     {
-        $queryBuilder = $category->products()->orderBy('created_at', 'desc');
+        $queryBuilder = $category->products()->whereNull('parent_id') ->orderBy('created_at', 'desc');
 
         if ($query) {
             $queryBuilder->where('name', 'like', "%{$query}%");
         }
 
-        // إلغاء الباجينيشن واستخدام get()
         return $queryBuilder->distinct('products.id')->get();
     }
 }

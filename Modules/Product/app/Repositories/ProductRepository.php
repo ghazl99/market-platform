@@ -17,6 +17,8 @@ interface ProductRepository
     public function delete(Product $product): bool;
 
     public function getTopOrderedProductsByStore($storeId, $limit = 10);
-    
+
     public function getTopViewedProductsByStore($storeId, $limit = 10);
+
+    public function getSubProducts($id, $storeId, ?string $query = null);
 }
