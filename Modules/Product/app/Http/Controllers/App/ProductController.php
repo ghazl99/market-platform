@@ -27,7 +27,7 @@ class ProductController extends Controller
         $products = $this->productService->getSubProducts($id, $storeId, $query);
 
         if ($request->ajax()) {
-            $html = view('themes.' . current_theme_name_en() . '._subProducts', compact('products'))->render();
+            $html = view(current_base_view_path() . '._subProducts', compact('products'))->render();
 
             return response()->json([
                 'html' => $html,
@@ -35,7 +35,7 @@ class ProductController extends Controller
             ]);
         }
 
-        return view('themes.' . current_theme_name_en() . '.subProducts', compact('products', 'parentProductId'));
+        return view(current_base_view_path() . '.subProducts', compact('products', 'parentProductId'));
     }
 
 
@@ -77,6 +77,6 @@ class ProductController extends Controller
         $product->increment('views_count');
         $product->load(['categories', 'attributes', 'store']);
 
-        return view('themes.' . current_theme_name_en() . '.product-purchase', compact('product'));
+        return view(current_base_view_path() . '.product-purchase', compact('product'));
     }
 }

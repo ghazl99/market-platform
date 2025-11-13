@@ -33,7 +33,7 @@ class PaymentRequestController extends Controller
             'rejected' => __('Rejected'),
         ];
 
-        return view('themes.' . current_theme_name_en() . '.payments', compact('paymentRequests', 'statusLabels'));
+        return view(current_base_view_path() . '.payments', compact('paymentRequests', 'statusLabels'));
     }
     public function store(PaymentRequestStore $request)
     {

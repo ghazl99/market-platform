@@ -26,8 +26,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
 
         View::composer([
-            'core::dashboard.layouts.app',
-            'themes.app',
+            'core::dashboard.layouts.app'
         ], function ($view) {
             $host = request()->getHost();
             $store = app(\Modules\Core\Services\Admin\HomeService::class)->getStoreByHost($host);

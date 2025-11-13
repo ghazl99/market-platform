@@ -29,7 +29,7 @@ class WalletController extends Controller
         ];
 
         $transactions = $this->walletService->getTransactions($filters, 10);
-        return view('themes.' . current_theme_name_en() . '.wallet', compact('transactions'));
+        return view(current_base_view_path() . '.wallet', compact('transactions'));
     }
 
     public function deposit(array $data)
@@ -42,7 +42,6 @@ class WalletController extends Controller
                     LogDepositTransaction::class,
                 ])
                 ->thenReturn();
-
         });
     }
 }

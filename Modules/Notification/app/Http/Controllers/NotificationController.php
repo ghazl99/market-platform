@@ -13,7 +13,7 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        return view('themes.' . current_theme_name_en() . '.notifications');
+        return view(current_base_view_path() . '.notifications');
     }
 
     public function markAsRead($id)
@@ -22,9 +22,7 @@ class NotificationController extends Controller
         $userId = $user->id;
         $userType = get_class($user); // Get the class name of the user model
 
-        // Find the notification that matches the given ID and belongs to the authenticated user.
-        // This approach bypasses the 'notifications()' method on the User model,
-        // which the linter indicated as undefined, by directly querying the DatabaseNotification model.
+
         $notification = \Illuminate\Notifications\DatabaseNotification::where('id', $id)
             ->where('notifiable_id', $userId)
             ->where('notifiable_type', $userType)

@@ -40,15 +40,15 @@ class CategoryController extends Controller
         $products = $this->categoryService->getProducts($category, $query);
 
         if ($request->ajax()) {
-            $html = view('themes.' . current_theme_name_en() . '._products', compact('products'))->render();
+            $html = view(current_base_view_path() . '._products', compact('products'))->render();
 
             return response()->json([
                 'html' => $html,
-                'hasPages' => false, // لم يعد هناك صفحات
+                'hasPages' => false,
             ]);
         }
 
-        return view('themes.' . current_theme_name_en() . '.products', compact('category', 'products'));
+        return view(current_base_view_path() . '.products', compact('category', 'products'));
     }
 
 
@@ -56,6 +56,6 @@ class CategoryController extends Controller
     {
         $category = $this->categoryService->getAllSubcategoriesById($id);
 
-        return view('themes.' . current_theme_name_en() . '.subCategoryById', compact('category'));
+        return view(current_base_view_path() . '.subCategoryById', compact('category'));
     }
 }

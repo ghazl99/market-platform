@@ -173,7 +173,7 @@ class ProductModelRepository implements ProductRepository
             ->first();
 
         if (!$product) {
-            return collect(); // مجموعة فارغة إذا المنتج غير موجود
+            return collect(); 
         }
 
         $queryBuilder = $product->children()->orderBy('created_at', 'desc');

@@ -69,7 +69,7 @@ class OrderController extends Controller
             'canceled' => Order::where('user_id', $userId)->where('store_id', $storeId)->where('status', 'canceled')->count(),
         ];
 
-        return view('themes.' . current_theme_name_en() . '.orders', compact('orders', 'statusCounts'));
+        return view(current_base_view_path() . '.orders', compact('orders', 'statusCounts'));
     }
 
     /**
@@ -109,7 +109,7 @@ class OrderController extends Controller
     {
         $order->load('items.product');
 
-        return view('themes.' . current_theme_name_en() . '.order-details', compact('order'));
+        return view(current_base_view_path() . '.order-details', compact('order'));
     }
 
     /**

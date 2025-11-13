@@ -78,3 +78,16 @@ if (!function_exists('current_theme_name_en')) {
         return $store->theme->getTranslation('name', 'en');
     }
 }
+if (! function_exists('current_base_view_path')) {
+    function current_base_view_path()
+    {
+        $store = current_store();
+
+        return match ($store->type) {
+            'digital' => 'digital.themes.' . current_theme_name_en(),
+            'traditional' => 'traditional.themes.' . current_theme_name_en(),
+            'educational' => 'educational.themes.' . current_theme_name_en(),
+            default => 'default.themes.' . current_theme_name_en(),
+        };
+    }
+}

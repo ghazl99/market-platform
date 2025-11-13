@@ -25,16 +25,13 @@ class HomeController extends Controller
         $host = $request->getHost();
 
         $mainDomain = app()->environment('production')
-            ? config('app.main_domain', 'soqsyria.com')
+            ? config('app.main_domain', 'mtjree.xyz')
             : 'market-platform.localhost';
 
-
-        // ✅ التحقق الصحيح
         if ($host === $mainDomain) {
             return view('core::app.home');
         }
 
-        // في حالة المتجر الفرعي
         $store = current_store();
 
         if (! $store) {
@@ -45,10 +42,11 @@ class HomeController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
         }
+
         $categories = $this->categoryService->getAllcategories();
         $topOrdered = $this->productService->getTopOrderedProducts($store->id, 10);
         $topViewed = $this->productService->getTopViewedProducts($store->id, 10);
 
-        return view('themes.' . current_theme_name_en() . '.home', compact('store', 'categories', 'topOrdered', 'topViewed'));
+        return view(current_base_view_path() . '.home', compact('store', 'categories', 'topOrdered', 'topViewed'));
     }
 }
