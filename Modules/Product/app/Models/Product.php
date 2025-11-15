@@ -2,7 +2,7 @@
 
 namespace Modules\Product\Models;
 
-use App\Group;
+use Modules\User\Models\Group;
 use Laravel\Scout\Searchable;
 use Modules\Store\Models\Store;
 use Spatie\MediaLibrary\HasMedia;
@@ -40,7 +40,6 @@ class Product extends Model implements HasMedia
         'is_active',
         'is_featured',
         'sku',
-        'dimensions',
         'seo_title',
         'seo_description',
         'views_count',
@@ -112,7 +111,7 @@ class Product extends Model implements HasMedia
         if ($user && $user->group) {
             $profitPercentage = $user->group->profit_percentage;
         } else {
-            $profitPercentage = \App\Group::getDefaultGroup()?->profit_percentage ?? 0;
+            $profitPercentage = \Modules\User\Models\Group::getDefaultGroup()?->profit_percentage ?? 0;
         }
         // احسب السعر النهائي
         return $basePrice + ($basePrice * $profitPercentage / 100);

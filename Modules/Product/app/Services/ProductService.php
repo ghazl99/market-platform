@@ -83,6 +83,15 @@ class ProductService
         return $data;
     }
 
+    /**
+     * Prepare attribute value data for translation
+     * This is a public method that can be called from ProductController
+     */
+    public function prepareDataForAttribute(array $data): array
+    {
+        return $this->prepareData($data, ['value']);
+    }
+
     public function createProduct(array $data)
     {
         DB::beginTransaction();
@@ -122,7 +131,6 @@ class ProductService
                     'is_active',
                     'is_featured',
                     'sku',
-                    'dimensions',
                     'seo_title',
                     'seo_description',
                     'min_quantity',
@@ -247,19 +255,25 @@ class ProductService
                 foreach ($data['names'] as $k => $name) {
                     if (empty($name)) continue;
 
-                    $valueData = ['value' => $data['value'][$k] ?? ''];
-                    if (! empty($valueData)) {
-                        $valueData = $this->prepareData($valueData);
+                    // تحضير قيمة الخاصية للترجمة
+                    $value = $data['value'][$k] ?? '';
+                    $valueData = ['value' => $value];
+                    if (! empty($value) && is_string($value)) {
+                        $valueData = $this->prepareData($valueData, ['value']);
+                    } else {
+                        // إذا كانت القيمة فارغة، استخدم array فارغ
+                        $valueData = ['value' => []];
                     }
+
                     // إنشاء أو إيجاد الخاصية
                     $attribute = $this->attributeService->create([
                         'name' => $name,
                         'unit' => $data['unit'][$k] ?? null,
                     ]);
 
-                    // ربط الخاصية بالمنتج + القيمة
+                    // ربط الخاصية بالمنتج + القيمة (JSON encoded)
                     $product->attributes()->attach($attribute->id, [
-                        'value' => ! empty($valueData['value']) ? json_encode($valueData['value']) : '',
+                        'value' => ! empty($valueData['value']) ? json_encode($valueData['value']) : json_encode([]),
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
@@ -312,15 +326,21 @@ class ProductService
             if (! empty($data['names']) && is_array($data['names'])) {
 
                 $syncData = [];
-                $locale = app()->getLocale();
 
                 foreach ($data['names'] as $k => $name) {
                     if (! $name) {
                         continue;
                     }
 
-                    $valueData = ['value' => $data['value'][$k] ?? ''];
-                    $valueData = $this->prepareData($valueData);
+                    // تحضير قيمة الخاصية للترجمة
+                    $value = $data['value'][$k] ?? '';
+                    $valueData = ['value' => $value];
+                    if (! empty($value) && is_string($value)) {
+                        $valueData = $this->prepareData($valueData, ['value']);
+                    } else {
+                        // إذا كانت القيمة فارغة، استخدم array فارغ
+                        $valueData = ['value' => []];
+                    }
 
                     $attribute = $this->attributeService->create([
                         'name' => $name,
@@ -328,7 +348,7 @@ class ProductService
                     ]);
 
                     $syncData[$attribute->id] = [
-                        'value' => ! empty($valueData['value']) ? json_encode($valueData['value']) : '',
+                        'value' => ! empty($valueData['value']) ? json_encode($valueData['value']) : json_encode([]),
                         'updated_at' => now(),
                         'created_at' => now(),
                     ];

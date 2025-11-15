@@ -397,5 +397,20 @@
     "Confirm Delete": "Confirm Delete",
     "Are you sure you want to delete the product": "Are you sure you want to delete the product",
     "This action cannot be undone.": "This action cannot be undone.",
-    "A product with this name already exists in this store. Please choose a different name.": "A product with this name already exists in this store. Please choose a different name."
+    "A product with this name already exists in this store. Please choose a different name.": "A product with this name already exists in this store. Please choose a different name.",
+    "Product Attributes": "Product Attributes",
+    "Add Attribute": "Add Attribute",
+    "Attribute Name": "Attribute Name",
+    "Value": "Value",
+    "Unit": "Unit",
+    "Save Attribute": "Save Attribute",
+    "Attribute added successfully": "Attribute added successfully",
+    "An error occurred while adding the attribute": "An error occurred while adding the attribute",
+    "Are you sure you want to remove the attribute": "Are you sure you want to remove the attribute",
+    "An error occurred while removing the attribute": "An error occurred while removing the attribute",
+    "No attributes added yet. Click \"Add Attribute\" to add one.": "No attributes added yet. Click \"Add Attribute\" to add one.",
+    "Attribute name is required": "Attribute name is required",
+    "Saving...": "Saving...",
+    "This attribute is already added to the product": "This attribute is already added to the product",
+    "Attribute removed successfully": "Attribute removed successfully"
 }

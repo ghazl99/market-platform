@@ -43,7 +43,7 @@ class CategoryController extends Controller implements HasMiddleware
             $parentCategory = null;
         }
 
-        return view('category::dashboard.index', compact('categories', 'parentCategory'));
+        return view('category::dashboard.'. current_store()->type .'.index', compact('categories', 'parentCategory'));
     }
 
     /**
@@ -59,7 +59,7 @@ class CategoryController extends Controller implements HasMiddleware
         } else {
             $categories = $this->categoryService->getAllcategories();
         }
-        return view('category::dashboard.create', compact('categories'));
+        return view('category::dashboard.'. current_store()->type .'.create', compact('categories'));
     }
 
     /**
@@ -91,7 +91,7 @@ class CategoryController extends Controller implements HasMiddleware
     public function edit(Category $category)
     {
         $categories = $this->categoryService->getAllcategories();
-        return view('category::dashboard.edit', compact('category', 'categories'));
+        return view('category::dashboard.'. current_store()->type .'.edit', compact('category', 'categories'));
     }
 
     /**

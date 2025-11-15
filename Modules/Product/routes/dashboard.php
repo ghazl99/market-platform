@@ -19,4 +19,8 @@ Route::middleware(['web', 'auth', 'ensure-store-access', 'check.store.status'])-
 
     // Route to show product image by media ID
     Route::get('/product/image/{media}', [ProductController::class, 'showImage'])->name('product.image');
+
+    // Routes for product attributes
+    Route::post('/products/{product}/attributes', [ProductController::class, 'addAttribute'])->name('product.attributes.store');
+    Route::delete('/products/{product}/attributes/{attribute}', [ProductController::class, 'removeAttribute'])->name('product.attributes.destroy');
 });

@@ -3,7 +3,7 @@
 namespace Modules\User\Pipelines;
 
 use Closure;
-use App\Group;
+use Modules\User\Models\Group;
 use Illuminate\Support\Facades\Hash;
 use Modules\User\Repositories\Auth\RegisterUserRepository;
 

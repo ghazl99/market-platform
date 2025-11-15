@@ -431,5 +431,20 @@
     "Confirm Delete": "تأكيد الحذف",
     "Are you sure you want to delete the product": "هل أنت متأكد من حذف المنتج",
     "This action cannot be undone.": "لا يمكن التراجع عن هذا الإجراء.",
-    "A product with this name already exists in this store. Please choose a different name.": "يوجد منتج بهذا الاسم في هذا المتجر بالفعل. يرجى اختيار اسم مختلف."
+    "A product with this name already exists in this store. Please choose a different name.": "يوجد منتج بهذا الاسم في هذا المتجر بالفعل. يرجى اختيار اسم مختلف.",
+    "Product Attributes": "خصائص المنتج",
+    "Add Attribute": "إضافة خاصية",
+    "Attribute Name": "اسم الخاصية",
+    "Value": "القيمة",
+    "Unit": "الوحدة",
+    "Save Attribute": "حفظ الخاصية",
+    "Attribute added successfully": "تم إضافة الخاصية بنجاح",
+    "An error occurred while adding the attribute": "حدث خطأ أثناء إضافة الخاصية",
+    "Are you sure you want to remove the attribute": "هل أنت متأكد من حذف الخاصية",
+    "An error occurred while removing the attribute": "حدث خطأ أثناء حذف الخاصية",
+    "No attributes added yet. Click \"Add Attribute\" to add one.": "لم تتم إضافة خصائص بعد. انقر على \"إضافة خاصية\" لإضافة واحدة.",
+    "Attribute name is required": "اسم الخاصية مطلوب",
+    "Saving...": "جاري الحفظ...",
+    "This attribute is already added to the product": "هذه الخاصية مضافة بالفعل للمنتج",
+    "Attribute removed successfully": "تم حذف الخاصية بنجاح"
 }

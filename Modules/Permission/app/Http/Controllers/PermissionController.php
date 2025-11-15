@@ -21,7 +21,7 @@ class PermissionController extends Controller
         $roles = Role::all();
         $users = User::with('permissions')->get();
 
-        return view('permission::index', compact('permissions', 'roles', 'users'));
+        return view('permission::dashboard.'. current_store()->type .'.index', compact('permissions', 'roles', 'users'));
     }
 
     /**

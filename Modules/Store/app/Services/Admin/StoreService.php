@@ -2,7 +2,7 @@
 
 namespace Modules\Store\Services\Admin;
 
-use App\Services\GroupService;
+use Modules\User\Services\GroupService;
 use Modules\Store\Models\Store;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Group;
+use Modules\User\Models\Group;
 
 class GroupSeeder extends Seeder
 {

@@ -23,7 +23,7 @@ class GroupController extends Controller
     {
         $groups = Group::with(['store', 'users'])->withCount('users')->get();
 
-        return view('admin.groups.index', compact('groups'));
+        return view('admin.dashboard.'. current_store()->type .'.groups.index', compact('groups'));
     }
 
     /**
@@ -32,7 +32,7 @@ class GroupController extends Controller
     public function create()
     {
         // Store will be obtained automatically using helper in store() method
-        return view('admin.groups.create');
+        return view('admin.dashboard.'. current_store()->type .'.groups.create');
     }
 
     /**
@@ -101,7 +101,7 @@ class GroupController extends Controller
         $group->load('store');
         $users = $group->users()->paginate(20);
 
-        return view('admin.groups.show', compact('group', 'users'));
+        return view('admin.dashboard.'. current_store()->type .'.groups.show', compact('group', 'users'));
     }
 
     /**
@@ -110,7 +110,7 @@ class GroupController extends Controller
     public function edit(Group $group)
     {
         // Store association cannot be changed, so no need to pass currentStore
-        return view('admin.groups.edit', compact('group'));
+        return view('admin.dashboard.'. current_store()->type .'.groups.edit', compact('group'));
     }
 
     /**
@@ -175,7 +175,7 @@ class GroupController extends Controller
             ]);
 
             $message = $e->getMessage();
-            
+
             if (str_contains($message, 'Cannot delete the default group')) {
                 return redirect()->route('admin.groups.index')
                     ->with('error', __('Cannot delete the default group'));

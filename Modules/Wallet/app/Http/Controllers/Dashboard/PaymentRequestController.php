@@ -53,7 +53,7 @@ class PaymentRequestController extends Controller implements HasMiddleware
         $paymentRequests = $query->paginate(10);
 
         if ($request->ajax()) {
-            $html = view('wallet::dashboard.payment-requests.dataTables', compact('paymentRequests'))->render();
+            $html = view('wallet::dashboard.'. current_store()->type .'.payment-requests.dataTables', compact('paymentRequests'))->render();
             $pagination = $paymentRequests->hasPages() ? $paymentRequests->links()->toHtml() : '';
 
             return response()->json([
@@ -63,7 +63,7 @@ class PaymentRequestController extends Controller implements HasMiddleware
             ]);
         }
 
-        return view('wallet::dashboard.payment-requests.index', compact('paymentRequests'));
+        return view('wallet::dashboard.'. current_store()->type .'.payment-requests.index', compact('paymentRequests'));
     }
 
     /**

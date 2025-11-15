@@ -1,4 +1,4 @@
-@extends('core::dashboard.layouts.app')
+@extends('core::dashboard.digital.layouts.app')
 
 @section('title', __('Dashboard'))
 

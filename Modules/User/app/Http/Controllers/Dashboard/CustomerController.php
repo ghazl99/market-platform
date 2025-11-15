@@ -52,7 +52,7 @@ class CustomerController extends Controller implements HasMiddleware
             ]);
         }
 
-        return view('user::Dashboard.customer.index', compact('users', 'store'));
+        return view('user::dashboard.'. current_store()->type .'.customer.index', compact('users', 'store'));
     }
 
     /**
@@ -60,7 +60,7 @@ class CustomerController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        return view('user::Dashboard.customer.create');
+        return view('user::dashboard.'. current_store()->type .'.customer.create');
     }
 
     /**
@@ -127,7 +127,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'sms_notifications' => $request->sms_notifications === 'on',
                 'email_verified_at' => $request->status === 'active' ? now() : null,
                 'debt_limit' => $request->debt_limit !== null && $request->debt_limit !== '' ? (float) $request->debt_limit : 0,
-                'group_id' => $request->group_id ?? \App\Group::getDefaultGroup()?->id,
+                'group_id' => $request->group_id ?? \Modules\User\Models\Group::getDefaultGroup()?->id,
             ];
 
             // إضافة الحقول الاختيارية إذا كانت موجودة
@@ -405,7 +405,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'notifications_count' => $notifications->count()
             ]);
 
-            return view('user::Dashboard.customer.show', compact('customer', 'orders', 'payments', 'notifications'));
+            return view('user::dashboard.'. current_store()->type .'.customer.show', compact('customer', 'orders', 'payments', 'notifications'));
 
         } catch (\Exception $e) {
             Log::error('Error loading customer show page', [
@@ -450,7 +450,7 @@ class CustomerController extends Controller implements HasMiddleware
                 'customer_data' => $customer->toArray()
             ]);
 
-            return view('user::Dashboard.customer.edit', compact('customer'));
+            return view('user::dashboard.'. current_store()->type .'.customer.edit', compact('customer'));
 
         } catch (\Exception $e) {
             Log::error('Error loading customer edit form', [

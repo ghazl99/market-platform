@@ -181,6 +181,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
      */
     public function group()
     {
-        return $this->belongsTo(\App\Group::class);
+        return $this->belongsTo(\Modules\User\Models\Group::class);
     }
 }

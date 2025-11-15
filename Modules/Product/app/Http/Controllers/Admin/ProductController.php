@@ -50,7 +50,7 @@ class ProductController extends Controller implements HasMiddleware
         $selectedCategory = null;
 
         if ($request->ajax()) {
-            $html = view('product::dashboard.dataTables', compact('products'))->render();
+            $html = view('product::dashboard.'. current_store()->type .'.dataTables', compact('products'))->render();
             $pagination = $products->hasPages() ? $products->links()->toHtml() : '';
 
             return response()->json([
@@ -60,7 +60,7 @@ class ProductController extends Controller implements HasMiddleware
             ]);
         }
 
-        return view('product::dashboard.index', compact('products', 'categories', 'selectedCategory'));
+        return view('product::dashboard.'. current_store()->type .'.index', compact('products', 'categories', 'selectedCategory'));
     }
 
     /**
@@ -84,7 +84,7 @@ class ProductController extends Controller implements HasMiddleware
             $selectedCategory = $this->categoryService->getCategoryById($request->category_id);
         }
 
-        return view('product::dashboard.create', compact('attributes', 'categories', 'parentProduct', 'selectedCategory'));
+        return view('product::dashboard.'. current_store()->type .'.create', compact('attributes', 'categories', 'parentProduct', 'selectedCategory'));
     }
 
     /**
@@ -211,11 +211,14 @@ class ProductController extends Controller implements HasMiddleware
             ->limit(10)
             ->get();
 
-        // Get linked providers for the current store
+        // Get linked providers for the current store (only for digital stores)
         $store = current_store();
-        $linkedProviders = $store ? $store->activeProviders()->get() : collect();
+        $linkedProviders = collect();
+        if ($store && $store->type === 'digital') {
+            $linkedProviders = $store->activeProviders()->get();
+        }
 
-        return view('product::dashboard.show', compact(
+        return view('product::dashboard.'. current_store()->type .'.show', compact(
             'product',
             'maxQuantity',
             'minQuantity',
@@ -240,7 +243,7 @@ class ProductController extends Controller implements HasMiddleware
         // تحميل الفئات مع المنتج
         $product->load('categories');
 
-        return view('product::dashboard.edit', compact('product', 'attributes', 'categories'));
+        return view('product::dashboard.'. current_store()->type .'.edit', compact('product', 'attributes', 'categories'));
     }
 
     /**
@@ -261,6 +264,15 @@ class ProductController extends Controller implements HasMiddleware
             return redirect()->route('dashboard.product.index')->with('error', __('Failed to update the product.'));
         }
 
+        // Clear provider fields for traditional stores
+        $store = current_store();
+        if ($store && $store->type !== 'digital') {
+            $request->merge([
+                'provider_id' => null,
+                'provider_product_number' => null,
+            ]);
+        }
+
         // If linking_type is manual, clear provider fields
         $linkingType = $request->input('linking_type', $product->linking_type ?? 'automatic');
         if ($linkingType === 'manual') {
@@ -278,7 +290,7 @@ class ProductController extends Controller implements HasMiddleware
         $hasPrice = $request->filled('price');
         $hasCategory = $request->filled('category');
         $hasStatus = $request->filled('status');
-        
+
         $hasAllRequiredFields = $hasName && $hasDescription && $hasPrice && $hasCategory && $hasStatus;
 
         if ($hasProviderFields && !$hasAllRequiredFields) {
@@ -299,7 +311,7 @@ class ProductController extends Controller implements HasMiddleware
             if (!$hasStatus) {
                 $mergeData['status'] = $product->status;
             }
-            
+
             if (!empty($mergeData)) {
                 $request->merge($mergeData);
             }
@@ -384,5 +396,84 @@ class ProductController extends Controller implements HasMiddleware
         }
 
         return response()->file($path);
+    }
+
+    /**
+     * Add attribute to product
+     */
+    public function addAttribute(Request $request, Product $product)
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'value' => 'nullable|string|max:255',
+                'unit' => 'nullable|string|max:50',
+            ]);
+
+            // Get or create attribute
+            $attribute = $this->attributeService->create([
+                'name' => $request->name,
+                'unit' => $request->unit,
+            ]);
+
+            // Prepare value for translation
+            $valueData = ['value' => $request->value ?? ''];
+            if (!empty($request->value) && is_string($request->value)) {
+                // Use ProductService's prepareData method for translation
+                $valueData = $this->productService->prepareDataForAttribute($valueData);
+            } else {
+                $valueData = ['value' => []];
+            }
+
+            // Check if attribute already attached to product
+            if ($product->attributes()->where('attribute_id', $attribute->id)->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('This attribute is already added to the product'),
+                ], 400);
+            }
+
+            // Attach attribute to product with value
+            $product->attributes()->attach($attribute->id, [
+                'value' => !empty($valueData['value']) ? json_encode($valueData['value']) : json_encode([]),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => __('Attribute added successfully'),
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error adding attribute: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => __('An error occurred while adding the attribute'),
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove attribute from product
+     */
+    public function removeAttribute(Product $product, $attributeId)
+    {
+        try {
+            $attribute = \Modules\Attribute\Models\Attribute::findOrFail($attributeId);
+
+            // Detach attribute from product
+            $product->attributes()->detach($attribute->id);
+
+            return response()->json([
+                'success' => true,
+                'message' => __('Attribute removed successfully'),
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error removing attribute: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => __('An error occurred while removing the attribute'),
+            ], 500);
+        }
     }
 }

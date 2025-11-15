@@ -25,7 +25,7 @@ class DashboardController extends Controller implements HasMiddleware
     {
         return [
             new Middleware('role:admin', only: ['dashboadAdmin']),
-            new Middleware('role:owner', only: ['index']),
+            new Middleware('role:owner', only: ['index', 'statistics']),
 
         ];
     }
@@ -38,8 +38,7 @@ class DashboardController extends Controller implements HasMiddleware
      */
     public function index(Request $request)
     {
-        // Use Store model directly instead of helper function
-        $store = Store::currentFromUrl()->first();
+        $store = current_store(); // Using current_store() helper
 
         if (!$store) {
             abort(404, 'Store not found');
@@ -94,7 +93,7 @@ class DashboardController extends Controller implements HasMiddleware
             ->distinct()
             ->pluck('user_id')
             ->toArray();
-        
+
         // جلب العملاء الذين لديهم طلبات قبل اليوم
         $customersWithPreviousOrders = Order::where('store_id', $store->id)
             ->whereDate('created_at', '<', Carbon::today())
@@ -102,7 +101,7 @@ class DashboardController extends Controller implements HasMiddleware
             ->distinct()
             ->pluck('user_id')
             ->toArray();
-        
+
         // العملاء الجدد = الذين لديهم طلبات اليوم وليس لديهم طلبات سابقة
         $newCustomers = count(array_diff($customersWithOrdersToday, $customersWithPreviousOrders));
 
@@ -114,14 +113,14 @@ class DashboardController extends Controller implements HasMiddleware
             ->distinct()
             ->pluck('user_id')
             ->toArray();
-        
+
         $customersWithPreviousOrdersBeforeLastWeek = Order::where('store_id', $store->id)
             ->whereDate('created_at', '<', $sameDayLastWeek)
             ->select('user_id')
             ->distinct()
             ->pluck('user_id')
             ->toArray();
-        
+
         $newCustomersLastWeek = count(array_diff($customersWithOrdersSameDayLastWeek, $customersWithPreviousOrdersBeforeLastWeek));
 
         // حساب نسبة النمو (مقارنة اليوم بنفس اليوم من الأسبوع الماضي)
@@ -131,7 +130,7 @@ class DashboardController extends Controller implements HasMiddleware
 
         // حساب معدل التحويل (عدد العملاء الذين لديهم طلبات / إجمالي العملاء الفريدين)
         $totalOrders = Order::where('store_id', $store->id)->count();
-        
+
         // إجمالي العملاء الفريدين (الذين لديهم طلبات في المتجر)
         $totalCustomers = Order::where('store_id', $store->id)
             ->select('user_id')
@@ -216,7 +215,7 @@ class DashboardController extends Controller implements HasMiddleware
                 if (!$user) {
                     return null;
                 }
-                
+
                 return [
                     'type' => 'user',
                     'icon' => 'user-plus',
@@ -305,10 +304,10 @@ class DashboardController extends Controller implements HasMiddleware
         // معلومات إضافية مفيدة
         // إجمالي العملاء (الذين لديهم طلبات)
         $totalCustomersCount = $totalCustomers;
-        
+
         // متوسط قيمة الطلب
         $averageOrderValue = $totalOrders > 0 ? ($totalSales / $totalOrders) : 0;
-        
+
         // المنتجات النشطة
         $activeProducts = Product::where('store_id', $store->id)
             ->where(function($query) {
@@ -316,12 +315,12 @@ class DashboardController extends Controller implements HasMiddleware
                       ->orWhere('is_active', true);
             })
             ->count();
-        
+
         // الطلبات قيد الانتظار
         $pendingOrders = Order::where('store_id', $store->id)
             ->where('status', 'pending')
             ->count();
-        
+
         // مبيعات هذا الأسبوع
         $thisWeekSales = Order::where('store_id', $store->id)
             ->where('status', 'completed')
@@ -330,7 +329,7 @@ class DashboardController extends Controller implements HasMiddleware
                 Carbon::now()->endOfWeek()
             ])
             ->sum('total_amount');
-        
+
         // مبيعات الأسبوع الماضي
         $lastWeekSales = Order::where('store_id', $store->id)
             ->where('status', 'completed')
@@ -340,7 +339,7 @@ class DashboardController extends Controller implements HasMiddleware
             ])
             ->sum('total_amount');
 
-        return view('core::store.dashboard', compact(
+        return view('core::dashboard.'. $store->type .'.dashboard', compact(
             'store',
             'totalSales',
             'salesGrowth',
@@ -362,6 +361,7 @@ class DashboardController extends Controller implements HasMiddleware
             'lastWeekSales'
         ));
     }
+
 
     public function dashboadAdmin()
     {
@@ -418,7 +418,7 @@ class DashboardController extends Controller implements HasMiddleware
      */
     public function statistics(Request $request)
     {
-        $store = Store::currentFromUrl()->first();
+        $store = current_store(); // Using current_store() helper
 
         if (!$store) {
             abort(404, 'Store not found');
@@ -472,14 +472,14 @@ class DashboardController extends Controller implements HasMiddleware
             ->distinct()
             ->pluck('user_id')
             ->toArray();
-        
+
         $customersWithPreviousOrders = Order::where('store_id', $store->id)
             ->whereDate('created_at', '<', Carbon::today())
             ->select('user_id')
             ->distinct()
             ->pluck('user_id')
             ->toArray();
-        
+
         $newUsersToday = count(array_diff($customersWithOrdersToday, $customersWithPreviousOrders));
 
         // العملاء الجدد هذا الشهر (أول طلب لهم هذا الشهر)
@@ -490,14 +490,14 @@ class DashboardController extends Controller implements HasMiddleware
             ->distinct()
             ->pluck('user_id')
             ->toArray();
-        
+
         $customersWithPreviousOrdersBeforeMonth = Order::where('store_id', $store->id)
             ->where('created_at', '<', Carbon::now()->startOfMonth())
             ->select('user_id')
             ->distinct()
             ->pluck('user_id')
             ->toArray();
-        
+
         $newUsersThisMonth = count(array_diff($customersWithOrdersThisMonth, $customersWithPreviousOrdersBeforeMonth));
 
         // إحصائيات الطلبات
@@ -748,11 +748,11 @@ class DashboardController extends Controller implements HasMiddleware
 
         // أحدث الطلبات
         $recentOrdersQuery = Order::where('store_id', $store->id);
-        
+
         if ($fromDate || $toDate) {
             $applyDateFilter($recentOrdersQuery);
         }
-        
+
         $recentOrders = $recentOrdersQuery
             ->with(['user' => function($query) {
                 // تحميل جميع الحقول المطلوبة
@@ -761,7 +761,7 @@ class DashboardController extends Controller implements HasMiddleware
             ->latest()
             ->take(10)
             ->get();
-        
+
         // التأكد من تحميل العلاقة لكل طلب
         foreach ($recentOrders as $order) {
             if ($order->user_id && !$order->relationLoaded('user')) {
@@ -772,7 +772,7 @@ class DashboardController extends Controller implements HasMiddleware
         // أحدث العملاء (الذين لديهم طلبات في المتجر) - حسب تاريخ أول طلب
         $recentUsersQuery = Order::where('store_id', $store->id)
             ->select('user_id', DB::raw('MIN(created_at) as first_order_date'));
-        
+
         if ($fromDate || $toDate) {
             $recentUsersQuery->where(function($q) use ($fromDate, $toDate) {
                 if ($fromDate && $toDate) {
@@ -787,7 +787,7 @@ class DashboardController extends Controller implements HasMiddleware
                 }
             });
         }
-        
+
         $recentUsers = $recentUsersQuery
             ->groupBy('user_id')
             ->orderBy('first_order_date', 'desc')
@@ -827,7 +827,7 @@ class DashboardController extends Controller implements HasMiddleware
             ->take(10)
             ->get();
 
-        return view('core::dashboard.statistics', compact(
+        return view('core::dashboard.'. $store->type .'.statistics', compact(
             'store',
             'totalUsers',
             'activeUsers',

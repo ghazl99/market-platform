@@ -269,7 +269,7 @@ class Store extends Model implements HasMedia
      */
     public function groups(): HasMany
     {
-        return $this->hasMany(\App\Group::class);
+        return $this->hasMany(\Modules\User\Models\Group::class);
     }
 
     /**

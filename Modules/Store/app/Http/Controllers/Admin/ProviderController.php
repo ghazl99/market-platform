@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Log;
 use Modules\Store\Models\Provider;
 use Modules\Store\Models\Store;
 use Modules\Store\Services\ProviderService;
@@ -30,6 +31,11 @@ class ProviderController extends Controller implements HasMiddleware
     {
         $store = current_store();
 
+        // Providers are only available for digital stores
+        if ($store->type !== 'digital') {
+            abort(404, 'Providers are only available for digital stores.');
+        }
+
         // Get all providers linked to this store
         $linkedProviders = $store->providers()->get();
 
@@ -44,11 +50,16 @@ class ProviderController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
+        $store = current_store();
+
+        // Providers are only available for digital stores
+        if ($store->type !== 'digital') {
+            abort(404, 'Providers are only available for digital stores.');
+        }
+
         $request->validate([
             'provider_id' => 'required|exists:providers,id',
         ]);
-
-        $store = current_store();
         $provider = Provider::findOrFail($request->provider_id);
 
         // Check if provider is already linked to this store
@@ -73,6 +84,11 @@ class ProviderController extends Controller implements HasMiddleware
     {
         $store = current_store();
 
+        // Providers are only available for digital stores
+        if ($store->type !== 'digital') {
+            abort(404, 'Providers are only available for digital stores.');
+        }
+
         $provider = Provider::findOrFail($providerId);
 
         // Check if provider is linked to this store
@@ -93,11 +109,16 @@ class ProviderController extends Controller implements HasMiddleware
      */
     public function toggleStatus(Request $request, $providerId)
     {
+        $store = current_store();
+
+        // Providers are only available for digital stores
+        if ($store->type !== 'digital') {
+            abort(404, 'Providers are only available for digital stores.');
+        }
+
         $request->validate([
             'is_active' => 'required|boolean',
         ]);
-
-        $store = current_store();
         $provider = Provider::findOrFail($providerId);
 
         // Check if provider is linked to this store
@@ -122,6 +143,11 @@ class ProviderController extends Controller implements HasMiddleware
     {
         $store = current_store();
 
+        // Providers are only available for digital stores
+        if ($store->type !== 'digital') {
+            abort(404, 'Providers are only available for digital stores.');
+        }
+
         // Check if provider is linked to this store
         if (!$store->providers()->where('providers.id', $provider->id)->exists()) {
             return response()->json(['error' => __('Provider is not linked to your store.')], 403);
@@ -130,7 +156,7 @@ class ProviderController extends Controller implements HasMiddleware
         $products = $this->providerService->getProductsFromProvider($provider);
 
         // Log for debugging
-        \Log::info('Provider products fetched in controller', [
+        Log::info('Provider products fetched in controller', [
             'provider_id' => $provider->id,
             'provider_name' => $provider->name,
             'products_count' => count($products),
@@ -159,7 +185,7 @@ class ProviderController extends Controller implements HasMiddleware
             }
         }
 
-        \Log::info('Formatted products for response', [
+        Log::info('Formatted products for response', [
             'provider_id' => $provider->id,
             'formatted_count' => count($formattedProducts),
             'sample' => $formattedProducts[0] ?? null

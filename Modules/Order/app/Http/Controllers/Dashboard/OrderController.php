@@ -33,7 +33,7 @@ class OrderController extends Controller implements HasMiddleware
 
         $orders = $this->orderService->getOrders($storeId);
 
-        return view('order::dashboard.index', compact('orders'));
+        return view('order::dashboard.'. current_store()->type .'.index', compact('orders'));
     }
 
     /**
@@ -55,7 +55,7 @@ class OrderController extends Controller implements HasMiddleware
             }]);
         }
 
-        return view('order::dashboard.show', compact('order'));
+        return view('order::dashboard.'. current_store()->type .'.show', compact('order'));
     }
 
     /**
@@ -65,7 +65,7 @@ class OrderController extends Controller implements HasMiddleware
     {
         $order->load('items.product', 'user');
 
-        return view('order::dashboard.edit', compact('order'));
+        return view('order::dashboard.'. current_store()->type .'.edit', compact('order'));
     }
 
     /**

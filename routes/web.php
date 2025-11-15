@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\GroupController;
+use Modules\User\Http\Controllers\Dashboard\GroupController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 // Admin Groups Routes with localization support

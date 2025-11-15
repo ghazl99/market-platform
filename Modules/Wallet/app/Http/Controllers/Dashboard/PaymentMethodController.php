@@ -24,7 +24,7 @@ class PaymentMethodController extends Controller
         $store = request()->attributes->get('store') ?? Store::currentFromUrl()->firstOrFail();
         $paymentMethods = $this->paymentMethodService->getForStore($store);
 
-        return view('wallet::dashboard.payment-methods.index', compact('paymentMethods'));
+        return view('wallet::dashboard.'. current_store()->type .'.payment-methods.index', compact('paymentMethods'));
     }
 
     /**
@@ -40,7 +40,7 @@ class PaymentMethodController extends Controller
             abort(404, __('Store not found. Please make sure you are accessing from the correct URL.'));
         }
 
-        return view('wallet::dashboard.payment-methods.create');
+        return view('wallet::dashboard.'. current_store()->type .'.payment-methods.create');
     }
 
     /**
@@ -150,7 +150,7 @@ class PaymentMethodController extends Controller
         // إعادة تعيين العملات المنظفة
         $paymentMethod->setAttribute('currencies', $currencies);
 
-        return view('wallet::dashboard.payment-methods.edit', compact('paymentMethod'));
+        return view('wallet::dashboard.'. current_store()->type .'.payment-methods.edit', compact('paymentMethod'));
     }
 
     /**

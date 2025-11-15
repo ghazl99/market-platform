@@ -36,7 +36,6 @@ class StoreProductRequest extends FormRequest
             'is_active' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
             'sku' => 'nullable|string|max:255|unique:products,sku',
-            'dimensions' => 'nullable|string|max:100',
             'seo_title' => 'nullable|string|max:255',
             'seo_description' => 'nullable|string|max:500',
             'product_type' => 'nullable|string|in:transfer,code',

@@ -41,7 +41,7 @@ class StaffController extends Controller implements HasMiddleware
             abort(404, 'Store not found');
         }
         if ($request->ajax()) {
-            $html = view('user::dashboard.staff.dataTables', compact('users', 'store'))->render();
+            $html = view('user::dashboard.'. current_store()->type .'.staff.dataTables', compact('users', 'store'))->render();
             $pagination = $users->hasPages() ? $users->links()->toHtml() : '';
 
             return response()->json([
@@ -51,7 +51,7 @@ class StaffController extends Controller implements HasMiddleware
             ]);
         }
 
-        return view('user::dashboard.staff.index', compact('users', 'store'));
+        return view('user::dashboard.'. current_store()->type .'.staff.index', compact('users', 'store'));
     }
 
     /**
@@ -59,7 +59,7 @@ class StaffController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        return view('user::dashboard.staff.create');
+        return view('user::dashboard.'. current_store()->type .'.staff.create');
     }
 
     /**
@@ -116,7 +116,7 @@ class StaffController extends Controller implements HasMiddleware
 
         $permissions = $this->staffPermissionService->getAllPermissions();
 
-        return view('user::dashboard.staff.edit-permissions', compact('user', 'permissions'));
+        return view('user::dashboard.'. current_store()->type .'.staff.edit-permissions', compact('user', 'permissions'));
     }
 
     public function update(Request $request, User $user)
